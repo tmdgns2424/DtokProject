@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PLOGIN001">
+    <bizUnitName>[PU]로그인처리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>로그인 로그아웃 처리 PU</description>
+    <method-list>
+        <method id="pLogout">
+            <methodName>[PM]로그아웃</methodName>
+            <transactionId>com.MAINLOGIN@PLOGIN001_pLogout</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>로그아웃 처리</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:31:31" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchLogin">
+            <methodName>[PM]로그인</methodName>
+            <transactionId>com.MAINLOGIN@PLOGIN001_pSearchLogin</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>사용자ID로 사용자정보 조회하여 로그인 처리함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T16:02:17" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="pUpdatePwd">
+            <methodName>[PM]비밀번호변경</methodName>
+            <transactionId>com.MAINLOGIN@PLOGIN001_pUpdatePwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>비밀번호변경</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T11:41:20" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSessionUser">
+            <methodName>[PM]세션사용자정보반환</methodName>
+            <transactionId>com.MAINLOGIN@PLOGIN001_pSessionUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>현재 세션사용자정보를 반환</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-02T15:42:54" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenuTree">
+            <methodName>[PM]하위메뉴TREE조회</methodName>
+            <transactionId>com.MAINLOGIN@PLOGIN001_pSearchMenuTree</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 메뉴의 하위 메뉴 TREE 목록을 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-01T11:25:32" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T15:09:04" user="admin (admin)"/>
+    </history>
+</bizUnit>

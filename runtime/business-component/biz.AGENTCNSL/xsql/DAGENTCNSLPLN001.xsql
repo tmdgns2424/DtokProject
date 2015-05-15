@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTCNSLPLN001">
+	<select id="dSearchAgentCnslPln" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agentcnsl.db.DAGENTCNSLPLN001.dSearchAgentCnslPln  */
+/* IO: 이민재,2014-11-21T17:01:41(이민재,2014-11-21T17:01:41) */
+	SELECT   A.AGENT_CNSL_PLN_NUM
+       , TO_CHAR( TO_DATE(A.CNSL_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) CNSL_DT
+       , A.USER_ID
+       , A.USER_NM
+       , A.CNSL_ST_CD
+       , (SELECT COMM_CD_VAL_NM 
+            FROM TBAS_COMM_CD_DTL 
+           WHERE COMM_CD_ID='DSM_APRV_TYP_CD' 
+             AND COMM_CD_VAL = A.CNSL_ST_CD ) AS CNSL_ST_NM 
+       , CASE WHEN A.COMP_CNSL_PLN_NUM IS NULL THEN '미완료' ELSE '완료' END AS COMP_YN /* 시행여부 */
+       , A.DSM_HEADQ_CD AS DEPT_CD
+       , A.DSM_HEADQ_NM AS DEPT_NM
+       , A.DSM_GRP_CD AS ORG_CD   
+       , A.DSM_GRP_NM AS ORG_NM  
+       , A.RETL_ORG_CD           
+       , A.RETL_ORG_NM 
+       , A.RETL_CLASS_CD
+       , (SELECT COMM_CD_VAL_NM 
+            FROM TBAS_COMM_CD_DTL 
+           WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             AND COMM_CD_VAL = A.RETL_CLASS_CD ) AS RETL_CLASS_NM /* 직책명 */
+       , A.CNSLR_CD AS CNSLR_CD       
+       , A.CNSLR_NM    
+       , A.CNSLR_RETL_CLASS_CD  AS CNSLR_RETL_CLASS_CD
+       , (SELECT COMM_CD_VAL_NM 
+            FROM TBAS_COMM_CD_DTL 
+           WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             AND COMM_CD_VAL = A.CNSLR_RETL_CLASS_CD ) AS CNSLR_RETL_CLASS_NM /* 면담자직책명 */
+       , A.CNSL_RSN_NM
+  FROM ( SELECT ROW_NUMBER() OVER (ORDER BY a.cnsl_dt DESC) rn
+              , A.AGENT_CNSL_PLN_NUM /* 에이전트 면담 계획 번호 */
+              , A.CNSL_DT     /* 면담계획일자 */
+              , A.USER_ID     /* MAID */           
+              , B.USER_NM     /* MA이름 */
+              , A.CNSL_ST_CD  /* 면담진행상태 */
+              , J.SUP_OUT_ORG_DTL_ID AS DSM_HEADQ_CD /* 영업국 코드 */
+              , J.OUT_ORG_DTL_NM AS DSM_HEADQ_NM /* 영업국명 */
+              , G.OUT_ORG_DTL_ID AS DSM_GRP_CD  /* 영업팀코드 */
+              , G.OUT_ORG_DTL_NM AS DSM_GRP_NM  /* 영업팀명 */
+              , F.AGNT_ID AS RETL_ORG_CD  /* 에이전트코드 */          
+              , F.AGNT_NM AS RETL_ORG_NM  /* 에이전트명 */
+              , F.RPSTY AS RETL_CLASS_CD  /* 직책코드 */
+              , D.AGNT_ID AS CNSLR_CD /* 면담자코드 */       
+              , C.USER_NM AS CNSLR_NM  /* 면담자명 */
+              , D.RPSTY  AS CNSLR_RETL_CLASS_CD /* 면담자직책코드 */
+              , A.CNSL_RSN_NM /* 면담목적 */
+              , Z.AGENT_CNSL_PLN_NUM COMP_CNSL_PLN_NUM /* 면담의 계획번호, 해당 번호가 NULL이 아니면 완료, 그렇지 않다면 미완료 */
+           FROM DSM_AGENT_CNSL_PLN A /* 면담계획 */
+                JOIN TBAS_USER_MGMT B ON (A.USER_ID = B.USER_ID)
+                JOIN TBAS_USER_MGMT C ON (A.CNSLR_ID = C.USER_ID)
+                JOIN TBAS_DUTY_MGMT E ON (C.DUTY = E.DUTY_CD)
+                LEFT JOIN TBAS_OUT_ORG_MBR_MGMT F ON (B.CPLAZA_ORG_CD = F.AGNT_ID AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+                LEFT JOIN TBAS_OUT_ORG_MBR_MGMT D ON (C.CPLAZA_ORG_CD = D.AGNT_ID AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+                LEFT JOIN TBAS_OUT_ORG_DTL_MGMT G ON (F.OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID) /* DSM 조직 (팀) */
+                LEFT JOIN TBAS_OUT_ORG_DTL_MGMT J ON (G.SUP_OUT_ORG_DTL_ID = J.OUT_ORG_DTL_ID) /* DSM 조직 (팀) */
+                LEFT JOIN TBAS_OUT_ORG_MGMT I ON(I.OUT_ORG_ID=G.OUT_ORG_ID)
+                LEFT JOIN DSM_AGENT_CNSL Z ON ( A.AGENT_CNSL_PLN_NUM = Z.AGENT_CNSL_PLN_NUM )
+          WHERE A.CNSL_DT BETWEEN #FROM_DT# AND #TO_DT#
+             ]]><isNotEmpty prepend="AND" property="BO_CD"><![CDATA[
+                        I.ORG_ID = #BO_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="DEPT_CD"><![CDATA[
+                        J.SUP_OUT_ORG_DTL_ID = #DEPT_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="ORG_CD"><![CDATA[
+                        G.OUT_ORG_DTL_ID = #ORG_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="RCMNDR_ID"><![CDATA[
+                        F.AGNT_ID = #RCMNDR_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSLR_NM"><![CDATA[
+                        C.USER_NM LIKE ('%'||#CNSLR_NM#||'%')
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSL_ST_CD"><![CDATA[
+                        A.CNSL_ST_CD = #CNSL_ST_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isEqual property="SCRN_TYP" compareValue="MNG"><![CDATA[
+             	 AND C.DUTY_CD IN (SELECT DUTY_CD FROM TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+             ]]></isEqual><![CDATA[
+             ]]><isEqual property="SCRN_TYP" compareValue="TM"><![CDATA[
+             	 AND C.DUTY_CD IN (SELECT DUTY_CD FROM TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+                  AND E.DUTY_CD = '16'
+             ]]></isEqual><![CDATA[
+             ]]><isEqual property="COMP_YN" compareValue="Y"><![CDATA[
+             	 AND Z.AGENT_CNSL_PLN_NUM IS NOT NULL
+             ]]></isEqual><![CDATA[
+             ]]><isEqual property="COMP_YN" compareValue="N"><![CDATA[
+             	 AND Z.AGENT_CNSL_PLN_NUM IS NULL
+             ]]></isEqual><![CDATA[
+        ) A
+ WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#
+]]>
+	</select>
+	<select id="dSearchAgentCnslPlnCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agentcnsl.db.DAGENTCNSLPLN001.dSearchAgentCnslPlnCount  */
+/* IO: 이민재,2014-11-21T17:25:17(이민재,2014-11-21T17:25:17) */
+	SELECT COUNT(*) AS totCnt
+	  FROM ( SELECT *
+	           FROM DSM_AGENT_CNSL_PLN A /* 면담계획 */
+	                JOIN TBAS_USER_MGMT B ON (A.USER_ID = B.USER_ID)
+	                JOIN TBAS_USER_MGMT C ON (A.CNSLR_ID = C.USER_ID)
+	                JOIN TBAS_DUTY_MGMT E ON (C.DUTY = E.DUTY_CD)
+	                LEFT JOIN TBAS_OUT_ORG_MBR_MGMT F ON (B.CPLAZA_ORG_CD = F.AGNT_ID AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	                LEFT JOIN TBAS_OUT_ORG_MBR_MGMT D ON (C.CPLAZA_ORG_CD = D.AGNT_ID AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	                LEFT JOIN TBAS_OUT_ORG_DTL_MGMT G ON (F.OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID) /* DSM 조직 (팀) */
+	                LEFT JOIN TBAS_OUT_ORG_DTL_MGMT J ON (G.SUP_OUT_ORG_DTL_ID = J.OUT_ORG_DTL_ID) /* DSM 조직 (팀) */
+	                LEFT JOIN TBAS_OUT_ORG_MGMT I ON(I.OUT_ORG_ID=G.OUT_ORG_ID)
+	                LEFT JOIN DSM_AGENT_CNSL Z ON ( A.AGENT_CNSL_PLN_NUM = Z.AGENT_CNSL_PLN_NUM )
+	          WHERE A.CNSL_DT BETWEEN #FROM_DT# AND #TO_DT#
+	             ]]><isNotEmpty prepend="AND" property="BO_CD"><![CDATA[
+	                        I.ORG_ID = #BO_CD#
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isNotEmpty prepend="AND" property="DEPT_CD"><![CDATA[
+	                        J.SUP_OUT_ORG_DTL_ID = #DEPT_CD#
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isNotEmpty prepend="AND" property="ORG_CD"><![CDATA[
+	                        G.OUT_ORG_DTL_ID = #ORG_CD#
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isNotEmpty prepend="AND" property="RCMNDR_ID"><![CDATA[
+	                        F.AGNT_ID = #RCMNDR_ID#
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isNotEmpty prepend="AND" property="CNSLR_NM"><![CDATA[
+	                        C.USER_NM LIKE ('%'||#CNSLR_NM#||'%')
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isNotEmpty prepend="AND" property="CNSL_ST_CD"><![CDATA[
+	                        A.CNSL_ST_CD = #CNSL_ST_CD#
+	             ]]></isNotEmpty><![CDATA[
+	             ]]><isEqual property="SCRN_TYP" compareValue="MNG"><![CDATA[
+	             	 AND C.DUTY_CD IN (SELECT DUTY_CD FROM TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+	             ]]></isEqual><![CDATA[
+	             ]]><isEqual property="SCRN_TYP" compareValue="TM"><![CDATA[
+	             	 AND C.DUTY_CD IN (SELECT DUTY_CD FROM TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+	                  AND E.DUTY_CD = '16'
+	             ]]></isEqual><![CDATA[
+	             ]]><isEqual property="COMP_YN" compareValue="Y"><![CDATA[
+	             	 AND Z.AGENT_CNSL_PLN_NUM IS NOT NULL
+	             ]]></isEqual><![CDATA[
+	             ]]><isEqual property="COMP_YN" compareValue="N"><![CDATA[
+	             	 AND Z.AGENT_CNSL_PLN_NUM IS NULL
+	             ]]></isEqual><![CDATA[
+	        ) A
+	 WHERE 1 = 1]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSALEPRST002">
+	<select id="dSearchBestMa" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST002.dSearchBestMa  */
+/* IO: 채수윤,2015-03-13T12:52:01(안종광,2015-02-11T11:16:49) */
+SELECT RNK
+       , ORG_ID
+       , SALE_DEPT_ORG_ID
+       , SALE_DEPT_ORG_NM
+       , SALE_TEAM_ORG_ID
+       , SALE_TEAM_ORG_NM
+       , AGNT_ID
+       , AGNT_NM
+       , AGNT_NAME
+       , RPSTY
+       , RPSTY_NM
+       , HEAD_SORT_SEQ
+       , TEAM_SORT_SEQ
+       , SALE_QTY
+  FROM (
+SELECT S.RNK
+     , D.ORG_ID
+     , C.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /*영업국ID*/
+     , C.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM /*영업국명*/
+     , A.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID /*영업팀ID*/
+     , B.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM /*영업팀명*/
+     , A.AGNT_ID  /*MA에이전트ID*/
+     , (SELECT F_MASKING('N', A.AGNT_NM) FROM DUAL) AS AGNT_NM /*MA명*/
+     , A.AGNT_NM AS AGNT_NAME
+     , A.RPSTY
+     , (SELECT F_DSM_CODE_NM('DSM_RETL_CLASS_CD', A.RPSTY) FROM DUAL) AS RPSTY_NM /*직책명*/
+     , C.SORT_SEQ AS HEAD_SORT_SEQ
+     , B.SORT_SEQ AS TEAM_SORT_SEQ 
+     , S.SALE_QTY /*판매량*/
+  FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY SALE_QTY DESC) AS RNK
+             , AGNT_ID
+             , SALE_QTY
+          FROM (
+                SELECT AGNT_ID
+                     , SUM(CASE WHEN PROD_CL = 'PHON' AND SALE_CL_CD IN('S10100', 'S10200', 'S20100', 'S20200') THEN SALE_QTY ELSE 0 END) AS SALE_QTY 
+                  FROM ( /*단말기판매량*/
+                        SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , GS.SALE_ORG
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , ES.MDL_CD              AS MDL_CD
+                             , GS.SALE_DTM            AS SALE_DT
+                             , (SELECT Z.ADD_INFO_01
+                                  FROM PS_MNG.TBAS_COMM_CD_DTL  Z 
+                                 WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                   AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)) AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)                          AS SALE_TYP
+                             , DECODE(GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)       AS SALE_QTY 
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE     GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE   ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT       OG
+                             , (SELECT A.AGNT_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                                 WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+                                   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                                   AND B.SUP_OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ) /*사무국 제외*/
+                           ]]><isNotEmpty property="IS_BOUNDED_BY_DEPT"><![CDATA[
+                               ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="Y"><![CDATA[
+                                   AND B.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국제한*/
+                               ]]></isEqual><![CDATA[
+                               ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="N"><![CDATA[
+                                   AND B.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                                         WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/
+                                                       )
+                               ]]></isEqual><![CDATA[
+                           ]]></isNotEmpty><![CDATA[
+                               ) OA
+                             , (SELECT DISTINCT Z.ORG_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+                                 WHERE Z.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                                         WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/)
+                               ) OH
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #SALE_DT_STA# 
+                           AND GS.SALE_CHG_DTM     <= #SALE_DT_END#
+                           AND GS.DEL_YN     = 'N'
+                           AND ES.MDL_CD     IS NOT NULL
+                           AND ES.PROD_CL_CD = '1' /* 폰 */
+                           AND GS.SALE_ORG   = OG.ORG_ID
+                           AND GS.SALE_PLC   = OA.AGNT_ID
+                           AND OG.SUP_ORG    = OH.ORG_ID
+                           AND 'Y' = (CASE WHEN #onlineContext.userInfo.ATTC_CAT# = '3' THEN 'N' ELSE 'Y' END) /* 도급직이면 조회 안함 */
+                       )
+                 GROUP BY AGNT_ID
+               )
+       ) S
+     , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  A
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT  B
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT  C
+     , PS_MNG.TBAS_OUT_ORG_MGMT      D
+ WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+   AND B.SUP_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID
+   AND C.OUT_ORG_ID = D.OUT_ORG_ID
+   AND C.OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+   AND NVL(C.DTOK_EFF_ORG_YN, 'N') = 'Y' /* D-TOK사용여부 */
+   AND S.AGNT_ID = A.AGNT_ID
+       ) 
+ WHERE RNK < 21
+ ORDER BY RNK]]>
+	</select>
+	<select id="dSearchBestTeam" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST002.dSearchBestTeam  */
+/* IO: 채수윤,2015-03-13T13:01:28(안종광,2015-02-11T10:48:44) */
+SELECT RNK
+     , SALE_DEPT_ORG_ID
+     , SALE_DEPT_ORG_NM
+     , SALE_TEAM_ORG_ID
+     , SALE_TEAM_ORG_NM
+     , AGNT_NAME
+     , AGNT_NM
+     , SALE_QTY
+  FROM (
+SELECT ROW_NUMBER() OVER (ORDER BY S.SALE_QTY DESC) AS RNK
+     , S.SALE_DEPT_ORG_ID
+     , B.OUT_ORG_DTL_NM   AS SALE_DEPT_ORG_NM /*영업국명*/
+     , S.SALE_TEAM_ORG_ID
+     , C.OUT_ORG_DTL_NM   AS SALE_TEAM_ORG_NM /*영업팀명*/
+     , A.AGNT_NM AS AGNT_NAME
+     , (SELECT F_MASKING('N', A.AGNT_NM) FROM DUAL) AS AGNT_NM
+     , S.SALE_QTY
+  FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY QTY.SALE_QTY DESC) AS RNK
+             , TEAM.SALE_DEPT_ORG_ID
+             , TEAM.SALE_TEAM_ORG_ID
+             , TEAM.AGNT_ID
+             , QTY.SALE_QTY
+          FROM (
+                SELECT B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+                     , B.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+                     , MAX(AGNT_ID) AS AGNT_ID
+                  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                 WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+                   AND A.RPSTY IN ('03', '04','08','10', '13') /* FM, CM, FM+총무, 수습FM, SM */
+                   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                   AND B.SUP_OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+                 GROUP BY B.SUP_OUT_ORG_DTL_ID, B.OUT_ORG_DTL_ID
+               ) TEAM
+             , (SELECT OUT_ORG_DTL_ID
+                     , SUM(CASE WHEN PROD_CL = 'PHON' AND SALE_CL_CD IN('S10100', 'S10200', 'S20100', 'S20200') THEN SALE_QTY ELSE 0 END) AS SALE_QTY 
+                                                                        /* S10100=일반신규, S10200=MNP, S20100=보상기변, S20200=일반기변 */
+                  FROM (
+                        /*단말기판매수량*/
+                        SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , AG.OUT_ORG_DTL_ID
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , ES.MDL_CD              AS MDL_CD
+                             , GS.SALE_DTM            AS SALE_DT
+                             , (SELECT Z.ADD_INFO_01 
+                                  FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                                 WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                   AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)) AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)                          AS SALE_TYP
+                             , DECODE(GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)       AS SALE_QTY 
+                                                          /* ZSAL_C_00110 : 01=판매, 02=기기변경, 12=판매처변경, 13=약정변경, 07=판매취소 */
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , (SELECT A.OUT_ORG_DTL_ID
+                                     , A.AGNT_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                                 WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+                                   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                                   AND B.SUP_OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+                                 ]]><isNotEmpty property="IS_BOUNDED_BY_DEPT"><![CDATA[
+                                  ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="Y"><![CDATA[
+                                   AND B.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국제한*/
+                                  ]]></isEqual><![CDATA[
+                                  ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="N"><![CDATA[
+                                   AND B.OUT_ORG_ID IN (
+                                          SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                           WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/
+                                       )
+                                  ]]></isEqual><![CDATA[
+                                 ]]></isNotEmpty><![CDATA[
+                               ) AG
+                             , (SELECT DISTINCT Z.ORG_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+                                 WHERE Z.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                                         WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/)
+                               ) OH
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #SALE_DT_STA# 
+                           AND GS.SALE_CHG_DTM     <= #SALE_DT_END#
+                           AND GS.DEL_YN     = 'N'
+                           AND ES.MDL_CD     IS NOT NULL
+                           AND ES.PROD_CL_CD = '1' /*폰*/
+                           AND GS.SALE_ORG = OG.ORG_ID
+                           AND GS.SALE_PLC = AG.AGNT_ID
+                           AND OG.SUP_ORG  = OH.ORG_ID
+                           AND 'Y' = (CASE WHEN #onlineContext.userInfo.ATTC_CAT# = '3' THEN 'N' ELSE 'Y' END) /* 도급직이면 조회 안함 */
+                       )
+                 GROUP BY OUT_ORG_DTL_ID
+               ) QTY
+         WHERE TEAM.SALE_TEAM_ORG_ID = QTY.OUT_ORG_DTL_ID
+       ) S
+     , PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT C
+ WHERE S.AGNT_ID = A.AGNT_ID
+   AND A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+   AND S.SALE_DEPT_ORG_ID = B.OUT_ORG_DTL_ID
+   AND NVL(B.DTOK_EFF_ORG_YN, 'N') = 'Y'
+   AND S.SALE_TEAM_ORG_ID = C.OUT_ORG_DTL_ID
+       )
+ WHERE RNK < 21
+ ORDER BY RNK, SALE_TEAM_ORG_NM]]>
+	</select>
+	<select id="dSearchMrtgExpir" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST002.dSearchMrtgExpir  */
+/* IO: 채수윤,2015-03-13T13:07:57(안종광,2015-02-11T10:32:12) */
+SELECT x.RNK
+     , x.SALE_DEPT_ORG_ID
+     , x.SALE_DEPT_ORG_NM
+     , x.SALE_TEAM_ORG_ID
+     , x.SALE_TEAM_ORG_NM
+     , x.AGNT_ID
+     , (SELECT F_MASKING('N', x.AGNT_NM) FROM DUAL) AS AGNT_NM
+     , x.AGNT_NM AS AGNT_NAME
+     , x.RPSTY
+     , x.RPSTY_NM
+     , x.BAS_AMT
+     , x.MRTG_AMT
+     , x.EFF_DT
+     , x.PRD
+  FROM (
+        SELECT ROW_NUMBER() OVER(ORDER BY A.EFF_DT, A.BAS_AMT DESC, B.AGNT_NM) AS RNK
+             , D.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /*영업국ID*/
+             , D.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM /*영업국명*/
+             , C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID /*영업팀ID*/
+             , C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM /*영업팀명*/
+             , A.AGNT_ID
+             , B.AGNT_NM /*에이전트명*/
+             , B.RPSTY
+             , (SELECT Z.COMM_CD_VAL_NM 
+                  FROM PS_MNG.TBAS_COMM_CD_DTL  Z 
+                 WHERE Z.COMM_CD_ID = 'DSM_RETL_CLASS_CD' 
+                   AND Z.COMM_CD_VAL = B.RPSTY) AS RPSTY_NM /*직책명*/
+             , NVL(A.BAS_AMT, 0) AS BAS_AMT
+             , TO_CHAR(NVL(A.BAS_AMT, 0) / 10000000) || '천만원' AS MRTG_AMT /*담보설정금액*/
+             , A.EFF_DT /*만료예정일*/
+             , A.PRD /*잔여일수*/
+          FROM (SELECT A.DEAL_CO_CD AS AGNT_ID
+                     , (SELECT SUM(Y.MRTG_SET_AMT) 
+                          FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT Y
+                         WHERE Y.DEAL_CO_CD = A.DEAL_CO_CD
+                           AND Y.DEL_YN = 'N'
+                           AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN Y.SET_DT AND Y.EXPIR_DT
+                       ) AS BAS_AMT
+                     , A.EXPIR_DT AS EFF_DT
+                     , TRUNC(TO_DATE(A.EXPIR_DT) - TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD'))) AS PRD
+                  FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT A
+                 WHERE EXISTS (SELECT 'X'
+                                 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT Z
+                                WHERE Z.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+                                  AND Z.AGNT_ID = A.DEAL_CO_CD)
+                   AND A.DEL_YN = 'N'
+                   AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN A.SET_DT AND A.EXPIR_DT
+                   AND A.EXPIR_DT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+               ) A
+               JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON(B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND B.AGNT_ID = A.AGNT_ID)
+               JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON(C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+               JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON(D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+               JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON(E.OUT_ORG_ID = C.OUT_ORG_ID)
+         WHERE 'Y' = (CASE WHEN #onlineContext.userInfo.ATTC_CAT# = '3' THEN 'N' ELSE 'Y' END) /* 도급직이면 조회 안함 */
+          ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="Y"><![CDATA[
+           AND D.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국제한*/
+          ]]></isEqual><![CDATA[
+          ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="N"><![CDATA[
+           AND D.OUT_ORG_ID IN (
+                  SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                   WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/
+               )
+          ]]></isEqual><![CDATA[
+          ]]><isEqual property="IS_BOUNDED_BY_TEAM" compareValue="Y"><![CDATA[
+           AND C.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀제한*/
+          ]]></isEqual><![CDATA[
+     ) x
+ WHERE x.RNK < 21
+ ORDER BY x.RNK]]>
+	</select>
+	<select id="dSearchHeadqSaleRnk" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST002.dSearchHeadqSaleRnk  */
+/* IO: 채수윤,2015-03-19T12:29:18(채수윤,2015-03-19T12:15:30) */
+SELECT RNK
+     , SALE_DEPT_ORG_ID
+     , SALE_DEPT_ORG_NM
+     , AGNT_NAME
+     , AGNT_NM
+     , SALE_QTY
+  FROM (
+SELECT ROW_NUMBER() OVER (ORDER BY S.SALE_QTY DESC) AS RNK
+     , S.SALE_DEPT_ORG_ID
+     , B.OUT_ORG_DTL_NM   AS SALE_DEPT_ORG_NM /*영업국명*/
+     , A.AGNT_NM AS AGNT_NAME
+     , (SELECT F_MASKING('N', A.AGNT_NM) FROM DUAL) AS AGNT_NM
+     , S.SALE_QTY
+  FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY QTY.SALE_QTY DESC) AS RNK
+             , TEAM.SALE_DEPT_ORG_ID
+             , TEAM.AGNT_ID
+             , QTY.SALE_QTY
+          FROM (
+                SELECT B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+                     , MAX(AGNT_ID) AS AGNT_ID
+                  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                 WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+                   AND A.RPSTY IN ('07', '11','12','15') /* 선임국장, 책임국장, 수석국장, 국장 */
+                   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                   AND B.SUP_OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+                 GROUP BY B.SUP_OUT_ORG_DTL_ID
+               ) TEAM
+             , (SELECT SALE_DEPT_ORG_ID
+                     , SUM(CASE WHEN PROD_CL = 'PHON' AND SALE_CL_CD IN('S10100', 'S10200', 'S20100', 'S20200') THEN SALE_QTY ELSE 0 END) AS SALE_QTY 
+                                                                        /* S10100=일반신규, S10200=MNP, S20100=보상기변, S20200=일반기변 */
+                  FROM (
+                        /*단말기판매수량*/
+                        SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , AG.SALE_DEPT_ORG_ID
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , ES.MDL_CD              AS MDL_CD
+                             , GS.SALE_DTM            AS SALE_DT
+                             , (SELECT Z.ADD_INFO_01 
+                                  FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                                 WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                   AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)) AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)                          AS SALE_TYP
+                             , DECODE(GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)       AS SALE_QTY 
+                                                          /* ZSAL_C_00110 : 01=판매, 02=기기변경, 12=판매처변경, 13=약정변경, 07=판매취소 */
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , (SELECT B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+                                     , A.AGNT_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                                 WHERE A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+                                   AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                                   AND B.SUP_OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+                                   AND B.OUT_ORG_ID IN (
+                                          SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                           WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/
+                                       )
+                               ) AG
+                             , (SELECT DISTINCT Z.ORG_ID
+                                  FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+                                 WHERE Z.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                                                         WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/)
+                               ) OH
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #SALE_DT_STA#
+                           AND GS.SALE_CHG_DTM     <= #SALE_DT_END#
+                           AND GS.DEL_YN     = 'N'
+                           AND ES.MDL_CD     IS NOT NULL
+                           AND ES.PROD_CL_CD = '1' /*폰*/
+                           AND GS.SALE_ORG = OG.ORG_ID
+                           AND GS.SALE_PLC = AG.AGNT_ID
+                           AND OG.SUP_ORG  = OH.ORG_ID
+                           AND 'Y' = (CASE WHEN #onlineContext.userInfo.ATTC_CAT# = '3' THEN 'N' ELSE 'Y' END) /* 도급직이면 조회 안함 */
+                       )
+                 GROUP BY SALE_DEPT_ORG_ID
+               ) QTY
+         WHERE TEAM.SALE_DEPT_ORG_ID = QTY.SALE_DEPT_ORG_ID
+       ) S
+     , PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+ WHERE S.AGNT_ID = A.AGNT_ID
+   AND A.CONS_MTH = SUBSTR(#SALE_DT_STA#, 1, 6)
+   AND S.SALE_DEPT_ORG_ID = B.OUT_ORG_DTL_ID
+   AND NVL(B.DTOK_EFF_ORG_YN, 'N') = 'Y'
+       )
+ WHERE RNK < 21
+ ORDER BY RNK, SALE_DEPT_ORG_NM]]>
+	</select>
+</sqlMap>

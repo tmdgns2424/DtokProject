@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DINCMPDOCTYPHST001">
+
+	<insert id="dInsertIncmpDocTypHst" parameterClass="map" >
+	<![CDATA[
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOCTYPHST001.dInsertIncmpDocTypHst  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+	INSERT INTO DSM_INCMP_DOC_TYP_HST (
+	       DSM_INCMP_DOC_ID /* 미비서류접수ID */
+	     , DOC_TYP_CD       /* 첨부유형 */
+	     , RGSTR_ID         /* 등록자ID */
+	     , RGST_DTM         /* 등록일시 */
+	     , UPDR_ID          /* 수정자ID */
+	     , UPD_DTM          /* 수정일시 */
+	) VALUES (
+	       #DSM_INCMP_DOC_ID#
+	     , #DOC_TYP_CD#
+	     , #onlineContext.userInfo.loginId#
+	     , SYSDATE
+	     , #onlineContext.userInfo.loginId#
+	     , SYSDATE         
+	)
+	]]>
+	</insert>
+	
+	<delete id="dDeleteIncmpDocTypHst" >
+	<![CDATA[
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOCTYPHST001.dDeleteIncmpDocTypHst  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+	DELETE FROM DSM_INCMP_DOC_TYP_HST
+ 	WHERE DSM_INCMP_DOC_ID = #DSM_INCMP_DOC_ID#
+ 	]]>
+	</delete>
+
+</sqlMap>

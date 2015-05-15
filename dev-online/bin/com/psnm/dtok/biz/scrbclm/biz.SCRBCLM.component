@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.SCRBCLM">
+    <componentName>[BC]업무-비정상영업소명관리</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.scrbclm</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-02-16T09:43:39" user="안진갑 (ahnjingap)"/>
+    </history>
+</component>

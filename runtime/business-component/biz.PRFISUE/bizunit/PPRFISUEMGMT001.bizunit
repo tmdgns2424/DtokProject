@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PPRFISUEMGMT001">
+    <bizUnitName>[PU]증명서발급</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.PRFISUE</componentId>
+    <description/>
+    <method-list>
+        <method id="pInsertJobLog">
+            <methodName>[PM]작업로그 등록</methodName>
+            <transactionId>biz.PRFISUE@PPRFISUEMGMT001_pInsertJobLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-10T15:57:19" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSavePrfIsueStCd">
+            <methodName>[PM]증명서발급상태변경</methodName>
+            <transactionId>biz.PRFISUE@PPRFISUEMGMT001_pSavePrfIsueStCd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T09:48:27" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSavePrfIsue">
+            <methodName>[PM]증명서발급정보 등록/수정/삭제</methodName>
+            <transactionId>biz.PRFISUE@PPRFISUEMGMT001_pSavePrfIsue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T09:20:45" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchPrfIsue">
+            <methodName>[PM]증명서발급정보 조회</methodName>
+            <transactionId>biz.PRFISUE@PPRFISUEMGMT001_pSearchPrfIsue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T09:18:54" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-25T10:38:07" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

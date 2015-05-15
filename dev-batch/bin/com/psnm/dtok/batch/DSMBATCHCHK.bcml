@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.batch.DSMBATCHCHK">
+    <componentName>배치수행결과전송</componentName>
+    <bizGroupXd>batch</bizGroupXd>
+    <packageName>com.psnm.dtok.batch</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description/>
+    <history>
+        <created date="2015-04-15T15:35:45" user="허용 (06476)"/>
+        <updated date="" user=""/>
+    </history>
+</component>

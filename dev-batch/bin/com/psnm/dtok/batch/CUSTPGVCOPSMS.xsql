@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.CUSTPGVCOPSMS">
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CUSTPGVCOPSMS.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-05-13T22:11:14(허용,2015-04-14T13:47:39) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+   #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHH24MMSS')/*발송일시*/
+     
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , '0264005567'/*발송전화번호*/
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+		,#SND_PHON#
+]]></isEqual><![CDATA[        
+
+
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , '01047567552'
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+		,#RCV_PHON#
+]]></isEqual><![CDATA[ 
+
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , '0264005567'/*발송전화번호*/
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+		,#SND_PHON#
+]]></isEqual><![CDATA[    
+       
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , #SND_MSG#
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+     , CASE WHEN #SND_TYP# = 'DSM_CUST_PGCV' 
+       THEN '[D-tok] 고객민원 처리시한 초과! / ' || #APND#
+       WHEN  #SND_TYP# = 'DSM_SCRB_CLM'
+       THEN '[D-tok] 비정상 개통 추정 건 확인 시한 초과!/' ||  #APND#
+       ELSE '[D-tok] 메시지 오류. 죄송합니다.' END  
+]]></isEqual><![CDATA[      
+
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CUSTPGVCOPSMS.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 허용,2015-04-16T14:40:54(채수윤,2015-04-08T22:00:27) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , '01047567552'/*발송전화번호*/
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+     , #RCV_PHON# /*수신전화번호*/ 
+]]></isEqual><![CDATA[             
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CUSTPGVCOPSMS.dInsertSmsTran  */
+/* IO: 허용,2015-05-13T22:11:25(허용,2015-04-14T14:58:36) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , '0264005567'/*발송전화번호*/
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+		,#SND_PHON#
+]]></isEqual><![CDATA[ 
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , #CONTEXT#
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+     , CASE WHEN #SND_TYP# = 'DSM_CUST_PGCV' 
+       THEN '[D-tok] 고객민원 처리시한 초과! / '  || #APND#
+       WHEN  #SND_TYP# = 'DSM_SCRB_CLM'
+       THEN '[D-tok] 비정상 개통 추정 건 확인 시한 초과! / ' ||  #APND#
+       ELSE '[D-tok] 메시지 오류. 죄송합니다.' END        
+]]></isEqual><![CDATA[       
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 허용,2015-04-14T09:34:08(허용,2015-04-14T09:34:08) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 허용,2015-04-14T09:34:37(허용,2015-04-14T09:34:37) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectPgvcOpList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.CUSTPGVCOPSMS.dSelectPgvcOpList 처리시한경과건조회 */
+/* IO: 허용,2015-05-14T10:26:22(허용,2015-05-13T22:02:28) */
+/*고객민원*/
+/*팀장*/
+SELECT 
+ 'DSM_CUST_PGCV' AS SND_TYP
+ ,RCV_PHON       AS RCV_PHON
+, E.COMM_CD_VAL_NM AS SND_PHON 
+,A.CUST_NM || ' 고객 (' ||D.OUT_ORG_DTL_NM || ' ' || C.OUT_ORG_DTL_NM || ' ' ||B.AGNT_NM|| ')' AS APND
+FROM  DSM_CUST_PGCV A
+JOIN  PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON 
+      (A.AGNT_ID = B.AGNT_ID 
+       AND CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' ) )        
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON      
+      ( B.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)   
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON      
+      ( C.SUP_OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)          
+JOIN ( /*팀별팀장*/
+      SELECT 
+          A.AGNT_ID
+         ,B.OUT_ORG_DTL_ID AS DSM_TEAM_CD
+         ,C.OUT_ORG_DTL_ID AS DSM_HEADQ_CD
+         ,D.MBL_PHON_NUM1 || D.MBL_PHON_NUM2 || D.MBL_PHON_NUM3 AS RCV_PHON         
+      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (B.SUP_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)      
+      JOIN PS_MNG.TBAS_USER_MGMT C ON (A.AGNT_ID = C.CPLAZA_ORG_CD)
+      JOIN DSM_USER D ON (C.USER_ID = D.USER_ID)      
+      WHERE  CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' )
+        AND ( A.CS_YN = 'Y' OR A.RPSTY IN (
+                                            SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                            WHERE COMM_CD_ID = 'DSM_RETL_CLASS_CD'
+                                            AND ADD_INFO_05 = '09'
+                                          )
+            )      
+      ) D ON ( C.OUT_ORG_DTL_ID = D.DSM_TEAM_CD ) 
+JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_REP_PHON_NUM' AND E.COMM_CD_VAL = C.OUT_ORG_ID)                                          
+WHERE  TO_CHAR(SYSDATE , 'yyyymmddhhmi') > A.OP_CLS_DT || A.OP_CLS_TM || A.OP_CLS_MM
+                              AND A.CUST_PGCV_ST_CD = 'N'
+                              AND NOT EXISTS (SELECT 'x' FROM DSM_CUST_PGCV_OP_DTL B 
+                                              WHERE A.RCV_MGMT_NUM= B.RCV_MGMT_NUM)
+                              AND A.OP_CLS_DT >= '20150409'    /*이건택M요청*/              
+UNION 
+/*국장/CS*/                    
+SELECT 
+'DSM_CUST_PGCV' AS SND_TYP
+,RCV_PHON       AS RCV_PHON
+,E.COMM_CD_VAL_NM AS SND_PHON
+,A.CUST_NM || ' 고객 (' ||D.OUT_ORG_DTL_NM || ' ' || C.OUT_ORG_DTL_NM || ' ' ||B.AGNT_NM|| ')'   AS APND
+FROM  DSM_CUST_PGCV A
+JOIN  PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON 
+      (A.AGNT_ID = B.AGNT_ID 
+       AND CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' ) )
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON      
+      ( B.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)        
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON      
+      ( C.SUP_OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)      
+JOIN ( /*국별 국장및CS*/
+      SELECT 
+          A.AGNT_ID
+         ,B.OUT_ORG_DTL_ID AS DSM_TEAM_CD       
+         ,C.OUT_ORG_DTL_ID AS DSM_HEADQ_CD
+         ,D.MBL_PHON_NUM1 || D.MBL_PHON_NUM2 || D.MBL_PHON_NUM3 AS RCV_PHON         
+      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (B.SUP_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)      
+      JOIN PS_MNG.TBAS_USER_MGMT C ON (A.AGNT_ID = C.CPLAZA_ORG_CD)
+      JOIN DSM_USER D ON (C.USER_ID = D.USER_ID)      
+      WHERE  CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' )
+        AND ( A.CS_YN = 'Y' OR A.RPSTY IN (
+                                            SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                            WHERE COMM_CD_ID = 'DSM_RETL_CLASS_CD'
+                                            AND ADD_INFO_05 = '08'
+                                          )
+            )      
+      ) D ON ( C.SUP_OUT_ORG_DTL_ID = D.DSM_HEADQ_CD )      
+JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_REP_PHON_NUM' AND E.COMM_CD_VAL = C.OUT_ORG_ID)                                       
+WHERE  TO_CHAR(SYSDATE , 'yyyymmddhhmi') > A.OP_CLS_DT || A.OP_CLS_TM || A.OP_CLS_MM
+                              AND A.CUST_PGCV_ST_CD = 'N'
+                              AND NOT EXISTS (SELECT 'x' FROM DSM_CUST_PGCV_OP_DTL B 
+                                              WHERE A.RCV_MGMT_NUM= B.RCV_MGMT_NUM)
+                              AND A.OP_CLS_DT >= '20150409'    /*이건택M요청*/
+                              
+                              
+UNION      
+
+            
+/*비정상영업추정*/
+/*팀장*/
+SELECT 
+ 'DSM_SCRB_CLM' AS SND_TYP
+ ,RCV_PHON       AS RCV_PHON
+, E.COMM_CD_VAL_NM AS SND_PHON 
+,A.CUST_NM || ' 고객 (' ||D.OUT_ORG_DTL_NM || ' ' || C.OUT_ORG_DTL_NM || ' ' ||B.AGNT_NM|| ')' AS APND
+FROM  DSM_SCRB_CLM A
+JOIN  PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON 
+      (A.AGNT_ID = B.AGNT_ID 
+       AND CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' ) )        
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON      
+      ( B.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)   
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON      
+      ( C.SUP_OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)          
+JOIN ( /*팀별 팀장*/
+      SELECT 
+          A.AGNT_ID
+         ,B.OUT_ORG_DTL_ID AS DSM_TEAM_CD
+         ,C.OUT_ORG_DTL_ID AS DSM_HEADQ_CD
+         ,D.MBL_PHON_NUM1 || D.MBL_PHON_NUM2 || D.MBL_PHON_NUM3 AS RCV_PHON         
+      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (B.SUP_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)      
+      JOIN PS_MNG.TBAS_USER_MGMT C ON (A.AGNT_ID = C.CPLAZA_ORG_CD)
+      JOIN DSM_USER D ON (C.USER_ID = D.USER_ID)      
+      WHERE  CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' )
+        AND ( A.CS_YN = 'Y' OR A.RPSTY IN (
+                                            SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                            WHERE COMM_CD_ID = 'DSM_RETL_CLASS_CD'
+                                            AND ADD_INFO_05 = '09'
+                                          )
+            )      
+      ) D ON ( C.OUT_ORG_DTL_ID = D.DSM_TEAM_CD ) 
+JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_REP_PHON_NUM' AND E.COMM_CD_VAL = C.OUT_ORG_ID)                                          
+WHERE  A.SCRB_CLM_ST_CD = 'N'
+AND A.OP_CLS_DT >= '20150409'    /*이건택M요청*/
+AND TO_CHAR(SYSDATE , 'yyyymmddhhmi') > A.OP_CLS_DT || A.OP_CLS_TM || A.OP_CLS_MM
+AND NOT EXISTS (SELECT 'x' FROM DSM_SCRB_CLM_OP_DTL B 
+                 WHERE A.RCV_MGMT_NUM= B.RCV_MGMT_NUM)                 
+UNION 
+/*국장/CS*/                    
+SELECT 
+'DSM_SCRB_CLM' AS SND_TYP
+,RCV_PHON       AS RCV_PHON
+,E.COMM_CD_VAL_NM AS SND_PHON
+,A.CUST_NM || ' 고객 (' ||D.OUT_ORG_DTL_NM || ' ' || C.OUT_ORG_DTL_NM || ' ' ||B.AGNT_NM|| ')'   AS APND
+FROM  DSM_SCRB_CLM A
+JOIN  PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON 
+      (A.AGNT_ID = B.AGNT_ID 
+       AND CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' ) )
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON      
+      ( B.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)        
+JOIN  PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON      
+      ( C.SUP_OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)      
+JOIN ( /*국별 국장및CS*/
+      SELECT 
+          A.AGNT_ID
+         ,B.OUT_ORG_DTL_ID AS DSM_TEAM_CD       
+         ,C.OUT_ORG_DTL_ID AS DSM_HEADQ_CD
+         ,D.MBL_PHON_NUM1 || D.MBL_PHON_NUM2 || D.MBL_PHON_NUM3 AS RCV_PHON         
+      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (B.SUP_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)      
+      JOIN PS_MNG.TBAS_USER_MGMT C ON (A.AGNT_ID = C.CPLAZA_ORG_CD)
+      JOIN DSM_USER D ON (C.USER_ID = D.USER_ID)      
+      WHERE  CONS_MTH = TO_CHAR(SYSDATE , 'yyyymm' )
+        AND ( A.CS_YN = 'Y' OR A.RPSTY IN (
+                                            SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                            WHERE COMM_CD_ID = 'DSM_RETL_CLASS_CD'
+                                            AND ADD_INFO_05 = '08'
+                                          )
+            )      
+      ) D ON ( C.SUP_OUT_ORG_DTL_ID = D.DSM_HEADQ_CD )      
+JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_REP_PHON_NUM' AND E.COMM_CD_VAL = C.OUT_ORG_ID)                                       
+WHERE  A.SCRB_CLM_ST_CD = 'N'
+AND A.OP_CLS_DT >= '20150409'    /*이건택M요청*/
+AND TO_CHAR(SYSDATE , 'yyyymmddhhmi') > A.OP_CLS_DT || A.OP_CLS_TM || A.OP_CLS_MM
+AND NOT EXISTS (SELECT 'x' FROM DSM_SCRB_CLM_OP_DTL B 
+                 WHERE A.RCV_MGMT_NUM= B.RCV_MGMT_NUM)]]>
+	</select>
+</sqlMap>

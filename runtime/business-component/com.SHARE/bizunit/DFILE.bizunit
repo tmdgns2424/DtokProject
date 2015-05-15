@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DFILE">
+    <bizUnitName>[DU]파일관리</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>공통 첨부파일 정보처리 DAO 클래스</description>
+    <method-list>
+        <method id="dInsertFile">
+            <methodName>[DM]첨부파일등록</methodName>
+            <transactionId>com.SHARE@DFILE_dInsertFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보를 등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-13T09:19:52" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dDeleteFile">
+            <methodName>[DM]첨부파일삭제</methodName>
+            <transactionId>com.SHARE@DFILE_dDeleteFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보를 삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-13T09:20:20" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchFile">
+            <methodName>[DM]첨부파일조회</methodName>
+            <transactionId>com.SHARE@DFILE_dSearchFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-12T20:35:31" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-12T20:34:26" user="admin (admin)"/>
+    </history>
+</bizUnit>

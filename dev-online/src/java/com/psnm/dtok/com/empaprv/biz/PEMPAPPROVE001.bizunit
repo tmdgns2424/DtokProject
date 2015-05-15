@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PEMPAPPROVE001">
+    <bizUnitName>[PU]임직원로그인관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.EMPAPRV</componentId>
+    <description>임직원로그인관리 PU</description>
+    <method-list>
+        <method id="pSearchAproveUser">
+            <methodName>[PM]임직원로그인관리사용자조회</methodName>
+            <transactionId>com.EMPAPRV@PEMPAPPROVE001_pSearchAproveUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 사용자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:30:28" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDeleteAprove">
+            <methodName>[PM]임직원로그인관리삭제</methodName>
+            <transactionId>com.EMPAPRV@PEMPAPPROVE001_pDeleteAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:31:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveAprove">
+            <methodName>[PM]임직원로그인관리저장(등록|수정)</methodName>
+            <transactionId>com.EMPAPRV@PEMPAPPROVE001_pSaveAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:31:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAprove">
+            <methodName>[PM]임직원로그인관리조회</methodName>
+            <transactionId>com.EMPAPRV@PEMPAPPROVE001_pSearchAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:29:13" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchDutyMgmt">
+            <methodName>[PM]임직원로그인관리직무조회</methodName>
+            <transactionId>com.EMPAPRV@PEMPAPPROVE001_pSearchDutyMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리직무정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T16:23:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-23T13:11:56" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

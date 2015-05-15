@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PWEBBASVAL001">
+    <bizUnitName>[PU]기본값관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.BASEVAL</componentId>
+    <description>기본값관리 PU</description>
+    <method-list>
+        <method id="pDeleteWebBasVal">
+            <methodName>[PM]기본값관리삭제</methodName>
+            <transactionId>com.BASEVAL@PWEBBASVAL001_pDeleteWebBasVal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>기본값관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-22T11:33:11" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveWebBasVal">
+            <methodName>[PM]기본값관리저장(등록|수정)</methodName>
+            <transactionId>com.BASEVAL@PWEBBASVAL001_pSaveWebBasVal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>기본값관리 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-22T11:24:14" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchWebBasVal">
+            <methodName>[PM]기본값관리조회</methodName>
+            <transactionId>com.BASEVAL@PWEBBASVAL001_pSearchWebBasVal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>기본값관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-22T11:10:54" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pUpdateWebBasValImg">
+            <methodName>[PM]팝업이미지관리수정</methodName>
+            <transactionId>com.BASEVAL@PWEBBASVAL001_pUpdateWebBasValImg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>팝업이미지정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-22T16:11:09" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchWebBasValPic">
+            <methodName>[PM]팝업이미지관리조회</methodName>
+            <transactionId>com.BASEVAL@PWEBBASVAL001_pSearchWebBasValPic</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>팝업이미지관리정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:08:31" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-22T11:09:20" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

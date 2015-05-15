@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PAGENTCNSLPRSS001">
+    <bizUnitName>[PU]면담현황</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.AGNTFTFT</componentId>
+    <description>면담현황 PU</description>
+    <method-list>
+        <method id="pSearchAgentCnslPrssExcel">
+            <methodName>[PM]면담현황엑셀조회</methodName>
+            <transactionId>biz.AGNTFTFT@PAGENTCNSLPRSS001_pSearchAgentCnslPrssExcel</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담현황엑셀 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T17:23:37" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentCnslPrss">
+            <methodName>[PM]면담현황조회</methodName>
+            <transactionId>biz.AGNTFTFT@PAGENTCNSLPRSS001_pSearchAgentCnslPrss</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담현황 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T13:20:57" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentCnslPrssTotal">
+            <methodName>[PM]면담현황통계조회</methodName>
+            <transactionId>biz.AGNTFTFT@PAGENTCNSLPRSS001_pSearchAgentCnslPrssTotal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담현황통계 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T10:46:49" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-19T13:20:00" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

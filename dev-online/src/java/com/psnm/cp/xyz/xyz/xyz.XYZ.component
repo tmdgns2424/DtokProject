@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="xyz.XYZ">
+    <componentName>샘플</componentName>
+    <bizGroupXd>xyz</bizGroupXd>
+    <packageName>com.psnm.cp.xyz.xyz</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+    </history>
+</component>

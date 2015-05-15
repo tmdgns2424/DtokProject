@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DEXCELSALEEX001">
+    <bizUnitName>[DU]우수영업사례</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEEX</componentId>
+    <description>우수영업사례 DU</description>
+    <method-list>
+        <method id="dSearchExcelSaleExIdSeq">
+            <methodName>[DM]우수영업사례ID시퀀스채번</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dSearchExcelSaleExIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례ID 시퀀스 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:52:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchExcelSaleExCount">
+            <methodName>[DM]우수영업사례건수조회</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dSearchExcelSaleExCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:42:02" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteExcelSaleEx">
+            <methodName>[DM]우수영업사례삭제</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dDeleteExcelSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례정보를 삭제 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:52:57" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailExcelSaleEx">
+            <methodName>[DM]우수영업사례상세</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dDetailExcelSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T17:31:37" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateExcelSaleEx">
+            <methodName>[DM]우수영업사례수정</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dUpdateExcelSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:51:52" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertExcelSaleEx">
+            <methodName>[DM]우수영업사례저장</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dInsertExcelSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:51:29" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchExcelSaleEx">
+            <methodName>[DM]우수영업사례조회</methodName>
+            <transactionId>biz.SALEEX@DEXCELSALEEX001_dSearchExcelSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>우수영업사례정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:41:35" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-26T11:31:08" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.ANNCEMGMT">
+    <componentName>[BC]공통-공지사항</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.anncemgmt</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-01-08T09:30:29" user="이민재 (leeminjae)"/>
+    </history>
+</component>

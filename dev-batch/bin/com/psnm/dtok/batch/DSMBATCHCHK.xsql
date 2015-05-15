@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.DSMBATCHCHK">
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.DSMBATCHCHK.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 허용,2015-04-15T16:00:52(허용,2015-04-15T16:00:52) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 채수윤,2015-04-08T20:26:56(채수윤,2015-04-08T20:26:56) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.DSMBATCHCHK.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-15T16:03:49(채수윤,2015-04-08T20:31:09) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , '01047567552' /*수신전화번호*/
+     , '0264005567'/*발송전화번호*/
+     , (    SELECT 
+            '배치수행 결과 - 성공:' ||  SUM(DECODE (JOB_SUSS_YN , 'Y' , 1 , 0) ) || '건 실패:' ||SUM(DECODE (JOB_SUSS_YN , 'Y' , 0 , 1) ) || '건'
+            FROM DSM_BATCH_LOG
+            WHERE TO_CHAR (JOB_STA_DTM , 'YYYYMMDD' ) = TO_CHAR(SYSDATE , 'YYYYMMDD'))/*발송메시지*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 채수윤,2015-04-08T20:29:27(채수윤,2015-04-08T20:29:27) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , '01047567552' /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.DSMBATCHCHK.dInsertSmsTran SMS발송정보입력 */
+/* IO: 허용,2015-04-15T16:03:23(채수윤,2015-04-08T20:15:28) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+     , (    SELECT 
+            '배치수행 결과 - 성공:' ||  SUM(DECODE (JOB_SUSS_YN , 'Y' , 1 , 0) ) || '건 실패:' ||SUM(DECODE (JOB_SUSS_YN , 'Y' , 0 , 1) ) || '건'
+            FROM DSM_BATCH_LOG
+            WHERE TO_CHAR (JOB_STA_DTM , 'YYYYMMDD' ) = TO_CHAR(SYSDATE , 'YYYYMMDD'))/*발송메시지*/
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<update id="SP_DSMBATCHCHK" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.DSMBATCHCHK.SP_DSMBATCHCHK  */
+/* IO: 허용,2015-04-15T16:12:01(허용,2015-04-15T16:10:27) */
+BEGIN 
+  PSNMDTOK.SP_DSMBATCHCHK;
+END]]>
+	</update>
+</sqlMap>

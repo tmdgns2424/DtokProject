@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<STYLE type=text/css>.text {
+	FONT-FAMILY: "돋움";  FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+</STYLE>
+</head>
+
+<BODY aLink=#2822C8 leftMargin=0 topMargin=0 bgColor=#ffffff text=#000000 vLink=#2822C8 link=#2822C8 marginheight="0" marginwidth="0">
+<!--<DIV align=center style="ppsition:absolute; left:50%; top:50%; margin-left:-150px; mergin-top:-150px; padding:0px;" >-->
+<DIV align=center>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<TABLE border=1 bordercolor=#6083C3 cellspacing=0 width=30% align=center>
+  <TR height=30 bgcolor=#6083C3>
+	<TD colspan=2 align=center>
+		<font color=#FFFFFF face=돋움><B>
+		고객님의 안전한 사용을 위하여 보안프로그램을 설치 중입니다.
+		</B></font>
+	</TD>
+  </TR>
+  <TR>
+	<TD>
+		<TABLE  border=0 bordercolor=#6083C3 cellspacing=0 width=100%  align=center>
+			  <TR height=80>
+				<TD Align=center><IMG src="./img/plugin_bg.gif" width=150 height=50></TD>
+				<TD align=left><BR><IMG src="./img/plugin.gif" width=350 height=15>
+				<BR><FONT color=#7A9BC8> <B>설치작업은 약 10 초에서 수 분이 소요됩니다.</B><BR></FONT>
+				<FONT color=#5274BE><B>잠시만 기다려 주시기 바랍니다.</B></FONT></TD>
+			 </TR>
+			 <TR height=1 bgcolor=#6083C3>
+				<TD></TD>
+				<TD></TD>
+			 </TR>
+			  <TR>
+				<TD style="color:#000000;" align=center colspan=2>
+					<img src="./img/text.png" width="550" height="15" >&nbsp;<img src="./img/help.png" width="120" height="20" style="cursor:hand;" target="_blank" onclick="popWin=window.open('popup.htm','windows','width=625,height=400'); popWin.focus(); return false;">
+					<FONT color=#5274BE face=돋움><h2>웹 보안 프로그램 다운로드</h2></FONT>
+					
+					<script language="javascript">
+
+						var clintInfoObj = window.clientInformation;
+						var browser = clintInfoObj.platform;
+						//alert(navigator.appVersion);
+						if((clintInfoObj.appVersion.toLowerCase().indexOf("x64") < 0) &&(clintInfoObj.appVersion.toLowerCase().indexOf("wow64") < 0))
+						{
+						//alert('32비트OS에 32비트Borwser');
+						document.write("<a href='./components/WebCubeSetup.exe'><img src='./img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+						}
+						else
+						{
+							if(browser.toLowerCase() != "win64") 
+							{
+							//alert('64비트OS에 32비트Borwser');
+							document.write("<a href='./components/WebCubeSetupwow.exe'><img src='./img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+							}
+							else
+							{
+							//alert('64비트OS에 64비트Borwser');
+							document.write("<a href='./components/WebCubeSetup64.exe'><img src='./img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+							}
+						}
+
+					</script>	
+					<BR><BR>
+					<FONT color=#5274BE><B>본 사이트는 웹 보안 프로그램이 설치되어야만 이용하실 수 있습니다.<BR>
+					고객님의 정보 보호를 위해 웹 보안 프로그램을 설치해 주시기 바랍니다.</FONT>
+					<!--1. 상단에 <b>설치파일 다운로드</b> 링크를 클릭하여 설치파일을 다운로드 합니다.<br>
+					(아래의 이미지는 크롬의 경우 나타날 수 있으며 타브라우저의 경우 메세지가 다를수 있습니다.)<br>
+					<img src="./img/Down.jpg" width="382" height="30" border="0" align=center><br><br>
+					
+					2. 다운로드 받은 파일을 실행시키면 아래와 같은 "<b>설치</b>" 화면이 나타나며 Next를 선택하여 설치를 완료합니다.<br>
+					<img src="./img/Inst.jpg" width="390" height="250" border="0"><br><br>
+					
+					3. 설치가 완료되면 사이트에 접속하시면 됩니다.<br><br>-->
+				</TD>
+			   </TR>
+			   <TR>
+				<TD>
+					
+				</TD>
+			   </TR>
+		 </TABLE>
+	</TD>
+   </TR>
+   <!--<TR>
+	<TD height="20">
+		<b><font color="blue">※ 설치 완료 후 시스템 재시작 메시지가 뜨는 경우 ※</font></b><br>
+		<b>1) 시스템 재부팅 후 이용하고자 할 경우</b><br>
+		- "예"를 클릭하여 시스템 재부팅 후 서비스를 이용합니다.<br>
+		<b>2) 시스템 재부팅을 하지 않고 이용하고자 할 경우</b><br>
+		- "아니오"를 클릭한 후 모든 브라우저를 닫고, 하나의 브라우저를 실행한 후 다시 설치를 진행합니다.
+	</TD>
+   </TR>-->
+  
+</TABLE>
+</DIV>
+</BODY>
+</HTML>

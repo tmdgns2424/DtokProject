@@ -1,0 +1,8 @@
+#
+#Tue Nov 04 10:14:00 KST 2014
+batch_java_exe_folder=src/exe
+batch_java_test_folder=src/test
+batch_lib_folder=lib
+batch_java_bin_folder=bin
+batch_java_src_folder=src/java
+batch_java_fio_folder=src/fio

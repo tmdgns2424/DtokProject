@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSCRBCLM001">
+    <bizUnitName>[PU]비정상영업소명 관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SCRBCLM</componentId>
+    <description/>
+    <method-list>
+        <method id="pSearchScrbClmPrst">
+            <methodName>[PM]비정상영업소명현황 조회</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSearchScrbClmPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-17T12:34:20" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSaveScrbClm">
+            <methodName>[PM]비정상영업소명 등록/수정</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSaveScrbClm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T11:40:36" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pDeleteScrbClm">
+            <methodName>[PM]비정상영업소명 삭제</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pDeleteScrbClm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T14:56:00" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchScrbClmDtl">
+            <methodName>[PM]비정상영업소명 상세조회</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSearchScrbClmDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T13:34:22" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchScrbClm">
+            <methodName>[PM]비정상영업소명 조회</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSearchScrbClm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T09:46:53" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pFnshOrRevokScrbClm">
+            <methodName>[PM]비정상영업소명 최종완료/완료취소</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pFnshOrRevokScrbClm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-17T09:58:37" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSaveScrbClmOp">
+            <methodName>[PM]비정상영업소명처리 등록/수정</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSaveScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T15:36:16" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pDeleteScrbClmOp">
+            <methodName>[PM]비정상영업소명처리 삭제</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pDeleteScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T17:07:43" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchScrbClmOpDtl">
+            <methodName>[PM]비정상영업소명처리 상세조회</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSearchScrbClmOpDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T16:27:40" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchIsMa">
+            <methodName>[PM]판매자의 해당월 기준 MA/S-MA 여부 조회</methodName>
+            <transactionId>biz.SCRBCLM@PSCRBCLM001_pSearchIsMa</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-23T16:55:26" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-16T09:45:08" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

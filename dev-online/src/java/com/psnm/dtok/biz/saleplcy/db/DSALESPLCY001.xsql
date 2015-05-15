@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSALESPLCY001">
+	<select id="dSearchSalesPlcy" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcy  */
+/* IO: 이민재,2014-11-21T10:56:43(이민재,2014-11-21T10:56:43) */
+	SELECT * 
+	FROM (
+		SELECT ROWNUM AS RN  
+     		, Z.DSM_SALES_PLCY_ID
+     		, Z.F
+     		, Z.ANNCE_YN
+     		, Z.APLY_STA_DT
+     		, Z.DSM_SALES_PLCY_TYP_CD
+     		, Z.DSM_SALES_PLCY_TYP_NM
+     		, Z.DSM_SALES_PLCY_TYP_CD_PRT
+     		, Z.SALES_PLCY_NM
+     		, Z.VIEW_CNT
+     		, Z.USER_NM
+     		, Z.RGST_DTM
+     		, Z.RGST_ORG_ID
+     		, Z.RGST_OUT_ORG_ID
+ 		FROM (
+    		SELECT /*+ ORDERED USE_NL( A B C ) */
+              		X.DSM_SALES_PLCY_ID
+            	, CASE WHEN X.RGST_DTM + #NEW_PRD# / 24 >= SYSDATE THEN 'NEW' END F 
+            	, CASE WHEN X.ANNCE_YN = 'Y' THEN
+                          CASE WHEN TO_CHAR(SYSDATE, 'YYYYMMDD') >= X.ANNCE_STA_DT AND TO_CHAR(SYSDATE, 'YYYYMMDD') <= X.ANNCE_END_DT THEN 'Y' 
+                   		         ELSE 'N'
+                          END
+                    ELSE X.ANNCE_YN
+             		END ANNCE_YN
+            	, SUBSTR(X.APLY_STA_DT, 1, 4) || '-' || SUBSTR(X.APLY_STA_DT, 5, 2) || '-' || SUBSTR(X.APLY_STA_DT, 7) AS APLY_STA_DT
+            	, X.DSM_SALES_PLCY_TYP_CD
+            	, (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = X.DSM_SALES_PLCY_TYP_CD) AS DSM_SALES_PLCY_TYP_NM
+            	, (SELECT PRT_SEQ FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = X.DSM_SALES_PLCY_TYP_CD) AS DSM_SALES_PLCY_TYP_CD_PRT
+            	, X.SALES_PLCY_NM
+            	, ( SELECT NVL(COUNT(I.READR_ID) , 0)
+                	FROM DSM_READR_MGMT I , PS_MNG.TBAS_USER_MGMT II
+                	WHERE I.READ_MGMT_ID = X.DSM_SALES_PLCY_ID
+                	    AND I.READR_ID = II.USER_ID
+                	    AND II.ATTC_CAT = '4'
+              		) VIEW_CNT /* 조회건수 */
+            	, F_MASKING('N',X.RGSTR_NM) AS USER_NM
+            	, TO_CHAR(X.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM
+            	, X.RGST_ORG_ID
+            	, X.RGST_OUT_ORG_ID
+			FROM (
+				SELECT A.DSM_SALES_PLCY_ID 
+            		, A.APLY_STA_DT
+            		, A.SALES_PLCY_NM
+            		, A.ANNCE_YN
+            		, A.ANNCE_STA_DT
+            		, A.ANNCE_END_DT
+            		, A.RGST_DTM 
+            		, A.RGSTR_ID
+            		, C.USER_NM AS RGSTR_NM
+            		, A.DSM_SALES_PLCY_TYP_CD
+            		, A.RGST_ORG_ID
+            		, A.RGST_OUT_ORG_ID
+ 				FROM DSM_SALES_PLCY A
+        		LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+        		WHERE A.RGST_OUT_ORG_ID = #onlineContext.userInfo.OUT_ORG_ID#
+            	AND A.DEL_YN = 'N'
+            	AND A.APLY_STA_DT BETWEEN #FROM_DT# AND #TO_DT# 
+        		UNION
+    			SELECT A.DSM_SALES_PLCY_ID
+                	, A.APLY_STA_DT
+                	, A.SALES_PLCY_NM
+                	, A.ANNCE_YN
+                	, A.ANNCE_STA_DT
+                	, A.ANNCE_END_DT
+                	, A.RGST_DTM
+                	, A.RGSTR_ID
+                	, C.USER_NM AS RGSTR_NM
+                	, A.DSM_SALES_PLCY_TYP_CD
+              		, A.RGST_ORG_ID
+              		, A.RGST_OUT_ORG_ID
+        		FROM DSM_SALES_PLCY A
+        		LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+        		WHERE A.RGST_OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM DSM_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+            	AND A.DEL_YN = 'N'
+            	AND A.APLY_STA_DT BETWEEN #FROM_DT# AND #TO_DT# 
+      		) X
+      		WHERE 1=1
+      		]]><isNotEmpty prepend="" property="DSM_SALES_PLCY_TYP_CD"><![CDATA[
+			AND X.DSM_SALES_PLCY_TYP_CD = #DSM_SALES_PLCY_TYP_CD#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+			AND X.RGST_ORG_ID = #HDQT_TEAM_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+			AND X.RGST_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+  		) Z
+  	 ORDER BY Z.ANNCE_YN DESC, Z.DSM_SALES_PLCY_TYP_CD_PRT, Z.RGST_DTM DESC
+	) WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchSalesPlcyCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyCount  */
+/* IO: 이민재,2014-11-21T10:58:20(이민재,2014-11-21T10:58:20) */
+	SELECT COUNT(1) AS CNT
+	FROM (
+		SELECT A.DSM_SALES_PLCY_ID 
+			, A.APLY_STA_DT
+       		, A.SALES_PLCY_NM
+       		, A.ANNCE_YN
+       		, A.ANNCE_STA_DT
+       		, A.ANNCE_END_DT
+       		, A.RGST_DTM 
+       		, A.RGSTR_ID
+       		, C.USER_NM AS RGSTR_NM
+       		, A.DSM_SALES_PLCY_TYP_CD
+       		, A.RGST_ORG_ID
+       		, A.RGST_OUT_ORG_ID
+		FROM DSM_SALES_PLCY A
+  		LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+  		WHERE A.RGST_OUT_ORG_ID = #onlineContext.userInfo.OUT_ORG_ID#
+ 		AND A.DEL_YN = 'N'
+		AND A.APLY_STA_DT BETWEEN #FROM_DT# AND #TO_DT# 
+		UNION
+		SELECT A.DSM_SALES_PLCY_ID
+        	, A.APLY_STA_DT
+        	, A.SALES_PLCY_NM
+        	, A.ANNCE_YN
+        	, A.ANNCE_STA_DT
+        	, A.ANNCE_END_DT
+        	, A.RGST_DTM
+        	, A.RGSTR_ID
+        	, C.USER_NM AS RGSTR_NM
+        	, A.DSM_SALES_PLCY_TYP_CD
+      		, A.RGST_ORG_ID
+      		, A.RGST_OUT_ORG_ID
+		FROM DSM_SALES_PLCY A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+		WHERE A.RGST_OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM DSM_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+		AND A.DEL_YN = 'N'
+		AND A.APLY_STA_DT BETWEEN #FROM_DT# AND #TO_DT# 
+	) X
+	WHERE 1=1
+	]]><isNotEmpty prepend="" property="DSM_SALES_PLCY_TYP_CD"><![CDATA[
+	AND X.DSM_SALES_PLCY_TYP_CD = #DSM_SALES_PLCY_TYP_CD#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+	AND X.RGST_ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+	AND X.RGST_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchSalesPlcyIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyIdSeq  */
+/* IO: 이민재,2014-11-21T10:59:22(이민재,2014-11-21T10:59:22) */
+	SELECT 'PLC' || LPAD(DSM_SALES_PLCY_SEQ.NEXTVAL, 12, '0') AS DSM_SALES_PLCY_ID FROM DUAL]]>
+	</select>
+	<insert id="dInsertSalesPlcy" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dInsertSalesPlcy  */
+/* IO: 채수윤,2015-03-13T09:25:15(이민재,2014-11-21T11:00:06) */
+INSERT INTO DSM_SALES_PLCY (
+			DSM_SALES_PLCY_ID
+		, APLY_STA_DT
+     	, DSM_SALES_PLCY_TYP_CD
+     	, SALES_PLCY_CTT
+     	, SALES_PLCY_NM
+     	, ANNCE_YN /* 공지사항여부 */
+     	, ANNCE_STA_DT /* 공지사항시작일자 */
+     	, ANNCE_END_DT /* 공지사항종료일자 */
+     	, DEL_CYCL_DT_CNT
+     	, RGSTR_ID
+     	, RGST_DTM
+     	, UPDR_ID
+     	, UPD_DTM
+     	, RGST_ORG_ID
+		, RGST_OUT_ORG_ID
+	) VALUES (
+	       #DSM_SALES_PLCY_ID#
+		, REPLACE(#APLY_STA_DT#, '-', '')
+		, #DSM_SALES_PLCY_TYP_CD#
+		, #SALES_PLCY_CTT:CLOB#
+		, #SALES_PLCY_NM#
+		, #ANNCE_YN#
+		, #ANNCE_STA_DT#
+		, #ANNCE_END_DT#
+		, #DEL_CYCL_CD#
+		, #onlineContext.userInfo.loginId#
+		, SYSDATE
+		, #onlineContext.userInfo.loginId#
+		, SYSDATE
+		, #onlineContext.userInfo.NEW_ORG_ID#
+  		, #onlineContext.userInfo.OUT_ORG_ID#
+	)]]>
+	</insert>
+	<update id="dUpdateSalesPlcy" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dUpdateSalesPlcy  */
+/* IO: 채수윤,2015-03-13T09:29:20(이민재,2014-11-21T11:02:05) */
+UPDATE DSM_SALES_PLCY A SET
+       A.APLY_STA_DT            = REPLACE(#APLY_STA_DT#, '-', '')
+     , A.DSM_SALES_PLCY_TYP_CD  = #DSM_SALES_PLCY_TYP_CD#
+     , A.SALES_PLCY_CTT         = #SALES_PLCY_CTT:CLOB#
+     , A.SALES_PLCY_NM          = #SALES_PLCY_NM#
+     , A.ANNCE_YN               = #ANNCE_YN#
+     , A.ANNCE_STA_DT           = #ANNCE_STA_DT#
+     , A.ANNCE_END_DT           = #ANNCE_END_DT#
+     , A.DEL_CYCL_DT_CNT        = #DEL_CYCL_CD#
+     , A.UPDR_ID                = #onlineContext.userInfo.loginId#
+     , A.UPD_DTM               	= SYSDATE
+ 	WHERE A.DSM_SALES_PLCY_ID 	= #DSM_SALES_PLCY_ID#]]>
+	</update>
+	<select id="dSearchSalesPlcyStc" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyStc  */
+/* IO: 이민재,2014-11-21T11:49:49(이민재,2014-11-21T11:49:49) */
+	SELECT YMD
+		, SALE_DEPT_ORG_ID
+	FROM (
+		SELECT TO_CHAR(G.UPD_DTM, 'YYYY-MM-DD') YMD
+			, wm_concat(D.OUT_ORG_DTL_ID ) AS SALE_DEPT_ORG_ID
+		/*	, LISTAGG(D.OUT_ORG_DTL_NM,',') WITHIN GROUP ( ORDER BY D.OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_NM */
+		FROM PS_MNG.TBAS_USER_MGMT A
+	  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.CPLAZA_ORG_CD AND B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+	  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID )
+	  	JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON ( E.OUT_ORG_ID = D.OUT_ORG_ID )
+	  	JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON ( F.ORG_ID = E.ORG_ID )
+	  	LEFT JOIN DSM_READR_MGMT G ON ( G.READR_ID = A.USER_ID AND G.READ_MGMT_ID  = #DSM_SALES_PLCY_ID# )
+	  	WHERE G.UPD_DTM IS NOT NULL
+	  	AND A.ATTC_CAT = '4'
+	  	AND A.USER_TYP = '4'
+	  	AND E.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+    	GROUP BY ROLLUP( TO_CHAR(G.UPD_DTM, 'YYYY-MM-DD') )
+	)
+	ORDER BY  NVL(YMD, '0000-00-00')
+	
+	/*
+	SELECT YMD
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(TTLCNT) ) ELSE MAX(TTLCNT) - MIN(TTLCNT) || '/' || MAX(TTLCNT) END TTLCNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K1CNT ) ) ELSE MAX(K1CNT ) - MIN(K1CNT ) || '/' || MAX(K1CNT ) END K1CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K2CNT ) ) ELSE MAX(K2CNT ) - MIN(K2CNT ) || '/' || MAX(K2CNT ) END K2CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K3CNT ) ) ELSE MAX(K3CNT ) - MIN(K3CNT ) || '/' || MAX(K3CNT ) END K3CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K4CNT ) ) ELSE MAX(K4CNT ) - MIN(K4CNT ) || '/' || MAX(K4CNT ) END K4CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K5CNT ) ) ELSE MAX(K5CNT ) - MIN(K5CNT ) || '/' || MAX(K5CNT ) END K5CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K6CNT ) ) ELSE MAX(K6CNT ) - MIN(K6CNT ) || '/' || MAX(K6CNT ) END K6CNT
+	     , CASE WHEN YMD > ' ' THEN TO_CHAR( MIN(K7CNT ) ) ELSE MAX(K7CNT ) - MIN(K7CNT ) || '/' || MAX(K7CNT ) END K7CNT
+	  FROM (
+		SELECT TO_CHAR(F.UPD_DTM, 'YYYY-MM-DD') YMD
+              , COUNT( 1 ) TTLCNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01020000' THEN 1 END ) K1CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01030000' THEN 1 END ) K2CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01040000' THEN 1 END ) K3CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01050000' THEN 1 END ) K4CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01060000' THEN 1 END ) K5CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01070000' THEN 1 END ) K6CNT
+              , COUNT( CASE WHEN C.SUP_OUT_ORG_DTL_ID = '01080000' THEN 1 END ) K7CNT
+           FROM PS_MNG.TBAS_USER_MGMT A
+            JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.CPLAZA_ORG_CD AND B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND B.ST2='01')
+            JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+            JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON ( D.OUT_ORG_ID = C.OUT_ORG_ID AND D.EFF_ORG_YN = 'Y' AND D.DEL_YN = 'N')
+            JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON ( E.ORG_ID = D.ORG_ID AND E.DEL_YN = 'N')
+            LEFT JOIN DSM_READR_MGMT F ON ( F.READR_ID = A.USER_ID AND F.READ_MGMT_ID =  ) 
+            WHERE A.ATTC_CAT = '4'
+              AND A.USER_TYP = '4'
+          GROUP BY ROLLUP( TO_CHAR(F.UPD_DTM, 'YYYY-MM-DD') )
+  	) 
+ 	GROUP BY YMD
+ 	ORDER BY NVL(YMD, '0000-00-00')
+ 	*/
+ ]]>
+	</select>
+	<select id="dDetailSalesPlcy" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dDetailSalesPlcy  */
+/* IO: 채수윤,2015-03-13T09:27:08(이민재,2014-11-21T13:26:02) */
+SELECT A.DSM_SALES_PLCY_ID 					/* 영업정책ID */
+     , A.DSM_SALES_PLCY_TYP_CD 					/* 정책유형코드 */
+     , B.COMM_CD_VAL_NM DSM_SALES_PLCY_TYP_NM 	/* 정책유형 */
+     , A.SALES_PLCY_NM 							/* 제목 */
+     , A.ANNCE_YN 								/* 공지사항여부 */
+     , DECODE(A.ANNCE_STA_DT,'','',SUBSTR(A.ANNCE_STA_DT, 1, 4) || '-' || SUBSTR(A.ANNCE_STA_DT, 5, 2) || '-' || SUBSTR(A.ANNCE_STA_DT, 7)) AS ANNCE_STA_DT
+     , DECODE(A.ANNCE_END_DT,'','',SUBSTR(A.ANNCE_END_DT, 1, 4) || '-' || SUBSTR(A.ANNCE_END_DT, 5, 2) || '-' || SUBSTR(A.ANNCE_END_DT, 7)) AS ANNCE_END_DT
+     , A.SALES_PLCY_CTT
+     , SUBSTR(A.APLY_STA_DT, 1, 4) || '-' || SUBSTR(A.APLY_STA_DT, 5, 2) || '-' || SUBSTR(A.APLY_STA_DT, 7) AS APLY_STA_DT /* 적용일자 */
+     , F_DSM_WRITER_NM(A.RGSTR_ID, 'board') AS USER_NM 								/* 작성자 */
+     , TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD') RGST_DTM
+     , A.DEL_CYCL_DT_CNT
+     , F_DSM_CODE_NM('DSM_BLT_DEL_CYCL_CD', A.DEL_CYCL_DT_CNT) AS DEL_CYCL_DT_NM
+  	FROM DSM_SALES_PLCY A
+	JOIN PS_MNG.TBAS_COMM_CD_DTL B ON (A.DSM_SALES_PLCY_TYP_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD') 
+ 	WHERE A.DSM_SALES_PLCY_ID = #DSM_SALES_PLCY_ID#]]>
+	</select>
+	<update id="dDeleteSalesPlcy" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dDeleteSalesPlcy  */
+/* IO: 이민재,2014-11-21T16:31:20(이민재,2014-11-21T16:31:20) */
+	UPDATE DSM_SALES_PLCY A SET
+	       A.DEL_YN  = 'Y'
+	     , A.DELR_ID = #onlineContext.userInfo.loginId#
+	     , A.DEL_DTM = SYSDATE
+	WHERE A.DSM_SALES_PLCY_ID = #DSM_SALES_PLCY_ID#]]>
+	</update>
+	<select id="dSearchSalesPlcyContact" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyContact  */
+/* IO: 이민재,2014-12-05T13:32:09(이민재,2014-12-05T13:32:09) */
+	SELECT COUNT(*) OVER() AS totCnt 
+	 , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM  		/* 영업국명 */
+     , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM   		/* 영업팀명 */
+     , C.AGNT_ID AS AGNT_ID   						/* 에이전트코드 */
+     , H.COMM_CD_VAL_NM AS RPSTY_NM 				/* 직책명 */
+     , F_MASKING('N',C.AGNT_NM) AS AGNT_NM   		/* 에이전트명 */
+     , TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') CTCT_TM
+  	FROM DSM_READR_MGMT A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.READR_ID )
+	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID AND F.EFF_ORG_YN = 'Y' AND F.DEL_YN = 'N' )
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON ( G.ORG_ID = F.ORG_ID AND G.DEL_YN = 'N')
+	JOIN PS_MNG.TBAS_COMM_CD_DTL H ON ( H.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND H.COMM_CD_VAL = C.RPSTY )
+	WHERE A.READ_MGMT_ID = #DSM_SALES_PLCY_ID#
+	]]><isNotEmpty property="YMD"><![CDATA[
+   		AND TO_CHAR(A.UPD_DTM, 'YYYY-MM-DD') = #YMD#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+   		AND E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	ORDER BY A.RGST_DTM]]>
+	</select>
+	<select id="dSearchSalesPlcyBrws" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyBrws  */
+/* IO: 채수윤,2015-01-27T15:19:01(이민재,2015-01-15T18:50:56) */
+SELECT * 
+	FROM (
+		SELECT ROWNUM AS RN  
+     		, Z.DSM_SALES_PLCY_ID
+            , Z.F
+            , Z.ANNCE_YN
+            , Z.APLY_STA_DT
+            , Z.DSM_SALES_PLCY_TYP_CD
+            , Z.DSM_SALES_PLCY_TYP_NM
+            , Z.DSM_SALES_PLCY_TYP_CD_PRT
+            , Z.SALES_PLCY_NM
+            , Z.VIEW_CNT
+            , Z.USER_NM
+            , Z.RGST_DTM
+            , Z.RGST_ORG_ID
+            , Z.RGST_OUT_ORG_ID
+ 		FROM (
+    		SELECT /*+ ORDERED USE_NL( A B C ) */
+              		X.DSM_SALES_PLCY_ID
+            	, CASE WHEN X.RGST_DTM + #NEW_PRD# / 24 >= SYSDATE THEN 'NEW' END F 
+            	, CASE WHEN X.ANNCE_YN = 'Y' THEN
+                          CASE WHEN TO_CHAR(SYSDATE, 'YYYYMMDD') >= X.ANNCE_STA_DT AND TO_CHAR(SYSDATE, 'YYYYMMDD') <= X.ANNCE_END_DT THEN 'Y' 
+                   		         ELSE 'N'
+                          END
+                    ELSE X.ANNCE_YN
+             		END ANNCE_YN
+            	, SUBSTR(X.APLY_STA_DT, 1, 4) || '-' || SUBSTR(X.APLY_STA_DT, 5, 2) || '-' || SUBSTR(X.APLY_STA_DT, 7) AS APLY_STA_DT
+            	, X.DSM_SALES_PLCY_TYP_CD
+            	, (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = X.DSM_SALES_PLCY_TYP_CD) AS DSM_SALES_PLCY_TYP_NM
+            	, (SELECT PRT_SEQ FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = X.DSM_SALES_PLCY_TYP_CD) AS DSM_SALES_PLCY_TYP_CD_PRT
+            	, X.SALES_PLCY_NM
+            	, ( SELECT NVL(COUNT(I.READR_ID) , 0)
+                	FROM DSM_READR_MGMT I
+                	WHERE I.READ_MGMT_ID = X.DSM_SALES_PLCY_ID
+              		) VIEW_CNT /* 조회건수 */
+            	, F_MASKING('N',X.RGSTR_NM) AS USER_NM
+            	, TO_CHAR(X.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM
+            	, X.RGST_ORG_ID
+            	, X.RGST_OUT_ORG_ID
+			FROM (
+    			SELECT A.DSM_SALES_PLCY_ID 
+            		, A.APLY_STA_DT
+            		, A.SALES_PLCY_NM
+            		, A.ANNCE_YN
+            		, A.ANNCE_STA_DT
+            		, A.ANNCE_END_DT
+            		, A.RGST_DTM 
+            		, A.RGSTR_ID
+            		, D.USER_NM AS RGSTR_NM
+            		, A.DSM_SALES_PLCY_TYP_CD
+            		, A.RGST_ORG_ID
+            		, A.RGST_OUT_ORG_ID
+            FROM DSM_SALES_PLCY A
+        		JOIN (SELECT C.SALES_PLCY_ID
+                        FROM (SELECT DUTY AS DUTY_CD
+                                 FROM PS_MNG.TBAS_USER_MGMT
+                                WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                UNION 
+                               SELECT DUTY_CD
+                                 FROM DSM_APPROVE
+                                WHERE USER_ID = #onlineContext.userInfo.loginId#
+                             ) A
+                           , DSM_AUTH_GRP_APLY_DUTY B
+                           , DSM_PLCY_RCV_GRP C
+                      WHERE A.DUTY_CD = B.DUTY_CD
+                        AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                      GROUP BY C.SALES_PLCY_ID
+                     ) B ON (A.DSM_SALES_PLCY_ID = B.SALES_PLCY_ID)
+                ]]><isEqual property="DUTY_CD_YN" compareValue="N"><![CDATA[
+				JOIN ( SELECT SALES_PLCY_ID
+						FROM DSM_PLCY_RCV_ORG
+  						WHERE 1=1
+ 				]]><isNotEmpty property="onlineContext.userInfo.SALE_DEPT_ORG_ID"><![CDATA[
+						AND DSM_HEADQ_CD = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+  				]]></isNotEmpty><![CDATA[
+   						GROUP BY SALES_PLCY_ID
+						) C ON (A.DSM_SALES_PLCY_ID = C.SALES_PLCY_ID)
+   				]]></isEqual><![CDATA[     
+        		LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (D.USER_ID = A.RGSTR_ID)
+          	WHERE 1=1
+             AND EXISTS (SELECT 'X' FROM  DSM_PLCY_RCV_ORG K , PS_MNG.TBAS_OUT_ORG_DTL_MGMT L , VW_DATA_USE_AUTH M  
+                        WHERE K.SALES_PLCY_ID = A.DSM_SALES_PLCY_ID
+                          AND K.DSM_HEADQ_CD = L.OUT_ORG_DTL_ID
+                          AND L.OUT_ORG_ID = M.OUT_ORG_ID                           
+                          AND M.USER_ID = #onlineContext.userInfo.loginId#)                   
+            AND A.DSM_SALES_PLCY_TYP_CD NOT IN(SELECT '10' AS DSM_SALES_PLCY_TYP_CD /* 이동전화 */
+                                                 FROM DSM_USE_RSTRCT Z
+                                                WHERE DOW_CL = TO_CHAR(SYSDATE, 'D')
+                                                  AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+                                                  AND APLY_YN = 'Y'
+                                                  AND TO_CHAR(SYSDATE, 'HH24MI') BETWEEN APLY_STA_HM AND APLY_END_HM
+                                                  AND 'Y' = (SELECT CASE WHEN COUNT(*) > 0 THEN 'N' ELSE 'Y' END FROM DSM_USE_RSTRCT_EXCEPT WHERE USER_ID = #onlineContext.userInfo.USER_ID#))
+      		) X
+      		WHERE TO_DATE(X.RGST_DTM) BETWEEN #FROM_DT# AND #TO_DT#
+      		]]><isNotEmpty prepend="" property="DSM_SALES_PLCY_TYP_CD"><![CDATA[
+			AND X.DSM_SALES_PLCY_TYP_CD = #DSM_SALES_PLCY_TYP_CD#
+			]]></isNotEmpty><![CDATA[
+  		) Z
+   ORDER BY Z.ANNCE_YN DESC, Z.DSM_SALES_PLCY_TYP_CD_PRT, Z.RGST_DTM DESC
+	) WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchSalesPlcyBrwsCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyBrwsCount  */
+/* IO: 이민재,2015-01-15T18:51:06(이민재,2015-01-15T18:51:06) */
+	SELECT COUNT(1) AS CNT
+	FROM (
+		SELECT A.DSM_SALES_PLCY_ID 
+			, A.APLY_STA_DT
+       		, A.SALES_PLCY_NM
+       		, A.ANNCE_YN
+       		, A.ANNCE_STA_DT
+       		, A.ANNCE_END_DT
+       		, A.RGST_DTM 
+       		, A.RGSTR_ID
+       		, D.USER_NM AS RGSTR_NM
+       		, A.DSM_SALES_PLCY_TYP_CD
+       		, A.RGST_ORG_ID
+       		, A.RGST_OUT_ORG_ID
+		FROM DSM_SALES_PLCY A
+		JOIN ( SELECT C.SALES_PLCY_ID
+                FROM (SELECT DUTY AS DUTY_CD
+                         FROM PS_MNG.TBAS_USER_MGMT
+                        WHERE USER_ID = #onlineContext.userInfo.loginId#
+                        UNION 
+                       SELECT DUTY_CD
+                         FROM DSM_APPROVE
+                        WHERE USER_ID = #onlineContext.userInfo.loginId#
+                     ) A
+                   , DSM_AUTH_GRP_APLY_DUTY B
+                   , DSM_PLCY_RCV_GRP C
+              WHERE A.DUTY_CD = B.DUTY_CD
+                AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+              GROUP BY C.SALES_PLCY_ID
+				) B ON (A.DSM_SALES_PLCY_ID = B.SALES_PLCY_ID)
+		]]><isEqual property="DUTY_CD_YN" compareValue="N"><![CDATA[
+		JOIN ( SELECT SALES_PLCY_ID
+				FROM DSM_PLCY_RCV_ORG
+				WHERE 1=1
+		]]><isNotEmpty property="onlineContext.userInfo.SALE_DEPT_ORG_ID"><![CDATA[
+				AND DSM_HEADQ_CD = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+				GROUP BY SALES_PLCY_ID
+				) C ON (A.DSM_SALES_PLCY_ID = C.SALES_PLCY_ID)
+		]]></isEqual><![CDATA[
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (D.USER_ID = A.RGSTR_ID)
+		WHERE 1=1
+         AND EXISTS (SELECT 'X' FROM  DSM_PLCY_RCV_ORG K ,  PS_MNG.TBAS_OUT_ORG_DTL_MGMT L , VW_DATA_USE_AUTH M  
+                        WHERE K.SALES_PLCY_ID = A.DSM_SALES_PLCY_ID
+                          AND K.DSM_HEADQ_CD = L.OUT_ORG_DTL_ID
+                          AND L.OUT_ORG_ID = M.OUT_ORG_ID                           
+                          AND M.USER_ID = #onlineContext.userInfo.loginId#)                                 			
+        AND A.DSM_SALES_PLCY_TYP_CD NOT IN(SELECT '10' AS DSM_SALES_PLCY_TYP_CD /* 이동전화 */
+                                             FROM DSM_USE_RSTRCT Z
+                                            WHERE DOW_CL = TO_CHAR(SYSDATE, 'D')
+                                              AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+                                              AND APLY_YN = 'Y'
+                                              AND TO_CHAR(SYSDATE, 'HH24MI') BETWEEN APLY_STA_HM AND APLY_END_HM
+                                              AND 'Y' = (SELECT CASE WHEN COUNT(*) > 0 THEN 'N' ELSE 'Y' END FROM DSM_USE_RSTRCT_EXCEPT WHERE USER_ID = #onlineContext.userInfo.USER_ID#))
+	) X
+	WHERE TO_DATE(X.RGST_DTM) BETWEEN #FROM_DT# AND #TO_DT#
+	]]><isNotEmpty prepend="" property="DSM_SALES_PLCY_TYP_CD"><![CDATA[
+	AND X.DSM_SALES_PLCY_TYP_CD = #DSM_SALES_PLCY_TYP_CD#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchSalesPlcyStcDept" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DSALESPLCY001.dSearchSalesPlcyStcDept  */
+/* IO: 채수윤,2015-01-30T13:53:20(이민재,2015-01-16T15:43:39) */
+SELECT A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+		, (SELECT COUNT(*) 
+		     FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+		          JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT Y ON (Y.CONS_MTH = SUBSTR(REPLACE(#APLY_STA_DT#, '-', ''), 1, 6) 
+		                                              AND Y.OUT_ORG_DTL_ID = Z.OUT_ORG_DTL_ID)
+		    WHERE Z.SUP_OUT_ORG_DTL_ID = A.OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_MBR_CNT
+  	FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+  	JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID AND B.EFF_ORG_YN = 'Y' AND B.DEL_YN = 'N')
+  	JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID AND C.DEL_YN = 'N')
+ 	WHERE A.OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+   	AND A.ORG_LVL = '1'
+   	AND A.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */
+  	]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+   	AND B.OUT_ORG_ID = #HDQT_PART_ORG_ID# /* (세션)본사파트 조직ID */
+  	]]></isNotEmpty><![CDATA[
+ 	ORDER BY A.OUT_ORG_DTL_ID]]>
+	</select>
+</sqlMap>

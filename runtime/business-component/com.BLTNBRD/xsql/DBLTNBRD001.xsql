@@ -1,0 +1,1338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DBLTNBRD001">
+	<select id="dSearchBltnBrdTree" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdTree  */
+/* IO: 허용,2015-03-18T17:07:24(김지홍,2015-01-30T17:12:06) */
+WITH
+	LVL1_BLTN_BRD AS
+	(
+	 SELECT A.BLTN_BRD_ID
+	      , A.BLTN_BRD_NM
+	      , A.BLTN_BRD_TYP_CD
+	      , A.SUP_BLTN_BRD_ID
+	      , NULL AS AUTH_TYP_CD
+	      , A.BRWS_SEQ
+	   FROM DSM_BLTN_BRD A
+	  WHERE A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	    AND A.USE_YN = 'Y'
+	    AND A.BLTN_BRD_TYP_CD = '1'
+	),
+	LVL2_BLTN_BRD AS
+	(
+	 SELECT A.BLTN_BRD_ID
+	      , A.BLTN_BRD_NM
+	      , A.BLTN_BRD_TYP_CD
+	      , A.SUP_BLTN_BRD_ID
+	      , NULL AS AUTH_TYP_CD
+	      , A.BRWS_SEQ
+	   FROM DSM_BLTN_BRD A
+	  WHERE A.BLTN_BRD_TYP_CD ='2'
+	    AND A.USE_YN = 'Y'
+	    AND EXISTS (SELECT 'X'
+	                  FROM LVL1_BLTN_BRD
+	                 WHERE BLTN_BRD_ID = A.SUP_BLTN_BRD_ID
+	                )
+	),
+	LVL3_BLTN_BRD AS
+	(
+	 SELECT A.BLTN_BRD_ID
+	      , A.BLTN_BRD_NM
+	      , A.BLTN_BRD_TYP_CD
+	      , A.SUP_BLTN_BRD_ID
+	      , B.AUTH_TYP_CD
+	      , A.BRWS_SEQ
+	   FROM DSM_BLTN_BRD A
+	   JOIN DSM_BLTN_BRD_AUTH B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+       JOIN (
+             SELECT X.AUTH_GRP_ID
+              FROM (SELECT A.USER_ID
+                         , D.AUTH_GRP_ID
+                         , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                      FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+                             FROM DSM_APPROVE A
+                            WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                            UNION
+                           SELECT A.USER_ID, B.DUTY AS DUTY_CD
+                             FROM DSM_USER A
+                                  JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                              AND B.USER_ST = '1' 
+                                                              AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                            WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                           ) A 
+                           JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+                           JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                   ) X
+             WHERE X.RNK = 1 ) C ON (C.AUTH_GRP_ID = B.AUTH_GRP_ID)	   
+   ]]><isEqual property="S_ATTC_CAT" compareValue="4"><![CDATA[
+	   JOIN DSM_BLTN_BRD_AUTH_ORG D ON (D.BLTN_BRD_ID = A.BLTN_BRD_ID AND D.DSM_HEADQ_CD = #S_DEPT_CD#) /* 외부사용자(임직원,계약직,도급직 외) 설정된 영업국 기준으로 */
+   ]]></isEqual><![CDATA[
+	  WHERE EXISTS (SELECT 'X'
+	                  FROM LVL2_BLTN_BRD
+	                 WHERE BLTN_BRD_ID = A.SUP_BLTN_BRD_ID
+	               )
+	    AND B.ALL_USER_APLY_YN = 'Y'
+	    AND A.BLTN_BRD_TYP_CD = '3'
+	    AND A.USE_YN = 'Y'
+    ]]><isNotEqual property="S_ATTC_CAT" compareValue="4"><![CDATA[
+        AND A.BLTN_BRD_ID IN (SELECT C.BLTN_BRD_ID
+                                FROM VW_DATA_USE_AUTH A
+                                     JOIN DSM_MGMT_HEADQ B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+                                     JOIN DSM_BLTN_BRD_AUTH_ORG C ON(C.DSM_HEADQ_CD = B.DSM_HEADQ_CD)
+                               WHERE A.USER_ID = #onlineContext.userInfo.loginId#) /* 임직원,계약직,도급직인 경우 데이터 사용권한의 사무국 기준조회 */
+	]]></isNotEqual><![CDATA[
+
+	  UNION
+	  
+	 SELECT A.BLTN_BRD_ID
+	      , A.BLTN_BRD_NM
+	      , A.BLTN_BRD_TYP_CD
+	      , A.SUP_BLTN_BRD_ID
+	      , B.AUTH_TYP_CD
+	      , A.BRWS_SEQ
+	   FROM DSM_BLTN_BRD A
+	   JOIN DSM_BLTN_BRD_AUTH B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	   JOIN DSM_BLTN_BRD_AUTH_USER E ON (E.BLTN_BRD_ID = A.BLTN_BRD_ID AND E.USER_ID = #onlineContext.userInfo.loginId# )
+       JOIN (
+             SELECT X.AUTH_GRP_ID
+              FROM (SELECT A.USER_ID
+                         , D.AUTH_GRP_ID
+                         , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                      FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+                             FROM DSM_APPROVE A
+                            WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                            UNION
+                           SELECT A.USER_ID, B.DUTY AS DUTY_CD
+                             FROM DSM_USER A
+                                  JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                              AND B.USER_ST = '1' 
+                                                              AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                            WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                           ) A 
+                           JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+                           JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                   ) X
+             WHERE X.RNK = 1 ) C ON (C.AUTH_GRP_ID = B.AUTH_GRP_ID)	   
+   ]]><isEqual property="S_ATTC_CAT" compareValue="4"><![CDATA[
+	   JOIN DSM_BLTN_BRD_AUTH_ORG D ON (D.BLTN_BRD_ID = A.BLTN_BRD_ID AND D.DSM_HEADQ_CD = #S_DEPT_CD#) /* 외부사용자(임직원,계약직,도급직 외) 설정된 영업국 기준으로 */
+   ]]></isEqual><![CDATA[
+	  WHERE EXISTS (SELECT 'X'
+	                  FROM LVL2_BLTN_BRD
+	                 WHERE BLTN_BRD_ID = A.SUP_BLTN_BRD_ID
+	               )
+	    AND B.ALL_USER_APLY_YN = 'N'
+	    AND A.BLTN_BRD_TYP_CD = '3'
+	    AND A.USE_YN = 'Y'
+    ]]><isNotEqual property="S_ATTC_CAT" compareValue="4"><![CDATA[
+        AND A.BLTN_BRD_ID IN (SELECT C.BLTN_BRD_ID
+                                FROM VW_DATA_USE_AUTH A
+                                     JOIN DSM_MGMT_HEADQ B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+                                     JOIN DSM_BLTN_BRD_AUTH_ORG C ON(C.DSM_HEADQ_CD = B.DSM_HEADQ_CD)
+                               WHERE A.USER_ID = #onlineContext.userInfo.loginId#) /* 임직원,계약직,도급직인 경우 데이터 사용권한의 사무국 기준조회 */
+	]]></isNotEqual><![CDATA[
+	    
+	)
+	
+	SELECT  X.*
+	  FROM (
+	        SELECT  A.BLTN_BRD_TYP_CD
+	             , (SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL
+	                 WHERE A.BLTN_BRD_TYP_CD = COMM_CD_VAL
+	                   AND COMM_CD_ID = 'DSM_BLTN_BRD_TYP_CD'
+	               ) AS BLTN_BRD_TYP_NM
+	             , A.SUP_BLTN_BRD_ID
+	             , A.BLTN_BRD_ID
+	             , A.BLTN_BRD_NM
+	             , A.AUTH_TYP_CD
+	             , A.BRWS_SEQ
+	             , DECODE(A.SUP_BLTN_BRD_ID,#BLTN_BRD_ID#,'',A.SUP_BLTN_BRD_ID) AS SUP_TMP_BLTN_BRD_ID 
+	             /* , DECODE(A.SUP_BLTN_BRD_ID,'0000','',A.SUP_BLTN_BRD_ID) AS SUP_TMP_BLTN_BRD_ID */
+	          FROM (
+	                SELECT BLTN_BRD_ID
+	                      ,BLTN_BRD_NM
+	                      ,BLTN_BRD_TYP_CD
+	                      ,SUP_BLTN_BRD_ID
+	                      ,AUTH_TYP_CD
+	                      ,BRWS_SEQ
+	                  FROM LVL1_BLTN_BRD
+	                  
+	                 UNION ALL
+	                 
+	                SELECT BLTN_BRD_ID
+	                      ,BLTN_BRD_NM
+	                      ,BLTN_BRD_TYP_CD
+	                      ,SUP_BLTN_BRD_ID
+	                      ,AUTH_TYP_CD
+	                      ,BRWS_SEQ
+	                  FROM (SELECT A.BLTN_BRD_ID
+	                              ,A.BLTN_BRD_NM
+	                              ,A.BLTN_BRD_TYP_CD
+	                              ,A.SUP_BLTN_BRD_ID
+	                              ,A.AUTH_TYP_CD
+	                              ,A.BRWS_SEQ
+	                          FROM LVL2_BLTN_BRD A
+	                          JOIN LVL3_BLTN_BRD B ON (B.SUP_BLTN_BRD_ID = A.BLTN_BRD_ID)
+	                         GROUP BY A.BLTN_BRD_ID,A.BLTN_BRD_NM,A.BLTN_BRD_TYP_CD,
+	                                  A.SUP_BLTN_BRD_ID,A.AUTH_TYP_CD,A.BRWS_SEQ
+	                       ) 
+	                 UNION ALL
+	                SELECT BLTN_BRD_ID
+	                      ,BLTN_BRD_NM
+	                      ,BLTN_BRD_TYP_CD
+	                      ,SUP_BLTN_BRD_ID
+	                      ,AUTH_TYP_CD
+	                      ,BRWS_SEQ
+	                  FROM LVL3_BLTN_BRD
+	               ) A
+	       ) X
+	 START WITH X.BLTN_BRD_TYP_CD = 2
+	 /*  START WITH X.BLTN_BRD_TYP_CD = 1 */
+	 CONNECT BY PRIOR X.BLTN_BRD_ID = X.SUP_BLTN_BRD_ID
+	 ORDER SIBLINGS BY X.BLTN_BRD_TYP_CD, X.BRWS_SEQ, X.BLTN_BRD_NM]]>
+	</select>
+	<select id="dSearchBltnBrdList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdList  */
+/* IO: 허용,2015-04-09T19:30:55(김지홍,2015-01-30T17:12:06) */
+]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+	  WITH V_BLTN AS
+	  (
+	    SELECT A.BLTCONT_ID AS ORGL_BLTCONT_ID
+	         , A.ORGL_BLTCONT_ID AS BLTCONT_ID
+	        FROM DSM_BLTCONT A
+	        JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	        LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	        LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	       WHERE A.DEL_YN = 'N'
+	         AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	         AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	      ]]><isNotEmpty property="RGST_DTM_FROM"><![CDATA[
+	         ]]><isNotEmpty property="RGST_DTM_TO"><![CDATA[
+	         AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') BETWEEN REPLACE(#RGST_DTM_FROM#,'-','') AND REPLACE(#RGST_DTM_TO#,'-','')
+	         ]]></isNotEmpty><![CDATA[
+	      ]]></isNotEmpty><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+	         AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	      ]]></isEqual><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+	         AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+	      ]]></isEqual><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+	         AND (C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	      ]]></isEqual><![CDATA[
+	      ]]><isEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+	         AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM#)
+		  ]]></isEmpty><![CDATA[   
+	  )
+	]]></isNotEmpty><![CDATA[
+	
+	SELECT * FROM ( 
+	  SELECT ROWNUM RN, TB.* FROM (
+	SELECT Z.BLTCONT_ST
+	      ,Z.BLTCONT_TYP_CD
+	      ,Z.BLTCONT_ID
+	      ,Z.BLTCONT_TITL_NM
+	      ,NVL(Z.CMNT_CNT,0) AS CMNT_CNT
+	      ,DECODE(Z.ATCH_CNT,0,'N','Y') AS ATCH_YN
+	      ,Z.READ_CNT 
+	      /*,Z.RGSTR_NM*/
+	      ,F_MASKING('N',Z.RGSTR_NM) AS RGSTR_NM
+	      ,Z.RGSTR_ID
+          ,TO_CHAR(Z.RGST_DTM, CASE WHEN #BLT_DTM_YN# = 'N' THEN 'YYYY-MM-DD'
+	                           ELSE 'YYYY-MM-DD HH24:MI' END ) AS RGST_DT
+	      ,Z.BLTN_BRD_ID
+	      ,Z.SCRT_NUM_SET_YN
+	  FROM (
+	        SELECT 'NT' AS BLTCONT_ST 
+	              ,'0' AS ANNCE_VALUE
+	              ,A.BLTCONT_ID
+	              ,A.BLTCONT_TYP_CD
+	              ,A.ORGL_BLTCONT_ID
+	              ,A.BLTCONT_TITL_NM
+	              ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					  FROM DSM_CMNT_MGMT X
+					 WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	              ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	  ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	              ,B.ANM_TYP_CD
+	              ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	              ,C.USER_ID AS RGSTR_ID
+	              ,A.RGST_DTM
+	              ,A.BLTN_BRD_ID
+	              ,A.SCRT_NUM_SET_YN
+	              ,NVL( (SELECT K.RGST_DTM  FROM  DSM_BLTCONT K WHERE K.BLTCONT_ID = A.ORGL_BLTCONT_ID), A.RGST_DTM )  SEQ	              
+	         FROM DSM_BLTCONT A
+	              JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	              LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	              LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	        WHERE A.DEL_YN = 'N'
+	          AND A.ANNCE_YN = 'Y'
+	          AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.ANNCE_STA_DT AND ANNCE_END_DT
+	          AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	      
+	      UNION
+	      
+	        SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               ,C.USER_ID AS RGSTR_ID
+	               ,A.RGST_DTM
+	               ,A.BLTN_BRD_ID
+	               ,A.SCRT_NUM_SET_YN
+                   ,NVL( (SELECT K.RGST_DTM  FROM  DSM_BLTCONT K WHERE K.BLTCONT_ID = A.ORGL_BLTCONT_ID), A.RGST_DTM )  SEQ	               
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           
+	           ]]><isNotEmpty property="RGST_DTM_FROM"><![CDATA[
+	                ]]><isNotEmpty property="RGST_DTM_TO"><![CDATA[
+	                    AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') BETWEEN REPLACE(#RGST_DTM_FROM#,'-','') AND REPLACE(#RGST_DTM_TO#,'-','')
+	                ]]></isNotEmpty><![CDATA[
+	           ]]></isNotEmpty><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+	                   AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	           ]]></isEqual><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+	                   AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+	           ]]></isEqual><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+	                   AND (C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	           ]]></isEqual><![CDATA[
+	           ]]><isEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+	        		   AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM#)
+		  	   ]]></isEmpty><![CDATA[  
+	           
+	    ]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+			]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+	                 
+	         UNION 
+	         
+	         SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               ,C.USER_ID AS RGSTR_ID
+	               ,A.RGST_DTM               
+	               ,A.BLTN_BRD_ID
+	               ,A.SCRT_NUM_SET_YN
+                   ,NVL( (SELECT K.RGST_DTM  FROM  DSM_BLTCONT K WHERE K.BLTCONT_ID = A.ORGL_BLTCONT_ID), A.RGST_DTM )  SEQ	               
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           AND A.ORGL_BLTCONT_ID IN ( SELECT ORGL_BLTCONT_ID FROM V_BLTN )
+			]]></isNotEmpty><![CDATA[
+		]]></isNotEmpty><![CDATA[
+	           
+		]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+			]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+	                 
+	         UNION 
+	         
+	         SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               ,C.USER_ID AS RGSTR_ID
+	               ,A.RGST_DTM
+	               ,A.BLTN_BRD_ID
+	               ,A.SCRT_NUM_SET_YN
+                   ,NVL( (SELECT K.RGST_DTM  FROM  DSM_BLTCONT K WHERE K.BLTCONT_ID = A.ORGL_BLTCONT_ID), A.RGST_DTM )  SEQ	               
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           AND A.BLTCONT_ID IN ( SELECT BLTCONT_ID FROM V_BLTN )
+			]]></isNotEmpty><![CDATA[
+		]]></isNotEmpty><![CDATA[
+	           
+	       ) Z
+	 START WITH Z.BLTCONT_TYP_CD = 0
+	 CONNECT BY PRIOR Z.BLTCONT_ID = Z.ORGL_BLTCONT_ID
+	 ORDER SIBLINGS BY Z.ANNCE_VALUE , SEQ DESC ,Z.BLTCONT_ID DESC
+	    ) TB 
+	) WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchBltnBrdCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdCount  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	
+	]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+	  WITH V_BLTN AS
+	  (
+	    SELECT A.BLTCONT_ID AS ORGL_BLTCONT_ID
+	         , A.ORGL_BLTCONT_ID AS BLTCONT_ID
+	        FROM DSM_BLTCONT A
+	        JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	        LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	        LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	       WHERE A.DEL_YN = 'N'
+	         AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	         AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	      ]]><isNotEmpty property="RGST_DTM_FROM"><![CDATA[
+	         ]]><isNotEmpty property="RGST_DTM_TO"><![CDATA[
+	         AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') BETWEEN REPLACE(#RGST_DTM_FROM#,'-','') AND REPLACE(#RGST_DTM_TO#,'-','')
+	         ]]></isNotEmpty><![CDATA[
+	      ]]></isNotEmpty><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+	         AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	      ]]></isEqual><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+	         AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+	      ]]></isEqual><![CDATA[
+	      ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+	         AND (C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	      ]]></isEqual><![CDATA[
+	  )
+	]]></isNotEmpty><![CDATA[
+	
+	SELECT COUNT(1) AS CNT
+	  FROM (
+	SELECT Z.BLTCONT_ST
+	      ,Z.BLTCONT_TYP_CD
+	      ,Z.BLTCONT_ID
+	      ,Z.BLTCONT_TITL_NM
+	      ,NVL(Z.CMNT_CNT,0) AS CMNT_CNT
+	      ,DECODE(Z.ATCH_CNT,0,'N','Y') AS ATCH_YN
+	      ,Z.READ_CNT
+	      ,Z.RGSTR_NM
+	      ,Z.RGST_DT
+	      ,Z.BLTN_BRD_ID
+	  FROM (
+	        SELECT 'NT' AS BLTCONT_ST 
+	              ,'0' AS ANNCE_VALUE
+	              ,A.BLTCONT_ID
+	              ,A.BLTCONT_TYP_CD
+	              ,A.ORGL_BLTCONT_ID
+	              ,A.BLTCONT_TITL_NM
+	              ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					  FROM DSM_CMNT_MGMT X
+					 WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	              ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                    FROM DSM_ATCH_FILE_MGMT X
+                    WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	  ,(SELECT COUNT(Y.READ_MGMT_ID)
+                     FROM DSM_READR_MGMT Y
+                    WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	              ,B.ANM_TYP_CD
+	              ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	              ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DT
+	              ,A.BLTN_BRD_ID
+	         FROM DSM_BLTCONT A
+	              JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	              LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	              LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	        WHERE A.DEL_YN = 'N'
+	          AND A.ANNCE_YN = 'Y'
+	          AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.ANNCE_STA_DT AND ANNCE_END_DT
+	          AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	      
+	      UNION
+	      
+	        SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DT
+	               ,A.BLTN_BRD_ID
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           
+	           ]]><isNotEmpty property="RGST_DTM_FROM"><![CDATA[
+	                ]]><isNotEmpty property="RGST_DTM_TO"><![CDATA[
+	                    AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') BETWEEN REPLACE(#RGST_DTM_FROM#,'-','') AND REPLACE(#RGST_DTM_TO#,'-','')
+	                ]]></isNotEmpty><![CDATA[
+	           ]]></isNotEmpty><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+	                   AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	           ]]></isEqual><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+	                   AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+	           ]]></isEqual><![CDATA[
+	           ]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+	                   AND (C.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR D.NICK_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+	           ]]></isEqual><![CDATA[
+	           
+	    ]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+			]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+	                 
+	         UNION 
+	         
+	         SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               
+	               ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DT
+	               ,A.BLTN_BRD_ID
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           AND A.ORGL_BLTCONT_ID IN ( SELECT ORGL_BLTCONT_ID FROM V_BLTN )
+			]]></isNotEmpty><![CDATA[
+		]]></isNotEmpty><![CDATA[
+	           
+		]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+			]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+	                 
+	         UNION 
+	         
+	         SELECT 
+	                CASE
+	                  WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	                  THEN 'NW'
+	                  ELSE ''
+	                END AS BLTCONT_ST
+	               ,'1' AS ANNCE_VALUE
+	               ,A.BLTCONT_ID
+	               ,A.BLTCONT_TYP_CD
+	               ,A.ORGL_BLTCONT_ID
+	               ,A.BLTCONT_TITL_NM
+	               ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					   FROM DSM_CMNT_MGMT X
+					  WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	               ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	   ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	               ,B.ANM_TYP_CD
+	               ,DECODE(B.ANM_TYP_CD,'1',C.USER_NM,'2',D.NICK_NM,'익명') AS RGSTR_NM
+	               
+	               ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DT
+	               ,A.BLTN_BRD_ID
+	          FROM DSM_BLTCONT A
+	          JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	          LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+	          LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+	         WHERE A.DEL_YN = 'N'
+	           AND (A.ANNCE_YN = 'N' OR A.ANNCE_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+	           AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+	           AND A.BLTCONT_ID IN ( SELECT BLTCONT_ID FROM V_BLTN )
+			]]></isNotEmpty><![CDATA[
+		]]></isNotEmpty><![CDATA[
+	       ) Z
+		)]]>
+	</select>
+	<select id="dDetailBltnBrd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dDetailBltnBrd  */
+/* IO: 채수윤,2015-03-18T14:06:38(김지홍,2015-01-30T17:12:06) */
+SELECT 
+	       A.BLTCONT_TITL_NM
+	     , DECODE(B.ANM_TYP_CD,'1', F_DSM_GET_USER_NM(A.RGSTR_ID),
+	                           '2', F_DSM_GET_NICK_NM(A.RGSTR_ID),
+	                           '익명'
+	       ) AS NICK_NM
+	     , TO_CHAR(A.RGST_DTM,'YYYY-MM-DD HH24:MI') AS RGST_DT
+	     , A.BLTCONT_CTT
+	     , A.REJND_PERM_YN
+	     , A.CMNT_PERM_YN
+	     , A.ANNCE_YN
+	     , TO_CHAR(TO_DATE(A.ANNCE_STA_DT,'YYYYMMDD'),'YYYY-MM-DD') AS ANNCE_STA_DT
+	     , TO_CHAR(TO_DATE(A.ANNCE_END_DT,'YYYYMMDD'),'YYYY-MM-DD') AS ANNCE_END_DT
+	     , A.RGSTR_ID
+	     , A.BLTCONT_TYP_CD
+	     , (SELECT COUNT(1) AS REPLAY_CNT
+	         FROM DSM_BLTCONT X
+	        WHERE X.ORGL_BLTCONT_ID = #BLTCONT_ID#
+	       ) AS REPLAY_CNT
+	     , CASE WHEN A.BLTCONT_TYP_CD = '0' AND B.RCMND_OBJ_YN = 'Y' AND C.WEEK_RCMND_PSBL_YN = 'Y' 
+	              THEN 'Y'                              
+	              ELSE 'N'
+	       END AS WEEK_RCMND_PSBL_YN                         /* WEEK_RCMND_PSBL_YN = 'Y'일 경우 '주간추천' 버튼 활성화 */
+	     , C.RCMNDR_NM AS WEEK_RCMNDR_NM                     /* 주간 추천자 */
+	     , TO_CHAR(TO_DATE(C.RCMND_DT),'YYYY-MM-DD') AS WEEK_RCMND_DT /* 주간 추천일 */
+	     , CASE WHEN A.BLTCONT_TYP_CD = '0' AND B.RCMND_OBJ_YN = 'Y' AND D.MTH_RCMND_PSBL_YN = 'Y'                              
+	              THEN 'Y'
+	              ELSE 'N'
+	       END AS MTH_RCMND_PSBL_YN                          /* MTH_RCMND_PSBL_YN = 'Y'일 경우 '월간추천' 버튼 활성화 */
+	     , D.RCMNDR_NM AS MTH_RCMNDR_NM                      /* 월간 추천자 */
+	     , TO_CHAR(TO_DATE(D.RCMND_DT),'YYYY-MM-DD') AS MTH_RCMND_DT  /* 월간 추천일 */
+	     , A.SCRT_NUM_SET_YN								 /* 비밀번호 설정 */
+	     , A.DEL_CYCL_DT_CNT /* 삭제주기 */
+	     , E.PRE_BLTCONT_ID
+	     , E.NXT_BLTCONT_ID
+	     , B.RCMND_OBJ_YN /* 추천대상여부 */
+	  FROM DSM_BLTCONT A
+	  LEFT OUTER JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+	  LEFT OUTER JOIN 
+	       (
+	        SELECT DISTINCT
+	               A1.BLTCONT_ID
+	             , A1.RCMND_TYP_CD
+	             , B1.RCMNDR_ID
+	             , C1.USER_NM AS RCMNDR_NM
+	             , B1.RCMND_DT
+	             , CASE WHEN A1.SYSDT_CNT = NVL(B1.WEEK_RGST_CNT,' ') AND A1.AUTH_GRP_ID IN ('01', '99') 
+	                      THEN 'N' 
+	                      ELSE 'Y' 
+	               END AS WEEK_RCMND_PSBL_YN
+	          FROM (
+	                SELECT 
+	                       #BLTCONT_ID# AS BLTCONT_ID
+	                     , '01' AS RCMND_TYP_CD
+	                     , TO_CHAR(SYSDATE,'IW') AS SYSDT_CNT
+	                     , A.AUTH_GRP_ID
+	                  FROM (
+	                        SELECT D.AUTH_GRP_ID
+					             , MAX(D.AUTH_PRTY)
+					          FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+					                 FROM DSM_APPROVE A
+					                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+					                UNION
+					               SELECT A.USER_ID, B.DUTY AS DUTY_CD
+					                 FROM DSM_USER A
+					                      JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+					                                                  AND B.USER_ST = '1' 
+					                                                  AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+					                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+					               ) A 
+					               JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+					               JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+					         GROUP BY D.AUTH_GRP_ID
+	                       ) A
+	               ) A1
+	          LEFT OUTER JOIN
+	               (
+	                SELECT
+	                       A.BLTCONT_ID
+	                     , A.RCMND_TYP_CD
+	                     , A.UPDR_ID AS RCMNDR_ID
+	                     , TO_CHAR(A.UPD_DTM,'YYYYMMDD') AS RCMND_DT
+	                     , TO_CHAR(A.UPD_DTM,'IW') AS WEEK_RGST_CNT
+	                  FROM DSM_BLTCONT_RCMND A
+	                  WHERE BLTCONT_ID = #BLTCONT_ID#
+	               ) B1 ON (B1.BLTCONT_ID = A1.BLTCONT_ID AND B1.RCMND_TYP_CD = A1.RCMND_TYP_CD)
+	          LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C1 ON (C1.USER_ID = B1.RCMNDR_ID)
+	       ) C ON (C.BLTCONT_ID = A.BLTCONT_ID)
+	  LEFT OUTER JOIN
+	       (
+	        SELECT DISTINCT
+	               A1.BLTCONT_ID
+	             , A1.RCMND_TYP_CD
+	             , B1.RCMNDR_ID
+	             , C1.USER_NM AS RCMNDR_NM
+	             , B1.RCMND_DT
+	             , CASE WHEN A1.SYSDT_CNT = NVL(B1.MTH_RGST_CNT,' ') AND A1.AUTH_GRP_ID IN ('01','99') 
+	                      THEN 'N' 
+	                      ELSE 'Y' 
+	               END AS MTH_RCMND_PSBL_YN
+	          FROM (
+	                SELECT 
+	                       #BLTCONT_ID# AS BLTCONT_ID
+	                     , '02' AS RCMND_TYP_CD
+	                     , TO_CHAR(SYSDATE,'YYYYMM') AS SYSDT_CNT
+	                     , A.AUTH_GRP_ID
+	                  FROM (
+	                        SELECT D.AUTH_GRP_ID
+					             , MAX(D.AUTH_PRTY)
+					          FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+					                 FROM DSM_APPROVE A
+					                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+					                UNION
+					               SELECT A.USER_ID, B.DUTY AS DUTY_CD
+					                 FROM DSM_USER A
+					                      JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+					                                                  AND B.USER_ST = '1' 
+					                                                  AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+					                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+					               ) A 
+					               JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+					               JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+					         GROUP BY D.AUTH_GRP_ID
+	                       ) A
+	               ) A1
+	          LEFT OUTER JOIN
+	               (
+	                SELECT
+	                       A.BLTCONT_ID
+	                     , A.RCMND_TYP_CD
+	                     , A.UPDR_ID AS RCMNDR_ID
+	                     , TO_CHAR(A.UPD_DTM,'YYYYMMDD') AS RCMND_DT
+	                     , TO_CHAR(A.UPD_DTM,'YYYYMM') AS MTH_RGST_CNT
+	                  FROM DSM_BLTCONT_RCMND A
+	                  WHERE BLTCONT_ID = #BLTCONT_ID#
+	               ) B1 ON (B1.BLTCONT_ID = A1.BLTCONT_ID AND B1.RCMND_TYP_CD = A1.RCMND_TYP_CD)
+	          LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C1 ON (C1.USER_ID = B1.RCMNDR_ID)
+	       ) D ON (D.BLTCONT_ID = A.BLTCONT_ID)
+	  LEFT OUTER JOIN
+	       (
+            SELECT A.BLTCONT_ID
+                   , LAG ( A.BLTCONT_ID ) OVER( ORDER BY RN ) PRE_BLTCONT_ID
+                   , LEAD( A.BLTCONT_ID ) OVER( ORDER BY RN ) NXT_BLTCONT_ID
+                FROM ( SELECT A.BLTCONT_ID
+                            , A.ORGL_BLTCONT_ID
+                            , A.BLTCONT_TITL_NM
+                            , A.BLTCONT_TYP_CD
+                            , ROWNUM RN
+                         FROM ( 
+                               SELECT X.BLTCONT_ID
+                                    , X.ORGL_BLTCONT_ID
+                                    , X.BLTCONT_TITL_NM
+                                    , X.BLTCONT_TYP_CD
+                                    , X.ANNCE_YN
+                                 FROM (
+                                       SELECT A.BLTCONT_ID
+                                            , A.ORGL_BLTCONT_ID
+                                            , A.BLTCONT_TITL_NM
+                                            , A.BLTCONT_TYP_CD
+                                            , A.ANNCE_YN
+                                            , A.SCRT_NUM_SET_YN
+                                            , A.RGSTR_ID
+                                         FROM DSM_BLTCONT A
+                                              JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+                                              LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+                                              LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+                                        WHERE A.DEL_YN = 'N'
+                                          AND A.ANNCE_YN = 'Y'
+                                          AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.ANNCE_STA_DT AND ANNCE_END_DT
+                                          AND A.BLTN_BRD_ID = #BLTN_BRD_ID#
+                                       UNION ALL
+                                       SELECT A.BLTCONT_ID
+                                            , A.ORGL_BLTCONT_ID
+                                            , A.BLTCONT_TITL_NM
+                                            , A.BLTCONT_TYP_CD
+                                            , A.ANNCE_YN
+                                            , A.SCRT_NUM_SET_YN
+                                            , A.RGSTR_ID
+                                         FROM DSM_BLTCONT A
+                                              JOIN DSM_BLTN_BRD B ON (B.BLTN_BRD_ID = A.BLTN_BRD_ID)
+                                              LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.RGSTR_ID)
+                                              LEFT JOIN DSM_USER D ON (D.USER_ID = A.RGSTR_ID)
+                                        WHERE A.DEL_YN = 'N'
+                                          AND A.ANNCE_YN = 'N'
+                                          AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') BETWEEN REPLACE(NVL(#RGST_DTM_FROM#,TO_CHAR(A.RGST_DTM,'YYYYMMDD')),'-','') AND REPLACE(NVL(#RGST_DTM_TO#,TO_CHAR(A.RGST_DTM,'YYYYMMDD')),'-','')
+                                          AND A.BLTN_BRD_ID = #BLTN_BRD_ID# 
+                                      ) X
+                                WHERE X.SCRT_NUM_SET_YN != 'Y'
+                                   OR (X.SCRT_NUM_SET_YN = 'Y'
+                                       AND (X.RGSTR_ID = #onlineContext.userInfo.loginId#
+                                            OR 'E' = (SELECT DISTINCT AUTH_TYP_CD
+                                                        FROM (
+                                                              SELECT X.AUTH_TYP_CD
+                                                                   , RANK() OVER (ORDER BY X.AUTH_PRTY) AS RNK
+                                                                FROM (
+                                                                      SELECT C.AUTH_GRP_ID
+                                                                           , D.AUTH_TYP_CD
+                                                                           , CASE WHEN D.AUTH_TYP_CD = 'E' THEN 1
+                                                                                  WHEN D.AUTH_TYP_CD = 'W' THEN 2
+                                                                                  WHEN D.AUTH_TYP_CD = 'R' THEN 3
+                                                                                  ELSE 4
+                                                                             END AS AUTH_PRTY
+                                                                        FROM (SELECT DUTY_CD
+                                                                                     FROM DSM_APPROVE
+                                                                                    WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                                                                    UNION
+                                                                                   SELECT DUTY AS DUTY_CD
+                                                                                     FROM PS_MNG.TBAS_USER_MGMT
+                                                                                    WHERE 1=1
+                                                                                      AND USER_ID = #onlineContext.userInfo.loginId#
+                                                                                      AND ATTC_CAT = '4'
+                                                                             ) A
+                                                                             JOIN DSM_AUTH_GRP_APLY_DUTY B ON(B.DUTY_CD = A.DUTY_CD)
+                                                                             JOIN DSM_AUTH_GRP C ON(C.AUTH_GRP_ID = B.AUTH_GRP_ID)
+                                                                             JOIN DSM_BLTN_BRD_AUTH D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                                                                       WHERE D.BLTN_BRD_ID = #BLTN_BRD_ID#
+                                                                     ) X
+                                                             ) 
+                                                       WHERE RNK = 1
+                                                     )
+                                           )
+                                      )
+                              ) A
+                        START WITH A.BLTCONT_TYP_CD = 0
+                        CONNECT BY PRIOR A.BLTCONT_ID = A.ORGL_BLTCONT_ID
+                        ORDER SIBLINGS BY A.ANNCE_YN DESC, A.BLTCONT_ID DESC
+                     ) A
+           ) E ON (E.BLTCONT_ID = A.BLTCONT_ID)
+	 WHERE A.BLTCONT_ID = #BLTCONT_ID#]]>
+	</select>
+	<insert id="dInsertBltnBrdInfo" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dInsertBltnBrdInfo  */
+/* IO: 채수윤,2015-03-13T09:46:11(김지홍,2015-01-30T17:12:06) */
+INSERT INTO DSM_BLTCONT
+	(  BLTCONT_ID
+	  ,BLTCONT_TYP_CD
+	  ,BLTN_BRD_ID
+	  ,ORGL_BLTCONT_ID
+	  ,BLTCONT_TITL_NM
+	  ,BLTCONT_CTT
+	  ,ANNCE_YN
+	  ,ANNCE_STA_DT
+	  ,ANNCE_END_DT
+	  ,REJND_PERM_YN
+	  ,CMNT_PERM_YN
+	  ,SCRT_NUM_SET_YN
+	  ,DEL_CYCL_DT_CNT
+	  ,DEL_YN
+	  ,DELR_ID
+	  ,DEL_DTM
+	  ,RGSTR_ID
+	  ,RGST_DTM
+	  ,UPDR_ID
+	  ,UPD_DTM 
+	)
+	VALUES
+	(  #BLTCONT_ID#
+	  ,'0'
+	  ,#BLTN_BRD_ID#
+	  ,NULL
+	  ,#BLTCONT_TITL_NM#
+	  ,#BLTCONT_CTT#
+	  ,#ANNCE_YN#
+	  ,#ANNCE_STA_DT#
+	  ,#ANNCE_END_DT#
+	  ,#REJND_PERM_YN#
+	  ,#CMNT_PERM_YN#
+	  ,#SCRT_NUM_SET_YN#
+	  ,#DEL_CYCL_CD#
+	  ,'N'
+	  ,NULL
+	  ,NULL
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE )]]>
+	</insert>
+	<insert id="dInsertBltnBrdReply" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dInsertBltnBrdInfo  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	INSERT INTO DSM_BLTCONT
+	(  BLTCONT_ID
+	  ,BLTCONT_TYP_CD
+	  ,BLTN_BRD_ID
+	  ,ORGL_BLTCONT_ID
+	  ,BLTCONT_TITL_NM
+	  ,BLTCONT_CTT
+	  ,ANNCE_YN
+	  ,ANNCE_STA_DT
+	  ,ANNCE_END_DT
+	  ,REJND_PERM_YN
+	  ,CMNT_PERM_YN
+	  ,SCRT_NUM_SET_YN
+	  ,DEL_YN
+	  ,DELR_ID
+	  ,DEL_DTM
+	  ,RGSTR_ID
+	  ,RGST_DTM
+	  ,UPDR_ID
+	  ,UPD_DTM 
+	)
+	VALUES
+	(  #BLTCONT_ID#
+	  ,'1'
+	  ,#BLTN_BRD_ID# 
+	  ,#ORGL_BLTCONT_ID# 
+	  ,#BLTCONT_TITL_NM#
+	  ,#BLTCONT_CTT#
+	  ,'N'
+	  ,NULL
+	  ,NULL
+	  ,#REJND_PERM_YN#
+	  ,#CMNT_PERM_YN#
+	  ,#SCRT_NUM_SET_YN#
+	  ,'N'
+	  ,NULL
+	  ,NULL
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE 
+	)]]>
+	</insert>
+	<select id="dSearchBltnBrdIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdIdSeq  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT 'BLT' || LPAD( DSM_BLTCONT_SEQ.NEXTVAL + 1, 12, '0' ) AS BLTCONT_ID 
+  	FROM DUAL
+  ]]>
+	</select>
+	<update id="dDeleteBltnBrd" parameterClass="map" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dDeleteBltBrd  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	UPDATE DSM_BLTCONT
+	  SET  DEL_YN = 'Y'
+	      ,DELR_ID = #onlineContext.userInfo.loginId#
+	      ,DEL_DTM = SYSDATE
+	      ,UPDR_ID = #onlineContext.userInfo.loginId#
+	      ,UPD_DTM = SYSDATE
+	 WHERE BLTCONT_ID = #BLTCONT_ID#
+ ]]>
+	</update>
+	<update id="dUpdateBltnBrd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dUpdateBltnBrd  */
+/* IO: 채수윤,2015-03-13T09:55:48(김지홍,2015-01-30T17:12:06) */
+UPDATE DSM_BLTCONT
+	   SET BLTCONT_TITL_NM = #BLTCONT_TITL_NM#
+	      ,BLTCONT_CTT = #BLTCONT_CTT#
+	      ,ANNCE_YN = #ANNCE_YN#
+	      ,ANNCE_STA_DT = #ANNCE_STA_DT#
+	      ,ANNCE_END_DT = #ANNCE_END_DT#
+	      ,REJND_PERM_YN = #REJND_PERM_YN#
+	      ,CMNT_PERM_YN = #CMNT_PERM_YN#
+	      ,SCRT_NUM_SET_YN = #SCRT_NUM_SET_YN#
+	      ,DEL_CYCL_DT_CNT = #DEL_CYCL_CD#
+	      ,UPDR_ID = #onlineContext.userInfo.loginId#
+	      ,UPD_DTM = SYSDATE
+	 WHERE BLTCONT_ID = #BLTCONT_ID#]]>
+	</update>
+	<select id="dCheckBltBrd" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dCheckBltBrd  */
+/* IO: 허용,2015-04-14T10:16:02(김지홍,2015-01-30T17:12:06) */
+SELECT /* 게시판에 대한 삭제 권한(E) 보유여부 및 등록자 확인 */
+       (SELECT DISTINCT AUTH_TYP_CD
+          FROM (
+        SELECT X.AUTH_TYP_CD
+             , RANK() OVER (ORDER BY X.AUTH_PRTY) AS RNK
+          FROM (
+                SELECT B.AUTH_GRP_ID
+                     , D.AUTH_TYP_CD
+                     , CASE WHEN D.AUTH_TYP_CD = 'E' THEN 1
+                            WHEN D.AUTH_TYP_CD = 'W' THEN 2
+                            WHEN D.AUTH_TYP_CD = 'R' THEN 3
+                            ELSE 4
+                       END AS AUTH_PRTY
+                  FROM (SELECT DUTY_CD
+                               FROM DSM_APPROVE
+                              WHERE USER_ID = #onlineContext.userInfo.loginId#
+                              UNION
+                             SELECT DUTY AS DUTY_CD
+                               FROM PS_MNG.TBAS_USER_MGMT
+                              WHERE 1=1
+                                AND USER_ID = #onlineContext.userInfo.loginId#
+                                AND ATTC_CAT = '4'
+                       ) A
+                       JOIN DSM_AUTH_GRP_APLY_DUTY B ON(B.DUTY_CD = A.DUTY_CD)
+                       JOIN DSM_AUTH_GRP C ON(C.AUTH_GRP_ID = B.AUTH_GRP_ID)
+                       JOIN DSM_BLTN_BRD_AUTH D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                 WHERE D.BLTN_BRD_ID = #BLTN_BRD_ID#
+               ) X
+               ) 
+         WHERE RNK = 1
+        ) AS AUTH_TYP_CD
+      , (       
+              SELECT 
+                CASE WHEN  B.BLTCONT_ID IS NOT NULL /*답글인 경우*/ 
+                   THEN DECODE(B.RGSTR_ID,#onlineContext.userInfo.loginId#,'Y','N')
+              ELSE                                /*원글인  경우*/
+                DECODE(A.RGSTR_ID,#onlineContext.userInfo.loginId#,'Y','N') 
+              END AS RGSTR_YN 
+              FROM DSM_BLTCONT A 
+              LEFT JOIN DSM_BLTCONT B ON ( A.ORGL_BLTCONT_ID = B.BLTCONT_ID )
+              WHERE A.BLTCONT_ID = #BLTCONT_ID#
+        ) AS RGSTR_YN
+  FROM DUAL]]>
+	</select>
+	<select id="dCheckBltBrdScrtNum" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dCheckBltBrdScrtNum  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT DISTINCT A.SCRT_NUM_SET_YN 
+	FROM DSM_BLTN_BRD A, DSM_BLTCONT B
+	WHERE A.BLTN_BRD_ID = B.BLTN_BRD_ID(+)
+	AND A.BLTN_BRD_ID = #BLTN_BRD_ID#]]>
+	</select>
+	<select id="dDetailBltBrdForMove" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dDetailBltBrdForMove  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT C.SUP_BLTN_BRD_ID AS LVL1_ID
+	      ,C.SUP_BLTN_BRD_ID AS CURR_LVL1_ID
+	      ,D.BLTN_BRD_NM AS LVL1_NM
+	      ,D.BLTN_BRD_NM AS CURR_LVL1_NM
+	      ,B.SUP_BLTN_BRD_ID AS LVL2_ID
+	      ,B.SUP_BLTN_BRD_ID AS CURR_LVL2_ID
+	      ,C.BLTN_BRD_NM AS LVL2_NM
+	      ,C.BLTN_BRD_NM AS CURR_LVL2_NM
+	      ,A.BLTN_BRD_ID AS LVL3_ID
+	      ,A.BLTN_BRD_ID AS CURR_LVL3_ID
+	      ,B.BLTN_BRD_NM AS LVL3_NM
+	      ,B.BLTN_BRD_NM AS CURR_LVL3_NM
+	 FROM DSM_BLTCONT A
+	      JOIN DSM_BLTN_BRD B ON (A.BLTN_BRD_ID = B.BLTN_BRD_ID)
+	      JOIN DSM_BLTN_BRD C ON (B.SUP_BLTN_BRD_ID = C.BLTN_BRD_ID)
+	      JOIN DSM_BLTN_BRD D ON (C.SUP_BLTN_BRD_ID = D.BLTN_BRD_ID)
+	 WHERE C.BLTN_BRD_TYP_CD = '2'
+	   AND A.BLTCONT_ID = #BLTCONT_ID#
+	   
+	UNION
+	 
+	SELECT B.SUP_BLTN_BRD_ID AS LVL1_ID
+	      ,B.SUP_BLTN_BRD_ID AS CURR_LVL1_ID
+	      ,C.BLTN_BRD_NM AS LVL1_NM
+	      ,C.BLTN_BRD_NM AS CURR_LVL1_NM
+	      ,'' AS LVL2_ID
+	      ,'' AS CURR_LVL2_ID
+	      ,'' AS LVL2_NM
+	      ,'' AS CURR_LVL2_NM
+	      ,A.BLTN_BRD_ID AS LVL3_ID
+	      ,A.BLTN_BRD_ID AS CURR_LVL3_ID
+	      ,B.BLTN_BRD_NM AS LVL3_NM
+	      ,B.BLTN_BRD_NM AS CURR_LVL3_NM
+	 FROM DSM_BLTCONT A
+	      JOIN DSM_BLTN_BRD B ON (A.BLTN_BRD_ID = B.BLTN_BRD_ID)
+	      JOIN DSM_BLTN_BRD C ON (B.SUP_BLTN_BRD_ID = C.BLTN_BRD_ID)
+	WHERE C.BLTN_BRD_TYP_CD = '1'
+	  AND A.BLTCONT_ID = #BLTCONT_ID#
+    ]]>
+	</select>
+	<select id="dSearchBltnBrdLvl1" resultClass="hmap" fetchSize="50" ><![CDATA[
+  	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdLvl1  */
+	/* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT A.BLTN_BRD_ID AS LVL1_ID
+	      ,A.BLTN_BRD_NM AS LVL1_NM
+	  FROM DSM_BLTN_BRD A
+	 WHERE A.BLTN_BRD_TYP_CD = '1'
+	   AND A.USE_YN = 'Y'
+	 ORDER BY A.BRWS_SEQ
+    ]]>
+	</select>
+	<select id="dSearchBltnBrdLvl2" resultClass="hmap" fetchSize="50" ><![CDATA[
+    /* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdLvl2  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+    SELECT X.LVL2_ID
+	    ,X.LVL2_NM
+	FROM ( 
+	      SELECT A.BLTN_BRD_ID AS LVL2_ID
+	            ,A.BLTN_BRD_NM AS LVL2_NM
+	            ,A.BRWS_SEQ AS BRWS_SEQ
+	        FROM DSM_BLTN_BRD A
+	       WHERE A.BLTN_BRD_TYP_CD = '2'
+	         AND A.USE_YN = 'Y'
+	         AND SUP_BLTN_BRD_ID = #LVL1_ID#
+	     ) X
+    ORDER BY X.BRWS_SEQ 
+    ]]>
+	</select>
+	<select id="dSearchBltnBrdLvl3" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdLvl3  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	]]><isEqual property="LVL2_ID" compareValue=""><![CDATA[
+	SELECT A.BLTN_BRD_ID AS LVL3_ID
+	      ,A.BLTN_BRD_NM AS LVL3_NM
+	  FROM DSM_BLTN_BRD A
+	 WHERE A.BLTN_BRD_TYP_CD = '3'
+	   AND A.USE_YN = 'Y'
+	   AND A.SUP_BLTN_BRD_ID = #LVL1_ID#
+	 ORDER BY A.BRWS_SEQ
+	]]></isEqual><![CDATA[
+	]]><isNotEqual property="LVL2_ID" compareValue=""><![CDATA[
+	SELECT A.BLTN_BRD_ID AS LVL3_ID
+	      ,A.BLTN_BRD_NM AS LVL3_NM
+	  FROM DSM_BLTN_BRD A
+	 WHERE A.BLTN_BRD_TYP_CD = '3'
+	   AND A.USE_YN = 'Y'
+	   AND A.SUP_BLTN_BRD_ID = #LVL2_ID#
+	 ORDER BY A.BRWS_SEQ
+	]]></isNotEqual><![CDATA[]]>
+	</select>
+	<select id="dSearchBltnBrdReplyList" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdReplyList  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT Z.BLTCONT_ID
+	      ,Z.BLTCONT_TITL_NM
+	      ,NVL(Z.CMNT_CNT,0) AS CMNT_CNT
+	      ,DECODE(Z.ATCH_CNT,0,'N','Y') AS ATCH_YN
+	      ,Z.READ_CNT
+	      ,F_DSM_GET_NICK_NM(Z.RGSTR_ID) AS NICK_NM
+	      ,Z.RGST_DT
+	  FROM (
+	        SELECT A.BLTCONT_ID
+	              ,A.BLTCONT_TITL_NM
+	              ,(SELECT COUNT(X.CMNT_MGMT_ID)
+					  FROM DSM_CMNT_MGMT X
+					 WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+	              ,(SELECT COUNT(X.ATCH_MGMT_ID)
+                  	  FROM DSM_ATCH_FILE_MGMT X
+                     WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+              	  ,(SELECT COUNT(Y.READ_MGMT_ID)
+                      FROM DSM_READR_MGMT Y
+                     WHERE A.BLTCONT_ID = Y.READ_MGMT_ID) AS READ_CNT
+	              ,A.RGSTR_ID
+	              ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DT
+	         FROM DSM_BLTCONT A
+	        WHERE A.ORGL_BLTCONT_ID = #BLTCONT_ID#
+	       ) Z
+	 ORDER BY Z.BLTCONT_ID DESC]]>
+	</select>
+	<update id="dUpdateBltnBrdMove" parameterClass="map" ><![CDATA[
+	 /* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dUpdateBltnBrdMove  */
+     /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	 UPDATE DSM_BLTCONT
+	    SET BLTN_BRD_ID = #LVL3_ID#
+	  WHERE (BLTCONT_ID = #BLTCONT_ID# OR ORGL_BLTCONT_ID = #BLTCONT_ID#)
+ ]]>
+	</update>
+	<select id="dCheckWeekcmndPsbl" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dCheckWeekRcmdPsbl  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT DISTINCT
+	  CASE
+	    WHEN A1.SYSDT_CNT = NVL(B1.WEEK_RGST_CNT,' ')
+	    AND A1.AUTH_GRP_ID IN ('01', '99')
+	    THEN 'N'
+	    ELSE 'Y'
+	  END AS WEEK_RCMND_PSBL_YN
+	FROM
+	  (SELECT #BLTCONT_ID#    AS BLTCONT_ID ,
+	    '01'                  AS RCMND_TYP_CD ,
+	    TO_CHAR(SYSDATE,'IW') AS SYSDT_CNT ,
+	    A.AUTH_GRP_ID
+	  FROM
+	    (SELECT D.AUTH_GRP_ID
+             , MAX(D.AUTH_PRTY)
+          FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+                 FROM DSM_APPROVE A
+                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                UNION
+               SELECT A.USER_ID, B.DUTY AS DUTY_CD
+                 FROM DSM_USER A
+                      JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                  AND B.USER_ST = '1' 
+                                                  AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+               ) A 
+               JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+               JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+         GROUP BY D.AUTH_GRP_ID
+	    ) A
+	  ) A1
+	LEFT OUTER JOIN
+	  (SELECT A.BLTCONT_ID ,
+	    A.RCMND_TYP_CD ,
+	    A.UPDR_ID                     AS RCMNDR_ID ,
+	    TO_CHAR(A.UPD_DTM,'YYYYMMDD') AS RCMND_DT ,
+	    TO_CHAR(A.UPD_DTM,'IW')       AS WEEK_RGST_CNT
+	  FROM DSM_BLTCONT_RCMND A
+	  WHERE BLTCONT_ID = #BLTCONT_ID#
+	  ) B1
+	ON (B1.BLTCONT_ID   = A1.BLTCONT_ID
+	AND B1.RCMND_TYP_CD = A1.RCMND_TYP_CD)
+	LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C1
+	ON (C1.USER_ID = B1.RCMNDR_ID)]]>
+	</select>
+	<select id="dCheckMonthRcmndPsbl" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dCheckMonthRcmndPsbl  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT DISTINCT
+	  CASE
+	    WHEN A1.SYSDT_CNT = NVL(B1.MTH_RGST_CNT,' ')
+	    AND A1.AUTH_GRP_ID IN ('01','99')
+	    THEN 'N'
+	    ELSE 'Y'
+	  END AS MTH_RCMND_PSBL_YN
+	FROM
+	  (SELECT #BLTCONT_ID#        AS BLTCONT_ID ,
+	    '02'                      AS RCMND_TYP_CD ,
+	    TO_CHAR(SYSDATE,'YYYYMM') AS SYSDT_CNT ,
+	    A.AUTH_GRP_ID
+	  FROM
+	    (SELECT D.AUTH_GRP_ID
+             , MAX(D.AUTH_PRTY)
+          FROM(SELECT A.USER_ID, A.DUTY_CD AS DUTY_CD
+                 FROM DSM_APPROVE A
+                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+                UNION
+               SELECT A.USER_ID, B.DUTY AS DUTY_CD
+                 FROM DSM_USER A
+                      JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                  AND B.USER_ST = '1' 
+                                                  AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                WHERE A.USER_ID = #onlineContext.userInfo.loginId#
+               ) A 
+               JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+               JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+         GROUP BY D.AUTH_GRP_ID
+	    ) A
+	  ) A1
+	LEFT OUTER JOIN
+	  (SELECT A.BLTCONT_ID ,
+	    A.RCMND_TYP_CD ,
+	    A.UPDR_ID                     AS RCMNDR_ID ,
+	    TO_CHAR(A.UPD_DTM,'YYYYMMDD') AS RCMND_DT ,
+	    TO_CHAR(A.UPD_DTM,'YYYYMM')   AS MTH_RGST_CNT
+	  FROM DSM_BLTCONT_RCMND A
+	  WHERE BLTCONT_ID = #BLTCONT_ID#
+	  ) B1
+	ON (B1.BLTCONT_ID   = A1.BLTCONT_ID
+	AND B1.RCMND_TYP_CD = A1.RCMND_TYP_CD)
+	LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C1
+	ON (C1.USER_ID = B1.RCMNDR_ID)]]>
+	</select>
+	<insert id="dInsertRcmnd" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dInsertRcmnd  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	INSERT INTO DSM_BLTCONT_RCMND
+	(
+	    BLTCONT_ID
+	  , RCMND_TYP_CD
+	  , RGSTR_ID
+	  , RGST_DTM
+	  , UPDR_ID
+	  , UPD_DTM
+	)
+	VALUES
+	(
+	  #BLTCONT_ID#
+	  , #RCMND_TYP_CD#
+	  , #onlineContext.userInfo.loginId#
+	  , SYSDATE
+	  , #onlineContext.userInfo.loginId#
+	  , SYSDATE
+	)]]>
+	</insert>
+	<select id="dSearchBltnBrdInfo" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdInfo  */
+    /* IO: 김지홍,2015-01-30T17:12:06(김지홍,2015-01-30T17:12:06) */
+	SELECT  A.SRCH_PRD_CD 		/* 조회기간 */
+	      , A.SRCH_PRD_CHG_YN   /* 조회기간변경가능 */
+	      , A.BLT_DTM_YN 		/* 게시일시여부 */
+	      , A.SMS_RCV_YN        /* SMS수신여부 */
+	      /* , A.CHRGR_ID  담당자명 */
+	   FROM DSM_BLTN_BRD A
+	WHERE BLTN_BRD_ID = #BLTN_BRD_ID#]]>
+	</select>
+	<select id="dSearchBltnBrdChrgrforSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dSearchBltnBrdChrgrforSms  */
+/* IO: 김보선,2015-04-09T10:07:22(김지홍,2015-01-30T17:12:06) */
+SELECT z.USER_ID 
+     , z.MBL_PHON_NUM1 || z.MBL_PHON_NUM2 || z.MBL_PHON_NUM3 AS RCV_PHN_ID
+     , F_DSM_GET_USER_NM(#onlineContext.userInfo.loginId#) AS "{0}"
+     , (SELECT BLTN_BRD_NM FROM DSM_BLTN_BRD WHERE BLTN_BRD_ID = #BLTN_BRD_ID# ) AS "{1}"
+  	FROM (
+        	SELECT c.BLTN_BRD_ID
+	             , c.CHRGR_ID            
+	          FROM DSM_BLTN_BRD_CHRGR c
+	          JOIN PS_MNG.TBAS_USER_MGMT u ON ( c.CHRGR_ID = u.USER_ID AND u.DEL_YN != 'Y' AND u.USER_ST = '1' AND u.EFF_USER_YN = 'Y' AND u.ATTC_CAT IN ('1','2','3','4') )
+	          JOIN PS_MNG.TBAS_DUTY_MGMT d ON ( u.DUTY = d.DUTY_CD AND 'Y' = d.USE_YN AND d.DUTY_TYP = '2' )
+	               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT mm ON ( mm.AGNT_ID = u.CPLAZA_ORG_CD AND mm.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+	               LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT dm ON ( dm.OUT_ORG_DTL_ID = mm.OUT_ORG_DTL_ID )
+	               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = dm.OUT_ORG_ID )
+	         WHERE c.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+  	) x
+  	JOIN DSM_USER z ON ( z.USER_ID = x.CHRGR_ID )]]>
+	</select>
+	<update id="dDeleteBltnBrdSrchAll" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRD001.dDeleteBltnBrdSrchAll  */
+/* IO: 김보선,2015-03-18T11:06:20(김보선,2015-03-18T11:06:20) */
+UPDATE DSM_BLTCONT A
+  SET   A.DEL_YN = 'Y'
+      , A.DELR_ID = #onlineContext.userInfo.loginId#
+      , A.DEL_DTM = SYSDATE
+      , A.UPDR_ID = #onlineContext.userInfo.loginId#
+      , A.UPD_DTM = SYSDATE
+ WHERE A.BLTCONT_ID 
+    IN ( /* 해당 기간의 게시글과 답변이 달린 글 모두 삭제한다. */
+         SELECT BLTCONT_ID
+           FROM DSM_BLTCONT K
+          START WITH K.BLTN_BRD_ID = #BLTN_BRD_ID#
+            AND K.RGST_DTM >= TO_DATE(#FROM_DT#, 'YYYY-MM-DD') 
+            AND K.RGST_DTM < TO_DATE(#TO_DT#, 'YYYY-MM-DD') + 1
+        CONNECT BY PRIOR K.BLTCONT_ID = K.ORGL_BLTCONT_ID
+        )]]>
+	</update>
+</sqlMap>

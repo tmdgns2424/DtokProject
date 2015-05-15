@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FMAINAD001">
+    <bizUnitName>[FU]메인광고관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.MAINAD</componentId>
+    <description/>
+    <method-list>
+        <method id="fDeleteMainAd">
+            <methodName>[FM]메인광고 삭제</methodName>
+            <transactionId>com.MAINAD@FMAINAD001_fDeleteMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T17:52:47" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchMainAdDtl">
+            <methodName>[FM]메인광고 상세조회</methodName>
+            <transactionId>com.MAINAD@FMAINAD001_fSearchMainAdDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T16:42:46" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fUpdateMainAd">
+            <methodName>[FM]메인광고 저장|수정</methodName>
+            <transactionId>com.MAINAD@FMAINAD001_fUpdateMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T16:19:11" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fInsertMainAd">
+            <methodName>[FM]메인광고 저장|신규</methodName>
+            <transactionId>com.MAINAD@FMAINAD001_fInsertMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T14:54:51" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchMainAd">
+            <methodName>[FM]메인정보 조회</methodName>
+            <transactionId>com.MAINAD@FMAINAD001_fSearchMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T13:34:32" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-03-16T13:33:42" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

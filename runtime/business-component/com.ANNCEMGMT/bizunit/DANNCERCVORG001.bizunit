@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DANNCERCVORG001">
+    <bizUnitName>[DU]공지사항조직</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.ANNCEMGMT</componentId>
+    <description>공지사항조직 DU</description>
+    <method-list>
+        <method id="dSearchAnnceRcvOrgTarget">
+            <methodName>[DM]공지대상조직조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVORG001_dSearchAnnceRcvOrgTarget</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지대상조직정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:08:52" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteAnnceRcvOrg">
+            <methodName>[DM]공지조직삭제</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVORG001_dDeleteAnnceRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지조직정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:30:56" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnceRcvOrg">
+            <methodName>[DM]공지조직저장</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVORG001_dInsertAnnceRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지조직정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:30:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceRcvOrgObject">
+            <methodName>[DM]공지할조직조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVORG001_dSearchAnnceRcvOrgObject</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지할조직정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:29:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T14:59:51" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

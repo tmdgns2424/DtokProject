@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.PRFISUE">
+    <componentName>[BC]업무-증명서발급</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.prfisue</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-02-25T10:37:28" user="안진갑 (ahnjingap)"/>
+    </history>
+</component>

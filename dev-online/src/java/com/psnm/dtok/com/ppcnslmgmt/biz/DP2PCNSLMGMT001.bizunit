@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DP2PCNSLMGMT001">
+    <bizUnitName>[DU]무엇이든물어보세요</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.PPCNSLMGMT</componentId>
+    <description>무엇이든물어보세요 DU</description>
+    <method-list>
+        <method id="dSearchP2pCnslIdSeq">
+            <methodName>[DM]무엇이든물어보세요ID시퀀스채번</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dSearchP2pCnslIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 시퀀스 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T15:13:11" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchP2pCnslSms">
+            <methodName>[DM]무엇이든물어보세요SMS대상자조회</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dSearchP2pCnslSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요SMS대상자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T15:28:44" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchP2pCnslCount">
+            <methodName>[DM]무엇이든물어보세요건수조회</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dSearchP2pCnslCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dInsertP2pCnslRejnd">
+            <methodName>[DM]무엇이든물어보세요답글저장</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dInsertP2pCnslRejnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요답글 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T16:47:52" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchP2pCnslRejndSms">
+            <methodName>[DM]무엇이든물어보세요답변SMS대상자조회</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dSearchP2pCnslRejndSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요답변SMS대상자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T16:44:48" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteP2pCnsl">
+            <methodName>[DM]무엇이든물어보세요삭제</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dDeleteP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dDetailP2pCnsl">
+            <methodName>[DM]무엇이든물어보세요상세</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dDetailP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dInsertP2pCnsl">
+            <methodName>[DM]무엇이든물어보세요저장</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dInsertP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dSearchP2pCnsl">
+            <methodName>[DM]무엇이든물어보세요조회</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dSearchP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dUpdateP2pCnsl">
+            <methodName>[DM]무엇이든물어보세요수정</methodName>
+            <transactionId>com.PPCNSLMGMT@DP2PCNSLMGMT001_dUpdateP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-11T17:48:00" user="이승훈 (leeseunghun)"/>
+    </history>
+</bizUnit>

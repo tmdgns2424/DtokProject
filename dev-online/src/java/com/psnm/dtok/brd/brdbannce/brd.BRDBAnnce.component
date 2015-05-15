@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="brd.BRDBAnnce">
+    <componentName>[BC]SAMPLE-공지사항</componentName>
+    <bizGroupXd>brd</bizGroupXd>
+    <packageName>com.psnm.dtok.brd.brdbannce</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-11-05T11:29:32" user="admin (admin)"/>
+    </history>
+</component>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DUSERSTRCT001">
+    <bizUnitName>[DU]사용제한관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.USERSTRCT</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchToDay">
+            <methodName>[DM]현재일요일조회</methodName>
+            <transactionId>com.USERSTRCT@DUSERSTRCT001_dSearchToDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T15:04:28" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchUseRstrctMgmt">
+            <methodName>[DM]사용제한조회</methodName>
+            <transactionId>com.USERSTRCT@DUSERSTRCT001_dSearchUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T09:53:37" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchDay">
+            <methodName>[DM]사용제한요일조회</methodName>
+            <transactionId>com.USERSTRCT@DUSERSTRCT001_dSearchDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:25:08" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSaveUseRstrctMgmt">
+            <methodName>[DM]사용제한저장</methodName>
+            <transactionId>com.USERSTRCT@DUSERSTRCT001_dSaveUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T14:25:42" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T09:52:31" user="채수윤 (chesuyun)"/>
+    </history>
+</bizUnit>

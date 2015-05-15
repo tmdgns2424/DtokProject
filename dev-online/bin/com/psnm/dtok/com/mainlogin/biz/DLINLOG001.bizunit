@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DLINLOG001">
+    <bizUnitName>[DU]로그인로그</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>로그인, 로그아웃 로그 등록/수정</description>
+    <method-list>
+        <method id="dUpdateLog">
+            <methodName>[DM]로그아웃로그수정</methodName>
+            <transactionId>com.MAINLOGIN@DLINLOG001_dUpdateLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>로그아웃시 로그수정</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:55:32" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertLog">
+            <methodName>[DM]로그인로그등록</methodName>
+            <transactionId>com.MAINLOGIN@DLINLOG001_dInsertLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>로그인로그 등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:54:59" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-21T16:39:13" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

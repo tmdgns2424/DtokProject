@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DDSM_ANNCE">
+    <bizUnitName>[DU]공지사항</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>brd.BRDBAnnce</componentId>
+    <description>공지사항</description>
+    <method-list>
+        <method id="dSearchAnnce">
+            <methodName>[DM]공지사항 1건조회</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dSearchAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 1건조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-07T10:34:15" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dDSM_ANNCE_S002">
+            <methodName>[DM]공지사항 건수조회</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dDSM_ANNCE_S002</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 건수조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-05T13:26:14" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnce">
+            <methodName>[DM]공지사항 등록</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dInsertAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-11T09:51:12" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dDSM_ANNCE_S001">
+            <methodName>[DM]공지사항 목록조회</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dDSM_ANNCE_S001</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 목록조회(페이징)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-05T13:08:26" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dUpdateAnnce">
+            <methodName>[DM]공지사항 수정</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dUpdateAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 정보를 수정</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-14T09:45:08" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnceAtchFile">
+            <methodName>[DM]공지사항 첨부파일등록</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dInsertAnnceAtchFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 첨부파일등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-11T09:58:24" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dDeleteAnnceAtchFile">
+            <methodName>[DM]공지사항 첨부파일삭제</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dDeleteAnnceAtchFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 첨부파일삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-11T10:03:51" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceAtchFile">
+            <methodName>[DM]공지사항 첨부파일조회</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dSearchAnnceAtchFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 첨부파일조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-07T10:44:07" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceIdSeq">
+            <methodName>[DM]공지사항ID 시퀀스채번</methodName>
+            <transactionId>brd.BRDBAnnce@DDSM_ANNCE_dSearchAnnceIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항ID 시퀀스채번</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-11T09:45:35" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-05T13:05:18" user="admin (admin)"/>
+    </history>
+</bizUnit>

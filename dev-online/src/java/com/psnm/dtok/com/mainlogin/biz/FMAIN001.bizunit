@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FMAIN001">
+    <bizUnitName>[FU]메인조회</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>메인조회</description>
+    <method-list>
+        <method id="fSearchAnnce">
+            <methodName>[FM]공지사항</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항, 첨부파일, 댓글목록을 조회하여 반환</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T16:34:14" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchWhoBorn">
+            <methodName>[FM]금주의생일자목록</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchWhoBorn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]금주의생일자목록(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T10:21:13" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fMergeMrtgExpir">
+            <methodName>[FM]담보만료정보등록|수정</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fMergeMrtgExpir</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]담보만료정보등록|수정 - 재계약여부</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T10:52:45" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fUpdateNameCheck">
+            <methodName>[FM]본인확인결과갱신</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fUpdateNameCheck</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]본인확인결과갱신</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T13:19:49" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAnncePopList">
+            <methodName>[FM]팝업공지목록</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchAnncePopList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]팝업공지목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T16:02:34" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchMain1">
+            <methodName>[FM]메인정보목록조회1</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchMain1</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메인용 공지목록 등 각종 정보 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T14:07:20" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchRcvPaperCnt">
+            <methodName>[FM]받은쪽지개수조회</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchRcvPaperCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>받은쪽지개수조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T15:04:50" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAnnceMndtList">
+            <methodName>[FM]필수확인공지목록</methodName>
+            <transactionId>com.MAINLOGIN@FMAIN001_fSearchAnnceMndtList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]필수확인공지목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:59:35" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-17T14:04:32" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

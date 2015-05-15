@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.BIZMGMT">
+    <componentName>[BC]업무-전화번호부</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.bizmgmt</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-01-23T10:47:22" user="이승훈2 (gunyoung)"/>
+    </history>
+</component>

@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>SMS 발송</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-default.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-layout.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css" />
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/alopex-grid-render.js"></script>
+<script type="text/javascript" src="../script/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+
+<script type="text/javascript" src="../script/lib/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../script/lib/ckeditor/adapters/jquery.js"></script>
+
+<script type="text/javascript" src="../script/psnm-config.js"></script>
+<script type="text/javascript" src="../script/psnm-common.js"></script>
+<script type="text/javascript" src="../script/psnm-utils.js"></script>
+<script type="text/javascript" src="../script/psnm-action.js"></script>
+<script type="text/javascript" src="../script/psnm-misc.js"></script>
+
+</head>
+
+<body>
+<!-- header start -->
+<div id="header">
+  <div class="nhearder">
+    <h1><img src="../image/logo.gif" ></h1>
+    <ul class="toptxt1" style="width: 395px;">
+      <li class="ft01"><img src="../image/blat_a1.gif"> <a href="#"><b>22통 [d*m운영자]</b></a> 님 로그인 <b>ㆍ</b></li>
+      <li class="ft02"><a href="#">마이페이지</a></li>
+      <li class="ft03"><a href="#">전체메뉴</a></li>
+      <li class="ft04"><a href="#"><img src="../image/btn_a1.gif"></a></li>
+    </ul>
+  </div>
+  <div class="gnb">
+    <ul class="g_menu">
+      <li><a href="#">영업 정보</a></li>
+      <li><a href="#">커뮤니티</a></li>
+      <li><a href="#">본사 업무</a></li>
+      <li style="padding-right:15px;"><a href="#">영업국 업무</a></li>
+      <li><a href="#">영업팀 업무</a></li>
+    </ul>
+    <p class="dimenu"><b> 바로가기 메뉴 +</b></p>
+  </div>
+</div>
+<!--// header end --> 
+
+<!--// left area -->
+<div class="left_bar"> <img src="../image/left_bar.gif" width="22" height="106"></div>
+
+<div id="contents">
+	<div class="content_title">
+		<div class="ub_txt6"> 
+			<span class="txt6_img"><b>문자발송</b>
+				<span class="notice-more"> 
+					<img src="../image/blat_a6.gif"> 
+					<span class="a2">본사업무</span> <span class="a3"> &gt; </span> <span class="a2">공통관리</span> <span class="a3"> &gt; </span> <b>문자발송</b> 
+				</span> 
+			</span> 
+		</div>
+	</div>
+	
+	<div class="sms_wrap">
+	    <!-- message start -->
+	    <div class="sms_section">
+	    	<div class="floatL4"> 
+	    		<img src="../image/blat_a7.gif"> 
+	    		<b>메시지 발송</b>
+    		</div>
+			<div class="textAR"> 
+				<textarea class="message"></textarea>
+				<p class="count"><em>37</em>/80 byte</p>
+				<p class="textAR fclear">
+			    	<span class="fleft" style="width:80%;"><input id="" data-bind="" data-type="textinput" style="width:90%" class="af-textinput af-default" data-converted="true"></span>
+			    	<span class="fright aright" style="width:20%;"><input id="btnAddMenu" type="button" data-type="button" class="addButton"></span>
+				</p>
+			</div>
+			<div data-type="table" data-height="106px" data-scroll="body" class="alopexgrid positioner" style="border-bottom: 2px solid #000">
+				<table>
+			        <colgroup>
+			            <col style="width:10%;" />
+			            <col style="width:30%;" />
+			            <col style="width:60%;" />
+			        </colgroup>
+			      	<tbody>
+				        <tr>
+				        	<td>01</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>02</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				        	<td>03</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				        	<td>04</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				        	<td>05</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				        	<td>06</td>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+			      	</tbody>
+			    </table>
+		  	</div>
+		  	<p class="count"><em>5</em>/100 명</p>
+		  	<div class="textAR fclear">
+				<span class="fleft" style="width:20%;"><strong>발신번호</strong></span>
+			    <span class="fright" style="width:80%;"><input id="" data-bind="" data-type="textinput" style="width:96%;" class="af-textinput af-default" data-converted="true"></span>
+			</div>
+			<div class="btn_right">
+				<input id="btnAddMenu" type="button" data-type="button" class="af-button af-n-btn13" />
+			</div>
+	    </div><!-- //message end -->
+	    
+	    <!-- search start -->
+	    <div class="sms_section">
+	    	<div class="floatL4"> 
+	    		<img src="../image/blat_a7.gif"> 
+	    		<b>발송 대상 조회</b>
+    		</div>
+			<div id="searchDiv" class="textAR"> 
+			    <form id="searchForm">
+				    <table id="searchTable" class="board02">
+						<colgroup>
+							<col style="width:15%"/>
+						    <col style="width:35%"/>
+						    <col style="width:15%"/>
+						    <col style="width:35%"/>
+						</colgroup>
+						<tr>
+						    <th scope="row">본사팀</th>
+						    <td class="tleft">
+							    <select id="RCV_TYP_CD" data-type="select" style="width:120px">
+							        <option value="01">유통영업팀</option>
+							    </select>
+						    </td>
+						    <th scope="row">본사파트</th>
+						    <td class="tleft">
+							    <select id="BO_CD" data-type="select" style="width:120px">
+							        <option value="01">수도권</option>
+							    </select>
+						    </td>
+						</tr>
+						<tr>
+						    <th scope="row">영업국</th>
+						    <td class="tleft">
+							    <select id="RCV_TYP_CD2" data-type="select" style="width:120px">
+							        <option value="01">-전체-</option>
+							    </select>
+						    </td>
+						    <th scope="row">영업팀</th>
+						    <td class="tleft">
+							    <select id="BO_CD2" data-type="select" style="width:120px">
+							        <option value="01">-전체-</option>
+							    </select>
+						    </td>
+						</tr>
+						<tr>
+						    <th scope="row">직무</th>
+						    <td colspan="3" class="tleft">
+							    <select id="RCV_TYP_CD31" data-type="select" style="width:120px">
+							        <option value="01">-전체-</option>
+							    </select>
+							    <select id="RCV_TYP_CD32" data-type="select" style="width:120px">
+							        <option value="01">-전체-</option>
+							    </select>
+						    </td>
+						</tr>
+						<tr>
+						    <th scope="row">사무국여부</th>
+						    <td colspan="3" class="tleft">
+						    	<input id="checkbox1" type="checkbox" data-type="checkbox" name="" data-bind="" value="">
+						    	<label for="checkbox1">사무국원</label>
+							    <input id="checkbox2" type="checkbox" data-type="checkbox" name="" data-bind="" value="">
+							    <label for="checkbox2">비 사무국원</label>
+						    </td>
+						</tr>
+				    </table>
+			    </form>
+			    <div class="btn_right">
+			        <input id="btnSearch" type="button" value="" data-type="button" data-theme="af-psnm">
+			    </div>
+			</div>
+			
+    		<div class="af-table-wrapper af-default" style="border-top:none">
+				<table data-highlight="true" data-type="table" data-height="353px" data-scroll="body">
+			        <colgroup>
+			            <col style="width:30%;" />
+			            <col style="width:70%;" />
+			        </colgroup>
+			        <thead>
+				        <tr>
+				          <th colspan="2">구성원 (총 00명) </th>
+				        </tr>
+			        </thead>
+			      	<tbody>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+				        <tr>
+				            <td>강창원</td>
+				            <td>010-567-8910</td>
+				        </tr>
+			      	</tbody>
+			      	<tfoot>
+			      	</tfoot>
+			    </table>
+		  	</div>
+		  	<div class="btn_right">
+		        <input id="btnAddMenu" type="button" data-type="button" class="addButton">
+		    </div>
+	    </div><!-- //search end -->
+	    
+	</div>
+</div>
+
+<!-- footer영역-->
+<footer id="footer">
+  <div class="footer">
+    <div class="masterbotm">
+      <p class="foot_logo"><img src="../image/blat_b1.gif"> </p>
+      <ul class="footdept">
+        <li class="foot01">개인정보 취급방침</li>
+        <li class="foot02">이용약관</li>
+        <li class="foot03">개인정보 수집이용안내</li>
+        <li class="foot04">개인정보 위탁</li>
+      </ul>
+      <ul class="footbotm">
+        <li class="botm01">서울특별시 성동구 아차산로 38 개룡빌딩 10층 상호: 피에스앤마케팅(주)</li>
+      </ul>
+      <ul class="footaddr">
+        <li class="addr01">대표이사:박병근 / 사업자등록번호: 104-86-20016 </li>
+        <li class="addr01">COPYRIGHT© 2014 PS&MARKETION CO,LTD. ALL RIGHTS RESERVED.</li>
+      </ul>
+      <ul class="sns">
+        <li class="textc2">대표번호</li>
+        <li class="textc3">070-7470-1000 </li>
+        <li class="textc4">평일 9시 - 18시</li>
+        <li class="blue"><img src="../image/btn_a3.gif"> <img src="../image/btn_a4.gif"></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

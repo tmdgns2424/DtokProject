@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.batch.PAPERDELBAT">
+    <componentName>[BC]배치-쪽지삭제</componentName>
+    <bizGroupXd>batch</bizGroupXd>
+    <packageName>com.psnm.dtok.batch</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description>한달 이상 경과한 쪽지 삭제</description>
+    <history>
+        <created date="2015-04-07T17:19:12" user="채수윤 (chesuyun)"/>
+        <updated date="2015-04-08T15:23:29" user="채수윤 (chesuyun)"/>
+    </history>
+</component>

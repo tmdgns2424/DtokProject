@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.xyz.BXYZ0001">
+    <componentName>BXYZ0001</componentName>
+    <bizGroupXd>xyz</bizGroupXd>
+    <packageName>com.psnm.dtok.xyz</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description/>
+    <history>
+        <created date="2015-03-12T13:29:17" user="안종광 (rhkd)"/>
+        <updated date="" user=""/>
+    </history>
+</component>

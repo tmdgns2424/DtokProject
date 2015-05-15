@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPHRS001">
+	<select id="dSearchPhrs" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.phrs.db.DPHRS001.dSearchPhrs  */
+/* IO: 이승훈2,2015-01-06T15:35:47(이승훈2,2015-01-05T16:19:12) */
+SELECT 
+	NUM
+	,PHRS
+	,ATHR
+	,(SELECT REGEXP_REPLACE(UPDR_ID,'(.)','*',LENGTH(UPDR_ID)-1) AS W_MASK_VAL FROM DUAL) AS UPDR_ID
+	,TO_CHAR(UPD_DTM, 'RRRR-MM-DD HH24:MI:SS') AS UPD_DTM	
+FROM DSM_PHRS
+
+]]>
+	</select>
+	<insert id="dInsertPhrs" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.phrs.db.DPHRS001.dInsertPhrs  */
+/* IO: 이승훈2,2015-01-05T16:21:32(이승훈2,2015-01-05T16:21:32) */]]>
+	</insert>
+	<update id="dUpdatePhrs" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.phrs.db.DPHRS001.dUpdatePhrs  */
+/* IO: 이승훈2,2015-01-05T16:22:07(이승훈2,2015-01-05T16:22:07) */
+
+UPDATE DSM_PHRS
+SET 
+	PHRS = #PHRS#
+	,ATHR = #ATHR#
+	,UPDR_ID = #onlineContext.userInfo.loginId#
+	,UPD_DTM = SYSDATE
+WHERE NUM = #NUM#]]>
+	</update>
+	<delete id="dDeletePhrs" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.phrs.db.DPHRS001.dDeletePhrs  */
+/* IO: 이승훈2,2015-01-05T16:22:24(이승훈2,2015-01-05T16:22:24) */]]>
+	</delete>
+</sqlMap>

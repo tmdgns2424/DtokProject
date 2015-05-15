@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSALEPRST002">
+    <bizUnitName>[PU]메인영업현황</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SALEPRST</componentId>
+    <description>[PU]메인영업현황</description>
+    <method-list>
+        <method id="pSearchMrtgExpir">
+            <methodName>[PM]담보기간만료예정현황조회</methodName>
+            <transactionId>biz.SALEPRST@PSALEPRST002_pSearchMrtgExpir</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]담보기간만료예정현황조회(메인용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T10:34:20" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchHeadqSaleRnk">
+            <methodName>[PM]영업국별판매순위조회</methodName>
+            <transactionId>biz.SALEPRST@PSALEPRST002_pSearchHeadqSaleRnk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>PM : 영업국별 판매 순위를 조회한다.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T09:14:13" user="채수윤 (chesuyun)"/>
+            </history>
+        </method>
+        <method id="pSearchBestMa">
+            <methodName>[PM]판매우수MA현황조회</methodName>
+            <transactionId>biz.SALEPRST@PSALEPRST002_pSearchBestMa</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]판매우수MA현황조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T16:42:51" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchBestTeam">
+            <methodName>[PM]판매우수팀장현황조회</methodName>
+            <transactionId>biz.SALEPRST@PSALEPRST002_pSearchBestTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]판매우수팀장현황조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T10:18:15" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-10T16:38:05" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

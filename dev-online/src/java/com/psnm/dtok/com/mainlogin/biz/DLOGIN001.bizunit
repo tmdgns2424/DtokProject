@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DLOGIN001">
+    <bizUnitName>[DU]로그인처리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>로그인 로그아웃 처리 DU</description>
+    <method-list>
+        <method id="dUpdateFailCnt">
+            <methodName>[DM]로그인실패회수갱신</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dUpdateFailCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>로그인실패회수를 초기화(0)하거나 +1 갱신</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-20T14:07:32" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchLogin">
+            <methodName>[DM]로그인조회</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dSearchLogin</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>사용자ID로 사용자정보 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T15:26:37" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dUpdatePwd">
+            <methodName>[DM]비밀번호변경</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dUpdatePwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>비밀번호변경</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T11:36:13" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dUpdateLogout">
+            <methodName>[DM]중복로그인 로그아웃</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dUpdateLogout</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-05-12T10:54:09" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchRecentLoginLog">
+            <methodName>[DM]최근로그인로그조회</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dSearchRecentLoginLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]최근로그인로그조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-22T17:33:10" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchUserAuthGrpByDuty">
+            <methodName>[DM]회원권한그룹조회</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dSearchUserAuthGrpByDuty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]회원권한그룹조회 - 로그인회원의 직무에 따른 권한그룹 목록 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T14:27:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchUserDataAuthOrg">
+            <methodName>[DM]회원데이터권한조직조회</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dSearchUserDataAuthOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]회원데이터권한조직조회 : 로그인회원의 소속 '본사파트'와 등록된 권한'본사파트' 정보를 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T15:04:56" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertPwdChgHst">
+            <methodName>비밀번호 이력등록</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dInsertPwdChgHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-05-04T10:02:27" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchIsRecentPwd">
+            <methodName>최근비밀번호 동일여부</methodName>
+            <transactionId>com.MAINLOGIN@DLOGIN001_dSearchIsRecentPwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-05-04T10:02:12" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T15:10:35" user="admin (admin)"/>
+    </history>
+</bizUnit>

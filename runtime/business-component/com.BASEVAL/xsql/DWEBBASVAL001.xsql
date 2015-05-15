@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DWEBBASVAL001">
+	<select id="dSearchWebBasVal" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.baseval.db.DWEBBASVAL001.dSearchWebBasVal  */
+/* IO: 채수윤,2015-01-30T10:42:59(이민재,2014-12-22T11:14:08) */
+SELECT B.COMM_CD_VAL_NM AS DSM_WEB_STRD_NM_VAL
+		, C.COMM_CD_VAL_NM AS DSM_WEB_STRD_TYP_CD
+		, A.DSM_WEB_STRD_CD_VAL
+		, A.APLY_STA_DT
+		, A.APLY_END_DT
+		, A.MGMT_TYP_CD
+		, A.STRD_APLY_VAL
+		, A.RGSTR_ID
+		, A.RGST_DTM
+		, A.UPDR_ID
+		, A.UPD_DTM
+	FROM DSM_WEB_BAS_VAL A
+	LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL B ON (B.COMM_CD_ID = 'DSM_WEB_STRD_CD_VAL'AND B.COMM_CD_VAL = A.DSM_WEB_STRD_CD_VAL)
+	LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL C ON (C.COMM_CD_ID = 'DSM_WEB_STRD_TYP_CD'AND C.COMM_CD_VAL = A.MGMT_TYP_CD)
+	WHERE 1=1
+	AND A.MGMT_TYP_CD <> '99'
+ ]]><isNotEmpty prepend="AND" property="MGMT_TYP_CD"><![CDATA[
+		A.MGMT_TYP_CD = #MGMT_TYP_CD#
+ ]]></isNotEmpty><![CDATA[
+ ]]><isNotEmpty prepend="AND" property="DSM_WEB_STRD_CD_VAL"><![CDATA[
+		A.DSM_WEB_STRD_CD_VAL = #DSM_WEB_STRD_CD_VAL#
+ ]]></isNotEmpty><![CDATA[
+    ORDER BY B.PRT_SEQ]]>
+	</select>
+	<insert id="dInsertWebBasVal" ><![CDATA[/* Biz: com.psnm.dtok.com.baseval.db.DWEBBASVAL001.dInsertWebBasVal  */
+/* IO: 이민재,2014-12-22T11:29:06(이민재,2014-12-22T11:29:06) */
+	INSERT INTO DSM_WEB_BAS_VAL
+	(
+		DSM_WEB_STRD_CD_VAL
+		, APLY_STA_DT
+		, APLY_END_DT
+		, MGMT_TYP_CD
+  		, STRD_APLY_VAL
+  		, RGSTR_ID
+  		, RGST_DTM
+  		, UPDR_ID
+  		, UPD_DTM
+	)
+	VALUES
+	(
+   		#DSM_WEB_STRD_CD_VAL#
+  		, #APLY_STA_DT#
+  		, #APLY_END_DT#
+  		, #MGMT_TYP_CD#
+  		, #STRD_APLY_VAL#
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+	)]]>
+	</insert>
+	<update id="dUpdateWebBasVal" ><![CDATA[/* Biz: com.psnm.dtok.com.baseval.db.DWEBBASVAL001.dUpdateWebBasVal  */
+/* IO: 이민재,2014-12-22T11:29:16(이민재,2014-12-22T11:29:16) */
+	UPDATE DSM_WEB_BAS_VAL
+	SET  MGMT_TYP_CD = #MGMT_TYP_CD#
+	]]><isNotEmpty property="APLY_STA_DT"><![CDATA[
+	, APLY_STA_DT = #APLY_STA_DT#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="APLY_END_DT"><![CDATA[
+	, APLY_END_DT = #APLY_END_DT#
+	]]></isNotEmpty><![CDATA[
+	, RGSTR_ID = #onlineContext.userInfo.loginId#
+	, RGST_DTM = SYSDATE
+	, UPDR_ID = #onlineContext.userInfo.loginId#
+	, UPD_DTM = SYSDATE
+	, STRD_APLY_VAL = #STRD_APLY_VAL#
+	WHERE DSM_WEB_STRD_CD_VAL = #DSM_WEB_STRD_CD_VAL#]]>
+	</update>
+	<delete id="dDeleteWebBasVal" ><![CDATA[/* Biz: com.psnm.dtok.com.baseval.db.DWEBBASVAL001.dDeleteWebBasVal  */
+/* IO: 이민재,2014-12-22T11:34:17(이민재,2014-12-22T11:34:17) */
+	DELETE FROM DSM_WEB_BAS_VAL
+ 	WHERE DSM_WEB_STRD_CD_VAL = #DSM_WEB_STRD_CD_VAL#]]>
+	</delete>
+	<select id="dSearchWebBasValPic" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.baseval.db.DWEBBASVAL001.dSearchWebBasValPic  */
+/* IO: 이민재,2015-01-22T14:59:11(이민재,2015-01-22T14:59:11) */
+	SELECT A.DSM_WEB_STRD_CD_VAL
+		, TO_CHAR(TO_DATE(A.APLY_STA_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS APLY_STA_DT
+		, TO_CHAR(TO_DATE(A.APLY_END_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS APLY_END_DT
+		, A.MGMT_TYP_CD
+		, A.STRD_APLY_VAL
+    	, B.ATCH_FILE_ID
+		, B.FILE_PATH
+	FROM DSM_WEB_BAS_VAL A
+  	LEFT JOIN DSM_ATCH_FILE B ON (B.ATCH_FILE_ID = A.STRD_APLY_VAL)
+	WHERE 1=1
+	AND A.MGMT_TYP_CD = '99']]>
+	</select>
+</sqlMap>

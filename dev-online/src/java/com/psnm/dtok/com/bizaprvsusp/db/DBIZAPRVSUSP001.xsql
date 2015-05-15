@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DBIZAPRVSUSP001">
+	<select id="dSearchBizAprvSusp" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bizaprvsusp.db.DBIZAPRVSUSP001.dSearchBizAprvSusp  */
+/* IO: 이민재,2015-02-26T14:08:15(이민재,2015-02-26T14:08:15) */
+	SELECT DSM_HEADQ_CD
+		, BIZ_APRV_TPY_CD
+		, BIZ_APRV_SUSP_HST_SEQ
+		, TO_CHAR(TO_DATE(SUSP_STA_DT),'YYYY-MM-DD') AS SUSP_STA_DT
+		, TO_CHAR(TO_DATE(SUSP_END_DT),'YYYY-MM-DD') AS SUSP_END_DT
+		, SUSP_RSN_CTT
+	FROM DSM_BIZ_APRV_SUSP A
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON ( B.OUT_ORG_DTL_ID = A.DSM_HEADQ_CD )
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT C ON ( C.OUT_ORG_ID = B.OUT_ORG_ID )
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT D ON ( D.ORG_ID = C.ORG_ID )
+	WHERE A.SUSP_STA_DT BETWEEN #FROM_DT# AND #TO_DT#
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		D.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		C.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		B.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	ORDER BY DSM_HEADQ_CD, SUSP_STA_DT DESC]]>
+	</select>
+	<insert id="dInsertBizAprvSusp" ><![CDATA[/* Biz: com.psnm.dtok.com.bizaprvsusp.db.DBIZAPRVSUSP001.dInsertBizAprvSusp  */
+/* IO: 이민재,2015-02-26T14:42:44(이민재,2015-02-26T14:42:44) */
+	INSERT INTO DSM_BIZ_APRV_SUSP (
+       			DSM_HEADQ_CD
+       			, BIZ_APRV_TPY_CD
+				, BIZ_APRV_SUSP_HST_SEQ
+				, SUSP_STA_DT
+				, SUSP_END_DT
+				, SUSP_RSN_CTT
+				, RGSTR_ID
+				, RGST_DTM
+				, UPDR_ID
+				, UPD_DTM
+	) VALUES (
+	       		#DSM_HEADQ_CD#
+	       		, #BIZ_APRV_TPY_CD#
+				, (SELECT NVL(MAX(BIZ_APRV_SUSP_HST_SEQ)+1, 0) FROM DSM_BIZ_APRV_SUSP)
+				, REPLACE(#SUSP_STA_DT#,'-','')
+				, REPLACE(#SUSP_END_DT#,'-','')
+				, #SUSP_RSN_CTT#
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+	)]]>
+	</insert>
+	<update id="dUpdateBizAprvSusp" ><![CDATA[/* Biz: com.psnm.dtok.com.bizaprvsusp.db.DBIZAPRVSUSP001.dUpdateBizAprvSusp  */
+/* IO: 이민재,2015-02-26T14:43:02(이민재,2015-02-26T14:43:02) */
+	UPDATE DSM_BIZ_APRV_SUSP SET
+			BIZ_APRV_TPY_CD = #BIZ_APRV_TPY_CD#
+			, SUSP_STA_DT = REPLACE(#SUSP_STA_DT#,'-','')
+			, SUSP_END_DT = REPLACE(#SUSP_END_DT#,'-','')
+			, SUSP_RSN_CTT = #SUSP_RSN_CTT#
+			, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+ 	WHERE DSM_HEADQ_CD = #DSM_HEADQ_CD#
+ 	AND BIZ_APRV_SUSP_HST_SEQ = #BIZ_APRV_SUSP_HST_SEQ#]]>
+	</update>
+	<delete id="dDeleteBizAprvSusp" ><![CDATA[/* Biz: com.psnm.dtok.com.bizaprvsusp.db.DBIZAPRVSUSP001.dDeleteBizAprvSusp  */
+/* IO: 이민재,2015-02-26T14:43:18(이민재,2015-02-26T14:43:18) */
+	DELETE FROM DSM_BIZ_APRV_SUSP
+ 	WHERE DSM_HEADQ_CD = #DSM_HEADQ_CD#
+ 	AND BIZ_APRV_SUSP_HST_SEQ = #BIZ_APRV_SUSP_HST_SEQ#]]>
+	</delete>
+</sqlMap>

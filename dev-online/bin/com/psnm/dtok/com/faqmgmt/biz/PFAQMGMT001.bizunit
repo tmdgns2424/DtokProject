@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PFAQMGMT001">
+    <bizUnitName>[PU]FAQ관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.FAQMGMT</componentId>
+    <description>FAQ관리 PU</description>
+    <method-list>
+        <method id="pSearchFaqRgstrNm">
+            <methodName>[PM]FAQ관리게시자조회</methodName>
+            <transactionId>com.FAQMGMT@PFAQMGMT001_pSearchFaqRgstrNm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ 게시자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:15:29" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pDetailFaq">
+            <methodName>[PM]FAQ관리상세</methodName>
+            <transactionId>com.FAQMGMT@PFAQMGMT001_pDetailFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T17:46:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pSaveFaq">
+            <methodName>[PM]FAQ관리저장(등록|수정)</methodName>
+            <transactionId>com.FAQMGMT@PFAQMGMT001_pSaveFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ 정보를 입력, 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:09:56" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pDeleteFaq">
+            <methodName>[PM]FAQ관리삭제</methodName>
+            <transactionId>com.FAQMGMT@PFAQMGMT001_pDeleteFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:09:56" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pSearchFaq">
+            <methodName>[PM]FAQ관리조회</methodName>
+            <transactionId>com.FAQMGMT@PFAQMGMT001_pSearchFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:15:29" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-11T15:48:22" user="이승훈 (leeseunghun)"/>
+    </history>
+</bizUnit>

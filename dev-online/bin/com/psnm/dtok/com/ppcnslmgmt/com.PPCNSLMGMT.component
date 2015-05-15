@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.PPCNSLMGMT">
+    <componentName>[BC]공통-무엇이든물어보세요</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.ppcnslmgmt</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-12-22T16:41:51" user="이승훈 (leeseunghun)"/>
+    </history>
+</component>

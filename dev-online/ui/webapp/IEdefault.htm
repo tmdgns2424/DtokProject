@@ -1,0 +1,460 @@
+﻿<html>
+<head>
+<title>WebCube</title>
+<STYLE type=text/css>.text {
+	FONT-FAMILY: "돋움";  FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+</STYLE>
+<script language="javascript">
+<!--
+//////////////////////////////////////////////////////////
+//
+// 전역 변수
+//
+//////////////////////////////////////////////////////////
+/**************************************
+
+전역변수 : isInitOCX
+
+다른 프레임에서 이 변수를 확인함으로써
+OCX가 초기화 되었나 판단하는 변수
+
+true : 초기화 됨.
+false : 초기화 안됨.
+
+***************************************/
+isInitOCX = false;
+
+/**************************************
+
+전역변수 : isInstallActiveX
+
+ActiveX가 제대로 설치되었나 안되었나 확인하는 변수
+
+-1 : 알수 없음.
+0  : 설치안됨.
+1  : 설치됨.
+
+***************************************/
+isInstallActiveX = -1;
+
+/**************************************
+
+전역변수 : nLoop
+
+본문 load가 끝났음에도 ActiveX 설치여부가 결정되지 않았을때
+재 확인하기 위한 재귀호출을 하는데 무한루프에 빠지지 않도록
+방어하기 위해 재귀횟수를 기록하는 변수
+
+***************************************/
+nLoop = 0;
+
+/**************************************
+
+전역변수 : ProtectString
+
+SetProtect 기능을 정의하고자하는 전역변수
+
+***************************************/
+ProtectString = "";
+
+//////////////////////////////////////////////////////////
+//
+// Check whether ActiveX is installed or not
+//
+//////////////////////////////////////////////////////////
+/**************************************
+
+함수명 : NoneActiveX()
+
+내   용 :
+- object onerror 이벤트 발생시 호출되는 함수 (IE가 발생시키는 이벤트)
+(object 태그 onerror 이벤트에 정의되어 있음.)
+
+- isInstallActiveX 변수 값을 0으로 세팅
+
+***************************************/
+function NoneActiveX()
+{
+	isInstallActiveX = 0;
+}
+
+/**************************************
+
+함수명 : SetActiveXState()
+
+내   용 :
+- object onreadystatechange 이벤트 발생시 호출되는 함수 (IE가 발생시키는 이벤트)
+(object 태그 onreadystatechange 이벤트에 정의되어 있음.)
+
+- readystate가 4일때 isInstallActiveX 변수 값을 1로 세팅
+
+***************************************/
+function SetActiveXState()
+{
+	if (isInstallActiveX != 0 && Obj.readyState == 4)
+	{
+		isInstallActiveX = 1;
+	}
+}
+
+/**************************************
+
+함수명 : chkActiveX()
+
+내   용 :
+- body onload 이벤트 발생시 호출되는 함수 (IE가 발생시키는 이벤트)
+(body 태그 onload 이벤트에 정의되어 있음.)
+
+- body load가 된 후에 ActiveX 설치여부를 확인
+
+***************************************/
+function chkActiveX()
+{
+	if (isInstallActiveX != 1)
+	{
+		if (isInstallActiveX == 0)
+		{
+			//alert(isInstallActiveX);
+			//alert(typeof(Obj));
+			//alert(Obj.readyState);
+			//document.location = './WebCube/setup.htm';
+			﻿document.getElementById("Setup").style.display = "block";
+			return;
+		}
+		else
+		{
+			
+			if (typeof(Obj)=="object" && Obj.readyState == 4)
+			{
+				isInstallActiveX = 1;				
+			}
+			else
+			{
+				nLoop++;
+				if (nLoop < 3)
+				{
+					setTimeout("chkActiveX()", 500);
+				}
+				else
+				{
+					alert('ActiveX loading is failed');
+					document.all.initMessage.innerHTML = "ActiveX loading is failed<br>";
+					return false;
+				}	
+			}
+		}
+	}
+	
+	if (isInstallActiveX==1){
+		// ActiveX is ready buy not initialized yet.
+		// ActiveX 가 설치되어 있다는 뜻임.		
+		//document.location='main.asp';
+	}
+}
+
+/**************************************
+
+함수명 : setMessage()
+
+내   용 :
+- CtrlStatus 이벤트에서 리턴코드가 오류인 경우 호출
+
+인   자 : 
+- nResult : 오류 코드
+
+***************************************/
+function setMessage(nResult)
+{
+    switch (parseInt(nResult)) {
+	  case(205) : // 2.1.0.6 이전 버전
+		location.href="./WebCube/error.htm?Terminal 서비스 사용 오류입니다." + "(error code:" + nResult + ")";
+		break;
+      case(206) : // 2.1.0.6 이전 버전
+		location.href="./WebCube/error.htm?Mirror 드라이브 사용 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(308) : 
+		document.location.href="./WebCube/error.htm?SetProtect 파라미터가 잘못 되었습니다." + "(error code:" + nResult + ")";
+        break;
+      case(310) :
+		location.href="./WebCube/error.htm?Active 스크립트 실행 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(311) :
+		location.href="./WebCube/error.htm?Internet Explorer에서만 사용할 수 있습니다." + "(error code:" + nResult + ")";
+        break;
+      case(312) :
+		location.href="./WebCube/error.htm?캐쉬 관련 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(313) :
+		location.href="./WebCube/error.htm?인젝션 실패 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(314) :
+		location.href="./WebCube/error.htm?WebCount.dll 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(315) :
+		location.href="./WebCube/error.htm?모듈 체크 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(316) :
+		location.href="./WebCube/error.htm?익스플로러 메뉴 초기화 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(317) :
+		location.href="./WebCube/error.htm?캡춰 모듈 오류입니다." + "(error code:" + nResult + ")";
+        break;
+      case(318) :
+		location.href="./WebCube/error.htm?API Hook 실패입니다." + "(error code:" + nResult + ")";
+				break;
+      case(320) : // 2.1.0.6 이전 버전
+		location.href="./WebCube/error.htm?원격 제어 프로그램 사용 오류입니다." + "(error code:" + nResult + ")";
+		    break;
+      case(321) :
+		location.href="./WebCube/error.htm?VMWare 사용 오류입니다." + "(error code:" + nResult + ")";
+	    break;
+      case(322) :
+		location.href="./WebCube/error.htm?Virtual PC 사용 오류입니다." + "(error code:" + nResult + ")";
+	    break;
+      case(323) :
+		location.href="./WebCube/error.htm?Terminal Service 사용 오류입니다." + "(error code:" + nResult + ")";
+	    break;
+      case(324) :
+		location.href="./WebCube/error.htm?Mirror 드라이브 사용 오류입니다." + "(error code:" + nResult + ")";
+	    break;
+      case(325) :
+		location.href="./WebCube/error.htm?원격 프로그램 사용 오류입니다." + "(error code:" + nResult + ")";
+	    break;
+      default :
+		location.href="./WebCube/error.htm?접근오류 입니다." + "(error code:" + nResult + ")";
+        break;
+    }
+}
+//-->
+</script>
+
+<script language="javascript" for="Obj" event="CtrlInitComplete()">
+<!--
+//////////////////////////////////////////////////////////
+//
+// ActiveX is initialized
+//
+//////////////////////////////////////////////////////////
+/**************************************
+
+이벤트명 : CtrlInitComplete()
+
+내   용 :
+- OCX 초기화가 끝나면 OCX가 CtrlInitComplete이벤트 발생 (OCX가 발생시키는 이벤트)
+
+- isInstallActiveX 변수 값을 1로 세팅 
+	: CtrlInitComplete 이벤트는 ActiveX가 Install되고 나서 나오는 이벤트이므로 다시 한번 1로 세팅해 줌.
+
+- OCX 초기화 전역변수 true로 세팅
+
+***************************************/
+	isInstallActiveX = 1;
+	isInitOCX = true;
+
+	if (1) {
+
+		Obj.CmdMethod(999, "", 0, "", 0, 0, "0");// 메소드 시작
+		//Obj.CmdMethod(1018, "0", 0, "0", 0, 0, "0"); //F12로 개발자툴 오픈
+
+		// 메소드명 : SetProtect(str)
+		// 용      도 : 세부적인 보안 옵션.
+		// 파라메터 : 값이 없는 경우 default 허용이며, 메소드를 사용하지 않은 경우 기본적인 기능 차단.
+		var arrSetProtect = new Array();
+	
+
+		arrSetProtect[0] = "G";		// CheckSum ("G"값 고정)
+		arrSetProtect[1] = "1";		// VmWare, Terminal 기능 차단(0) / 허용(1)
+		arrSetProtect[2] = "0";		// Print 기능 차단(0) / 허용(1)
+		arrSetProtect[3] = "0";		// SaveAs 기능 차단(0) / 허용(1)
+		arrSetProtect[4] = "0";		// Mouse 기능 차단(0) / 허용(1)
+		arrSetProtect[5] = "0";		// ScreenCapture 기능 차단(0) / 허용(1)
+		arrSetProtect[6] = "0";		// SourceView 기능 차단(0) / 허용(1)
+		arrSetProtect[7] = "0";		// Word Editor 기능 차단(0) / 허용(1)
+		arrSetProtect[8] = "0";		// Mail로 보내기 기능 차단(0) / 허용(1)
+		arrSetProtect[9] = "0";		// ClipBorad(Ctrl+C)기능 차단(0) / 허용 (1)
+		arrSetProtect[10] = "0";	// ClipBorad(Ctrl+V) 기능 차단(0) / 허용 (1)
+		
+
+		ProtectString = arrSetProtect.join("");
+
+		//Obj.SetPolicy("#basic#,Customer.htm:TPSAMVWLcv+");
+		Obj.SetPolicy("#basic#,annceMgmtRgst.jsp: cv-");          //Obj.SetPolicy("#basic#,annceEditForm: cv-");
+		Obj.SetPolicy("#basic#,mainSchdMgmtRgst.jsp: cv-");            //Obj.SetPolicy("#basic#,schEditForm: cv-");
+		//Obj.SetPolicy("#basic#,bizEditForm: v-");             //Obj.SetPolicy("#basic#,bizEditForm: v-");
+		Obj.SetPolicy("#basic#,issueProdMgmtDtl.jsp: v-");           //Obj.SetPolicy("#basic#,issueEditForm: v-");
+		Obj.SetPolicy("#basic#,salePlcyRgst.jsp: v-");  //Obj.SetPolicy("#basic#,reg_salePolicyEditForm: v-");
+		Obj.SetPolicy("#basic#,custPgcvDtl.jsp: cv-");         //Obj.SetPolicy("#basic#,custClmDtlForm: cv-");
+		Obj.SetPolicy("#basic#,scrbClmDtl.jsp: cv-");         //Obj.SetPolicy("#basic#,scrbClmDtlForm: cv-");
+		Obj.SetPolicy("#basic#,headSalePlanHeadRgst.jsp: v-");     //Obj.SetPolicy("#basic#,reg_salePlanMthPrst: v-");
+		Obj.SetPolicy("#basic#,prdFtftPlanDtl.jsp: v-");        //Obj.SetPolicy("#basic#,agentCnslDtlForm: v-");
+		Obj.SetPolicy("#basic#,agentEduRgst.jsp: v-");         //Obj.SetPolicy("#basic#,agentEduDtlForm: v-");
+		Obj.SetPolicy("#basic#,agentEduDtl.jsp: v-");     //Obj.SetPolicy("#basic#,reg_agentEduDtlForm: v-");
+		Obj.SetPolicy("#basic#,agentPrzDtl.jsp: v-");         //Obj.SetPolicy("#basic#,agentPrzDtlForm: v-");
+		Obj.SetPolicy("#basic#,agentDscplDtl.jsp: v-");       //Obj.SetPolicy("#basic#,agentDisplDtlForm: v-");
+		Obj.SetPolicy("#basic#,annceMgmtDtl.jsp: v-");            //Obj.SetPolicy("#basic#,annceDtlForm: v-");
+		Obj.SetPolicy("#basic#,mainSchdMgmtDtl.jsp: v-");          //Obj.SetPolicy("#basic#,schMgmtDtlForm: v-");
+		//Obj.SetPolicy("#basic#,bizDtlForm: v-");              //Obj.SetPolicy("#basic#,bizDtlForm: v-");
+		Obj.SetPolicy("#basic#,headPrdFtftPlanDtl.jsp: v-");  //Obj.SetPolicy("#basic#,head_salePolicyDtlForm: v-");
+		Obj.SetPolicy("#basic#,incmpDocRcvDtl.jsp: v-");        //Obj.SetPolicy("#basic#,incmpDocEditForm: v-");
+		Obj.SetPolicy("#basic#,bltnBrdRgst.jsp: cv-");        //Obj.SetPolicy("#basic#,bltcontEditForm: cv-");
+		Obj.SetPolicy("#basic#,bltnBrdDtl.jsp: cv-");        //Obj.SetPolicy("#basic#,bltcontBrwsForm: cv-");
+		Obj.SetPolicy("#basic#,userScrbRgst.jsp: cv-");     //Obj.SetPolicy("#basic#,userScrbInfMainPop: cv-");
+        Obj.SetPolicy("#basic#,faqMgmtRgst.jsp: cv-");  //추가
+		Obj.SetProtect(ProtectString);
+		
+		
+	}
+//-->
+</script>
+
+<script language="javascript" for="Obj" event="CtrlStatus( nCode, nResult)">
+<!--
+/**************************************
+
+이벤트명 : CtrlStatus()
+
+내   용 :
+- SetProtect 메소드가 호출된 후 발생하며, OCX의 현재 상태를 코드로 리턴해주는 이벤트
+
+- 리턴 코드가 오류인 경우 setMessage() 함수 호출
+
+- 리턴 코드가 정상인 경우 parent.mainFrm 프레임에 원하는 페이지 호출
+
+- 리턴 코드는 nCode : 0 , nResult : 0 인 경우 정상. 그외 코드는 오류임
+
+***************************************/
+//	setMessage(0);
+	
+	if(nCode == 0 && nResult != 0) 
+	{
+	    setMessage(nResult);
+	} 
+	else 
+	{
+		//document.location = 'index.jsp'; //'./Customer.htm';
+		document.location = '/index.jsp'; //'./Customer.htm';
+	}
+	
+//-->
+</script>
+
+
+</head>
+
+<BODY aLink=#2822C8 leftMargin=0 topMargin=0 bgColor=#ffffff text=#000000 vLink=#2822C8 link=#2822C8 marginheight="0" marginwidth="0" onload="chkActiveX();">
+<script language="javascript">
+	var WebCubeVersion = "4,1,2,3";
+	var clintInfoObj = window.clientInformation;
+	var browser = clintInfoObj.platform;
+	if((clintInfoObj.appVersion.toLowerCase().indexOf("x64") < 0) &&(clintInfoObj.appVersion.toLowerCase().indexOf("wow64") < 0))
+	{
+		//alert('32비트OS에 32비트Borwser');
+		document.write('<object classid="CLSID:29BC57E0-018D-46D2-B233-338B779C169C" '+
+		'width="0" height="0" id="Obj" codebase="WebCube/components/WebCube.cab#version='+WebCubeVersion+'" ' +
+		'VIEWASTEXT onerror="NoneActiveX()" onreadystatechange="SetActiveXState()"></object>');
+	}
+	else
+	{
+		if(browser.toLowerCase() != "win64") 
+		{
+			//alert('64비트OS에 32비트Borwser');
+			document.write('<object classid="CLSID:29BC57E0-018D-46D2-B233-338B779C169C" '+
+			'width="0" height="0" id="Obj" codebase="WebCube/components/WebCubewow.cab#version='+WebCubeVersion+'" ' +
+			'VIEWASTEXT onerror="NoneActiveX()" onreadystatechange="SetActiveXState()"></object>');			
+		}
+		else
+		{
+			//alert('64비트OS에 64비트Borwser');
+			document.write('<object classid="CLSID:29BC57E0-018D-46D2-B233-338B779C169C" '+
+			'width="0" height="0" id="Obj" codebase="WebCube/components/WebCube64.cab#version='+WebCubeVersion+'" ' +
+			'VIEWASTEXT onerror="NoneActiveX()" onreadystatechange="SetActiveXState()"></object>');
+		}
+	}
+
+</script>
+
+<!-- 
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////////////SETUP 안내 페이지(수동설치 페이지) 호출 시작///////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+-->
+<DIV align="center" id="Setup" style="display:none">
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<TABLE border=1 bordercolor=#6083C3 cellspacing=0 width=30% align=center>
+  <TR height=30 bgcolor=#6083C3>
+	<TD colspan=2 align=center>
+		<font color=#FFFFFF face=돋움><B>
+		고객님의 안전한 사용을 위하여 보안프로그램을 설치 중입니다.
+		</B></font>
+	</TD>
+  </TR>
+  <TR>
+	<TD>
+		<TABLE  border=0 bordercolor=#6083C3 cellspacing=0 width=100%  align=center>
+			  <TR height=80>
+				<TD Align=center><IMG src="./WebCube/img/plugin_bg.gif" width=150 height=50></TD>
+				<TD align=left><BR><IMG src="./WebCube/img/plugin.gif" width=350 height=15>
+				<BR><FONT color=#7A9BC8> <B>설치작업은 약 10 초에서 수 분이 소요됩니다.</B><BR></FONT>
+				<FONT color=#5274BE><B>잠시만 기다려 주시기 바랍니다.</B></FONT></TD>
+			 </TR>
+			 <TR height=1 bgcolor=#6083C3>
+				<TD></TD>
+				<TD></TD>
+			 </TR>
+			  <TR>
+				<TD style="color:#000000;" align=center colspan=2>
+					<img src="./WebCube/img/text.png" width="550" height="15" >&nbsp;<img src="./WebCube/img/help.png" width="120" height="20" style="cursor:hand;" target="_blank" onclick="popWin=window.open('./WebCube/popup.htm','windows','width=625,height=400'); popWin.focus(); return false;">
+					<FONT color=#5274BE face=돋움><h2>웹 보안 프로그램 다운로드</h2></FONT>
+					
+					<script language="javascript">
+
+						var clintInfoObj = window.clientInformation;
+						var browser = clintInfoObj.platform;
+						//alert(navigator.appVersion);
+						if((clintInfoObj.appVersion.toLowerCase().indexOf("x64") < 0) &&(clintInfoObj.appVersion.toLowerCase().indexOf("wow64") < 0))
+						{
+						//alert('32비트OS에 32비트Borwser');
+						document.write("<a href='./WebCube/components/WebCubeSetup.exe'><img src='./WebCube/img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+						}
+						else
+						{
+							if(browser.toLowerCase() != "win64") 
+							{
+							//alert('64비트OS에 32비트Borwser');
+							document.write("<a href='./WebCube/components/WebCubeSetupwow.exe'><img src='./WebCube/img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+							}
+							else
+							{
+							//alert('64비트OS에 64비트Borwser');
+							document.write("<a href='./WebCube/components/WebCubeSetup64.exe'><img src='./WebCube/img/bt_install.png' width='90' height='85' border='0' style='cursor:hand;'></a>");
+							}
+						}
+
+					</script>	
+					<BR><BR>
+					<FONT color=#5274BE><B>본 사이트는 웹 보안 프로그램이 설치되어야만 이용하실 수 있습니다.<BR>
+					고객님의 정보 보호를 위해 웹 보안 프로그램을 설치해 주시기 바랍니다.</FONT><br><br>
+					<b><font color="blue" size=2>※ 설치 완료 후 시스템 재시작 메시지가 뜨는 경우 ※</font></b><br>
+					<b><font size=1>1) 시스템 재부팅 후 이용하고자 할 경우</b><br>
+					- "예"를 클릭하여 시스템 재부팅 후 서비스를 이용합니다.<br>
+					<b>2) 시스템 재부팅을 하지 않고 이용하고자 할 경우</b><br>
+					- "아니오"를 클릭한 후 모든 브라우저를 닫고, 하나의 브라우저를 실행한 후 다시 설치를 진행합니다.</font>
+				</TD>
+			   </TR>
+		 </TABLE>
+	</TD>
+   </TR>
+   <TR>
+	<TD height="20">
+		
+	</TD>
+   </TR>
+  
+</TABLE>
+</DIV>
+</body>
+</html>

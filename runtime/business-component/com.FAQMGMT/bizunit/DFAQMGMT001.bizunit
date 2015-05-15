@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DFAQMGMT001">
+    <bizUnitName>[DU]FAQ관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.FAQMGMT</componentId>
+    <description>FAQ관리 DU</description>
+    <method-list>
+        <method id="dSearchFaqRgstrNm">
+            <methodName>[DM]FAQ관리게시자조회</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dSearchFaqRgstrNm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리등록게시자를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dDeleteFaq">
+            <methodName>[DM]FAQ관리삭제</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dDeleteFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dDetailFaq">
+            <methodName>[DM]FAQ관리상세</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dDetailFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dUpdateFaq">
+            <methodName>[DM]FAQ관리수정</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dUpdateFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dSearchFaqIdSeq">
+            <methodName>[DM]FAQ관리ID시퀀스채번</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dSearchFaqIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리 시퀀스 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dSearchFaq">
+            <methodName>[DM]FAQ관리조회</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dSearchFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dInsertFaq">
+            <methodName>[DM]FAQ관리저장</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dInsertFaq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="dSearchFaqCount">
+            <methodName>[DM]FAQ관리건수조회</methodName>
+            <transactionId>com.FAQMGMT@DFAQMGMT001_dSearchFaqCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>FAQ관리건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:44:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-11T16:30:50" user="이승훈 (leeseunghun)"/>
+    </history>
+</bizUnit>

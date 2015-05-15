@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PAGENTPRZ001">
+    <bizUnitName>[PU]포상관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.AGNTPRZ</componentId>
+    <description>포상관리 PU</description>
+    <method-list>
+        <method id="pDeleteAgentPrz">
+            <methodName>[PM]포상관리삭제</methodName>
+            <transactionId>biz.AGNTPRZ@PAGENTPRZ001_pDeleteAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T11:49:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDetailAgentPrz">
+            <methodName>[PM]포상관리상세</methodName>
+            <transactionId>biz.AGNTPRZ@PAGENTPRZ001_pDetailAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 상세정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-27T18:13:06" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pSaveExlAgentPrz">
+            <methodName>[PM]포상관리엑셀업로드</methodName>
+            <transactionId>biz.AGNTPRZ@PAGENTPRZ001_pSaveExlAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 엑셀업로드 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-10T17:18:16" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pSaveAgentPrz">
+            <methodName>[PM]포상관리저장(등록|수정)</methodName>
+            <transactionId>biz.AGNTPRZ@PAGENTPRZ001_pSaveAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리를 등록, 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-28T18:34:13" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentPrz">
+            <methodName>[PM]포상관리조회</methodName>
+            <transactionId>biz.AGNTPRZ@PAGENTPRZ001_pSearchAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-27T15:55:23" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-26T18:18:15" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

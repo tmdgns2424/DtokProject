@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.MAINAD">
+    <componentName>[BC]공통-메인광고관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.mainad</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-03-16T13:30:24" user="이승훈2 (gunyoung)"/>
+    </history>
+</component>

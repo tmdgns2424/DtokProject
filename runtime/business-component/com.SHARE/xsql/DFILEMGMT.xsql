@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFILEMGMT">
+	<select id="dSearchFileMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMGMT.dSearchFileMgmt  */
+/* IO: 안종광,2015-01-14T09:33:11(안종광,2015-01-14T09:33:11) */
+SELECT m.ATCH_MGMT_ID 
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH   /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_ATCH_FILE_MGMT m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.ATCH_MGMT_ID = #ATCH_MGMT_ID# /*첨부관리ID=컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<insert id="dInsertFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMGMT.dInsertFileMgmt  */
+/* IO: 안종광,2015-01-14T09:35:13(안종광,2015-01-14T09:35:13) */
+INSERT INTO DSM_ATCH_FILE_MGMT /*컨텐트테이블*/ (
+       ATCH_MGMT_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #ATCH_MGMT_ID# /*첨부관리ID=컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_ATCH_FILE_MGMT
+        WHERE ATCH_MGMT_ID = #ATCH_MGMT_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMGMT.dDeleteFileMgmt  */
+/* IO: 안종광,2015-01-14T09:36:18(안종광,2015-01-14T09:36:18) */
+DELETE FROM DSM_ATCH_FILE_MGMT
+ WHERE ATCH_MGMT_ID = #ATCH_MGMT_ID# /*첨부관리ID=컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PAGENTECCR001">
+    <bizUnitName>[PU]MA지원상담조회</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>MA지원상담조회 PU</description>
+    <method-list>
+        <method id="pDeleteAgentEccr">
+            <methodName>[PM]MA지원상담 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@PAGENTECCR001_pDeleteAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 삭제 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T18:32:30" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="pDetailAgentEccr">
+            <methodName>[PM]MA지원상담 상세조회</methodName>
+            <transactionId>agn.AGNTMGMT@PAGENTECCR001_pDetailAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 상세조회 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-24T09:26:46" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pSaveAgentEccr">
+            <methodName>[PM]MA지원상담 상담국배정및상태수정</methodName>
+            <transactionId>agn.AGNTMGMT@PAGENTECCR001_pSaveAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 상담국배정및상태수정 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-25T11:06:21" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentEccr">
+            <methodName>[PM]MA지원상담 조회</methodName>
+            <transactionId>agn.AGNTMGMT@PAGENTECCR001_pSearchAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 조회 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T16:37:49" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="pMergeAgentEccr">
+            <methodName>[PM]MA지원상담 저장</methodName>
+            <transactionId>agn.AGNTMGMT@PAGENTECCR001_pMergeAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 저장 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-17T13:38:43" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T16:30:21" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

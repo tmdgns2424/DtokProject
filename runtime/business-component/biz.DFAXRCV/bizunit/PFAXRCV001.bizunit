@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PFAXRCV001">
+    <bizUnitName>[PU]D-FAX접수결과</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.DFAXRCV</componentId>
+    <description>D-FAX접수결과 PU</description>
+    <method-list>
+        <method id="pSearchFaxRcv">
+            <methodName>[PM]D-FAX접수결과조회</methodName>
+            <transactionId>biz.DFAXRCV@PFAXRCV001_pSearchFaxRcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T16:10:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchFaxRcvMobile">
+            <methodName>[PM]D-FAX접수결과조회모바일</methodName>
+            <transactionId>biz.DFAXRCV@PFAXRCV001_pSearchFaxRcvMobile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과조회모바일 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-09T14:33:38" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveFaxRcvBizAprv">
+            <methodName>[PM]D-FAX접수업무승인저장(등록|수정)</methodName>
+            <transactionId>biz.DFAXRCV@PFAXRCV001_pSaveFaxRcvBizAprv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수업무승인 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T16:04:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchFaxRcvFile">
+            <methodName>[PM]D-FAX접수첨부파일조회</methodName>
+            <transactionId>biz.DFAXRCV@PFAXRCV001_pSearchFaxRcvFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수첨부파일 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T14:27:41" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-24T16:08:29" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

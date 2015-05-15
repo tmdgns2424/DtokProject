@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DUSER001">
+    <bizUnitName>[DU]공통회원관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>[DU]공통회원관리</description>
+    <method-list>
+        <method id="dSearchSmsRecordSet">
+            <methodName>[DM]임시비번용SMS레코드셋</methodName>
+            <transactionId>com.MAINLOGIN@DUSER001_dSearchSmsRecordSet</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]임시비번용 SMS레코드셋 생성하기위한 함수</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T13:37:58" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchUserId">
+            <methodName>[DM]회원ID조회</methodName>
+            <transactionId>com.MAINLOGIN@DUSER001_dSearchUserId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]회원ID조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:08:12" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dUpdateTempPwd">
+            <methodName>[DM]회원임시비밀번호변경</methodName>
+            <transactionId>com.MAINLOGIN@DUSER001_dUpdateTempPwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]회원임시비밀번호변경</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T11:15:58" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-09T15:06:51" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DANNCERCVORG001">
+	<select id="dSearchAnnceRcvOrgTarget" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVORG001.dSearchAnnceRcvOrgTarget  */
+/* IO: 이민재,2015-01-08T15:15:22(이민재,2015-01-08T15:15:22) */
+	SELECT OUT_ORG_ID AS HDQT_PART_ORG_ID
+         , OUT_ORG_NM AS HDQT_PART_ORG_NM
+	FROM PS_MNG.TBAS_OUT_ORG_MGMT
+	WHERE EFF_ORG_YN = 'Y'
+	AND DEL_YN = 'N'
+	ORDER BY OUT_ORG_ID]]>
+	</select>
+	<select id="dSearchAnnceRcvOrgObject" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVORG001.dSearchAnnceRcvOrgObject  */
+/* IO: 이민재,2015-01-08T15:15:06(이민재,2015-01-08T15:15:06) */
+	SELECT DISTINCT
+			A.OUT_ORG_ID AS HDQT_PART_ORG_ID
+			, B.OUT_ORG_NM AS HDQT_PART_ORG_NM
+	FROM DSM_ANNCE_RCV_ORG A
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+	WHERE A.ANNCE_ID = #ANNCE_ID#
+	ORDER BY A.OUT_ORG_ID]]>
+	</select>
+	<insert id="dInsertAnnceRcvOrg" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVORG001.dInsertAnnceRcvOrg  */
+/* IO: 이민재,2015-01-08T15:15:46(이민재,2015-01-08T15:15:46) */
+	INSERT INTO DSM_ANNCE_RCV_ORG
+		(  ANNCE_ID
+  		, OUT_ORG_ID
+  		, RGSTR_ID
+  		, RGST_DTM
+  		, UPDR_ID
+  		, UPD_DTM )
+	VALUES
+		(  #ANNCE_ID#
+  		, #HDQT_PART_ORG_ID#
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE )]]>
+	</insert>
+	<delete id="dDeleteAnnceRcvOrg" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVORG001.dDeleteAnnceRcvOrg  */
+/* IO: 이민재,2015-01-08T15:16:02(이민재,2015-01-08T15:16:02) */
+	DELETE FROM DSM_ANNCE_RCV_ORG WHERE ANNCE_ID = #ANNCE_ID#]]>
+	</delete>
+</sqlMap>

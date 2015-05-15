@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FPRFISUEMGMT001">
+    <bizUnitName>[FU]증명서발급</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.PRFISUE</componentId>
+    <description/>
+    <method-list>
+        <method id="fSavePrfIsueStCd">
+            <methodName>[FM]증명서발급상태 변경</methodName>
+            <transactionId>biz.PRFISUE@FPRFISUEMGMT001_fSavePrfIsueStCd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T09:48:47" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSavePrfIsue">
+            <methodName>[FM]증명서발급정보 등록/수정/삭제</methodName>
+            <transactionId>biz.PRFISUE@FPRFISUEMGMT001_fSavePrfIsue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T10:36:45" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchPrfIsue">
+            <methodName>[FM]증명서발급정보 조회</methodName>
+            <transactionId>biz.PRFISUE@FPRFISUEMGMT001_fSearchPrfIsue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T13:53:23" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-25T10:38:37" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

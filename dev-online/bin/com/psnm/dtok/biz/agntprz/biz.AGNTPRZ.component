@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.AGNTPRZ">
+    <componentName>[BC]업무-포상/징계관리</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.agntprz</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-11-26T18:16:01" user="한상곤 (hansanggon)"/>
+    </history>
+</component>

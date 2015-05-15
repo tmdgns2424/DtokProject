@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTCAREERHST001">
+    <bizUnitName>[DU]에이전트경력정보</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>에이전트경력정보 DU</description>
+    <method-list>
+        <method id="dDeleteAgentCareerHst">
+            <methodName>[DM]에이전트경력정보 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCAREERHST001_dDeleteAgentCareerHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트경력정보 삭제 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T18:05:39" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dInsertAgentCareerHst">
+            <methodName>[DM]에이전트경력정보 저장</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCAREERHST001_dInsertAgentCareerHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트경력정보 저장 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T11:13:45" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCareerHst">
+            <methodName>[DM]에이전트경력정보 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCAREERHST001_dSearchAgentCareerHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트경력정보 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-18T14:44:38" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-18T14:43:21" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

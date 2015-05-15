@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PBLTNBRD001">
+    <bizUnitName>[PU]게시판</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.BLTNBRD</componentId>
+    <description>커뮤니티 게시판 관련 PU</description>
+    <method-list>
+        <method id="pUpdateBltnBrdMove">
+            <methodName>[PM]게시글이동</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pUpdateBltnBrdMove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시글이동 시키는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-06T17:11:40" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSearchBltnBrdMoveInfo">
+            <methodName>[PM]게시글이동정보조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSearchBltnBrdMoveInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시글 이동과 관련된 게시판 그룹조회 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-06T11:38:18" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pRcmndBltnBrd">
+            <methodName>[PM]게시글추천등록</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pRcmndBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주간/월간 추천하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-06T18:09:33" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSearchBltnBrdGrp">
+            <methodName>[PM]게시판그룹조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSearchBltnBrdGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>글이동 관련 게시판 그룹조회 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T11:37:22" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pCheckBltnBrdScrtNum">
+            <methodName>[PM]게시판비밀번호가능여부</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pCheckBltnBrdScrtNum</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시판비밀번호가능여부 체크하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-05T18:56:07" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pInsetBltnBrdReply">
+            <methodName>[PM]게시판답글저장</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pInsetBltnBrdReply</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시판 답글 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-05T15:36:45" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pDeleteBltnBrdSrchAll">
+            <methodName>[PM]게시판삭제(기간조회)</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pDeleteBltnBrdSrchAll</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시판삭제(기간조회) PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-18T11:02:21" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="pDeleteBltnBrd">
+            <methodName>[PM]게시판삭제</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pDeleteBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>해당 게시글 삭제 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-05T09:43:54" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pCheckBltnBrd">
+            <methodName>[PM]게시판삭제가능여부확인</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pCheckBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시판삭제가능여부확인 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-10T15:12:13" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="pDetailBltnBrd">
+            <methodName>[PM]게시판상세조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pDetailBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>해당 게시판 상세조회 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-03T16:57:44" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSaveBltnBrdInfo">
+            <methodName>[PM]게시판정보저장</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSaveBltnBrdInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-04T17:58:13" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSearchBltnBrdList">
+            <methodName>[PM]게시판목록조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSearchBltnBrdList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>해당 게시판 관련 PM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-03T13:36:54" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSearchBltnBrdInfo">
+            <methodName>[PM]게시판정보조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSearchBltnBrdInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>해당 게시판 정보 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T16:27:51" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="pSearchBltnBrdTree">
+            <methodName>[PM]게시판트리조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRD001_pSearchBltnBrdTree</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-30T17:09:54" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-30T17:02:44" user="김지홍 (kimjihong)"/>
+    </history>
+</bizUnit>

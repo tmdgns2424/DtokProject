@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.BASEVAL">
+    <componentName>[BC]공통-기본값관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.baseval</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-12-22T10:53:53" user="이민재 (leeminjae)"/>
+    </history>
+</component>

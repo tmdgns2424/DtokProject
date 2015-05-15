@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PMTHSALESPLAN001">
+    <bizUnitName>[PU]월별영업계획관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SALEPLAN</componentId>
+    <description>월별영업계획관리 PU</description>
+    <method-list>
+        <method id="pSearchSalePlanCnslDlDt">
+            <methodName>[PM]월별영업계획관리기간조회</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSearchSalePlanCnslDlDt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리계획기간 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T16:24:57" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchMthExecTrgt">
+            <methodName>[PM]월별영업계획관리등록정보조회</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSearchMthExecTrgt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리등록정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T11:39:10" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveMthDsmTrgtTeam">
+            <methodName>[PM]월별영업계획관리영업팀저장(등록|수정)</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSaveMthDsmTrgtTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리영업팀 정보를 등록,수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T10:32:10" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchHeadSalePlan">
+            <methodName>[PM]월별영업계획관리조회</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSearchHeadSalePlan</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T13:06:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveMthDsmTrgtHeadq">
+            <methodName>[PM]월별영업계획관리저장(등록|수정)</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSaveMthDsmTrgtHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T15:26:23" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchMthExecTrgtTeam">
+            <methodName>[PM]월별영업계획관리등록정보영업팀조회</methodName>
+            <transactionId>biz.SALEPLAN@PMTHSALESPLAN001_pSearchMthExecTrgtTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리등록정보영업팀 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T16:34:07" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-11T11:11:49" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

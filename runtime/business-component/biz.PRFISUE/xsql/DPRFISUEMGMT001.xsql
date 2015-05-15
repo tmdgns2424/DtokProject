@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPRFISUEMGMT001">
+	<insert id="dInsertPrfIsue" ><![CDATA[/* Biz: com.psnm.dtok.biz.prfisue.db.DPRFISUEMGMT001.dInsertPrfIsue 증명서발급정보 등록 */
+/* IO: 안진갑,2015-03-16T10:10:34(안진갑,2015-02-26T10:45:12) */
+]]><selectKey keyProperty="PRF_MGMT_NUM" resultClass="String" type="pre"><![CDATA[
+   SELECT LPAD(DSM_PRF_ISUE_SEQ.NEXTVAL, 10, '0') AS PRF_MGMT_NUM FROM DUAL
+]]></selectKey><![CDATA[
+INSERT INTO DSM_PRF_ISUE
+       ( PRF_MGMT_NUM
+         , ORG_ID, OUT_ORG_ID, DSM_HEADQ_CD, DSM_TEAM_CD
+         , AGNT_ID, AGNT_NM, BIRTH_DT, PRF_CL_CD, PRF_USG_CD, PRF_ISUE_ST_CD, ISUE_QTY
+         , ISUE_RSN_CTT, RGSTR_ID, RGST_DTM, UPDR_ID, UPD_DTM 
+       )
+VALUES ( #PRF_MGMT_NUM#
+         , #ORG_ID#, #OUT_ORG_ID#, #DSM_HEADQ_CD#, #DSM_TEAM_CD#
+         , #AGNT_ID#, #AGNT_NM#, REPLACE(#BIRTH_DT#, '-', ''), #PRF_CL_CD#, #PRF_USG_CD#, #PRF_ISUE_ST_CD#, #ISUE_QTY#
+         , #ISUE_RSN_CTT#, #onlineContext.userInfo.loginId#, SYSDATE, #onlineContext.userInfo.loginId#, SYSDATE
+	   )]]>
+	</insert>
+	<update id="dUpdatePrfIsue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.prfisue.db.DPRFISUEMGMT001.dUpdatePrfIsue 증명서발급정보 수정 */
+/* IO: 안진갑,2015-03-16T10:17:18(안진갑,2015-02-26T12:20:25) */
+UPDATE DSM_PRF_ISUE
+      SET ORG_ID          = #ORG_ID#
+         , OUT_ORG_ID     = #OUT_ORG_ID#
+         , DSM_HEADQ_CD   = #DSM_HEADQ_CD#
+         , DSM_TEAM_CD    = #DSM_TEAM_CD#
+         , AGNT_ID        = #AGNT_ID#
+         , AGNT_NM        = #AGNT_NM#
+         , BIRTH_DT       = REPLACE(#BIRTH_DT#, '-', '')
+         , PRF_CL_CD      = #PRF_CL_CD#
+         , PRF_USG_CD     = #PRF_USG_CD#
+         , PRF_ISUE_ST_CD = #PRF_ISUE_ST_CD#
+         , ISUE_QTY       = #ISUE_QTY#                                
+         ]]><isEqual property="PRF_ISUE_ST_CD" compareValue="02"><![CDATA[
+         , REQ_USER_ID    = #onlineContext.userInfo.loginId#
+         , REQ_DTM        = SYSDATE
+         ]]></isEqual><![CDATA[
+         ]]><isEqual property="PRF_ISUE_ST_CD" compareValue="04"><![CDATA[
+         , APRV_USER_ID   = #onlineContext.userInfo.loginId#
+         , APRV_DTM       = SYSDATE
+         ]]></isEqual><![CDATA[
+         ]]><isEqual property="PRF_ISUE_ST_CD" compareValue="05"><![CDATA[
+         , RJCT_USER_ID   = #onlineContext.userInfo.loginId#
+         , RJCT_RSN_CTT   = #RJCT_RSN_CTT#
+         , RJCT_DTM       = SYSDATE
+         ]]></isEqual><![CDATA[
+         ]]><isEqual property="PRF_ISUE_ST_CD" compareValue="06"><![CDATA[
+         , ISUE_DTM       = SYSDATE
+         ]]></isEqual><![CDATA[
+         , UPDR_ID        = #onlineContext.userInfo.loginId#
+         , UPD_DTM        = SYSDATE
+   WHERE PRF_MGMT_NUM=#PRF_MGMT_NUM#]]>
+	</update>
+	<select id="dSearchPrfIsue" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.prfisue.db.DPRFISUEMGMT001.dSearchPrfIsue 증명서발급정보 조회 */
+/* IO: 안진갑,2015-04-01T13:19:49(안진갑,2015-02-26T13:57:36) */
+WITH EXPIRATION AS (SELECT STRD_APLY_VAL
+                      FROM DSM_WEB_BAS_VAL 
+                     WHERE  DSM_WEB_STRD_CD_VAL = '61' AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN APLY_STA_DT AND APLY_END_DT)
+           
+SELECT A.PRF_MGMT_NUM
+       , A.ORG_ID
+       , A.OUT_ORG_ID
+       , E.OUT_ORG_NM 
+       , A.DSM_HEADQ_CD
+       , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = A.DSM_HEADQ_CD) AS DSM_HEADQ_NM
+       , A.DSM_TEAM_CD
+       , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = A.DSM_TEAM_CD) AS DSM_TEAM_NM
+       , A.AGNT_ID
+       , A.AGNT_NM
+       , TO_CHAR(TO_DATE(A.BIRTH_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS BIRTH_DT
+       , A.PRF_CL_CD
+       , A.PRF_USG_CD
+       , A.PRF_ISUE_ST_CD
+       , A.ISUE_QTY
+       , A.ISUE_RSN_CTT
+       , A.RJCT_RSN_CTT
+       , TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI') AS REQ_DTM
+       , TO_CHAR(A.ISUE_DTM, 'YYYY-MM-DD HH24:MI') AS ISUE_DTM
+       , F.COMM_CD_VAL_NM AS RPSTY_NM
+       , H.SCRB_ST_CD
+       , (SELECT F_DSM_CODE_NM('DSM_PRF_CL_CD',      A.PRF_CL_CD)      FROM DUAL) AS PRF_CL_CD_NM
+       , (SELECT F_DSM_CODE_NM('DSM_PRF_ISUE_ST_CD', A.PRF_ISUE_ST_CD) FROM DUAL) AS PRF_ISUE_ST_CD_NM
+       , G.USER_ID
+       , TO_CHAR(A.APRV_DTM, 'YYYYMMDD') AS APRV_DT
+       , (SELECT  CASE WHEN TO_CHAR(SYSDATE, 'YYYYMMDD')<= TO_CHAR(A.APRV_DTM + S1.STRD_APLY_VAL, 'YYYYMMDD')  THEN 'Y' 
+                       ELSE 'N'
+                  END
+            FROM EXPIRATION S1) AS IS_PRINT
+       , (SELECT  TO_CHAR(A.APRV_DTM + S1.STRD_APLY_VAL, 'YYYYMMDD') FROM EXPIRATION S1) AS EXP_DATE
+  FROM DSM_PRF_ISUE A
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.AGNT_ID )
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID )
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT E     ON ( E.OUT_ORG_ID = C.OUT_ORG_ID )
+  JOIN PS_MNG.TBAS_USER_MGMT G        ON ( G.CPLAZA_ORG_CD = A.AGNT_ID AND G.ATTC_CAT = '4' AND G.USER_TYP = '4')
+  JOIN DSM_USER H                     ON ( H.USER_ID =  G.USER_ID ) 
+  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL F ON ( F.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND F.COMM_CD_VAL = B.RPSTY)
+  
+ WHERE E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+   AND B.CONS_MTH = (                             
+                      SELECT MAX(CONS_MTH)
+                       FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT
+                      WHERE CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') AND AGNT_ID = B.AGNT_ID
+                     )
+   AND TO_CHAR(A.RGST_DTM, 'YYYYMMDD') BETWEEN #FROM_DT# AND #TO_DT# 
+      ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+       E.ORG_ID = #HDQT_TEAM_ORG_ID#
+	  ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+       E.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+      ]]></isNotEmpty><![CDATA[  
+	  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+       D.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+      ]]></isNotEmpty><![CDATA[
+	  ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+       C.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+	  ]]></isNotEmpty><![CDATA[  
+	  ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+       A.AGNT_ID = #AGNT_ID#
+	  ]]></isNotEmpty><![CDATA[  
+	  ]]><isNotEmpty prepend="AND" property="SEARCH_PRF_ISUE_ST_CD"><![CDATA[
+			 A.PRF_ISUE_ST_CD = #SEARCH_PRF_ISUE_ST_CD#
+	  ]]></isNotEmpty><![CDATA[    
+	  ]]><isEqual prepend="AND" property="GUBN" compareValue="DEPT"><![CDATA[
+			 A.PRF_ISUE_ST_CD <> '01'
+	  ]]></isEqual><![CDATA[    
+ORDER BY A.PRF_MGMT_NUM DESC]]>
+	</select>
+	<delete id="dDeletePrfIsue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.prfisue.db.DPRFISUEMGMT001.dDeletePrfIsue 증명서발급정보 삭제 */
+/* IO: 안진갑,2015-02-26T16:04:44(안진갑,2015-02-26T16:03:36) */
+DELETE FROM DSM_PRF_ISUE WHERE PRF_MGMT_NUM=#PRF_MGMT_NUM#]]>
+	</delete>
+</sqlMap>

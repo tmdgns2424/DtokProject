@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCUSTPGCVOP001">
+	<insert id="dInsertCustPgcvOp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DCUSTPGCVOP001.dInsertCustPgcvOp 고객민원처리 등록 */
+/* IO: 안진갑,2015-03-05T15:31:57(안진갑,2015-02-11T10:28:16) */
+]]><selectKey keyProperty="OP_SEQ" resultClass="String" type="pre"><![CDATA[
+   SELECT NVL(MAX(OP_SEQ)+1, 1) AS OP_SEQ FROM DSM_CUST_PGCV_OP_DTL WHERE RCV_MGMT_NUM=#RCV_MGMT_NUM#
+]]></selectKey><![CDATA[
+INSERT INTO DSM_CUST_PGCV_OP_DTL
+(
+	  RCV_MGMT_NUM
+	, OP_SEQ
+	, OP_DT
+	, OP_TM
+	, OP_MM
+	, OPR_ID
+	, PGVC_OP_TYP_CD
+	, OP_CTT
+	, RGSTR_ID
+	, RGST_DTM
+	, UPDR_ID
+	, UPD_DTM
+)
+VALUES
+(
+	  #RCV_MGMT_NUM#
+	, #OP_SEQ#
+	, #OP_DT#
+	, #OP_TM#
+	, #OP_MM#
+	, #OPR_ID#
+	, #PGVC_OP_TYP_CD#
+	, #OP_CTT#
+	, #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<update id="dUpdateCustPgcvOp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DCUSTPGCVOP001.dUpdateCustPgcvOp 고객민원처리 수정 */
+/* IO: 안진갑,2015-02-11T15:43:58(안진갑,2015-02-11T10:29:20) */
+UPDATE DSM_CUST_PGCV_OP_DTL
+   SET OP_DT = #OP_DT#
+   	 , OP_TM = #OP_TM#
+	 , OP_MM = #OP_MM#
+	 , OPR_ID = #OPR_ID#
+	 , PGVC_OP_TYP_CD = #PGVC_OP_TYP_CD#
+	 , OP_CTT = #OP_CTT#
+	 , UPDR_ID = #onlineContext.userInfo.loginId#
+	 , UPD_DTM = SYSDATE
+ WHERE RCV_MGMT_NUM = #RCV_MGMT_NUM#
+   AND OP_SEQ = #OP_SEQ#]]>
+	</update>
+	<delete id="dDeleteCustPgcvOp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DCUSTPGCVOP001.dDeleteCustPgcvOp 고객민원처리 삭제 */
+/* IO: 안진갑,2015-02-11T10:30:49(안진갑,2015-02-11T10:30:49) */
+DELETE FROM DSM_CUST_PGCV_OP_DTL
+ WHERE RCV_MGMT_NUM = #RCV_MGMT_NUM#
+ ]]><isNotEmpty prepend="AND" property="OP_SEQ"><![CDATA[
+	OP_SEQ = #OP_SEQ#
+ ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<select id="dSearchCustPgcvOp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DCUSTPGCVOP001.dSearchCustPgcvOp 고객민원처리 조회 */
+/* IO: 안진갑,2015-02-11T15:26:07(안진갑,2015-02-11T11:03:05) */
+SELECT A.RCV_MGMT_NUM
+     , A.OP_SEQ
+     , TO_CHAR(TO_DATE(A.OP_DT), 'YYYY-MM-DD')||' '||A.OP_TM||':'||A.OP_MM AS OP_DTM
+     , A.OP_DT
+     , A.OP_TM
+     , A.OP_MM
+     , A.PGVC_OP_TYP_CD
+     , A.OPR_ID
+     , A.OP_CTT
+     , B.USER_NM        AS OPR_NM
+     , D.DUTY_NM        AS DUTY_NM
+     , I.ORG_ID         AS HDQT_TEAM_ORG_ID
+     , I.ORG_NM         AS HDQT_TEAM_ORG_NM
+     , H.OUT_ORG_ID     AS HDQT_PART_ORG_ID
+     , H.OUT_ORG_NM     AS HDQT_PART_ORG_NM
+     , G.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID    
+     , G.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+     , F.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID  
+     , F.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+     , C.USER_NM AS RGSTR_NM
+     , TO_CHAR(A.RGST_DTM,'YYYY-MM-DD HH24:MI') AS RGST_DTM
+  FROM DSM_CUST_PGCV_OP_DTL A
+  JOIN PS_MNG.TBAS_USER_MGMT B ON (A.OPR_ID = B.USER_ID)
+  JOIN PS_MNG.TBAS_USER_MGMT C ON (A.RGSTR_ID = C.USER_ID)
+  JOIN PS_MNG.TBAS_DUTY_MGMT D ON (B.DUTY = D.DUTY_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (B.CPLAZA_ORG_CD = E.AGNT_ID AND E.CONS_MTH=TO_CHAR(A.RGST_DTM, 'YYYYMM'))
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (E.OUT_ORG_DTL_ID = F.OUT_ORG_DTL_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT G ON (F.SUP_OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT H ON (F.OUT_ORG_ID = H.OUT_ORG_ID)
+  JOIN PS_MNG.TBAS_NEW_ORG_MGMT I ON (H.ORG_ID = I.ORG_ID)
+ WHERE A.RCV_MGMT_NUM = #RCV_MGMT_NUM#
+   ]]><isNotEmpty prepend="AND" property="OP_SEQ"><![CDATA[
+		A.OP_SEQ = #OP_SEQ#
+   ]]></isNotEmpty><![CDATA[	
+ ORDER BY A.OP_SEQ]]>
+	</select>
+</sqlMap>

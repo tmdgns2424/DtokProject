@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSCRBCLM001">
+	<select id="dSearchScrbClm" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchScrbClm 비정상영업소명 조회 */
+/* IO: 안진갑,2015-05-12T15:22:40(안진갑,2015-02-16T10:36:14) */
+SELECT T1.*
+       , TO_CHAR(TO_TIMESTAMP(T1.RCV_DT||T1.RCV_TM||T1.RCV_MM), 'YYYY-MM-DD HH:MI') AS RCV_DTM
+	   , TO_CHAR(TO_DATE(SUBSTRB(T1.SALE_DTM1,1,8)), 'YYYY-MM-DD') AS SALE_DTM
+       , REGEXP_REPLACE(T1.SVC_NUM, '(^\d{3})(.{3,4})(\d{4})', '\1-\2-\3') AS MBL_PHON_NUM
+       , F_MASKING('N', T1.CUST_NM1) AS CUST_NM
+       , F_MASKING('N', T1.AGNT_NM) AS AGNT_NM2
+       , (T1.CNSLR_TEL_NO1||'-'||T1.CNSLR_TEL_NUM2||'-'||T1.CNSLR_TEL_NUM3) AS CNSLR_TEL
+       , ( SELECT COUNT(1) FROM DSM_SCRB_CLM_OP_DTL WHERE RCV_MGMT_NUM = T1.RCV_MGMT_NUM ) AS OP_CNT
+       , TO_CHAR(TO_TIMESTAMP(T1.OP_CLS_DT||T1.OP_CLS_TM||T1.OP_CLS_MM), 'YYYY-MM-DD HH24:MI') AS OP_CLS_DTM
+       , TO_CHAR(TO_TIMESTAMP(T1.FNSH_DT||T1.FNSH_TM||T1.FNSH_MM), 'YYYY-MM-DD HH24:MI') AS FNSH_DTM
+  FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY A.RCV_MGMT_NUM DESC) RN
+               , COUNT(1) OVER() AS COUNT
+               , A.SCRB_CLM_ST_CD
+               , G.COMM_CD_VAL_NM AS SCRB_CLM_ST_NM
+               , A.RCV_MGMT_NUM                  
+               , A.RCV_DT
+               , A.RCV_TM
+               , A.RCV_MM
+               , A.RCV_OWNR_CD     
+               , H.COMM_CD_VAL_NM AS RCV_OWNR_NM
+               , A.SALE_DT AS SALE_DTM1
+               , A.SVC_NUM
+               , A.CUST_NM  AS CUST_NM1
+               , E.OUT_ORG_NM        AS HDQT_PART_ORG_ID
+               , D.OUT_ORG_DTL_NM    AS SALE_DEPT_ORG_ID
+               , C.OUT_ORG_DTL_NM    AS SALE_TEAM_ORG_ID
+               , A.AGNT_ID
+               , B.AGNT_NM
+               , A.CNSLR_NM
+               , A.CNSLR_TEL_NO1
+               , A.CNSLR_TEL_NUM2
+               , A.CNSLR_TEL_NUM3
+               , A.CLM_TYP_CD                  
+               , I.COMM_CD_VAL_NM  AS CLM_TYP_NM               
+               , A.OP_CLS_DT
+               , A.OP_CLS_TM
+               , A.OP_CLS_MM
+               , A.FNSH_DT
+               , A.FNSH_TM
+               , A.FNSH_MM
+               , A.SELLER_PEN_AMT
+               , A.TEAM_LDR_PEN_AMT
+               , A.DRTR_PEN_AMT
+               , A.SCRB_LRG_SEQ
+               , A.SCRB_LRG_AMT                
+          FROM DSM_SCRB_CLM A 	
+          /*
+          LEFT OUTER JOIN (
+                SELECT S1.SALE_DTM, S1.SVC_NUM, S1.CUST_NM, S1.GNRL_SALE_NO
+                  FROM PS_MNG.TSAL_N_GENERAL_SALE S1
+                 WHERE S1.GNRL_SALE_CHG_SEQ = (
+                                                 SELECT MAX(GNRL_SALE_CHG_SEQ) 
+                                                   FROM PS_MNG.TSAL_N_GENERAL_SALE
+                                                  WHERE GNRL_SALE_NO = S1.GNRL_SALE_NO
+                                                )
+                   AND S1.SVC_MGMT_LAST_YN = 'Y'                                      
+                   AND S1.SALE_CHG_HST_CL NOT IN ('07', '08', '23')         
+               ) F ON (F.GNRL_SALE_NO = A.SALE_MGMT_NUM )
+          */
+          JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.AGNT_ID AND B.CONS_MTH = SUBSTR(A.RCV_DT,0,6) )
+          JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+          JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID )
+          JOIN PS_MNG.TBAS_OUT_ORG_MGMT E     ON ( E.OUT_ORG_ID = C.OUT_ORG_ID )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL G ON  ( G.COMM_CD_ID = 'DSM_CUST_PGCV_ST_CD' AND G.COMM_CD_VAL = A.SCRB_CLM_ST_CD )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H ON  ( H.COMM_CD_ID = 'DSM_RCV_OWNR_CD' AND H.COMM_CD_VAL = A.RCV_OWNR_CD )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I ON  ( I.COMM_CD_ID = 'DSM_SCRB_CLM_TYP_CD' AND I.COMM_CD_VAL = A.CLM_TYP_CD )
+		 WHERE E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+		   AND A.RCV_DT BETWEEN #FROM_DT# AND #TO_DT# 
+		   ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+				E.ORG_ID = #HDQT_TEAM_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[
+		   ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			    E.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[  
+		   ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				D.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[
+		   ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				C.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[ 
+		   ]]><isNotEmpty prepend="AND" property="CLM_TYP_CD"><![CDATA[
+				A.CLM_TYP_CD = #CLM_TYP_CD#
+		   ]]></isNotEmpty><![CDATA[	
+		   ]]><isNotEmpty prepend="AND" property="SCRB_CLM_ST_CD"><![CDATA[
+				A.SCRB_CLM_ST_CD = #SCRB_CLM_ST_CD#
+		   ]]></isNotEmpty><![CDATA[
+		   ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				B.AGNT_ID = #AGNT_ID#
+		   ]]></isNotEmpty><![CDATA[		   
+		   ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+				B.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+		   ]]></isNotEmpty><![CDATA[		   		   		   	   
+		   ]]><isNotEmpty prepend="AND" property="CUST_NM"><![CDATA[
+				A.CUST_NM LIKE '%'||REPLACE(#CUST_NM#,' ','')||'%'
+		   ]]></isNotEmpty><![CDATA[		   
+        ) T1
+  WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<insert id="dInsertScrbClm" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dInsertScrbClm 비정상영업소명 등록 */
+/* IO: 안진갑,2015-04-16T16:55:10(안진갑,2015-02-16T11:44:49) */
+]]><selectKey keyProperty="RCV_MGMT_NUM" resultClass="String" type="pre"><![CDATA[
+   SELECT 'SCR'||LPAD(DSM_SCRB_CLM_SEQ.NEXTVAL, 10, '0') AS RCV_MGMT_NUM FROM DUAL
+]]></selectKey><![CDATA[
+INSERT INTO DSM_SCRB_CLM
+(
+  RCV_MGMT_NUM
+  , RCV_DT
+  , RCV_TM
+  , RCV_MM
+  , RCV_OWNR_CD
+  , CNSLR_NM
+  , CNSLR_TEL_NO1
+  , CNSLR_TEL_NUM2
+  , CNSLR_TEL_NUM3
+  , CLM_TYP_CD
+  , OP_CLS_DT
+  , OP_CLS_TM
+  , OP_CLS_MM
+  , SALE_MGMT_NUM
+  , RCV_CTT
+  ]]><isNotEmpty property="SCRB_LRG_SEQ"><![CDATA[
+  , SCRB_LRG_SEQ
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="SCRB_LRG_AMT"><![CDATA[
+  , SCRB_LRG_AMT
+  ]]></isNotEmpty><![CDATA[
+  , RGSTR_ID
+  , RGST_DTM
+  , UPDR_ID
+  , UPD_DTM
+  , AGNT_ID
+  , CUST_NM
+  , SVC_NUM
+  , SALE_DT  
+)
+VALUES(
+  #RCV_MGMT_NUM#
+  , #RCV_DT#
+  , #RCV_TM#
+  , #RCV_MM#
+  , #RCV_OWNR_CD#
+  , #CNSLR_NM#
+  , #CNSLR_TEL_NO1#
+  , #CNSLR_TEL_NUM2#
+  , #CNSLR_TEL_NUM3#
+  , #CLM_TYP_CD#
+  , #OP_CLS_DT#
+  , #OP_CLS_TM#
+  , #OP_CLS_MM#
+  , #SALE_MGMT_NUM#
+  , #RCV_CTT#
+  ]]><isNotEmpty property="SCRB_LRG_SEQ"><![CDATA[
+  , #SCRB_LRG_SEQ#
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="SCRB_LRG_AMT"><![CDATA[
+  , #SCRB_LRG_AMT#
+  ]]></isNotEmpty><![CDATA[
+  , #onlineContext.userInfo.loginId#
+  , SYSDATE
+  , #onlineContext.userInfo.loginId#
+  , SYSDATE
+  , #AGNT_ID#
+  , #CUST_NM#
+  , #SVC_NUM1#||#SVC_NUM2#||#SVC_NUM3#
+  , REPLACE(#SALE_DT#, '-', '')
+)]]>
+	</insert>
+	<update id="dUpdateScrbClm" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dUpdateScrbClm 비정상영업소명 수정 */
+/* IO: 안진갑,2015-04-16T17:02:29(안진갑,2015-02-16T13:32:38) */
+UPDATE DSM_SCRB_CLM
+   SET
+	 ]]><isEqual property="DIV" compareValue="SAVE"><![CDATA[
+	 RCV_DT = REPLACE(#RCV_DT#, '-', '')
+	 , RCV_TM = #RCV_TM#
+	 , RCV_MM = #RCV_MM#
+	 , RCV_OWNR_CD = #RCV_OWNR_CD#
+	 , CNSLR_NM = #CNSLR_NM#
+	 , CNSLR_TEL_NO1 = #CNSLR_TEL_NO1#
+	 , CNSLR_TEL_NUM2 = #CNSLR_TEL_NUM2#
+	 , CNSLR_TEL_NUM3 = #CNSLR_TEL_NUM3#
+	 , CLM_TYP_CD = #CLM_TYP_CD#
+	 , OP_CLS_DT = #OP_CLS_DT#
+	 , OP_CLS_TM = #OP_CLS_TM#
+	 , OP_CLS_MM = #OP_CLS_MM#
+	 , RCV_CTT = #RCV_CTT#
+     , SCRB_LRG_SEQ = #SCRB_LRG_SEQ#
+     , SCRB_LRG_AMT = #SCRB_LRG_AMT#
+	 , SALE_MGMT_NUM = #SALE_MGMT_NUM#
+	 , UPDR_ID = #onlineContext.userInfo.loginId#
+	 , UPD_DTM = SYSDATE
+	 , AGNT_ID = #AGNT_ID#
+	 , CUST_NM = #CUST_NM#
+ 	 , SVC_NUM = #SVC_NUM1#||#SVC_NUM2#||#SVC_NUM3#
+	 , SALE_DT = REPLACE(#SALE_DT#, '-', '')	 
+	 ]]></isEqual><![CDATA[	 
+	 ]]><isEqual property="SCRB_CLM_ST_CD" compareValue="Y"><![CDATA[
+	   SCRB_CLM_ST_CD = #SCRB_CLM_ST_CD#
+     , FNSH_DT = #FNSH_DT#
+	 , FNSH_TM = #FNSH_TM#
+	 , FNSH_MM = #FNSH_MM#
+	 , FNSH_OPR_ID = #FNSH_OPR_ID#
+	 , SELLER_PEN_AMT = #SELLER_PEN_AMT#
+	 , TEAM_LDR_PEN_AMT = #TEAM_LDR_PEN_AMT#
+	 , DRTR_PEN_AMT = #DRTR_PEN_AMT#
+	 , FNSH_MEMO = #FNSH_MEMO#
+	 , FNSH_CTT = #FNSH_CTT#
+     , FNSH_RGSTR_ID = #onlineContext.userInfo.loginId#
+	 , FNSH_RGST_DTM = SYSDATE 	
+	 , UPDR_ID = #onlineContext.userInfo.loginId#
+	 , UPD_DTM = SYSDATE	 
+	 ]]></isEqual><![CDATA[
+	 ]]><isEqual property="SCRB_CLM_ST_CD" compareValue="R"><![CDATA[
+	   ]]><isNotEqual property="DIV" compareValue="SAVE"><![CDATA[
+	   SCRB_CLM_ST_CD = #SCRB_CLM_ST_CD#
+	 , RE_RCV_YN = #RE_RCV_YN#
+     , FNSH_DT = null
+	 , FNSH_TM = null
+	 , FNSH_MM = null
+	 , FNSH_OPR_ID = null
+	 , SELLER_PEN_AMT = null
+	 , TEAM_LDR_PEN_AMT = null
+	 , DRTR_PEN_AMT = null
+	 , FNSH_MEMO = null
+	 , FNSH_CTT = null
+     , FNSH_RGSTR_ID = null
+	 , FNSH_RGST_DTM = null 	
+	 , UPDR_ID = #onlineContext.userInfo.loginId#
+	 , UPD_DTM = SYSDATE	
+	   ]]></isNotEqual><![CDATA[ 
+	 ]]></isEqual><![CDATA[
+ WHERE RCV_MGMT_NUM = #RCV_MGMT_NUM#]]>
+	</update>
+	<select id="dSearchScrbClmDtl" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchScrbClmDtl 비정상영업소명 상세조회 */
+/* IO: 안진갑,2015-05-12T15:22:04(안진갑,2015-02-16T14:01:59) */
+SELECT A.RCV_MGMT_NUM                  
+       , A.RCV_DT
+       , A.RCV_TM
+       , A.RCV_MM
+       , A.RCV_OWNR_CD     
+       , H.COMM_CD_VAL_NM AS RCV_OWNR_NM
+       , A.SALE_DT
+       , A.SVC_NUM
+       , REGEXP_SUBSTR(REGEXP_REPLACE(A.SVC_NUM,'-'), '(^\d{3})(.{3,4})(\d{4})', 1, 1, 'i', 1)  AS SVC_NUM1
+       , REGEXP_SUBSTR(REGEXP_REPLACE(A.SVC_NUM,'-'), '(^\d{3})(.{3,4})(\d{4})', 1, 1, 'i',2)   AS SVC_NUM2
+       , REGEXP_SUBSTR(REGEXP_REPLACE(A.SVC_NUM,'-'), '(^\d{3})(.{3,4})(\d{4})', 1, 1, 'i',3)   AS SVC_NUM3        
+       , A.CUST_NM
+       , J.ORG_NM            AS HDQT_TEAM_ORG_NM
+       , E.OUT_ORG_NM        AS HDQT_PART_ORG_NM
+       , D.OUT_ORG_DTL_NM    AS SALE_DEPT_ORG_NM
+       , C.OUT_ORG_DTL_NM    AS SALE_TEAM_ORG_NM
+       , A. AGNT_ID
+       , B.AGNT_NM
+       , A.CNSLR_NM
+       , A.CNSLR_TEL_NO1
+       , A.CNSLR_TEL_NUM2
+       , A.CNSLR_TEL_NUM3
+       , A.CLM_TYP_CD                  
+       , I.COMM_CD_VAL_NM  AS CLM_TYP_NM               
+       , A.OP_CLS_DT
+       , A.OP_CLS_TM
+       , A.OP_CLS_MM
+       , A.FNSH_DT
+       , A.FNSH_TM
+       , A.FNSH_MM
+       , A.SELLER_PEN_AMT
+       , A.TEAM_LDR_PEN_AMT
+       , A.DRTR_PEN_AMT
+       , A.RGSTR_ID
+       , K.USER_NM AS RGSTR_NM
+       , TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD HH24:MI') AS RGST_DTM
+       , A.SALE_MGMT_NUM
+       , A.RCV_CTT
+       , A.FNSH_RGSTR_ID
+       , F_MASKING('N', L.USER_NM) AS FNSH_RGSTR_NM
+       , TO_CHAR(A.FNSH_RGST_DTM, 'YYYY-MM-DD HH24:MI') AS FNSH_RGST_DTM
+       , A.FNSH_MEMO
+       , TO_CHAR(TO_DATE(A.FNSH_DT||FNSH_TM||FNSH_MM, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS FNSH_DTM
+       , A.FNSH_OPR_ID
+       , F_MASKING('N', M.USER_NM) AS FNSH_OPR_NM
+       , A.FNSH_CTT
+       , A.SCRB_CLM_ST_CD
+       , A.SCRB_LRG_SEQ
+	   , A.SCRB_LRG_AMT
+  FROM DSM_SCRB_CLM A
+  /*
+  LEFT OUTER JOIN (
+        SELECT S1.SALE_DTM, S1.SVC_NUM, S1.CUST_NM, S1.GNRL_SALE_NO
+          FROM PS_MNG.TSAL_N_GENERAL_SALE S1
+         WHERE S1.GNRL_SALE_CHG_SEQ = (
+                                         SELECT MAX(GNRL_SALE_CHG_SEQ) 
+                                           FROM PS_MNG.TSAL_N_GENERAL_SALE
+                                          WHERE GNRL_SALE_NO = S1.GNRL_SALE_NO
+                                        )
+           AND S1.SVC_MGMT_LAST_YN = 'Y'                                      
+           AND S1.SALE_CHG_HST_CL NOT IN ('07', '08', '23')         
+       ) F ON (F.GNRL_SALE_NO = A.SALE_MGMT_NUM )
+  */
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.AGNT_ID AND B.CONS_MTH = SUBSTR(A.RCV_DT,0,6) )
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID )
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT E     ON ( E.OUT_ORG_ID = C.OUT_ORG_ID )
+  JOIN PS_MNG.TBAS_NEW_ORG_MGMT J     ON ( J.ORG_ID = E.ORG_ID)
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT K   ON ( K.USER_ID = A.RGSTR_ID)
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT L   ON ( L.USER_ID = A.FNSH_RGSTR_ID)
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT M   ON ( M.USER_ID = A.FNSH_OPR_ID)
+  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H ON  ( H.COMM_CD_ID = 'DSM_RCV_OWNR_CD' AND H.COMM_CD_VAL = A.RCV_OWNR_CD )
+  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I ON  ( I.COMM_CD_ID = 'DSM_SCRB_CLM_TYP_CD' AND I.COMM_CD_VAL = A.CLM_TYP_CD )
+WHERE A.RCV_MGMT_NUM = #RCV_MGMT_NUM#]]>
+	</select>
+	<delete id="dDeleteScrbClm" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dDeleteScrbClm 비정상영업소명 삭제 */
+/* IO: 안진갑,2015-02-16T15:18:00(안진갑,2015-02-16T15:17:36) */
+DELETE FROM DSM_SCRB_CLM
+ WHERE RCV_MGMT_NUM = #RCV_MGMT_NUM#]]>
+	</delete>
+	<select id="dSearchScrbClmPrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchScrbClmPrst 비정상영업소명현황 조회 */
+/* IO: 안진갑,2015-05-07T14:38:31(안진갑,2015-02-17T12:36:09) */
+SELECT T2.*
+  FROM (
+		SELECT rownum AS RN
+       		   , COUNT(1) OVER()  AS COUNT
+       		   , T1.*
+		  FROM (
+				SELECT TO_CHAR(TO_DATE(A.RCV_DT), 'YYYY-MM') AS YYYYMM
+               		   , G.OUT_ORG_NM     AS HDQT_PART_ORG_NM
+               		   , F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+               		   , E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+               		   , A.AGNT_ID
+               		   , J.COMM_CD_VAL_NM AS RPSTY_NM
+               		   , D.AGNT_NM
+               		   , I.COMM_CD_VAL_NM AS PGVC_TYP_NM
+               		   , COUNT(1)                            AS SUM_TOTAL
+               		   , SUM(DECODE(A.SCRB_CLM_ST_CD,'N',1,0)) AS SUM_N
+               		   , SUM(DECODE(A.SCRB_CLM_ST_CD,'Y',1,0)) AS SUM_Y
+               		   , SUM(DECODE(A.SCRB_CLM_ST_CD,'R',1,0)) AS SUM_R
+  				 FROM DSM_SCRB_CLM A
+  				 /*  				   				   				
+				 LEFT OUTER JOIN (
+        		           		   SELECT S1.SALE_DTM, S1.SVC_NUM, S1.CUST_NM, S1.GNRL_SALE_NO
+					                 FROM PS_MNG.TSAL_N_GENERAL_SALE S1
+			                        WHERE S1.GNRL_SALE_CHG_SEQ = (
+                                            		               SELECT MAX(GNRL_SALE_CHG_SEQ) 
+			                                                         FROM PS_MNG.TSAL_N_GENERAL_SALE
+                                                                    WHERE GNRL_SALE_NO = S1.GNRL_SALE_NO
+                                                                 )
+                                      AND S1.SVC_MGMT_LAST_YN = 'Y'                                      
+                                      AND S1.SALE_CHG_HST_CL NOT IN ('07', '08', '23')         
+                                 ) C ON (C.GNRL_SALE_NO = A.SALE_MGMT_NUM )
+                 */
+  				 JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.AGNT_ID AND D.CONS_MTH = SUBSTR(A.RCV_DT,0,6) )
+  				 JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+  				 JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON ( F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID )  
+  				 JOIN PS_MNG.TBAS_OUT_ORG_MGMT G     ON ( G.OUT_ORG_ID = E.OUT_ORG_ID )
+  				 LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I ON  ( I.COMM_CD_ID = 'DSM_SCRB_CLM_TYP_CD' AND I.COMM_CD_VAL = A.CLM_TYP_CD )
+  				 LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL J ON  ( J.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND J.COMM_CD_VAL = D.RPSTY )
+			    WHERE E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+		  		  AND A.RCV_DT BETWEEN #FROM_DT# AND #TO_DT# 
+		   			]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+						G.ORG_ID = #HDQT_TEAM_ORG_ID#
+		     		]]></isNotEmpty><![CDATA[
+				    ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			    		G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		   		 	]]></isNotEmpty><![CDATA[  
+		   		 	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+						F.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		   		 	]]></isNotEmpty><![CDATA[
+		   			]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+						E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		   		 	]]></isNotEmpty><![CDATA[ 
+			   		]]><isNotEmpty prepend="AND" property="CLM_TYP_CD"><![CDATA[
+						A.CLM_TYP_CD = #CLM_TYP_CD#
+		   			]]></isNotEmpty><![CDATA[	
+		   			]]><isNotEmpty prepend="AND" property="SCRB_CLM_ST_CD"><![CDATA[
+						A.SCRB_CLM_ST_CD = #SCRB_CLM_ST_CD#
+		   			]]></isNotEmpty><![CDATA[
+		   			]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+						D.AGNT_ID = #AGNT_ID#
+		   			]]></isNotEmpty><![CDATA[		   			
+		   			]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+						D.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+		   			]]></isNotEmpty><![CDATA[		   		   		   	   
+		   			]]><isNotEmpty prepend="AND" property="CUST_NM"><![CDATA[
+						A.CUST_NM LIKE '%'||REPLACE(#CUST_NM#,' ','')||'%'
+		   			]]></isNotEmpty><![CDATA[		   
+				GROUP BY 
+        		 		 TO_CHAR(TO_DATE(A.RCV_DT), 'YYYY-MM')
+       		     		 , G.OUT_ORG_NM     
+       			 		 , F.OUT_ORG_DTL_NM 
+       			 		 , E.OUT_ORG_DTL_NM 
+       		 	 		 , A.AGNT_ID      
+       			 		 , J.COMM_CD_VAL_NM 
+       		     		 , D.AGNT_NM
+       			 		 , I.COMM_CD_VAL_NM
+				ORDER BY 
+       			 		 TO_CHAR(TO_DATE(A.RCV_DT), 'YYYY-MM')
+       			 		 , G.OUT_ORG_NM     
+       			 		 , F.OUT_ORG_DTL_NM 
+       		 	 		 , E.OUT_ORG_DTL_NM 
+       			 		 , A.AGNT_ID
+       			 		 , J.COMM_CD_VAL_NM 
+       			 		 , D.AGNT_NM
+       			 		 , I.COMM_CD_VAL_NM
+        	  ) T1
+       ) T2
+  WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchScrbClmStCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchScrbClmStCnt 비정상영업소명상태별 건수 */
+/* IO: 안진갑,2015-04-24T11:25:43(안진갑,2015-02-23T16:28:56) */
+SELECT NVL( T1.TOT_CNT, 0)     AS TOT_CNT
+       , NVL( T1.PRC_CNT, 0)   AS PRC_CNT
+       , NVL( T1.REPRC_CNT, 0) AS REPRC_CNT
+       , NVL( T1.END_CNT, 0)   AS END_CNT
+  FROM (
+        SELECT SUM(1) AS TOT_CNT
+               , SUM (CASE WHEN A.SCRB_CLM_ST_CD = 'N' THEN 1 ELSE 0 END) AS PRC_CNT
+               , SUM (CASE WHEN A.SCRB_CLM_ST_CD = 'R' THEN 1 ELSE 0 END) AS REPRC_CNT
+               , SUM (CASE WHEN A.SCRB_CLM_ST_CD = 'Y' THEN 1 ELSE 0 END) AS END_CNT            
+          FROM DSM_SCRB_CLM A 	
+          LEFT OUTER JOIN (
+                SELECT S1.SALE_DTM, S1.SVC_NUM, S1.CUST_NM, S1.GNRL_SALE_NO
+                  FROM PS_MNG.TSAL_N_GENERAL_SALE S1
+                 WHERE S1.GNRL_SALE_CHG_SEQ = (
+                                                 SELECT MAX(GNRL_SALE_CHG_SEQ) 
+                                                   FROM PS_MNG.TSAL_N_GENERAL_SALE
+                                                  WHERE GNRL_SALE_NO = S1.GNRL_SALE_NO
+                                                )
+                   AND S1.SVC_MGMT_LAST_YN = 'Y'                                      
+                   AND S1.SALE_CHG_HST_CL NOT IN ('07', '08', '23')         
+               ) F ON (F.GNRL_SALE_NO = A.SALE_MGMT_NUM )
+          JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( B.AGNT_ID = A.AGNT_ID AND B.CONS_MTH = SUBSTR(A.RCV_DT,0,6) )
+          JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON ( C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID )
+          JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID )
+          JOIN PS_MNG.TBAS_OUT_ORG_MGMT E     ON ( E.OUT_ORG_ID = C.OUT_ORG_ID )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL G ON  ( G.COMM_CD_ID = 'DSM_CUST_PGCV_ST_CD' AND G.COMM_CD_VAL = A.SCRB_CLM_ST_CD )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H ON  ( H.COMM_CD_ID = 'DSM_RCV_OWNR_CD' AND H.COMM_CD_VAL = A.RCV_OWNR_CD )
+          LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I ON  ( I.COMM_CD_ID = 'DSM_SCRB_CLM_TYP_CD' AND I.COMM_CD_VAL = A.CLM_TYP_CD )
+		 WHERE E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+		   AND A.RCV_DT BETWEEN #FROM_DT# AND #TO_DT# 
+		   ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+				E.ORG_ID = #HDQT_TEAM_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[
+		   ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			    E.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[  
+		   ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				D.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[
+		   ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				C.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		   ]]></isNotEmpty><![CDATA[ 
+		   ]]><isNotEmpty prepend="AND" property="CLM_TYP_CD"><![CDATA[
+				A.CLM_TYP_CD = #CLM_TYP_CD#
+		   ]]></isNotEmpty><![CDATA[	
+		   ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				B.AGNT_ID = #AGNT_ID#
+		   ]]></isNotEmpty><![CDATA[		   
+		   ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+				B.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+		   ]]></isNotEmpty><![CDATA[		   		   		   	   
+		   ]]><isNotEmpty prepend="AND" property="CUST_NM"><![CDATA[
+				F.CUST_NM LIKE '%'||REPLACE(#CUST_NM#,' ','')||'%'
+		   ]]></isNotEmpty><![CDATA[		   
+        ) T1]]>
+	</select>
+	<select id="dSearchSmsAgnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchSmsAgnt sms발송정보 조회(국장, 영업국CS담당) */
+/* IO: 안진갑,2015-04-30T16:39:00(안진갑,2015-02-24T11:22:41) */
+SELECT A.USER_ID
+       , ''  AS RCV_PHN_ID
+       , 'Y' AS ABSN_CHECK_YN
+       , #CUST_NM#||' 고객 (판매자: '||#SALE_DEPT_ORG_NM#||' '||#SALE_TEAM_ORG_NM#||' '||#AGNT_NM#||')'         AS "{0}"
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER                     D ON (D.USER_ID = A.USER_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+ WHERE B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+   AND A.DUTY = '14'
+   AND A.ATTC_CAT = '4'
+   AND A.USER_ST = '1'
+   AND C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#   
+UNION
+SELECT A.USER_ID
+       , ''  AS RCV_PHN_ID
+       , 'Y' AS ABSN_CHECK_YN
+       , #CUST_NM#||' 고객 (판매자: '||#SALE_DEPT_ORG_NM#||' '||#SALE_TEAM_ORG_NM#||' '||#AGNT_NM#||')'         AS "{0}"
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER                     D ON (D.USER_ID = A.USER_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+ WHERE B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+   AND A.DUTY = '16'
+   AND A.ATTC_CAT = '4'
+   AND A.USER_ST = '1'
+   AND C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#   
+   AND C.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#   
+UNION
+SELECT A.USER_ID
+       , ''  AS RCV_PHN_ID
+       , 'Y' AS ABSN_CHECK_YN
+       , #CUST_NM#||' 고객 (판매자: '||#SALE_DEPT_ORG_NM#||' '||#SALE_TEAM_ORG_NM#||' '||#AGNT_NM#||')'         AS "{0}"
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER                     D ON (D.USER_ID = A.USER_ID)  
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+ WHERE B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+   AND B.CS_YN = 'Y'
+   AND A.ATTC_CAT = '4'
+   AND A.USER_ST = '1'   
+   AND C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#]]>
+	</select>
+	<select id="dSearchSmsEmp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchSmsEmp sms발송정보 조회(CS담당직원) */
+/* IO: 안진갑,2015-04-27T17:14:14(안진갑,2015-02-24T11:25:24) */
+SELECT USER_ID
+       , ''  AS RCV_PHN_ID
+       , 'Y' AS ABSN_CHECK_YN
+       , #SMS_CUST_NM#||' 고객 (판매자: '||#SMS_SALE_DEPT_ORG_NM#||' '||#SMS_SALE_TEAM_ORG_NM#||' '||#SMS_AGNT_NM#||')'         AS "{0}"
+  FROM  DSM_SMS_MGMT
+ WHERE  TRAN_TYP_CD = '42']]>
+	</select>
+	<select id="dSearchIsMa" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.scrbclm.db.DSCRBCLM001.dSearchIsMa 판매자의 해당월 기준 MA/S-MA 여부 조회 */
+/* IO: 안진갑,2015-04-24T11:33:50(안진갑,2015-04-24T11:33:14) */
+SELECT MAX(CASE WHEN B.RPSTY='01' OR B.RPSTY='02' THEN '1'
+            ELSE '0'
+       END) AS IS_MA
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+ WHERE B.CONS_MTH = SUBSTR(REPLACE(#SALE_DT#, '-', ''),1,6)
+   AND B.AGNT_ID = #AGNT_ID#]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="PSNM Build(Deployment) UI(WEB) Files" default="all" basedir=".">
+
+	<property environment="env" />
+
+	<property name="project.name" value="nexcore" />
+    
+	<!-- [NEXCORE_HOME] custombuild build.properties -->
+	<property file="${NEXCORE_HOME_ANT}/script/build/${project.name}.build.properties" />
+	<!-- [NEXCORE_HOME] default build.properties -->
+	<property file="${NEXCORE_HOME_ANT}/script/build/nexcore.build.properties" />
+	<!-- [NEXCORE_HOME] custombuild for CI tool (Continuous Integration : quickBuild etc) -->
+	<property file="${ant.home}/${project.name}.build.properties" />
+	<!-- default for CI tool (Continuous Integration : quickBuild etc) -->
+	<property file="${ant.home}/nexcore.build.properties" />
+
+	<target name="check.nexcore.property" unless="NEXCORE_HOME">
+		<echo message=" find ANT_HOME ..." />
+		<available file="${ant.home}/nexcore.build.properties" property="check.property.ant" />
+		<antcall target="check.nexcore.property.anthome" />
+	</target>
+
+	<target name="check.nexcore.property.anthome" unless="check.property.ant">
+		<echo message="ERROR: " />
+		<echo message="      define property 'NEXCORE_HOME_ANT' first " />
+		<echo message="      in your Eclipse Preferences [Ant-Runtime-properties]" />
+		<echo message="      before depoying" />
+		<fail message="ERROR: Ant runtime property 에 'NEXCORE_HOME_ANT'을 등록하세요. " />
+	</target>
+
+	<target name="all" depends="check.nexcore.property">
+		<antcall target="all-web" />
+	</target>
+
+	<target name="all-web" depends="check.nexcore.property">
+		<echo message="todir : ${app.ear.webroot.path}/web.war" />
+		<antcall target="copy-web" />
+	</target>
+
+	<target name="copy-web">
+		<!-- Web파일 복사 -->
+		<copy todir="${app.ear.webroot.path}/web.war" overwrite="false" preservelastmodified="true" includeemptydirs="false" verbose="true">
+			<fileset dir="./webapp" defaultexcludes="false">
+				<exclude name="**/.svn/**,**/*.bak" />
+				<exclude name="**/*.bak/**" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+    
+</project>

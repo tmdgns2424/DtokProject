@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FMTHSALESPLAN001">
+    <bizUnitName>[FU]월별영업계획관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.SALEPLAN</componentId>
+    <description>월별영업계획관리 FU</description>
+    <method-list>
+        <method id="fSearchMthStrdCttC">
+            <methodName>[FM]월별기준내용당월조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthStrdCttC</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별기준내용당월 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T13:48:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthStrdCttP">
+            <methodName>[FM]월별기준내용목표조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthStrdCttP</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별기준내용목표 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T13:52:57" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthStrdCttB">
+            <methodName>[FM]월별기준내용전월조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthStrdCttB</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별기준내용전월 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T11:36:56" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthExecTrgtQtyTeam">
+            <methodName>[FM]월별목표수량영업팀조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthExecTrgtQtyTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별목표수량영업팀 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T16:31:16" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthExecTrgtQty">
+            <methodName>[FM]월별목표수량조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthExecTrgtQty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별목표수량 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T11:36:32" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalePlanCnslDlDt">
+            <methodName>[FM]월별영업계획관리기간조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchSalePlanCnslDlDt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리계획기간 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T15:37:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertMthDsmTrgtTeam">
+            <methodName>[FM]월별영업계획관리영업팀저장</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fInsertMthDsmTrgtTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리영업팀 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T10:24:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchHeadSalePlan">
+            <methodName>[FM]월별영업계획관리조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchHeadSalePlan</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T13:05:08" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertMthDsmTrgtHeadq">
+            <methodName>[FM]월별영업계획관리저장</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fInsertMthDsmTrgtHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업계획관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T15:27:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthExecTrgtTeam">
+            <methodName>[FM]월별영업실적영업팀조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthExecTrgtTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업실적영업팀 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T16:29:48" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthExecTrgt">
+            <methodName>[FM]월별영업실적조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthExecTrgt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업실적 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T11:35:55" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthTrgtTeamAgntPrsnCnt">
+            <methodName>[FM]월별영업팀에이전트MA수조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthTrgtTeamAgntPrsnCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업팀에이전트MA수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T17:51:09" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthTrgtTeamAgnt">
+            <methodName>[FM]월별영업팀에이전트조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthTrgtTeamAgnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업팀에이전트 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T16:32:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchMthTrgtTeam">
+            <methodName>[FM]월별영업팀조회</methodName>
+            <transactionId>biz.SALEPLAN@FMTHSALESPLAN001_fSearchMthTrgtTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>월별영업팀 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T17:17:22" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-11T11:12:21" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

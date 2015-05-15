@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DBASE">
+    <bizUnitName>[DU]기준정보조회</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>조직정보, 사용자정보등 본 시스템의 기준정보 조회</description>
+    <method-list>
+        <method id="dSearchAuthGrp">
+            <methodName>[DM]권한그룹목록</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]권한그룹목록 - 전체목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T15:31:30" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAllUserPop">
+            <methodName>[DM]모든회원팝업정보조회</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchAllUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-13T16:15:50" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchEmpPop">
+            <methodName>[DM]본사직원조회</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchEmpPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>본사직원조회(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:16:30" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentNoMember">
+            <methodName>[DM]에이전트조회(회원가입시)</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchAgentNoMember</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]에이전트조회(회원가입시) - 사용자테이블 JOIN 안함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-05T17:27:22" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAgent">
+            <methodName>[DM]에이전트조회</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchAgent</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트정보를 조회하여 반환(NO페이징, 팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-18T17:58:28" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchUserPop">
+            <methodName>[DM]회원팝업정보조회</methodName>
+            <transactionId>com.SHARE@DBASE_dSearchUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>회원정보 팝업을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T17:28:09" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-18T17:55:04" user="admin (admin)"/>
+    </history>
+</bizUnit>

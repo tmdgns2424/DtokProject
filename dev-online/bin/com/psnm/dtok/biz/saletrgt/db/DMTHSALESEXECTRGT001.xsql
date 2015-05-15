@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMTHSALESEXECTRGT001">
+	<select id="dSearchSalesExecTrgt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saletrgt.db.DMTHSALESEXECTRGT001.dSearchSalesExecTrgt  */
+/* IO: 채수윤,2015-02-25T13:31:02(이민재,2015-02-09T16:52:32) */
+SELECT C.ORG_ID AS HDQT_TEAM_ORG_ID
+		, C.ORG_NM AS HDQT_TEAM_ORG_NM
+		, B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, B.OUT_ORG_NM AS HDQT_PART_ORG_NM
+		, A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+		, E.UNIT_TYP_CD
+		, ( SELECT COMM_CD_VAL_NM 
+  			FROM PS_MNG.TBAS_COMM_CD_DTL 
+  			WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+  			AND COMM_CD_VAL = E.UNIT_TYP_CD ) AS UNIT_TYP_NM
+		, D.MGMT_RT
+		, D.EXEC_TRGT_QTY
+    FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+    LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+    LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID)
+    JOIN DSM_TRGT_STRD_PROD E ON (E.SALES_YM = #SALES_YM#)
+    LEFT JOIN DSM_TRGT_EXEC_TRGT D ON (D.SALES_YM = #SALES_YM# AND D.DSM_HEADQ_CD = A.OUT_ORG_DTL_ID AND D.UNIT_TYP_CD = E.UNIT_TYP_CD)
+  	WHERE A.ORG_LVL = '1'
+  	AND A.DTOK_EFF_ORG_YN = 'Y'
+  	AND A.OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+  	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		C.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+  	ORDER BY A.SORT_SEQ, E.SORT_SEQ]]>
+	</select>
+	<select id="dSearchSalesExecTrgtTotal" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saletrgt.db.DMTHSALESEXECTRGT001.dSearchSalesExecTrgtTotal  */
+/* IO: 채수윤,2015-02-25T13:30:44(이민재,2015-02-09T17:14:28) */
+SELECT X.TOTAL 
+		, X.UNIT_TYP_CD
+		, X.UNIT_TYP_NM
+		, X.SORT_SEQ
+		, NVL(SUM(X.EXEC_TRGT_QTY),0) AS SUM_EXEC_TRGT_QTY
+	FROM (
+		SELECT '합계' AS TOTAL  
+			, E.UNIT_TYP_CD
+			, ( SELECT COMM_CD_VAL_NM 
+  				FROM PS_MNG.TBAS_COMM_CD_DTL 
+  				WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+  				AND COMM_CD_VAL = E.UNIT_TYP_CD ) AS UNIT_TYP_NM
+			, D.EXEC_TRGT_QTY
+			, E.SORT_SEQ
+		FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID)
+        JOIN DSM_TRGT_STRD_PROD E ON (E.SALES_YM = #SALES_YM#)
+        LEFT JOIN DSM_TRGT_EXEC_TRGT D ON (D.SALES_YM = #SALES_YM# AND D.DSM_HEADQ_CD = A.OUT_ORG_DTL_ID AND D.UNIT_TYP_CD = E.UNIT_TYP_CD)
+  		WHERE A.ORG_LVL = '1'
+  		AND A.DTOK_EFF_ORG_YN = 'Y'
+  		AND A.OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+  		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			C.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+	) X
+	GROUP BY X.TOTAL, X.UNIT_TYP_CD, X.UNIT_TYP_NM, X.SORT_SEQ
+	ORDER BY X.SORT_SEQ]]>
+	</select>
+	<insert id="dInsertSalesExecTrgt" ><![CDATA[/* Biz: com.psnm.dtok.biz.saletrgt.db.DMTHSALESEXECTRGT001.dInsertSalesExecTrgt  */
+/* IO: 이민재,2015-02-09T16:52:55(이민재,2015-02-09T16:52:55) */
+	MERGE INTO DSM_TRGT_EXEC_TRGT
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND UNIT_TYP_CD = #UNIT_TYP_CD# )
+	WHEN MATCHED THEN
+		UPDATE SET MGMT_RT = #MGMT_RT#
+				, EXEC_TRGT_QTY = #EXEC_TRGT_QTY#
+				, UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+			, DSM_HEADQ_CD
+        	, UNIT_TYP_CD
+        	, MGMT_RT
+        	, EXEC_TRGT_QTY
+        	, RGSTR_ID
+        	, RGST_DTM
+        	, UPDR_ID
+        	, UPD_DTM
+		)VALUES(
+			#SALES_YM#
+			, #SALE_DEPT_ORG_ID#
+			, #UNIT_TYP_CD#
+			, #MGMT_RT#
+			, #EXEC_TRGT_QTY#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<select id="dSearchSalesExecTrgtBrws" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saletrgt.db.DMTHSALESEXECTRGT001.dSearchSalesExecTrgtBrws  */
+/* IO: 이민재,2015-02-10T13:30:28(이민재,2015-02-10T13:30:28) */
+	SELECT C.ORG_ID AS HDQT_TEAM_ORG_ID
+		, C.ORG_NM AS HDQT_TEAM_ORG_NM
+		, B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, B.OUT_ORG_NM AS HDQT_PART_ORG_NM
+		, A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+    	, D.SALES_YM
+		, E.UNIT_TYP_CD
+		, ( SELECT COMM_CD_VAL_NM 
+  			FROM PS_MNG.TBAS_COMM_CD_DTL 
+  			WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+  			AND COMM_CD_VAL = E.UNIT_TYP_CD ) AS UNIT_TYP_NM
+		, D.MGMT_RT
+		, D.EXEC_TRGT_QTY
+	FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID)
+	JOIN DSM_TRGT_EXEC_TRGT D ON (D.DSM_HEADQ_CD = A.OUT_ORG_DTL_ID  AND D.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#)
+	JOIN DSM_TRGT_STRD_PROD E ON (E.UNIT_TYP_CD = D.UNIT_TYP_CD AND E.SALES_YM = D.SALES_YM)
+  	WHERE A.ORG_LVL = '1'
+  	AND A.DTOK_EFF_ORG_YN = 'Y'
+  	AND A.OUT_ORG_DTL_ID NOT IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ)  /* 사무국 제외 */
+  	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		C.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		A.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+  	ORDER BY D.SALES_YM, A.SORT_SEQ, E.SORT_SEQ]]>
+	</select>
+</sqlMap>

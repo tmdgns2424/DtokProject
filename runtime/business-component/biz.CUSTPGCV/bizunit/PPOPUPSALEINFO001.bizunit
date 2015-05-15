@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PPOPUPSALEINFO001">
+    <bizUnitName>[PU]매출정보</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.CUSTPGCV</componentId>
+    <description/>
+    <method-list>
+        <method id="pSearchSaleInfo">
+            <methodName>[PM]매출정보 조회</methodName>
+            <transactionId>biz.CUSTPGCV@PPOPUPSALEINFO001_pSearchSaleInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T14:46:47" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-28T14:42:59" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

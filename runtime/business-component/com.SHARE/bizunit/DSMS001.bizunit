@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSMS001">
+    <bizUnitName>[DU]SMS기본</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[DU]SMS기본 (설명) TKEY! 같은 데이터베이스 PS_MNG 사용자 테이블 참조</description>
+    <method-list>
+        <method id="dInsertSmsTranDtl">
+            <methodName>[DM]SMS거래정보등록(상세)</methodName>
+            <transactionId>com.SHARE@DSMS001_dInsertSmsTranDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS거래정보등록(상세)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T20:08:17" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertSmsTran">
+            <methodName>[DM]SMS거래정보등록</methodName>
+            <transactionId>com.SHARE@DSMS001_dInsertSmsTran</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS거래정보등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T20:07:49" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchNextCmpMsgSeq">
+            <methodName>[DM]SMS고유ID다음값</methodName>
+            <transactionId>com.SHARE@DSMS001_dSearchNextCmpMsgSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS고유ID다음값 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T19:59:28" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSmsInfoByUser">
+            <methodName>[DM]SMS기본정보조회</methodName>
+            <transactionId>com.SHARE@DSMS001_dSearchSmsInfoByUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS기본정보조회 : 사용자ID조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T17:26:45" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertTelinkSms">
+            <methodName>[DM]SMS발송정보등록</methodName>
+            <transactionId>com.SHARE@DSMS001_dInsertTelinkSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS발송정보등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T20:08:47" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSmsCount">
+            <methodName>[DM]SMS전송건수조회</methodName>
+            <transactionId>com.SHARE@DSMS001_dSearchSmsCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS전송건수조회 - 지정된 년/월과 전송전화번호 조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-04T09:45:34" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchNextTranSeq">
+            <methodName>[DM]SMS전송차수SEQ다음값</methodName>
+            <transactionId>com.SHARE@DSMS001_dSearchNextTranSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS전송차수SEQ다음값 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T19:58:51" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchChrgrOpAbsn">
+            <methodName>[DM]영업국사용자부재여부체크</methodName>
+            <transactionId>com.SHARE@DSMS001_dSearchChrgrOpAbsn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]영업국사용자부재여부체크 - SMS발송시 현재 부재여부 데이터 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T14:20:21" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-12T18:23:20" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

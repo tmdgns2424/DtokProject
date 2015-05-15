@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSCHRCVORG001">
+    <bizUnitName>[DU]주요일정수신조직</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.MAINSCHD</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchSchRcvOrg">
+            <methodName>[DM]주요일정수신조직 조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHRCVORG001_dSearchSchRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 수신조직 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T16:55:59" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDeleteSchRcvOrg">
+            <methodName>[DM]주요일정수신조직삭제</methodName>
+            <transactionId>biz.MAINSCHD@DSCHRCVORG001_dDeleteSchRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 수신조직 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T18:32:18" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertSchRcvOrg">
+            <methodName>[DM]주요일정수신조직추가</methodName>
+            <transactionId>biz.MAINSCHD@DSCHRCVORG001_dInsertSchRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 수신조직 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T18:31:47" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-15T16:55:15" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSALEPLANSTRD001">
+	<select id="dSearchSalePlanStrdProd" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dSearchSalePlanStrdProd  */
+/* IO: 이민재,2015-01-29T14:23:55(이민재,2015-01-29T14:11:46) */
+	SELECT SALES_YM
+		, UNIT_TYP_CD
+		, SORT_SEQ
+		, RGSTR_ID
+		, RGST_DTM
+		, UPDR_ID
+		, UPD_DTM
+	FROM DSM_TRGT_STRD_PROD
+	WHERE SALES_YM = #SALES_YM#
+	ORDER BY SORT_SEQ]]>
+	</select>
+	<insert id="dInsertSalePlanStrdProd" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dInsertSalePlanStrdProd  */
+/* IO: 이민재,2015-01-29T14:33:38(이민재,2015-01-29T14:33:38) */
+	MERGE INTO DSM_TRGT_STRD_PROD
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND UNIT_TYP_CD = #UNIT_TYP_CD# )
+	WHEN MATCHED THEN
+		UPDATE SET SORT_SEQ = #SORT_SEQ#
+				, UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+        	, UNIT_TYP_CD
+        	, SORT_SEQ
+        	, RGSTR_ID
+        	, RGST_DTM
+        	, UPDR_ID
+        	, UPD_DTM
+		)VALUES(
+			#SALES_YM#
+			, #UNIT_TYP_CD#
+			, #SORT_SEQ#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<delete id="dDeleteSalePlanStrdProd" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dDeleteSalePlanStrdProd  */
+/* IO: 이민재,2015-01-29T14:40:19(이민재,2015-01-29T14:40:19) */
+	DELETE FROM DSM_TRGT_STRD_PROD 
+ 	WHERE SALES_YM = #SALES_YM# AND UNIT_TYP_CD = #UNIT_TYP_CD#]]>
+	</delete>
+	<select id="dSearchSalePlanStrdCtt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dSearchSalePlanStrdCtt  */
+/* IO: 이민재,2015-01-29T14:24:23(이민재,2015-01-29T14:24:23) */
+	SELECT SALES_YM
+		, STRD_MGMT_SEQ
+		, STRT_TITLE_NM
+		, ORG_LVL
+		, STRD_CL
+		, SORT_SEQ
+		, RGSTR_ID
+		, RGST_DTM
+		, UPDR_ID
+		, UPD_DTM
+	FROM DSM_TRGT_STRD_CTT
+	WHERE SALES_YM = #SALES_YM#
+	ORDER BY ORG_LVL, STRD_CL, SORT_SEQ]]>
+	</select>
+	<insert id="dInsertSalePlanStrdCtt" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dInsertSalePlanStrdCtt  */
+/* IO: 이민재,2015-01-29T14:35:24(이민재,2015-01-29T14:35:24) */
+	MERGE INTO DSM_TRGT_STRD_CTT
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND STRD_MGMT_SEQ = #STRD_MGMT_SEQ# )
+	WHEN MATCHED THEN
+		UPDATE SET STRT_TITLE_NM = #STRT_TITLE_NM#
+				, ORG_LVL = #ORG_LVL#
+				, STRD_CL = #STRD_CL#
+				, SORT_SEQ = #SORT_SEQ#
+				, UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+			, STRD_MGMT_SEQ
+			, STRT_TITLE_NM
+			, ORG_LVL
+			, STRD_CL
+			, SORT_SEQ
+			, RGSTR_ID
+			, RGST_DTM
+			, UPDR_ID
+			, UPD_DTM
+		)VALUES(
+			#SALES_YM#
+			, (SELECT NVL(MAX(TO_NUMBER(STRD_MGMT_SEQ)), 0 ) + 1 FROM DSM_TRGT_STRD_CTT WHERE SALES_YM = #SALES_YM#)
+			, #STRT_TITLE_NM#
+			, #ORG_LVL#
+			, #STRD_CL#
+			, #SORT_SEQ#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<delete id="dDeleteSalePlanStrdCtt" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DSALEPLANSTRD001.dDeleteSalePlanStrdCtt  */
+/* IO: 이민재,2015-01-29T14:40:39(이민재,2015-01-29T14:40:39) */
+	DELETE FROM DSM_TRGT_STRD_CTT 
+ 	WHERE SALES_YM = #SALES_YM# AND STRD_MGMT_SEQ = #STRD_MGMT_SEQ#]]>
+	</delete>
+</sqlMap>

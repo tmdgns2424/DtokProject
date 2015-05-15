@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>등록게시판 유형</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-default.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-layout.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/alopex-grid-render.js"></script>
+<script type="text/javascript" src="../script/psnm-config.js"></script>
+<script type="text/javascript" src="../script/psnm-common.js"></script>
+<script type="text/javascript" src="../script/psnm-utils.js"></script>
+</head>
+
+<body>
+<!-- header start -->
+<div id="header">
+  <div class="nhearder">
+    <h1><img src="../image/logo.gif" ></h1>
+    <ul class="toptxt1" style="width: 395px;">
+      <li class="ft01"><img src="../image/blat_a1.gif"> <a href="#"><b>22통 [d*m운영자]</b></a> 님 로그인 <b>ㆍ</b></li>
+      <li class="ft02"><a href="#">마이페이지</a></li>
+      <li class="ft03"><a href="#">전체메뉴</a></li>
+      <li class="ft04"><a href="#"><img src="../image/btn_a1.gif"></a></li>
+    </ul>
+  </div>
+  <div class="gnb">
+    <ul>
+      <li>영업 정보</li>
+      <li>커뮤니티</li>
+      <li>본사 업무</li>
+      <li style="padding-right:15px;">영업국 업무</li>
+      <li>영업팀 업무</li>
+    </ul>
+    <p class="dimenu"><b> 바로가기 메뉴 +</b></p>
+  </div>
+</div>
+<!--// header end --> 
+<!--// left area -->
+<div class="left_bar"> <img src="../image/left_bar.gif" width="22" height="106"></div>
+
+<!-- title area -->
+<div id="contents">
+  <div class="content_title">
+    <div class="ub_txt6"> <span class="txt6_img"><b>공지사항 상세</b> <span class="notice-more"> <img src="../image/blat_a6.gif"> <span class="a2">본사업무</span> <span class="a3"> > </span> <b>공지사항관리</b> </span> </span> </div>
+  </div>
+  <!-- btn area -->
+  <div class="btn_area">
+    <div class="ab_btn_right">
+      <input type="hidden" id="ANNCE_ID" name="ANNCE_ID" data-bind="value:ANNCE_ID" />
+      <!--
+            <button id="btnAppr" data-type="button" data-theme="af-btn5" data-altname="승인"></button>
+            <button id="btnReje" data-type="button" data-theme="af-btn6" data-altname="반려"></button>
+            <button id="btnReje11" data-type="button" data-theme="af-btn11" data-alt="최종완료"></button>
+            <button id="btnReje12" data-type="button" data-theme="af-btn12" data-alt="완료취소"></button>
+            -->
+      <button id="btnSave" data-type="button" data-theme="af-btn4"  data-altname="저장"></button>
+      <button id="btnDel"  data-type="button" data-theme="af-btn13" data-altname="삭제"></button>
+      <button id="btnTest" data-type="button" data-theme="af-btn5" data-altname="테스트"></button>
+      <button id="btnList" data-type="button" data-theme="af-btn14" data-altname="목록"></button>
+    </div>
+    
+    <!-- find condition area -->
+    <form id="form">
+      <!--view_list area -->
+      <div class="floatL4"> <img src="../image/blat_a7.gif"> <b>공지사항</b> </div>
+      <table class="board02" width="100%" >
+        <tr>
+          <th scope="col">제목</th>
+          <td colspan="5" class="tleft"><input id="ANNCE_TITL_NM" name="ANNCE_TITL_NM" data-bind="value:ANNCE_TITL_NM" data-type="textinput" 
+                           data-validation-rule="{required:true, minlength:5}" 
+                           data-validation-message="{required:'반드시 입력하세요!', minlength:'5글자 이상 입력하세요!'}" style="width:95%" value=""></td>
+        </tr>
+        <tr>
+          <th scope="col">팝업여부</th>
+          <td class="tleft" style=""><input type="radio" name="" data-type="radio"  data-theme="af-radio" class="spaceL"/>
+            <label for="radioId2">Y</label>
+            <input type="radio" name="" data-type="radio"  data-theme="af-radio" class="spaceL"/>
+            <label for="radioId2">N</label>
+            <br/></td>
+          <th scope="col"">팝업시작일</th>
+          <td class="tleft"><input id="POPUP_STA_DT" name="POPUP_STA_DT" data-type="dateinput" data-bind="value:POPUP_STA_DT" data-image/></td>
+          <th scope="col">팝업종료일</th>
+          <td class="tleft"><input id="POPUP_END_DT" name="POPUP_END_DT" data-type="dateinput" data-bind="value:POPUP_END_DT" data-image="<c:out value='${pageContext.request.contextPath}'/>/image/ico_calendar.png"/></td>
+        </tr>
+        <tr>
+          <th scope="col" style="width:100px;">공지대상</th>
+          <td class="tleft"><select id="RCV_TYP_CD" data-type="select">
+              <!--
+                        <option value="">-선택-</option>
+                        <option value="01">전에이전트</option>
+                        <option value="02">관리자</option>
+                        <option value="03">국장</option>
+                        -->
+            </select></td>
+          <th scope="col">작성자</th>
+          <td class="tleft"><input id="BLTNR_NM" name="BLTNR_NM" data-type="textinput" data-bind="value:BLTNR_NM" style="width:120px" data-disabled="true"/></td>
+          <th scope="col" style="width:100px;">작성일자</th>
+          <td class="tleft time"><input id="BLTN_DT" name="BLTN_DT" data-type="dateinput" data-bind="value:BLTN_DT" data-disabled="true" />
+            
+            <!--data-image--></td>
+        </tr>
+        <tr>
+          <td colspan="6" class="tleft_txt"><textarea id="ANNCE_CTT" data-type="textarea" data-bind="value:ANNCE_CTT" rows="10" cols="80" 
+                              data-validation-rule="{required:true}" 
+                              data-validation-message="{required:'내용을 반드시 입력하세요!'}" 
+                              style='overflow: auto; width: 98%;/*  height: 350px; */''></textarea></td>
+        </tr>
+      </table>
+    </form>
+    <div class="file-controls" style=""> 
+      <!-- <input type="file" name="file" id="file" class="input-file" /> --> 
+    </div>
+  </div>
+  
+  <!--view_list area -->
+  <div class="floatL4"> <img src="../image/blat_a7.gif"> <b>첨부파일</b>
+    <div class="ab_pos1"><!-- style="background-image:url(http://blogimgs.naver.com/imgs/btn_addphoto.gif); width:61px; clip:rect(0 61 20 0)" -->
+      <div style="width:95px; height: 24px; background:url('../image/btn_c16.gif') no-repeat; border:0px;">
+        <input id="fileupload" type="file" name="files[]" multiple style="width:44px; height:24px; filter:alpha(opacity=0); opacity: 0; cursor: pointer;" />
+        <button id="btnFileDel" data-type="button" style="width:44px; height: 24px; background:url('../image/btn_c28.gif') no-repeat 0px 0px; border:0px; cursor: pointer; display: inline;"></button>
+      </div>
+    </div>
+  </div>
+  <div id="gridfile" data-bind="grid:gridfile" data-ui="ds"></div>
+</div>
+
+<!-- footer 영역 -->
+<footer id="footer">
+  <div class="footer">
+    <div class="masterbotm">
+      <p class="foot_logo"><img src="../image/blat_b1.gif"> </p>
+      <ul class="footdept">
+        <li class="foot01">개인정보 취급방침</li>
+        <li class="foot02">이용약관</li>
+        <li class="foot03">개인정보 수집이용안내</li>
+        <li class="foot04">개인정보 위탁</li>
+      </ul>
+      <ul class="footbotm">
+        <li class="botm01">서울특별시 성동구 아차산로 38 개룡빌딩 10층 상호: 피에스앤마케팅(주)</li>
+      </ul>
+      <ul class="footaddr">
+        <li class="addr01">대표이사:박병근 / 사업자등록번호: 104-86-20016 </li>
+        <li class="addr01">COPYRIGHT© 2014 PS&MARKETION CO,LTD. ALL RIGHTS RESERVED.</li>
+      </ul>
+      <ul class="sns">
+        <li class="textc2">대표번호</li>
+        <li class="textc3">070-7470-1000 </li>
+        <li class="textc4">평일 9시 - 18시</li>
+        <li class="blue"><img src="../image/btn_a3.gif"> <img src="../image/btn_a4.gif"></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

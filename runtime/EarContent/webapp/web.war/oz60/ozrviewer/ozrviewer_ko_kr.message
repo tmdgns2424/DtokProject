@@ -1,0 +1,19 @@
+;Message file for OZ Report Viewer
+ozrviewer = 리포트 뷰어 모듈 설치..
+ozrviewerocx = 리포트 뷰어 OCX 설치..
+ozrresource = 리포트 뷰어 리소스 설치..
+ozrresource_ko_kr = 리포트 뷰어 한국어 리소스 설치..
+ozrresource_en_us = 리포트 뷰어 영어 리소스 설치..
+ozrresource_ja_jp = 리포트 뷰어 일본어 리소스 설치..
+ozrresource_zh_cn = 리포트 뷰어 중국어 리소스 설치..
+ozrresource_zh_tw = 리포트 뷰어 대만어 리소스 설치..
+ozrresource_ru_ru = 리포트 뷰어 러시아어 리소스 설치..
+ozrxlswriter = XLS 익스포트 모듈 설치..
+ozjpdf417 = PDF417 모듈 설치..
+ozpdfwriter = PDF 익스포트 모듈 설치..
+ozppt = PPT 익스포트 모듈 설치
+ozrviewer_win98 = 리포트 뷰어 윈도우 98 모듈 설치..
+ozsystem = 시스템 관련 모듈 설치..
+ozgdiplus = gdiplus.dll 설치..
+ozrhelp = 리포트 뷰어 사용자 도움말 설치..
+ozruser = USL 클라이언트 모듈 설치..

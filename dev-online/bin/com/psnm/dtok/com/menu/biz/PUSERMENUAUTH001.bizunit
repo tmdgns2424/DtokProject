@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PUSERMENUAUTH001">
+    <bizUnitName>[PU]사용자메뉴권한관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MENU</componentId>
+    <description>[PU]사용자메뉴권한관리</description>
+    <method-list>
+        <method id="pSaveUserMenuAuth">
+            <methodName>[PM]사용자메뉴권한저장</methodName>
+            <transactionId>com.MENU@PUSERMENUAUTH001_pSaveUserMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]사용자메뉴권한저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T16:36:00" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchUserMenuAuth">
+            <methodName>[PM]사용자메뉴권한조회</methodName>
+            <transactionId>com.MENU@PUSERMENUAUTH001_pSearchUserMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]사용자메뉴권한조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T17:14:16" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-26T17:11:12" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

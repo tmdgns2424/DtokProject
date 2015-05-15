@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-popup.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+<style type="text/css">
+.tree ul {
+	margin:0;
+	padding:0;
+	list-style:none
+}
+.tree ul ul {
+	margin:0 0 0 -3px
+}
+.tree li {
+	position:relative;
+	padding:0 0 0 22px;
+	background:url(../image/blat_a23.gif) no-repeat 9px 0;
+	line-height:20px;
+	white-space:nowrap;
+*zoom:1
+}
+.tree li.last {
+	background-position:9px -1766px
+}
+.tree li.active a {
+	font-weight:bold;
+	color:#333
+}
+.tree li.active li a {
+	font-weight:normal;
+	color:#767676
+}
+.tree a {
+	color:#767676;
+	text-decoration:none
+}
+.tree a:hover, .tree a:active, .tree a:focus {
+	text-decoration:underline;
+	color:#e52f2f;
+}
+.tree .toggle {
+	overflow:hidden;
+	position:absolute;
+	top:0;
+	left:0;
+	width:19px;
+	height:19px;
+	padding:0;
+	border:0;
+	background:transparent url(../image/blat_a23.gif) no-repeat;
+	cursor:pointer;
+	font-size:0;
+	color:#fff;
+	text-indent:19px;
+*text-indent:0;
+	vertical-align:middle
+}
+.tree .toggle.plus {
+	background-position:5px -15px
+}
+.tree .toggle.minus {
+	background-position:5px 5px
+}
+/* //UI Object */
+/* UI Object */
+#left {float: left;width: 30%; height:450px; margin-top: 15px; }
+.tbl_type,.tbl_type th,.tbl_type td{border:0; vertical-align:top;}
+.tbl_type{width:100%;border-bottom:2px solid #dcdcdc;font-family:'돋움',dotum;font-size:12px;text-align:center;border-collapse:collapse;  background: #fbfbfc; height:450px; valign="top"}
+.tbl_type caption{display:none}
+.tbl_type tfoot{background-color:#f5f7f9;font-weight:bold}
+.tbl_type th{padding:7px 0 4px;border-top:2px solid #dcdcdc;border-right:1px solid #dcdcdc;border-left:1px solid #dcdcdc;background-color:#f5f7f9;color:#666;font-family:'돋움',dotum;font-size:12px;font-weight:bold}
+.tbl_type td{padding:6px 0 4px;border:1px solid #e5e5e5;color:#4c4c4c}
+.tbl_type td.ranking{font-weight:bold}
+/* //UI Object */
+</style>
+<body>
+<div id="Wrap">
+
+<!-- title area -->
+<div class="pop_header" ><span class="title">조직도</span> <a href="#" class="pop_close" onclick="javascript:self.close();"> <img src="../image/blat_a9.gif" alt="팝업닫기" ></a> 
+
+<!--view_table area -->
+  <div class="textAR">
+    <table class="board02" width="100%" >
+      <tr>
+        <th width="15%" style=" color:#ea002c;" scope="col">지사</th>
+        <td width="33%" class="tleft"><select name="select" data-type="select" data-wrap="true"  style="width:170px;">
+            <option value="">(324031)B2B사업팀</option>
+          </select></td>
+        <th width="15%">소속국</th>
+        <td width="33%" class="tleft"><select name="select2" data-type="select" data-wrap="true" style="width:170px;">
+            <option value="">선택</option>
+          </select></td>
+      </tr>
+    </table>
+    
+    <!--//view_table left area -->
+    <div id="left" >
+    <table cellspacing="0" border="1" summary="메이져리그 2007시즌 1위~6위 팀순위입니다." class="tbl_type">
+<caption>조직도</caption>
+<colgroup>
+<col width="10%"><col><col width="10%"><col width="10%">
+<col width="10%"><col width="10%"><col width="10%"><col width="10%">
+</colgroup>
+<tfoot>
+</tfoot>
+<tbody>
+<tr>
+<td><div class="tree">
+            <ul  style="width:100px; padding-left:20px; padding-top:20px;">
+              <li><img src="../image/blat_a13.gif" width="12" height="12"> B2B사업팀
+                <ul>
+                  <li><a href="#">DSM사무국</a></li>
+                </ul>
+              </li>
+              <li><img src="../image/blat_a13.gif" width="12" height="12"> <a href="#">서울 3국</a>
+                <ul>
+                  <li><a href="#">02팀</a></li>
+                  <li><a href="#">03팀</a></li>
+                  <li><a href="#">04팀</a></li>
+                  <li><a href="#">05팀</a></li>
+                  <li><a href="#">국직속</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div></td>
+</tr>
+</tbody>
+</table>
+      </div>
+    
+     <!--//view_table list area -->
+     <table id="center">
+      <tr>
+        <td  class="fnt_align" valign="top" style=" padding-left:10px;"><table data-type="table" width="100%" >
+            <colgroup>
+            <col style="">
+            <col style="">
+            <col style="">
+            <col style="">
+            <col style="">
+            </colgroup>
+            <thead>
+              <tr style="text-align:left; ">
+                <th width="10%" id="id" data-sortable="number">직무</th>
+                <th width="12%" id="id" data-sortable="number">소속국</th>
+                <th width="12%" id="id" data-sortable="number">영업팀명</th>
+                <th width="11%" id="id" data-sortable="number">에이전트 코드</th>
+                <th width="12%" id="id" data-sortable="number">직책명</th>
+                <th width="9%" data-sortable="string">에이전트명</th>
+              </tr>
+            </thead>
+            <tbody class="table-body">
+              <tr class="row-odd">
+                <td >DSM_MA</td>
+                <td>서울3국</td>
+                <td class="time">02팀</td>
+                <td>7001294</td>
+                <td >MA</td>
+                <td >김*욱박</td>
+              </tr>
+            </tbody>
+          </table></td>
+    </table>
+
+<!-- btn area -->
+    
+</div>
+
+<p class="floatL3">
+      <input type="button" value="" data-type="button" data-theme="af-btn8">
+      <input type="button" value="" data-type="button" data-theme="af-btn10">
+    </p>
+</div>
+</body>
+</html>

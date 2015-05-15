@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.batch.CONTDELBAT">
+    <componentName>[BC]배치-게시글삭제</componentName>
+    <bizGroupXd>batch</bizGroupXd>
+    <packageName>com.psnm.dtok.batch</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description>공지사항, 영업정책, 주요일정, 커뮤니티 게시판 자동 게시글 삭제 기능</description>
+    <history>
+        <created date="2015-04-03T17:34:54" user="채수윤 (chesuyun)"/>
+        <updated date="2015-04-06T12:51:55" user="채수윤 (chesuyun)"/>
+    </history>
+</component>

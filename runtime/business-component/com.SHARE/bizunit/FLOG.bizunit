@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FLOG">
+    <bizUnitName>[FU]작업로그</bizUnitName>
+    <parentClassXd>SFU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description/>
+    <method-list>
+        <method id="fInsertJobLog">
+            <methodName>[FU]작업로그 등록</methodName>
+            <transactionId>com.SHARE@FLOG_fInsertJobLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-10T15:46:52" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-03-10T15:45:13" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

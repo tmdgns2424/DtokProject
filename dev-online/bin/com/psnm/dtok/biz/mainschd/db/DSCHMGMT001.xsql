@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSCHMGMT001">
+	<select id="dSearchSchMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmt  */
+/* IO: 이승훈2,2015-04-17T13:22:05(이승훈2,2015-04-17T11:44:17) */
+SELECT * 
+  FROM (
+	SELECT ROWNUM rn, ALL_LIST.* 
+	  FROM (   
+SELECT 
+        A.SCH_ID
+       ,A.SCH_TYP_CD
+       ,A.SCH_TYP_CD AS SCH_TYP_NM
+       ,A.SCH_TITL_NM
+       ,( SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+			FROM DSM_ATCH_FILE_MGMT X
+		   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+       /*,B.USER_NM AS BLTNR_NM */
+       ,F_MASKING('N',B.USER_NM) AS BLTNR_NM
+       ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS BLTN_DT
+       ,DECODE(A.SCH_STA_DT
+										 ,TO_CHAR(A.SCH_DT)
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD')
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD') ||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD')) AS SCH_DT /* 일정 */
+       , ( SELECT NVL(COUNT(I.READ_MGMT_ID) , 0)
+						  FROM DSM_READR_MGMT I
+						  WHERE I.READ_MGMT_ID =  A.SCH_ID  
+						) VIEW_CNT /* 조회건수 */ 
+  FROM DSM_SCHMGMT A
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)
+  JOIN ( SELECT SCH_ID FROM DSM_SCH_RCV_GRP WHERE 1=1
+           				]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+						AND AUTH_GRP_ID = #AUTH_GRP_ID#
+           				]]></isNotEmpty><![CDATA[
+           				GROUP BY  SCH_ID
+         				) C ON (C.SCH_ID = A.SCH_ID)
+ WHERE	1=1
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+		AND A.SCH_STA_DT <= #SEARCH_DT# || '31'              
+		AND A.SCH_DT >= #SEARCH_DT# || '01'
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+		AND A.RGST_ORG_ID = #HDQT_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+		AND (A.RGST_OUT_ORG_ID = #onlineContext.userInfo.OUT_ORG_ID#
+]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+			OR A.RGST_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+]]></isNotEmpty><![CDATA[
+		)
+]]><isNotEmpty property="USER_NM"><![CDATA[
+			AND B.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+			]]></isNotEmpty><![CDATA[
+ ORDER BY
+       A.SCH_DT DESC
+       ) ALL_LIST
+	)
+ WHERE rn BETWEEN (#page#-1)*#page_size#+1
+   AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchSchMgmtCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtCnt  */
+/* IO: 이승훈2,2015-04-17T13:21:47(이승훈2,2015-04-17T13:17:57) */
+SELECT COUNT(1) AS SCH_CNT
+  FROM (
+			SELECT	A.SCH_ID
+			  FROM	DSM_SCHMGMT A
+			  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+			  JOIN ( SELECT SCH_ID FROM DSM_SCH_RCV_GRP WHERE 1=1
+           				]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+						AND AUTH_GRP_ID = #AUTH_GRP_ID#
+           				]]></isNotEmpty><![CDATA[
+           				GROUP BY  SCH_ID
+         				) C ON (C.SCH_ID = A.SCH_ID)
+			 WHERE	1=1
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+					AND A.SCH_STA_DT <= #SEARCH_DT# || '31'              
+					AND A.SCH_DT >= #SEARCH_DT# || '01'
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+					AND A.RGST_ORG_ID = #HDQT_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+					AND (A.RGST_OUT_ORG_ID = #onlineContext.userInfo.OUT_ORG_ID#
+]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+						 OR A.RGST_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+]]></isNotEmpty><![CDATA[
+						)
+]]><isNotEmpty property="USER_NM"><![CDATA[
+					AND B.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+]]></isNotEmpty><![CDATA[
+		) ALLLIST]]>
+	</select>
+	<select id="dDetailSchMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dDetailSchMgmt  */
+/* IO: 이승훈2,2015-04-15T13:47:18(이승훈2,2015-01-15T10:08:36) */
+SELECT 
+        A.SCH_ID
+       ,A.SCH_TITL_NM
+       ,A.SCH_TYP_CD AS SCH_TYP_NM
+       ,F_MASKING('N', F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM
+       ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM
+       ,A.SCH_CTT
+       ,TO_CHAR(TO_DATE(A.SCH_DT), 'YYYY-MM-DD') AS SCH_DT
+       ,DECODE(A.SCH_STA_DT, NULL, TO_CHAR(TO_DATE(A.SCH_DT), 'YYYY-MM-DD'), TO_CHAR(TO_DATE(A.SCH_STA_DT), 'YYYY-MM-DD')) AS SCH_STA_DT /* 일정 */
+       ,A.DEL_CYCL_DT_CNT
+  FROM DSM_SCHMGMT A
+ WHERE A.SCH_ID = #SCH_ID#]]>
+	</select>
+	<select id="dSearchSchMgmtSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtSeq  */
+/* IO: 이민재,2015-03-12T10:33:32(이승훈2,2015-01-15T17:55:59) */
+SELECT 'SCH' || LPAD(DSM_SCH_SEQ.NEXTVAL, 12, '0') AS SCH_ID FROM DUAL]]>
+	</select>
+	<insert id="dInsertSchMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dInsertSchMgmt  */
+/* IO: 채수윤,2015-03-13T09:37:33(이승훈2,2015-01-15T18:03:37) */
+INSERT INTO DSM_SCHMGMT
+	(
+	  SCH_ID
+ 	  ,SCH_TYP_CD
+	  ,SCH_TITL_NM
+	  ,SCH_CTT
+ 	  ,SCH_DT
+	  ,SCH_STA_DT
+	  ,DEL_CYCL_DT_CNT
+ 	  ,RGSTR_ID
+  	  ,RGST_DTM
+ 	  ,UPDR_ID
+	  ,UPD_DTM 
+	  ,RGST_ORG_ID
+	  ,RGST_OUT_ORG_ID
+	)	
+VALUES
+	(
+	 #SCH_ID#
+     ,#SCH_TYP_CD#
+ 	 ,#SCH_TITL_NM#
+ 	 ,#SCH_CTT#
+ 	 ,REPLACE(#SCH_DT#,'-','')
+ 	 ,REPLACE(#SCH_STA_DT#,'-','')
+ 	 ,#DEL_CYCL_CD#
+ 	 ,#onlineContext.userInfo.loginId#
+  	 ,SYSDATE
+  	 ,#onlineContext.userInfo.loginId#
+ 	 ,SYSDATE
+ 	 , #onlineContext.userInfo.NEW_ORG_ID#
+  	 , #onlineContext.userInfo.OUT_ORG_ID# 
+ 	)]]>
+	</insert>
+	<update id="dUpdateSchMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dUpdateSchMgmt  */
+/* IO: 채수윤,2015-03-13T09:38:29(이승훈2,2015-01-15T18:03:50) */
+UPDATE DSM_SCHMGMT SET
+	  	SCH_TYP_CD   = #SCH_TYP_CD#
+	  	,SCH_TITL_NM = #SCH_TITL_NM#
+	  	,SCH_CTT     = #SCH_CTT#
+ 	  	,SCH_DT      = REPLACE(#SCH_DT#,'-','')
+	  	,SCH_STA_DT  = REPLACE(#SCH_STA_DT#,'-','')
+	  	,DEL_CYCL_DT_CNT = #DEL_CYCL_CD#
+ 	  	,UPDR_ID     = #onlineContext.userInfo.loginId#
+	  	,UPD_DTM     = SYSDATE
+ WHERE SCH_ID = #SCH_ID#]]>
+	</update>
+	<delete id="dDeleteSchMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dDeleteSchMgmt  */
+/* IO: 이승훈2,2015-01-16T10:25:21(이승훈2,2015-01-16T10:25:21) */
+DELETE FROM DSM_SCHMGMT WHERE SCH_ID = #SCH_ID#]]>
+	</delete>
+	<select id="dSearchSchMgmtBrwsCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtBrwsCnt  */
+/* IO: 이민재,2015-03-12T10:33:06(이승훈2,2015-01-19T09:48:53) */
+SELECT COUNT(1) AS SCH_CNT
+FROM
+	(
+		SELECT  A.SCH_ID        
+				,A.SCH_TYP_CD        
+				,A.SCH_TYP_CD AS SCH_TYP_NM        
+				,A.SCH_TITL_NM        
+				,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y')            
+					FROM DSM_ATCH_FILE_MGMT X          
+				   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+				,F_MASKING('N',B.USER_NM) AS BLTNR_NM        
+				,TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT        
+				,DECODE(A.SCH_STA_DT
+						, NULL
+						, TO_CHAR(TO_DATE(A.SCH_DT), 'YYYY-MM-DD')
+						, TO_CHAR(TO_DATE(A.SCH_STA_DT), 'YYYY-MM-DD'))||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD') AS SCH_DT  /* 일정 */       
+				, ( SELECT NVL(COUNT(I.READR_ID) , 0)            
+					  FROM DSM_READR_MGMT I            
+					 WHERE I.READ_MGMT_ID = A.SCH_ID          
+				  ) VIEW_CNT /* 조회건수 */      
+		  FROM DSM_SCHMGMT A
+		  JOIN ( SELECT DISTINCT C.SCH_ID
+                  FROM (SELECT DUTY AS DUTY_CD
+                           FROM PS_MNG.TBAS_USER_MGMT
+                          WHERE USER_ID = #onlineContext.userInfo.loginId#
+                          UNION 
+                         SELECT DUTY_CD
+                           FROM DSM_APPROVE
+                          WHERE USER_ID = #onlineContext.userInfo.loginId#
+                       ) A
+                     , DSM_AUTH_GRP_APLY_DUTY B
+                     , DSM_SCH_RCV_GRP C
+                WHERE A.DUTY_CD = B.DUTY_CD
+                  AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+			    ) B ON (A.SCH_ID = B.SCH_ID)
+		  JOIN ( SELECT SCH_ID
+				   FROM DSM_SCH_RCV_ORG 
+				  WHERE 1=1
+						AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+				  GROUP BY SCH_ID
+			    ) C ON (A.SCH_ID = C.SCH_ID)
+		  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)   
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+		 WHERE A.SCH_STA_DT <= #SEARCH_DT# || '31'              
+			   AND A.SCH_DT >= #SEARCH_DT# || '01'
+]]></isNotEmpty><![CDATA[
+		 ORDER BY        A.SCH_DT DESC        
+	)]]>
+	</select>
+	<select id="dSearchSchMgmtBrws" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtBrws  */
+/* IO: 이승훈2,2015-04-15T13:44:43(이승훈2,2015-01-19T09:54:01) */
+SELECT *
+  FROM
+		(
+			SELECT ROWNUM rn ,ALL_LIST.*
+			  FROM (
+						SELECT  A.SCH_ID        
+								,A.SCH_TYP_CD        
+								,A.SCH_TYP_CD AS SCH_TYP_NM        
+								,A.SCH_TITL_NM        
+								,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y')            
+									FROM DSM_ATCH_FILE_MGMT X          
+								   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+								,F_MASKING('N',B.USER_NM) AS BLTNR_NM        
+								,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS BLTN_DT        
+								,DECODE(A.SCH_STA_DT
+										 ,TO_CHAR(A.SCH_DT)
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD')
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD') ||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD')) AS SCH_DT /* 일정 */
+								,SUBSTR(A.SCH_STA_DT,7,8) AS SCH_STA_DT /* 일정 시작 일자 */
+								, ( SELECT  TO_DATE(A.SCH_DT, 'YYYYMMDD')+1 - TO_DATE(A.SCH_STA_DT, 'YYYYMMDD') FROM DUAL) AS DCNT /* 일정 일수 */
+								, ( SELECT NVL(COUNT(I.READR_ID) , 0)            
+									  FROM DSM_READR_MGMT I            
+									 WHERE I.READ_MGMT_ID = A.SCH_ID          
+								  ) VIEW_CNT /* 조회건수 */      
+						  FROM  DSM_SCHMGMT A
+						  JOIN  ( SELECT DISTINCT C.SCH_ID
+                                    FROM (SELECT DUTY AS DUTY_CD
+                                             FROM PS_MNG.TBAS_USER_MGMT
+                                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                            UNION 
+                                           SELECT DUTY_CD
+                                             FROM DSM_APPROVE
+                                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                         ) A
+                                       , DSM_AUTH_GRP_APLY_DUTY B
+                                       , DSM_SCH_RCV_GRP C
+                                  WHERE A.DUTY_CD = B.DUTY_CD
+                                    AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+							    ) B ON (A.SCH_ID = B.SCH_ID)
+						  JOIN ( SELECT SCH_ID
+								   FROM DSM_SCH_RCV_ORG 
+								  WHERE 1=1
+										AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+								  GROUP BY SCH_ID
+							    ) C ON (A.SCH_ID = C.SCH_ID)
+						  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)   
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+						 WHERE A.SCH_STA_DT <= #SEARCH_DT# || '31'              
+							   AND A.SCH_DT >= #SEARCH_DT# || '01'
+]]></isNotEmpty><![CDATA[
+						 ORDER BY        A.SCH_DT DESC        
+					) ALL_LIST
+		)WHERE rn BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchSchMgmtBrwsCal" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtBrwsCal  */
+/* IO: 이민재,2015-03-12T10:33:54(이승훈2,2015-01-19T18:20:21) */
+SELECT 
+	WEEKS 
+	,SUM(DECODE(D,'1', DAYNUM)) as SUN 
+	,SUM(DECODE(D,'2', DAYNUM)) as MON 
+	,SUM(DECODE(D,'3', DAYNUM)) as TUE 
+	,SUM(DECODE(D,'4', DAYNUM)) as WED 
+	,SUM(DECODE(D,'5', DAYNUM)) as THU 
+	,SUM(DECODE(D,'6', DAYNUM)) as FRI 
+	,SUM(DECODE(D,'7', DAYNUM)) as SAT 
+FROM 
+	( 
+		SELECT	ROWNUM	as DAYNUM
+				,TO_CHAR(TO_DATE(b.YYMM||LPAD(ROWNUM,2,'0'),'YYYYMMDD'), 'D') as D
+				,CAST(TO_CHAR(TO_DATE(b.YYMM||LPAD(ROWNUM,2,'0'),'YYYYMMDD'), 'W') as NUMBER) + 
+					DECODE( 
+						SIGN(CAST(TO_CHAR(TO_DATE(b.YYMM||LPAD(ROWNUM,2,'0'),'YYYYMMDD'), 'D') as NUMBER) 
+						-CAST(TO_CHAR(TO_DATE(b.YYMM||'01','YYYYMMDD'), 'D') as NUMBER)), 0, -1, 1, -1, 0
+				)  +1  as WEEKS /* 달력의 주일 */
+		  FROM DUAL CROSS JOIN (SELECT (CASE WHEN #SEARCH_DT# IS NULL THEN TO_CHAR(SYSDATE,'YYYYMM') ELSE #SEARCH_DT# END) as YYMM FROM DUAL) b 
+		CONNECT BY LEVEL<=TO_NUMBER(TO_CHAR(LAST_DAY(TO_DATE(b.YYMM,'YYYYMM')),'DD')) 
+	) 
+GROUP BY WEEKS 
+ORDER BY WEEKS]]>
+	</select>
+	<select id="dSearchPopSchMgmtBrws" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchPopSchMgmtBrws  */
+/* IO: 이승훈2,2015-04-15T13:45:30(이승훈2,2015-01-21T09:27:13) */
+SELECT *
+  FROM
+	(
+		SELECT ROWNUM rn ,ALL_LIST.*
+		  FROM (
+					SELECT  A.SCH_ID        
+							,A.SCH_TYP_CD        
+							,A.SCH_TYP_CD AS SCH_TYP_NM        
+							,A.SCH_TITL_NM        
+							,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y')            
+								FROM DSM_ATCH_FILE_MGMT X          
+							   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN          
+							,F_MASKING('N',B.USER_NM) AS BLTNR_NM        
+							,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS BLTN_DT        
+							,DECODE(A.SCH_STA_DT, NULL, TO_CHAR(TO_DATE(A.SCH_DT), 'YYYY-MM-DD'), TO_CHAR(TO_DATE(A.SCH_STA_DT), 'YYYY-MM-DD'))||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD') AS SCH_DT /* 일정 */
+							,SUBSTR(A.SCH_STA_DT,7,8) AS SCH_STA_DT /* 일정 시작 일자 */
+							, ( SELECT  TO_DATE(A.SCH_DT, 'YYYYMMDD')+1 - TO_DATE(A.SCH_STA_DT, 'YYYYMMDD') FROM DUAL) AS DCNT /* 일정 일수*/
+							, ( SELECT NVL(COUNT(I.READR_ID) , 0)            
+								  FROM DSM_READR_MGMT I            
+								 WHERE I.READ_MGMT_ID = A.SCH_ID          
+							  ) VIEW_CNT /* 조회건수 */      
+					  FROM  DSM_SCHMGMT A
+					  JOIN  ( SELECT DISTINCT C.SCH_ID
+                                FROM (SELECT DUTY AS DUTY_CD
+                                         FROM PS_MNG.TBAS_USER_MGMT
+                                        WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                        UNION 
+                                       SELECT DUTY_CD
+                                         FROM DSM_APPROVE
+                                        WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                     ) A
+                                   , DSM_AUTH_GRP_APLY_DUTY B
+                                   , DSM_SCH_RCV_GRP C
+                              WHERE A.DUTY_CD = B.DUTY_CD
+                                AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+						    ) B ON (A.SCH_ID = B.SCH_ID)
+				 	  JOIN  ( SELECT SCH_ID
+							   FROM DSM_SCH_RCV_ORG 
+							  WHERE 1=1
+									AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+							  GROUP BY SCH_ID
+						    ) C ON (A.SCH_ID = C.SCH_ID)
+					  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)   
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+					 WHERE A.SCH_STA_DT <= #SEARCH_DT#               
+						   AND A.SCH_DT >= #SEARCH_DT#
+]]></isNotEmpty><![CDATA[
+					 ORDER BY        A.SCH_DT DESC        
+				) ALL_LIST
+	)WHERE rn BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchPopSchMgmtBrwsCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchPopSchMgmtBrwsCnt  */
+/* IO: 이승훈2,2015-03-11T09:32:39(이승훈2,2015-01-21T09:29:52) */
+SELECT COUNT(1) AS SCH_CNT
+  FROM
+	(
+		SELECT  A.SCH_ID        
+				,A.SCH_TYP_CD        
+				,A.SCH_TYP_CD AS SCH_TYP_NM        
+				,A.SCH_TITL_NM        
+				,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y')            
+					FROM DSM_ATCH_FILE_MGMT X          
+				   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+				,F_MASKING('N',B.USER_NM) AS BLTNR_NM        
+				,TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT        
+				,DECODE(A.SCH_STA_DT
+						, NULL
+						, TO_CHAR(TO_DATE(A.SCH_DT), 'YYYY-MM-DD')
+						, TO_CHAR(TO_DATE(A.SCH_STA_DT), 'YYYY-MM-DD'))||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD') AS SCH_DT         
+				, ( SELECT NVL(COUNT(I.READR_ID) , 0)            
+					  FROM DSM_READR_MGMT I            
+					 WHERE I.READ_MGMT_ID = A.SCH_ID          
+				  ) VIEW_CNT /* 조회건수 */      
+		  FROM  DSM_SCHMGMT A
+		  JOIN  ( SELECT DISTINCT C.SCH_ID
+                    FROM (SELECT DUTY AS DUTY_CD
+                             FROM PS_MNG.TBAS_USER_MGMT
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                            UNION 
+                           SELECT DUTY_CD
+                             FROM DSM_APPROVE
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                         ) A
+                       , DSM_AUTH_GRP_APLY_DUTY B
+                       , DSM_SCH_RCV_GRP C
+                  WHERE A.DUTY_CD = B.DUTY_CD
+                    AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+			    ) B ON (A.SCH_ID = B.SCH_ID)
+		  JOIN  ( SELECT SCH_ID
+					FROM DSM_SCH_RCV_ORG 
+				   WHERE 1=1
+					     AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+				   GROUP BY SCH_ID
+			    ) C ON (A.SCH_ID = C.SCH_ID)
+		  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)   
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+		 WHERE A.SCH_STA_DT <= #SEARCH_DT#              
+			   AND A.SCH_DT >= #SEARCH_DT#
+]]></isNotEmpty><![CDATA[
+		 ORDER BY        A.SCH_DT DESC        
+	)]]>
+	</select>
+	<select id="dSearchSchMgmtBrwsCalHDay" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtBrwsCalHDay  */
+/* IO: 이민재,2015-03-12T10:33:45(이승훈2,2015-03-06T17:55:47) */
+SELECT TO_NUMBER(SUBSTR(HDAY_DT,7,8)) AS HDAY_DT
+	   ,DECODE(HDAY_CL,'2','2',DECODE(TO_CHAR(TO_DATE(HDAY_DT),'d'),'7','3','1')) AS HDAY_CL
+  FROM DSM_HDAY_MGMT
+ WHERE SUBSTR(HDAY_DT,1,6) = #SEARCH_DT#]]>
+	</select>
+	<select id="dSearchSchMgmtBrwsCalData" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtBrwsCalData  */
+/* IO: 이승훈2,2015-03-12T14:02:19(이승훈2,2015-03-12T14:02:19) */
+SELECT *
+  FROM
+		(
+			SELECT ROWNUM rn ,ALL_LIST.*
+			  FROM (
+						SELECT  A.SCH_ID        
+								,A.SCH_TYP_CD        
+								,A.SCH_TYP_CD AS SCH_TYP_NM        
+								,A.SCH_TITL_NM        
+								,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y')            
+									FROM DSM_ATCH_FILE_MGMT X          
+								   WHERE A.SCH_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+								,F_MASKING('N',B.USER_NM) AS BLTNR_NM        
+								,TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT        
+								,DECODE(A.SCH_STA_DT
+										 ,TO_CHAR(A.SCH_DT)
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD')
+										 ,TO_CHAR(TO_DATE(A.SCH_STA_DT),'YYYY-MM-DD') ||' ~ '|| TO_CHAR(TO_DATE(A.SCH_DT), 'MM-DD')) AS SCH_DT /* 일정 */
+								,SUBSTR(A.SCH_STA_DT,7,8) AS SCH_STA_DT /* 일정 시작 일자 */
+								, ( SELECT  TO_DATE(A.SCH_DT, 'YYYYMMDD')+1 - TO_DATE(A.SCH_STA_DT, 'YYYYMMDD') FROM DUAL) AS DCNT /* 일정 일수 */
+								, ( SELECT NVL(COUNT(I.READR_ID) , 0)            
+									  FROM DSM_READR_MGMT I            
+									 WHERE I.READ_MGMT_ID = A.SCH_ID          
+								  ) VIEW_CNT /* 조회건수 */      
+						  FROM  DSM_SCHMGMT A
+						  JOIN  ( SELECT DISTINCT C.SCH_ID
+                                    FROM (SELECT DUTY AS DUTY_CD
+                                             FROM PS_MNG.TBAS_USER_MGMT
+                                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                            UNION 
+                                           SELECT DUTY_CD
+                                             FROM DSM_APPROVE
+                                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                                         ) A
+                                       , DSM_AUTH_GRP_APLY_DUTY B
+                                       , DSM_SCH_RCV_GRP C
+                                  WHERE A.DUTY_CD = B.DUTY_CD
+                                    AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+							    ) B ON (A.SCH_ID = B.SCH_ID)
+						  JOIN ( SELECT SCH_ID
+								   FROM DSM_SCH_RCV_ORG 
+								  WHERE 1=1
+										AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+								  GROUP BY SCH_ID
+							    ) C ON (A.SCH_ID = C.SCH_ID)
+						  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)   
+]]><isNotEmpty prepend="" property="SEARCH_DT"><![CDATA[
+						 WHERE A.SCH_STA_DT <= #SEARCH_DT# || '31'              
+							   AND A.SCH_DT >= #SEARCH_DT# || '01'
+]]></isNotEmpty><![CDATA[
+						 ORDER BY        A.SCH_DT DESC        
+					) ALL_LIST
+		)]]>
+	</select>
+	<select id="dSearchSchMgmtAuthGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHMGMT001.dSearchSchMgmtAuthGrp  */
+/* IO: 이승훈2,2015-04-17T10:39:05(이승훈2,2015-04-17T10:39:05) */
+SELECT AUTH_GRP_ID
+	, '('||AUTH_GRP_ID||')'|| ' '|| AUTH_GRP_NM AS AUTH_GRP_NM
+  FROM DSM_AUTH_GRP
+ WHERE USE_YN = 'Y'
+ ORDER BY AUTH_GRP_ID]]>
+	</select>
+</sqlMap>

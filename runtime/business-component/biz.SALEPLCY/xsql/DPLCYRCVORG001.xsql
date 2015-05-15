@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPLCYRCVORG001">
+	<insert id="dInsertPlcyRcvOrg" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVORG001.dInsertPlcyRcvOrg  */
+/* IO: 이민재,2014-11-21T13:09:06(이민재,2014-11-21T13:09:03) */
+	INSERT INTO DSM_PLCY_RCV_ORG
+	(  SALES_PLCY_ID
+	  ,DSM_HEADQ_CD
+	  ,RGSTR_ID
+	  ,RGST_DTM
+	  ,UPDR_ID
+	  ,UPD_DTM )
+	VALUES
+	(  #SALES_PLCY_ID#
+	  ,#SALE_DEPT_ORG_ID#
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE )]]>
+	</insert>
+	<delete id="dDeletePlcyRcvOrg" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVORG001.dDeletePlcyRcvOrg  */
+/* IO: 이민재,2014-11-21T13:09:37(이민재,2014-11-21T13:09:37) */
+	DELETE FROM DSM_PLCY_RCV_ORG
+ 	WHERE SALES_PLCY_ID = #DSM_SALES_PLCY_ID#]]>
+	</delete>
+	<select id="dSearchPlcyRcvOrgDeptTarget" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVORG001.dSearchPlcyRcvOrgDeptTarget  */
+/* IO: 이민재,2014-11-21T15:36:38(이민재,2014-11-21T15:36:38) */
+	SELECT A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+	FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID AND B.EFF_ORG_YN = 'Y' AND B.DEL_YN = 'N')
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID AND C.DEL_YN = 'N')
+/*	WHERE A.OUT_ORG_DTL_ID NOT IN ('01090000') /* DSM 특판 제외 */
+	WHERE A.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */ 
+	AND A.ORG_LVL = '1'
+	AND A.OUT_ORG_DTL_ID NOT IN (
+	    SELECT DSM_HEADQ_CD 
+	    FROM DSM_PLCY_RCV_ORG
+	    WHERE SALES_PLCY_ID = #DSM_SALES_PLCY_ID#
+	    )
+	]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+	AND B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="N_OUT_ORG_DTL_ID"><![CDATA[
+    AND A.OUT_ORG_DTL_ID NOT IN ]]><iterate property="N_OUT_ORG_DTL_ID" open="(" close=")" conjunction=","><![CDATA[ #N_OUT_ORG_DTL_ID[]# ]]></iterate><![CDATA[
+    ]]></isNotEmpty><![CDATA[
+	ORDER BY A.OUT_ORG_DTL_ID]]>
+	</select>
+	<select id="dSearchPlcyRcvOrgDeptObject" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVORG001.dSearchPlcyRcvOrgDeptObject  */
+/* IO: 이민재,2014-11-21T15:54:23(이민재,2014-11-21T15:54:23) */
+	SELECT  DISTINCT
+	        A.DSM_HEADQ_CD AS SALE_DEPT_ORG_ID
+	       ,B.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+	  FROM DSM_PLCY_RCV_ORG A
+	  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (B.OUT_ORG_DTL_ID = A.DSM_HEADQ_CD)
+	  JOIN PS_MNG.TBAS_OUT_ORG_MGMT C ON (C.OUT_ORG_ID = B.OUT_ORG_ID)
+	  JOIN PS_MNG.TBAS_NEW_ORG_MGMT D ON (D.ORG_ID = C.ORG_ID)
+	 WHERE A.SALES_PLCY_ID = #DSM_SALES_PLCY_ID#
+	 ORDER BY A.DSM_HEADQ_CD]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PCMNT001">
+    <bizUnitName>[PU]댓글관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.CMNT</componentId>
+    <description>댓글관리PU</description>
+    <method-list>
+        <method id="pDeleteCmnt">
+            <methodName>[PM]댓글관리삭제</methodName>
+            <transactionId>com.CMNT@PCMNT001_pDeleteCmnt</transactionId>
+            <webServiceOpenXd>1</webServiceOpenXd>
+            <fixedLengthXd>1</fixedLengthXd>
+            <description>댓글을 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fixedLength/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fixedLength/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:30:11" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pInsertCmnt">
+            <methodName>[PM]댓글관리저장(등록|수정)</methodName>
+            <transactionId>com.CMNT@PCMNT001_pInsertCmnt</transactionId>
+            <webServiceOpenXd>1</webServiceOpenXd>
+            <fixedLengthXd>1</fixedLengthXd>
+            <description>댓글을 저장, 수정 하는 메소드</description>
+            <inputMethodIo>
+                <fixedLength/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fixedLength/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:29:49" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchCmnt">
+            <methodName>[PM]댓글관리조회</methodName>
+            <transactionId>com.CMNT@PCMNT001_pSearchCmnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>댓글 목록을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:29:24" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-05T17:04:30" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

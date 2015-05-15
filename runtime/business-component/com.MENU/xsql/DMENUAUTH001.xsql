@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMENUAUTH001">
+	<select id="dSearchMenuAuth" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENUAUTH001.dSearchMenuAuth  */
+/* IO: 안종광,2015-02-17T13:17:47(안종광,2014-12-12T09:55:54) */
+SELECT m.MENU_ID
+       , m.MENU_TYP_CD
+       , (SELECT F_DSM_CODE_NM('DSM_MENU_TYP_CD', m.MENU_TYP_CD) FROM DUAL) AS MENU_TYP_NM
+       , m.MENU_NM
+       , m.MENU_URL
+       , m.BRWS_SEQ
+       , m.SUP_MENU_ID
+       , m.CS_YN
+       , m.RSTRCT_CL
+       , m.USE_YN
+       , NVL(n.AUTH_GRP_ID, #AUTH_GRP_ID#) AS AUTH_GRP_ID
+       , n.AUTH_TYP_CD
+       , CASE WHEN n.AUTH_TYP_CD = 'R' OR n.AUTH_TYP_CD = 'W' THEN '1' 
+              ELSE '0' END AS R_AUTH
+       , CASE WHEN n.AUTH_TYP_CD = 'W' THEN '1' 
+              ELSE '0' END AS W_AUTH
+    FROM DSM_MENU m
+    LEFT JOIN DSM_MENU_AUTH n ON ( m.MENU_ID = n.MENU_ID AND n.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/ )
+   START WITH m.MENU_TYP_CD = 1 ]]><isNotEmpty property="TOP_MENU_ID"><![CDATA[AND m.MENU_ID = #TOP_MENU_ID# /*탑메뉴ID*/]]></isNotEmpty><![CDATA[
+ CONNECT BY PRIOR m.MENU_ID = m.SUP_MENU_ID
+   ORDER SIBLINGS BY m.BRWS_SEQ]]>
+	</select>
+	<insert id="dInsertMenuAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENUAUTH001.dInsertMenuAuth  */
+/* IO: 안종광,2014-12-12T10:02:26(안종광,2014-12-12T10:02:26) */
+INSERT INTO DSM_MENU_AUTH (
+       MENU_ID
+     , AUTH_GRP_ID
+     , AUTH_TYP_CD
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #MENU_ID#
+    , #AUTH_GRP_ID#
+    , DECODE(#W_AUTH#,'FALSE','R','W')
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteMenuAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENUAUTH001.dDeleteMenuAuth  */
+/* IO: 안종광,2014-12-12T10:05:08(안종광,2014-12-12T10:04:22) */
+DELETE FROM DSM_MENU_AUTH
+ WHERE MENU_ID     = #MENU_ID#     /*메뉴ID*/
+   AND AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+  ]]><isNotEmpty property="MENU_ID"><![CDATA[
+   AND AUTH_TYP_CD = #AUTH_TYP_CD# /*권한구분코드:R|W*/
+  ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<update id="dMergeMenuAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENUAUTH001.dMergeMenuAuth  */
+/* IO: 안종광,2015-02-12T15:28:27(안종광,2014-12-12T14:45:45) */
+MERGE INTO DSM_MENU_AUTH ma
+USING (
+        SELECT #MENU_ID# AS MENU_ID
+             , #AUTH_GRP_ID# AS AUTH_GRP_ID
+             , CASE
+               WHEN '11' = #R_AUTH#||#W_AUTH# THEN 'W'
+               WHEN '01' = #R_AUTH#||#W_AUTH# THEN 'W'
+               WHEN '10' = #R_AUTH#||#W_AUTH# THEN 'R'
+               ELSE '' END AS AUTH_TYP_CD
+         FROM DUAL
+    ) u
+   ON (ma.MENU_ID = u.MENU_ID AND ma.AUTH_GRP_ID = u.AUTH_GRP_ID)
+ WHEN MATCHED THEN
+      UPDATE SET
+             ma.AUTH_TYP_CD = u.AUTH_TYP_CD
+           , ma.UPD_DTM = SYSDATE
+           , ma.UPDR_ID = #onlineContext.userInfo.loginId#
+ WHEN NOT MATCHED THEN
+      INSERT (
+             MENU_ID
+           , AUTH_GRP_ID
+           , AUTH_TYP_CD
+           , RGSTR_ID
+           , RGST_DTM
+           , UPDR_ID
+           , UPD_DTM
+      )
+      VALUES (
+             u.MENU_ID
+           , u.AUTH_GRP_ID
+           , u.AUTH_TYP_CD
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+      )]]>
+	</update>
+	<insert id="dInsertMenuAuthHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENUAUTH001.dInsertMenuAuthHst  */
+/* IO: 안종광,2015-04-28T17:44:21(안종광,2015-04-28T17:44:21) */
+INSERT INTO DSM_MENU_AUTH_HST
+SELECT MENU_ID
+     , AUTH_GRP_ID
+     , SYSTIMESTAMP /*타임스탭프*/
+     , AUTH_TYP_CD
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+  FROM DSM_MENU_AUTH
+ WHERE MENU_ID = #MENU_ID# /*메뉴ID*/
+   AND AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/]]>
+	</insert>
+</sqlMap>

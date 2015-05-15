@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FISSUEPROD001">
+    <bizUnitName>[FU]이달의상품</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.ISSUEPROD</componentId>
+    <description/>
+    <method-list>
+        <method id="fDeleteIssueProd">
+            <methodName>[FM]이달의상품삭제</methodName>
+            <transactionId>biz.ISSUEPROD@FISSUEPROD001_fDeleteIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:20:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDetailIssueProd">
+            <methodName>[FM]이달의상품상세조회</methodName>
+            <transactionId>biz.ISSUEPROD@FISSUEPROD001_fDetailIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 상세조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:25:45" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fUpdateIssueProd">
+            <methodName>[FM]이달의상품정보수정</methodName>
+            <transactionId>biz.ISSUEPROD@FISSUEPROD001_fUpdateIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T10:52:24" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fInsertIssueProd">
+            <methodName>[FM]이달의상품정보추가</methodName>
+            <transactionId>biz.ISSUEPROD@FISSUEPROD001_fInsertIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T10:50:50" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchIssueProd">
+            <methodName>[FM]이달의상품조회</methodName>
+            <transactionId>biz.ISSUEPROD@FISSUEPROD001_fSearchIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T09:17:52" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T09:17:27" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

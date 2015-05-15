@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PP2PCNSLMGMT001">
+    <bizUnitName>[PU]무엇이든물어보세요</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.PPCNSLMGMT</componentId>
+    <description>무엇이든물어보세요 PU</description>
+    <method-list>
+        <method id="pInsertP2pCnslRejnd">
+            <methodName>[PM]무엇이든물어보세요답글저장</methodName>
+            <transactionId>com.PPCNSLMGMT@PP2PCNSLMGMT001_pInsertP2pCnslRejnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요답글 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T17:16:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDeleteP2pCnsl">
+            <methodName>[PM]무엇이든물어보세요삭제</methodName>
+            <transactionId>com.PPCNSLMGMT@PP2PCNSLMGMT001_pDeleteP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 삭제한다</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T15:22:43" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveP2pCnsl">
+            <methodName>[PM]무엇이든물어보세요저장(등록|수정)</methodName>
+            <transactionId>com.PPCNSLMGMT@PP2PCNSLMGMT001_pSaveP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 등록, 수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:15:29" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pDetailP2pCnsl">
+            <methodName>[PM]무엇이든물어보세요상세</methodName>
+            <transactionId>com.PPCNSLMGMT@PP2PCNSLMGMT001_pDetailP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T17:46:40" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="pSearchP2pCnsl">
+            <methodName>[PM]무엇이든물어보세요조회</methodName>
+            <transactionId>com.PPCNSLMGMT@PP2PCNSLMGMT001_pSearchP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:15:29" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-11T17:46:22" user="이승훈 (leeseunghun)"/>
+    </history>
+</bizUnit>

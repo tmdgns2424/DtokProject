@@ -1,0 +1,8 @@
+#
+#Tue Nov 04 10:13:40 KST 2014
+lib_folder=lib
+ui_folder=ui
+java_test_resource_folder=src/testresources
+java_bin_folder=bin
+java_test_folder=src/test
+java_src_folder=src/java

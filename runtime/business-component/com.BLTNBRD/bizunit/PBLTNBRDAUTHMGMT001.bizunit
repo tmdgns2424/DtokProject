@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PBLTNBRDAUTHMGMT001">
+    <bizUnitName>[PU]게시판권한관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.BLTNBRD</componentId>
+    <description>[PU]게시판권한관리</description>
+    <method-list>
+        <method id="pCopyBrdAuth">
+            <methodName>[PM]게시판권한복사</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRDAUTHMGMT001_pCopyBrdAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]게시판권한복사</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-23T11:20:38" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSaveBrdAuth">
+            <methodName>[PM]게시판권한저장</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRDAUTHMGMT001_pSaveBrdAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]게시판권한저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T10:11:26" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchDeptUser">
+            <methodName>[PM]게시판사용자조회(팝업)</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRDAUTHMGMT001_pSearchDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]게시판권한관리 - 사용자조회(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T13:49:55" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchAuthDeptUser">
+            <methodName>[PM]권한+영업국+회원정보조회</methodName>
+            <transactionId>com.BLTNBRD@PBLTNBRDAUTHMGMT001_pSearchAuthDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM] 적용대상권한, 적용권한, 적용대상영업국, 적용영업국 및 회원정보를 조회하여 반환</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T10:37:09" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-31T10:33:27" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

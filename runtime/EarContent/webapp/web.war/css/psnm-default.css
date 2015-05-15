@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+
+div,body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select,img{margin:0px; padding:0px}
+body,table{font-family:"맑은고딕",Malgun Gothic,"나눔고딕",Nanum Gothic,'돋움',dotum,AppleGothic,sans-serif;font-size:12px;color:#666666; line-height:18px;font-weight:normal;padding:0px;margin:0px;letter-spacing:-0.5px;}
+hr{display:none}
+dl,dt,dd,ul,ol,li{list-style:none;margin: 0;padding: 0px;}
+img,fieldset,button{border:0;}
+img,button,label,textarea{vertical-align:middle}
+
+form,fieldset{display:block}
+button, input[type=submit], input[type=button]{cursor:pointer; line-height:0;}
+legend{visibility:hidden; position:absolute; top:0; left:0;width:0px;height:0px;font-size:0px;line-height:0px} 
+caption{visibility:hidden;width:0px;height:0px;font-size:0px;line-height:0px} 
+
+a {cursor:pointer; text-decoration:none; color:#444448}
+a:hover{text-decoration:none}
+
+p,li,th{word-break:keep-all;}
+table {/*border-collapse:collapse; empty-cells:show*/}
+.hide{visibility:hidden; overflow:hidden; position:absolute; top:0; left:0; width:0; height:0; font-size:0; line-height:0}
+
+

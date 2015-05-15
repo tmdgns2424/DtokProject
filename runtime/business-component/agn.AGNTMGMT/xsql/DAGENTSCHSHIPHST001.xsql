@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTSCHSHIPHST001">
+	<select id="dSearchAgentSchshipHst" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTSCHSHIPHST001.dSearchAgentSchshipHst  */
+/* IO: 한상곤,2014-12-18T14:56:43(한상곤,2014-12-18T14:55:55) */
+SELECT CNTRT_MGMT_NUM
+     , HST_SEQ
+     , TO_CHAR(TO_DATE(APLY_STA_DT),'YYYY-MM-DD') AS APLY_STA_DT
+     , TO_CHAR(TO_DATE(APLY_END_DT),'YYYY-MM-DD') AS APLY_END_DT
+     , SCHSHIP_CL_CD
+     , (SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_SCHSHIP_CL_CD' AND SCHSHIP_CL_CD = COMM_CD_VAL) AS SCHSHIP_CL_NM
+     , SCHL_NM
+     , SCHL_DEPT_NM
+     , SCHL_DR_CD
+     , (SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_SCHL_DR_CD' AND SCHL_DR_CD = COMM_CD_VAL) AS SCHL_DR_NM
+  FROM DSM_AGENT_SCHSHIP_HST
+ WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#
+ ORDER BY HST_SEQ]]>
+	</select>
+	<insert id="dInsertAgentSchshipHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTSCHSHIPHST001.dInsertAgentSchshipHst  */
+/* IO: 김보선,2015-03-05T13:18:47(김보선,2015-02-16T12:52:20) */
+INSERT INTO DSM_AGENT_SCHSHIP_HST
+(
+   CNTRT_MGMT_NUM
+  ,HST_SEQ
+  ,APLY_STA_DT
+  ,APLY_END_DT
+  ,SCHSHIP_CL_CD
+  ,SCHL_NM
+  ,SCHL_DEPT_NM
+  ,SCHL_DR_CD
+  ,RGSTR_ID
+  ,RGST_DTM
+  ,UPDR_ID
+  ,UPD_DTM
+)
+VALUES
+(
+   #CNTRT_MGMT_NUM#
+  ,#HST_SEQ#
+  ,#APLY_STA_DT#
+  ,#APLY_END_DT#
+  ,#SCHSHIP_CL_CD#
+  ,#SCHL_NM#
+  ,#SCHL_DEPT_NM#
+  ,#SCHL_DR_CD#
+  ,#USER_ID#
+  ,SYSDATE
+  ,#USER_ID#
+  ,SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteAgentSchshipHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTSCHSHIPHST001.dDeleteAgentSchshipHst  */
+/* IO: 김보선,2015-03-03T09:36:08(김보선,2015-03-02T17:59:25) */
+DELETE FROM DSM_AGENT_SCHSHIP_HST
+ WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</delete>
+</sqlMap>

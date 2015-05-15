@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSCRBCLMHST001">
+    <bizUnitName>[DU]비정상영업소명재접수</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SCRBCLM</componentId>
+    <description/>
+    <method-list>
+        <method id="dInsertScrbClmHst">
+            <methodName>[DM]비정상영업소명 재접수 등록</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMHST001_dInsertScrbClmHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-17T10:31:25" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-16T13:39:44" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

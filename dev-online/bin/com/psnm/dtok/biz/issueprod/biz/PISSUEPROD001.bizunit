@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PISSUEPROD001">
+    <bizUnitName>[PU]이달의상품</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.ISSUEPROD</componentId>
+    <description/>
+    <method-list>
+        <method id="pDeleteIssueProd">
+            <methodName>[PM]이달의상품삭제</methodName>
+            <transactionId>biz.ISSUEPROD@PISSUEPROD001_pDeleteIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:18:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pDetailIssueProd">
+            <methodName>[PM]이달의상품상세조회</methodName>
+            <transactionId>biz.ISSUEPROD@PISSUEPROD001_pDetailIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:24:41" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchIssueProd">
+            <methodName>[PM]이달의상품조회</methodName>
+            <transactionId>biz.ISSUEPROD@PISSUEPROD001_pSearchIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T09:12:32" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSaveIssueProd">
+            <methodName>[PM]이달의상품정보저장(등록|수정)</methodName>
+            <transactionId>biz.ISSUEPROD@PISSUEPROD001_pSaveIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T19:18:12" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T09:11:47" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

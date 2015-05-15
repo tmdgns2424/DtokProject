@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FUSERSTRCT001">
+    <bizUnitName>[FU]사용제한관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.USERSTRCT</componentId>
+    <description/>
+    <method-list>
+        <method id="fSearchDay">
+            <methodName>[FM]사용제한요일조회</methodName>
+            <transactionId>com.USERSTRCT@FUSERSTRCT001_fSearchDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T15:12:57" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSaveUseRstrctMgmt">
+            <methodName>[FM]사용제한저장</methodName>
+            <transactionId>com.USERSTRCT@FUSERSTRCT001_fSaveUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T14:24:26" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchUseRstrctMgmt">
+            <methodName>[FM]사용제한조회</methodName>
+            <transactionId>com.USERSTRCT@FUSERSTRCT001_fSearchUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T09:53:22" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T09:52:17" user="채수윤 (chesuyun)"/>
+    </history>
+</bizUnit>

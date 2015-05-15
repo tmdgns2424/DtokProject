@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DISSUEPROD001">
+    <bizUnitName>[DU]이달의상품</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.ISSUEPROD</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchIssueSeq">
+            <methodName>[DM]이달의상품ID시퀀스채번</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dSearchIssueIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보 추가 시 시퀀스 채번</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T11:44:12" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDeleteIssue">
+            <methodName>[DM]이달의상품삭제</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dDeleteIssue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:20:31" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDetailIssueProd">
+            <methodName>[DM]이달의상품상세조회</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dDetailIssueProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 상세 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:27:34" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertIssueReadr">
+            <methodName>[DM]이달의상품열람자</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dInsertIssueReadr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:43:57" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dUpdateIssue">
+            <methodName>[DM]이달의상품정보수정</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dUpdateIssue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T11:09:02" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertIssue">
+            <methodName>[DM]이달의상품정보추가</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dInsertIssue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T11:01:17" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchIssue">
+            <methodName>[DM]이달의상품조회</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dSearchIssue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 검색을 위하여 관련 테이블(DSM_ISSUE, DSM_ISSUE_READR)을 조인하여 이달의 상품 객체를 map객체로 가져오는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T09:19:27" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchIssueCnt">
+            <methodName>[DM]이달의상품조회 건수</methodName>
+            <transactionId>biz.ISSUEPROD@DISSUE001_dSearchIssueCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>이달의 상품 건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T09:51:22" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T09:19:02" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

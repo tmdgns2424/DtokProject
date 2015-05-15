@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PCHRGRHEADQ001">
+    <bizUnitName>[PU]영업국별담당자관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.HEADCHRGR</componentId>
+    <description>영업국별담당자관리 PU</description>
+    <method-list>
+        <method id="pSearchChrgrHeadqUser">
+            <methodName>[PM]영업국별담당자관리담당자조회</methodName>
+            <transactionId>biz.HEADCHRGR@PCHRGRHEADQ001_pSearchChrgrHeadqUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리담당자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T16:44:19" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchChrgrHeadq">
+            <methodName>[PM]영업국별담당자관리영업국조회</methodName>
+            <transactionId>biz.HEADCHRGR@PCHRGRHEADQ001_pSearchChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리영업국 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T15:07:29" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveChrgrHeadq">
+            <methodName>[PM]영업국별담당자관리저장(등록|수정|삭제)</methodName>
+            <transactionId>biz.HEADCHRGR@PCHRGRHEADQ001_pSaveChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별 담당자관리 정보를 등록,수정,삭제 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T10:58:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchChrgrHeadqApprove">
+            <methodName>[PM]영업국별담당자관리회원정보조회</methodName>
+            <transactionId>biz.HEADCHRGR@PCHRGRHEADQ001_pSearchChrgrHeadqApprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리회원정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T09:56:28" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-30T16:05:10" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

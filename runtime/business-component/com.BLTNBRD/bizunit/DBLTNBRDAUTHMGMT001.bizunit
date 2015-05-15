@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DBLTNBRDAUTHMGMT001">
+    <bizUnitName>[DU]게시판권한관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.BLTNBRD</componentId>
+    <description>게시판권한관리</description>
+    <method-list>
+        <method id="dSearchDeptUser">
+            <methodName>[DM]게시판사용자조회(팝업)</methodName>
+            <transactionId>com.BLTNBRD@DBLTNBRDAUTHMGMT001_dSearchDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]게시판권한관리 - 사용자조회(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T13:46:17" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchBrdAuthUser">
+            <methodName>[DM]적용회원조회</methodName>
+            <transactionId>com.BLTNBRD@DBLTNBRDAUTHMGMT001_dSearchBrdAuthUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]적용회원조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T17:03:08" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchBrdAuthGrp">
+            <methodName>[DM]게시판권한그룹조회</methodName>
+            <transactionId>com.BLTNBRD@DBLTNBRDAUTHMGMT001_dSearchBrdAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]게시판권한그룹조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T14:42:48" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchBrdAuthOrg">
+            <methodName>[DM]게시판권한영업국조회</methodName>
+            <transactionId>com.BLTNBRD@DBLTNBRDAUTHMGMT001_dSearchBrdAuthOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]게시판권한영업국조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T10:30:46" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-31T10:18:10" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

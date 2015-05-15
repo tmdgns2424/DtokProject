@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PCODE">
+    <bizUnitName>[PU]코드조회</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.CODE</componentId>
+    <description>공통 코드조회 처리 클래스</description>
+    <method-list>
+        <method id="pSearchHdqtPart">
+            <methodName>[PM]본사파트조회</methodName>
+            <transactionId>com.CODE@PCODE_pSearchHdqtPart</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>본사파트 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T10:33:03" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSelectSaleDept">
+            <methodName>[PM]영업국조회</methodName>
+            <transactionId>com.CODE@PCODE_pSelectSaleDept</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]영업국조회 - 본사팀, 본사파트 조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:24:07" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchOrgByUpper">
+            <methodName>[PM]조직코드조회(세션없음)</methodName>
+            <transactionId>com.CODE@PCODE_pSearchOrgByUpper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]조직코드조회(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:42:24" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchOrgBySup">
+            <methodName>[PM]조직코드조회</methodName>
+            <transactionId>com.CODE@PCODE_pSearchOrgBySup</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 조직의 하위 조직목록을 조회(입력은 단건으로 필드맵에 { t(조회종류구분), codeid(지정조직ID), elemid(화면요소ID) } 파라미터)&#13;
+&#13;
+(참고) pSearchCodesByList 에서 공통코드와 같이 조회하는 형식에서 조직1건만 조회하는 방법을 추가함.&#13;
+(둘중 어느것을 사용해도 됨. 이 함수는 1개의 지정된 조직에 대한 것만 처리)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T10:43:52" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchCodesByList">
+            <methodName>[PM]코드조회(리스트입력)</methodName>
+            <transactionId>com.CODE@PCODE_pSearchCodesByList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공통코드ID로 해당 코드목록을 조회하여 반환&#13;
+(참고) 이 함수는 pSearchCodes 와 같으나 입력파라미터로 fields 가 아닌 recordSet["CODE_INFO_LIST"] 를 참조함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-27T13:51:53" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchCodes">
+            <methodName>[PM]코드조회</methodName>
+            <transactionId>com.CODE@PCODE_pSearchCodes</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공통코드ID로 해당 코드목록을 조회하여 반환&#13;
+(참고) DEL_YN=Y 제외, 정렬오름차순</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-14T11:56:17" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-14T11:54:43" user="admin (admin)"/>
+    </history>
+</bizUnit>

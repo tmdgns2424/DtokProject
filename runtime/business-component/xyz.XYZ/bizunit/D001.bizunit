@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="D001">
+    <bizUnitName>샘플조회</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>xyz.XYZ</componentId>
+    <description/>
+    <method-list>
+        <method id="d00101">
+            <methodName>샘플조회</methodName>
+            <transactionId>xyz.XYZ@D001_d00101</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+    </history>
+</bizUnit>

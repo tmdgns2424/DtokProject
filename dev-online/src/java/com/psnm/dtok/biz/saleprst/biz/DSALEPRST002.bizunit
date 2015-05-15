@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSALEPRST002">
+    <bizUnitName>[DU]메인영업현황</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEPRST</componentId>
+    <description>[DU]메인영업현황</description>
+    <method-list>
+        <method id="dSearchMrtgExpir">
+            <methodName>[DM]담보기간만료예정현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST002_dSearchMrtgExpir</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]담보기간만료예정현황조회(메인용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T10:32:58" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchHeadqSaleRnk">
+            <methodName>[DM]영업국별판매순위조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST002_dSearchHeadqSaleRnk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>DM : 영업국별 판매 순위를 조회한다.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T09:19:33" user="채수윤 (chesuyun)"/>
+            </history>
+        </method>
+        <method id="dSearchBestMa">
+            <methodName>[DM]판매우수MA현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST002_dSearchBestMa</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]판매우수MA현황조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T16:36:07" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchBestTeam">
+            <methodName>[DM]판매우수팀장현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST002_dSearchBestTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]판매우수팀장현황조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T09:55:49" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-10T16:14:13" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

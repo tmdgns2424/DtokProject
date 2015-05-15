@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DORG">
+    <bizUnitName>[DU]조직정보조회</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[DU]조직정보조회</description>
+    <method-list>
+        <method id="dSearchHdqtTeamOrgId2">
+            <methodName>[DM]본사팀(세션없음)</methodName>
+            <transactionId>com.SHARE@DCODE2_dSearchHdqtTeamOrgId2</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]본사팀목록(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:50:36" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchHdqtPartOrgId2">
+            <methodName>[DM]본사파트(세션없음)</methodName>
+            <transactionId>com.SHARE@DCODE2_dSearchHdqtPartOrgId2</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]본사파트 목록 조회(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:52:25" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleAgntOrgId2">
+            <methodName>[DM]에이전트(세션없음)</methodName>
+            <transactionId>com.SHARE@DCODE2_dSearchSaleAgntOrgId2</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]에이전트목록(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:54:16" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleDeptOrgId2">
+            <methodName>[DM]영업국(세션없음)</methodName>
+            <transactionId>com.SHARE@DCODE2_dSearchSaleDeptOrgId2</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]영업국(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:53:08" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSelectSaleDept">
+            <methodName>[DM]영업국조회</methodName>
+            <transactionId>com.SHARE@DORG_dSelectSaleDept</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]영업국조회 - 본사팀, 본사파트 조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:18:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleTeamOrgId2">
+            <methodName>[DM]영업팀(세션없음)</methodName>
+            <transactionId>com.SHARE@DCODE2_dSearchSaleTeamOrgId2</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]영업팀목록(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T15:53:42" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T15:49:34" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

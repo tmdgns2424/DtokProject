@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DUSERMGMT001">
+	<select id="dSearchUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchUser 회원정보 조회 */
+/* IO: 안진갑,2015-05-11T12:43:21(안진갑,2015-01-15T15:23:04) */
+SELECT	F_MASKING('N', T2.USER_NM1) AS USER_NM
+		, T2.*
+  FROM (
+		SELECT ROW_NUMBER() OVER(ORDER BY T1.RGST_DTM DESC) AS RN, COUNT(1) OVER() AS COUNT, T1.*
+		  FROM (
+				SELECT A.USER_ID
+				       , A.USER_NM                                      AS USER_NM1
+				       , A.ATTC_CAT
+				       , A.DUTY                                         AS DUTY_CD
+				       , C.DUTY_NM				      
+					   , F.OUT_ORG_NM                                   AS HDQT_PART_ORG_NM
+					   , J.OUT_ORG_DTL_NM                               AS SALE_DEPT_ORG_NM                                 
+					   , A.CPLAZA_ORG_CD                                AS SALE_AGNT_ORG_ID
+					   , D.AGNT_NM                                      AS SALE_AGNT_ORG_NM
+					   , TO_CHAR(B.RGST_DTM,'YYYY-MM-DD')               AS RGST_DTM
+					   , TO_CHAR(TO_DATE(B.SALE_OCCR_DT), 'YYYY-MM-DD') AS SALE_OCCR_DT
+					   , E.COMM_CD_VAL_NM AS SCRB_ST_NM
+					   , B.SCRB_ST_CD
+					   , L.COMM_CD_VAL_NM AS USER_ST_NM
+					   , TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD') AS DAYS
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                     ON ( A.USER_ID = B.USER_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( I.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT J ON ( J.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT F     ON ( F.OUT_ORG_ID = I.OUT_ORG_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT H     ON ( H.ORG_ID = F.ORG_ID )
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C   ON ( A.DUTY = C.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL L ON ( L.COMM_CD_VAL = A.USER_ST AND L.COMM_CD_ID = 'USER_ST') 				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[            			  
+				 WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+				   AND D.CONS_MTH = (                             
+									   SELECT  
+											  MAX(A.CONS_MTH) AS YYYYMM 
+										 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A 
+										WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') AND A.AGNT_ID = D.AGNT_ID
+									)
+				   AND A.EFF_USER_YN = 'Y'
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   H.ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   J.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+					   I.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_AGNT_ORG_ID"><![CDATA[
+					   A.CPLAZA_ORG_CD = #SALE_AGNT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[      
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   A.DUTY = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="SCRB_ST_CD"><![CDATA[
+					   B.SCRB_ST_CD = #SCRB_ST_CD#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isEmpty property="SCRB_ST_CD"><![CDATA[
+				  	   ]]><isNotEqual prepend="AND" property="DIV" compareValue="HDQT"><![CDATA[
+				  	    	B.SCRB_ST_CD IN ('02', '05')
+				  	   ]]></isNotEqual><![CDATA[				
+				  ]]></isEmpty><![CDATA[				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[  				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				    
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   D.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[  				   
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[   				  				      
+				UNION
+				SELECT A.USER_ID  
+				       , A.USER_NM                                      AS USER_NM1
+				       , A.ATTC_CAT
+				       , E.DUTY_CD
+				       , G.DUTY_NM
+					   , D.OUT_ORG_NM                                   AS HDQT_PART_ORG_NM
+					   , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT K WHERE K.OUT_ORG_DTL_ID = E.DSM_HEADQ_CD)     AS SALE_DEPT_ORG_NM                                 
+					   , ''                                             AS SALE_AGNT_ORG_ID
+					   , ''                                             AS SALE_AGNT_ORG_NM
+					   , TO_CHAR(B.RGST_DTM,'YYYY-MM-DD')               AS RGST_DTM
+					   , TO_CHAR(TO_DATE(B.SALE_OCCR_DT), 'YYYY-MM-DD') AS SALE_OCCR_DT
+					   , H.COMM_CD_VAL_NM AS SCRB_ST_NM
+					   , B.SCRB_ST_CD
+					   , I.COMM_CD_VAL_NM AS USER_ST_NM				   
+					   , TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD') AS DAYS
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                      ON ( B.USER_ID = A.USER_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT C      ON ( C.ORG_ID = A.NEW_ORG_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT D      ON ( D.ORG_ID = A.NEW_ORG_ID AND D.OUT_ORG_ID = A.OUT_ORG_ID )
+				  JOIN DSM_APPROVE E                   ON ( E.USER_ID = A.USER_ID)
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT G    ON ( G.DUTY_CD = E.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H  ON ( H.COMM_CD_VAL = B.SCRB_ST_CD AND H.COMM_CD_ID = 'DSM_SCRB_ST_CD')			  				  
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I  ON ( I.COMM_CD_VAL = A.USER_ST AND I.COMM_CD_ID = 'USER_ST')				  				   				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[			  
+				 WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+				   AND A.EFF_USER_YN = 'Y'
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   A.NEW_ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   E.DSM_HEADQ_CD  =  #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   E.DUTY_CD = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="SCRB_ST_CD"><![CDATA[
+					   B.SCRB_ST_CD = #SCRB_ST_CD#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isEmpty property="SCRB_ST_CD"><![CDATA[
+				  	   ]]><isNotEqual prepend="AND" property="DIV" compareValue="HDQT"><![CDATA[
+				  	    	B.SCRB_ST_CD IN ('02', '05')
+				  	   ]]></isNotEqual><![CDATA[				
+				  ]]></isEmpty><![CDATA[				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[ 
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				     
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[		
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[				  	
+				) T1
+		) T2
+  WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchUserDtl" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchUserDtl 회원정보 상세조회 */
+/* IO: 안진갑,2015-03-10T17:13:38(안진갑,2015-01-16T11:36:38) */
+WITH DSM_CAREER AS
+(
+    SELECT A.USER_ID, COUNT(C.CONS_MTH) AS CNT
+      FROM DSM_USER A
+      JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+      JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID=B.CPLAZA_ORG_CD)
+     WHERE C.CONS_MTH >= SUBSTR(A.SALE_OCCR_DT, 0, 6)
+       AND A.USER_ID = #USER_ID#
+     GROUP BY A.USER_ID
+)
+, DSM_APLCNSL AS
+(SELECT #USER_ID# AS USER_ID
+        , A.APLCNSL_MGMT_NUM
+  FROM DSM_APLCNSL_BRD A
+ WHERE A.AGNT_ID = (SELECT Z.CPLAZA_ORG_CD FROM PS_MNG.TBAS_USER_MGMT Z WHERE Z.USER_ID = #USER_ID#)
+   AND A.APLCNSL_MGMT_NUM = (SELECT MAX(Y.APLCNSL_MGMT_NUM)
+                               FROM DSM_APLCNSL_BRD Y
+                              WHERE Y.AGNT_ID = A.AGNT_ID) 
+)
+SELECT A.USER_ID
+       , (SELECT MAX(CNTRT_MGMT_NUM) FROM DSM_AGENT_CNTRT WHERE AGNT_ID=A.CPLAZA_ORG_CD) AS CNTRT_MGMT_NUM
+       , F_MASKING('N', A.USER_NM) AS USER_NM_M
+       , A.USER_NM           AS USER_NM
+       , A.ATTC_CAT
+       , A.DUTY 			 AS DUTY_CD
+       , C.DUTY_NM
+       , K.ORG_ID			 AS HDQT_TEAM_ORG_ID
+       , K.ORG_NM            AS HDQT_TEAM_ORG_NM
+       , J.OUT_ORG_ID     	 AS HDQT_PART_ORG_ID                      
+       , J.OUT_ORG_NM     	 AS HDQT_PART_ORG_NM
+       , M.OUT_ORG_DTL_ID 	 AS SALE_DEPT_ORG_ID
+       , M.OUT_ORG_DTL_NM 	 AS SALE_DEPT_ORG_NM
+       , I.OUT_ORG_DTL_ID 	 AS SALE_TEAM_ORG_ID       
+       , I.OUT_ORG_DTL_NM 	 AS SALE_TEAM_ORG_NM
+       , A.CPLAZA_ORG_CD  	 AS AGNT_ID
+       , D.AGNT_NM        	 AS AGNT_NM
+       , B.NICK_NM
+       , B.BIRTH_DT
+       , B.WEDD_DT
+       , B.WEDD_YN
+       , B.EMAIL_RCV_AGREE_YN
+       , B.SMS_RCV_AGREE_YN
+       , B.SCRB_ST_CD
+       , E.COMM_CD_VAL_NM
+       , TO_CHAR(B.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM
+       , TO_CHAR(TO_DATE(B.SALE_OCCR_DT), 'YYYY-MM-DD') AS SALE_OCCR_DT
+       , A.RMKS AS MEMO
+       , B.MAIN_JOB
+       , B.PIC_FILE_ID AS ATCH_FILE_ID
+       , N.FILE_PATH
+       , B.PHON_NUM1 
+       , B.PHON_NUM2
+       , B.PHON_NUM3
+       , B.TEL_CO_CD
+       , B.MBL_PHON_NUM1
+       , B.MBL_PHON_NUM2 
+       , B.MBL_PHON_NUM3
+       , B.FAX_NUM1
+       , B.FAX_NUM2
+       , B.FAX_NUM3
+       , B.BIRTH_LUNAR_YN
+       , B.EMAIL_ID
+       , B.EMAIL_DMN_NM 
+       , B.EMAIL_DMN_CD
+       , TRUNC((H.CNT+B.CAREER_MTH)/12) AS CAREER_YEAR   
+       , MOD((H.CNT+B.CAREER_MTH), 12)  AS CAREER_MONTH 
+       , SUBSTR(B.POST_NUM, 1, 3) AS POST_NUM1
+       , SUBSTR(B.POST_NUM, 5, 3) AS POST_NUM2
+       , B.ADDR_1
+       , B.ADDR_2
+       , O.APLCNSL_MGMT_NUM
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER B ON (A.USER_ID = B.USER_ID)
+  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C ON (A.DUTY = C.DUTY_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD 
+                                           AND D.CONS_MTH = (  SELECT MAX(A.CONS_MTH)
+                                                                 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                                                WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') AND AGNT_ID = D.AGNT_ID
+                                                             )
+                                          )
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( D.OUT_ORG_DTL_ID = I.OUT_ORG_DTL_ID )
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT M ON ( M.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT J     ON ( J.OUT_ORG_ID = I.OUT_ORG_ID ) 
+  LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT K     ON ( K.ORG_ID = J.ORG_ID )
+  LEFT JOIN DSM_CAREER H                   ON ( H.USER_ID = A.USER_ID )
+  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL  E     ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD' )
+  LEFT JOIN DSM_ATCH_FILE N                ON ( N.ATCH_FILE_ID = B.PIC_FILE_ID )
+  LEFT JOIN DSM_APLCNSL   O                ON ( H.USER_ID = A.USER_ID )            
+  WHERE 1=1
+    AND A.USER_ID = #USER_ID#
+    AND A.EFF_USER_YN = 'Y'
+  UNION
+  SELECT A.USER_ID
+       , (SELECT MAX(CNTRT_MGMT_NUM) FROM DSM_AGENT_CNTRT WHERE AGNT_ID=A.CPLAZA_ORG_CD AND ROWNUM=1) AS CNTRT_MGMT_NUM
+       , F_MASKING('N', A.USER_NM) AS USER_NM_M
+       , A.USER_NM           AS USER_NM
+       , A.ATTC_CAT
+       , E.DUTY_CD     			 AS DUTY_CD
+       , G.DUTY_NM
+       , C.ORG_ID			       AS HDQT_TEAM_ORG_ID
+       , C.ORG_NM            AS HDQT_TEAM_ORG_NM
+       , D.OUT_ORG_ID     	 AS HDQT_PART_ORG_ID                      
+       , D.OUT_ORG_NM     	 AS HDQT_PART_ORG_NM
+       , '' 	               AS SALE_DEPT_ORG_ID
+	   , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT K WHERE K.OUT_ORG_DTL_ID = E.DSM_HEADQ_CD   )     AS SALE_DEPT_ORG_NM
+       , ''               	 AS SALE_TEAM_ORG_ID       
+       , ''               	 AS SALE_TEAM_ORG_NM
+       , ''               	 AS AGNT_ID
+       , ''        	         AS AGNT_NM
+       , B.NICK_NM
+       , B.BIRTH_DT
+       , B.WEDD_DT
+       , B.WEDD_YN
+       , B.EMAIL_RCV_AGREE_YN
+       , B.SMS_RCV_AGREE_YN
+       , B.SCRB_ST_CD
+       , F.COMM_CD_VAL_NM
+       , TO_CHAR(B.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM
+       , TO_CHAR(TO_DATE(B.SALE_OCCR_DT), 'YYYY-MM-DD') AS SALE_OCCR_DT
+       , A.RMKS AS MEMO
+       , B.MAIN_JOB
+       , B.PIC_FILE_ID AS ATCH_FILE_ID
+       , N.FILE_PATH
+       , B.PHON_NUM1 
+       , B.PHON_NUM2
+       , B.PHON_NUM3
+       , B.TEL_CO_CD
+       , B.MBL_PHON_NUM1
+       , B.MBL_PHON_NUM2 
+       , B.MBL_PHON_NUM3
+       , B.FAX_NUM1
+       , B.FAX_NUM2
+       , B.FAX_NUM3
+       , B.BIRTH_LUNAR_YN
+       , B.EMAIL_ID
+       , B.EMAIL_DMN_NM 
+       , B.EMAIL_DMN_CD
+       , TRUNC((H.CNT+B.CAREER_MTH)/12) AS CAREER_YEAR   
+       , MOD((H.CNT+B.CAREER_MTH), 12)  AS CAREER_MONTH 
+       , SUBSTR(B.POST_NUM, 1, 3) AS POST_NUM1
+       , SUBSTR(B.POST_NUM, 5, 3) AS POST_NUM2
+       , B.ADDR_1
+       , B.ADDR_2
+       , O.APLCNSL_MGMT_NUM
+    FROM PS_MNG.TBAS_USER_MGMT A
+    JOIN DSM_USER B                      ON ( B.USER_ID = A.USER_ID )
+    JOIN PS_MNG.TBAS_NEW_ORG_MGMT C      ON ( C.ORG_ID = A.NEW_ORG_ID )
+    JOIN PS_MNG.TBAS_OUT_ORG_MGMT D      ON ( D.OUT_ORG_ID = A.OUT_ORG_ID)
+    JOIN DSM_APPROVE E                   ON ( E.USER_ID = A.USER_ID)
+    LEFT JOIN DSM_CAREER H               ON ( H.USER_ID = A.USER_ID )
+    LEFT JOIN PS_MNG.TBAS_DUTY_MGMT G    ON ( G.DUTY_CD = E.DUTY_CD )
+    LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL F  ON ( F.COMM_CD_VAL = B.SCRB_ST_CD AND F.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+    LEFT JOIN DSM_ATCH_FILE N            ON ( N.ATCH_FILE_ID = B.PIC_FILE_ID )     
+    LEFT JOIN DSM_APLCNSL   O                ON ( H.USER_ID = A.USER_ID )
+   WHERE A.USER_ID = #USER_ID#
+    AND A.EFF_USER_YN = 'Y']]>
+	</select>
+	<update id="dUpdateUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dUpdateUser 회원정보 수정 */
+/* IO: 안진갑,2015-03-10T17:14:07(안진갑,2015-01-16T16:21:05) */
+UPDATE DSM_USER
+   SET MAIN_JOB=#MAIN_JOB#
+       , NICK_NM=#NICK_NM#
+       , POST_NUM=#POST_NUM#
+       , ADDR_1=#ADDR_1#
+       , ADDR_2=#ADDR_2#
+       , PHON_NUM1=#PHON_NUM1#
+       , PHON_NUM2=#PHON_NUM2#
+       , PHON_NUM3=#PHON_NUM3#
+       , TEL_CO_CD=#TEL_CO_CD#
+       , MBL_PHON_NUM1=#MBL_PHON_NUM1#
+       , MBL_PHON_NUM2=#MBL_PHON_NUM2#
+       , MBL_PHON_NUM3=#MBL_PHON_NUM3#
+       , FAX_NUM1=#FAX_NUM1#
+       , FAX_NUM2=#FAX_NUM2#
+       , FAX_NUM3=#FAX_NUM3#
+       , BIRTH_DT=#BIRTH_DT#
+       , BIRTH_LUNAR_YN=#BIRTH_LUNAR_YN#
+       , WEDD_YN=#WEDD_YN#
+       , WEDD_DT=#WEDD_DT#      
+       , EMAIL_ID=#EMAIL_ID#
+       , EMAIL_DMN_CD=#EMAIL_DMN_CD#
+       , EMAIL_DMN_NM=#EMAIL_DMN_NM#
+       , EMAIL_RCV_AGREE_YN=#EMAIL_RCV_AGREE_YN#      
+       , SMS_RCV_AGREE_YN=#SMS_RCV_AGREE_YN#
+       , PIC_FILE_ID=#ATCH_FILE_ID#
+       , SCRB_ST_CD=#SCRB_ST_CD#
+	   , UPDR_ID = #onlineContext.userInfo.loginId#
+       , UPD_DTM = SYSDATE       
+ WHERE USER_ID=#USER_ID#]]>
+	</update>
+	<select id="dSearchActvCareer" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchActvCareer 활동경력 조회 */
+/* IO: 채수윤,2015-03-13T17:04:55(안진갑,2015-01-20T19:52:06) */
+SELECT
+       CASE WHEN TO_CHAR(SYSDATE , 'yyyymm') <=  TO_MTH
+        THEN  SUBSTR(FROM_MTH,1,4) ||'년' || SUBSTR(FROM_MTH,5) || '월' || ' ~    현재    '  
+        ELSE  SUBSTR(FROM_MTH,1,4) ||'년' || SUBSTR(FROM_MTH,5) || '월' || ' ~ ' || SUBSTR(TO_MTH,1,4) ||'년' || SUBSTR(TO_MTH,5) || '월'    
+        END AS CONS_MTH        
+     , E.OUT_ORG_NM                 AS HDQT_PART_ORG_NM
+     , D.OUT_ORG_DTL_NM             AS SALE_DEPT_ORG_NM
+     , C.OUT_ORG_DTL_NM             AS SALE_TEAM_ORG_NM      
+     , (SELECT K.COMM_CD_VAL_NM 
+          FROM PS_MNG.TBAS_COMM_CD_DTL K 
+         WHERE K.COMM_CD_ID = 'DSM_RETL_CLASS_CD' 
+           AND K.COMM_CD_VAL = A.C_RPSTY ) AS RPSTY_NM       
+  FROM ( /*이전 달과 차이 분*/
+        SELECT CONS_MTH          AS FROM_MTH
+             , C_OUT_ORG_DTL_ID 
+             , C_RPSTY
+             , ROW_NUMBER () OVER (ORDER BY CONS_MTH  ) RN 
+          FROM (SELECT CONS_MTH    
+                     , OUT_ORG_DTL_ID  C_OUT_ORG_DTL_ID
+                     , LAG(OUT_ORG_DTL_ID,1,'START') OVER (ORDER BY CONS_MTH) P_OUT_ORG_DTL_ID
+                     , ROW_NUMBER () OVER (ORDER BY CONS_MTH DESC ) RN
+                     , RPSTY C_RPSTY  
+                     , LAG(RPSTY,1,'START') OVER (ORDER BY CONS_MTH) P_RPSTY
+                 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT 
+                WHERE AGNT_ID = (SELECT CPLAZA_ORG_CD FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID = #USER_ID#)
+                )
+          WHERE 1=1 
+            AND ( P_OUT_ORG_DTL_ID <> C_OUT_ORG_DTL_ID OR C_RPSTY <> P_RPSTY)   
+       ) A 
+     , ( /*이후 달과 차이 분*/
+        SELECT CONS_MTH           AS TO_MTH
+             , C_OUT_ORG_DTL_ID
+             , C_RPSTY
+             , ROW_NUMBER () OVER (ORDER BY CONS_MTH  ) RN
+          FROM (SELECT CONS_MTH    
+                     , OUT_ORG_DTL_ID  C_OUT_ORG_DTL_ID
+                     , LEAD(OUT_ORG_DTL_ID,1,'END') OVER (ORDER BY CONS_MTH) N_OUT_ORG_DTL_ID
+                     , ROW_NUMBER () OVER (ORDER BY CONS_MTH DESC ) RN
+                     , RPSTY C_RPSTY  
+                     , LEAD(RPSTY,1,'END') OVER (ORDER BY CONS_MTH) N_RPSTY
+                 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT 
+                WHERE AGNT_ID = (SELECT CPLAZA_ORG_CD FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID = #USER_ID#)
+               )
+         WHERE 1=1
+           AND ( RN = 1 OR N_OUT_ORG_DTL_ID <> C_OUT_ORG_DTL_ID OR N_RPSTY <> C_RPSTY)        
+       ) B  
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT C /*팀*/  
+     , PS_MNG.TBAS_OUT_ORG_DTL_MGMT D /*국*/
+     , PS_MNG.TBAS_OUT_ORG_MGMT E     /*외부조직*/ 
+ WHERE A.RN = B.RN
+   AND A.C_OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID
+   AND D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID
+   AND E.OUT_ORG_ID = D.OUT_ORG_ID
+ ORDER BY 1 DESC]]>
+	</select>
+	<select id="dSearchMbrStHst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchMbrStHst 회원상태이력 조회 */
+/* IO: 안진갑,2015-01-21T10:48:02(안진갑,2015-01-21T10:42:07) */
+SELECT TO_CHAR(A.SCRB_ST_CHG_DTM, 'YYYY-MM-DD') AS SCRB_ST_CHG_DTM
+     , A.SCRB_ST_CD
+     , (SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_SCRB_ST_CD' AND COMM_CD_VAL = A.SCRB_ST_CD) AS SCRB_ST_NM
+     , A.SCRB_ST_CHGR_ID
+     , B.USER_NM
+     , A.SCRB_ST_CHG_RSN
+  FROM DSM_USER_SCRB_ST_CHG_HST A
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.SCRB_ST_CHGR_ID = B.USER_ID)
+ WHERE A.USER_ID = #USER_ID#
+ ORDER BY A.CHG_SEQ]]>
+	</select>
+	<select id="dSearchEduHst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchEduHst 교육이력 조회 */
+/* IO: 안진갑,2015-01-21T11:15:58(안진갑,2015-01-21T11:02:36) */
+SELECT B.USER_ID
+     , TO_CHAR(TO_DATE(A.EDU_DT), 'YYYY-MM-DD') AS EDU_DT
+     , A.EDU_NM
+     , A.EDUT_OWNR_NM
+     , A.LECTR_NM
+     , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID='DSM_EDU_MANN_CD' AND COMM_CD_VAL=B.EDU_MANN_CD) AS EDU_MANN_NM
+     , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID='DSM_EDU_MANN_CD' AND COMM_CD_VAL=B.EVAL_RSLT_CD) AS EVAL_RSLT_NM
+     , B.MEMO
+  FROM DSM_AGENT_EDU A
+  JOIN DSM_AGENT_EDU_ATNDR B ON (A.AGENT_EDUT_MGMT_NUM = B.AGENT_EDUT_MGMT_NUM)
+ WHERE USER_ID = #USER_ID#
+ ORDER BY A.EDU_DT DESC]]>
+	</select>
+	<select id="dSearchFtftHst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchFtftHst 면담이력조회 */
+/* IO: 안진갑,2015-03-16T17:24:31(안진갑,2015-01-21T11:41:11) */
+SELECT X.AGENT_CNSL_MGMT_NUM	
+       , TO_CHAR(TO_DATE(X.CNSL_DT), 'YYYY-MM-DD') AS CNSL_DT	
+	   , X.CNSLR_ID			
+       , X.CNSLR_NM			
+       , X.RPSTY_NM	
+       , X.CNSL_RSN_CD 
+       , X.CNSL_CTT
+  FROM (
+       SELECT A.AGENT_CNSL_MGMT_NUM	
+            , A.CNSL_DT		
+            , A.USER_ID		
+            , A.CNSLR_ID			
+            , B.USER_NM AS CNSLR_NM			
+            , A.CNSL_RSN_CD
+            , A.CNSL_CTT
+			, CASE WHEN B.ATTC_CAT = '4' THEN (SELECT COMM_CD_VAL_NM 
+                                                 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT S1
+                                                 JOIN PS_MNG.TBAS_COMM_CD_DTL S2 ON (S2.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND S2.COMM_CD_VAL = S1.RPSTY)
+                                                WHERE S1.AGNT_ID = B.CPLAZA_ORG_CD
+                                                  AND S1.CONS_MTH = SUBSTRB(A.CNSL_DT, 1, 6)
+                                        )
+                   ELSE (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'ZBAS_C_00380' AND COMM_CD_VAL = B.RPSTY)
+               END AS RPSTY_NM           
+         FROM DSM_AGENT_CNSL A 
+         JOIN PS_MNG.TBAS_USER_MGMT B   ON (B.USER_ID = A.CNSLR_ID)
+       ) X
+ WHERE X.USER_ID = #USER_ID#
+ ORDER BY X.CNSL_DT DESC]]>
+	</select>
+	<select id="dSearchCareerMtrCntrt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchCareerMtrCntrt 경력사항(계약 후) */
+/* IO: 안진갑,2015-01-21T14:59:33(안진갑,2015-01-21T14:22:22) */
+SELECT SUBSTRB(B.CONS_MTH,1,4)||'-'||SUBSTRB(B.CONS_MTH,5,2) AS CONS_MTH
+ 	     , F.OUT_ORG_ID     AS HDQT_PART_ORG_ID
+	     , F.OUT_ORG_NM     AS HDQT_PART_ORG_NM
+	     , E.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+	     , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+	     , C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+	     , C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+	     , B.AGNT_ID        AS SALE_AGNT_ORG_ID
+	     , D.COMM_CD_VAL_NM AS RPSTY_NM
+	     , A.USER_NM        AS SALE_AGNT_ORG_NM
+	     , '' AS FLAG
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN (
+          SELECT MIN(CONS_MTH) AS CONS_MTH, OUT_ORG_DTL_ID, RPSTY, AGNT_ID  
+          FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT
+          GROUP BY OUT_ORG_DTL_ID, RPSTY, AGNT_ID
+       ) B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = C.OUT_ORG_ID)
+  JOIN PS_MNG.TBAS_COMM_CD_DTL D ON (D.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND D.COMM_CD_VAL = B.RPSTY)
+ WHERE 1=1
+   AND A.USER_ID = #USER_ID#
+ ORDER BY B.CONS_MTH]]>
+	</select>
+	<update id="dUpdatePassword" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dUpdatePassword 패스워드 수정 */
+/* IO: 안진갑,2015-01-26T11:07:26(안진갑,2015-01-22T14:15:52) */
+UPDATE PS_MNG.TBAS_USER_MGMT
+   SET PWD = #PWD#,
+   	   PWD_END_DT = TO_CHAR(ADD_MONTHS(SYSDATE, 3),'YYYYMMDD'),
+   	   LOGIN_FAIL_CNT = 0
+ WHERE USER_ID  = #USER_ID#
+   AND ATTC_CAT = '4']]>
+	</update>
+	<insert id="dInsertUserInfoHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dInsertUserInfoHst 회원가입이력 저장 */
+/* IO: 안진갑,2015-01-22T16:27:53(안진갑,2015-01-22T16:27:24) */
+INSERT INTO DSM_USER_SCRB_ST_CHG_HST
+(
+   USER_ID
+  ,CHG_SEQ
+  ,SCRB_ST_CD
+  ,SCRB_ST_CHG_DTM
+  ,SCRB_ST_CHGR_ID
+  ,SCRB_ST_CHG_RSN
+  ,RGSTR_ID
+  ,RGST_DTM
+  ,UPDR_ID
+  ,UPD_DTM
+
+)
+VALUES
+(
+   #USER_ID#
+  ,(SELECT NVL(MAX(CHG_SEQ),0)+1
+      FROM DSM_USER_SCRB_ST_CHG_HST
+     WHERE USER_ID = #USER_ID#)
+  ,#SCRB_ST_CD#
+  ,SYSDATE
+  ,#onlineContext.userInfo.loginId#
+  ,#SCRB_ST_CHG_RSN#
+  ,#onlineContext.userInfo.loginId#
+  ,SYSDATE
+  ,#onlineContext.userInfo.loginId#
+  ,SYSDATE
+)]]>
+	</insert>
+	<select id="dSearchCertPwd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchCertPwd 패스워드 인증 */
+/* IO: 안진갑,2015-01-26T11:23:01(안진갑,2015-01-23T17:22:53) */
+SELECT COUNT(1) AS CNT
+  FROM PS_MNG.TBAS_USER_MGMT A     
+ WHERE A.USER_ID = #USER_ID#
+   AND A.PWD=#PWD#]]>
+	</select>
+	<select id="dSearchNonRealBizUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchNonRealBizUser 미인증회원 조회 */
+/* IO: 안진갑,2015-04-01T09:58:09(안진갑,2015-01-26T14:34:09) */
+SELECT T2.*
+       , F_MASKING('N', T2.USER_NM1) AS USER_NM
+  FROM (
+        SELECT ROW_NUMBER() OVER(ORDER BY T1.DIFF_DAY ASC) AS RN
+               , COUNT(1) OVER() AS COUNT
+               , T1.*
+          FROM (
+                SELECT F.OUT_ORG_NM       AS HDQT_PART_ORG_NM
+                       , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+                       , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+                       , A.USER_ID
+                       , A.USER_NM        AS USER_NM1                       
+                       , C.RPSTY
+                       , G.COMM_CD_VAL_NM AS RPSTY_NM
+                       , TO_CHAR(B.RGST_DTM, 'YYYY-MM-DD') AS RGST_DTM
+                       , TRUNC(SYSDATE) - TRUNC(TO_DATE(B.REAL_BIZ_DT, 'YYYY-MM-DD')) AS PAST_DAY
+                       , TRUNC(ADD_MONTHS(TO_DATE(B.REAL_BIZ_DT, 'YYYY-MM-DD'), 3)) - TRUNC(SYSDATE) AS DIFF_DAY
+                  FROM PS_MNG.TBAS_USER_MGMT A 
+                  JOIN DSM_USER B                     ON ( B.USER_ID = A.USER_ID )
+                  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.CPLAZA_ORG_CD )
+                  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+                  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+                  JOIN PS_MNG.TBAS_OUT_ORG_MGMT     F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+                  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL G ON ( G.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND G.COMM_CD_VAL = C.RPSTY  AND G.DEL_YN='N')
+                 WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+				   AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')                
+                   AND F.ORG_ID = #HDQT_TEAM_ORG_ID#
+                   ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+                   	   F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+                   ]]></isNotEmpty><![CDATA[
+                   ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+                       E.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+                   ]]></isNotEmpty><![CDATA[
+                   ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+                       D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+                   ]]></isNotEmpty><![CDATA[
+                   ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+                       A.USER_NM LIKE '%'||REPLACE(#USER_NM#, ' ', '')||'%'
+                   ]]></isNotEmpty><![CDATA[
+                UNION
+                SELECT D.OUT_ORG_NM       AS HDQT_PART_ORG_NM
+                       , '' AS SALE_DEPT_ORG_NM
+                       , '' AS SALE_TEAM_ORG_NM
+                       , A.USER_ID
+                       , A.USER_NM        AS USER_NM1                       
+                       , A.RPSTY
+                       , E.COMM_CD_VAL_NM AS RPSTY_NM
+                       , TO_CHAR(B.RGST_DTM, 'YYYY-MM-DD') AS RGST_DTM
+                       , TRUNC(SYSDATE) - TRUNC(TO_DATE(B.REAL_BIZ_DT, 'YYYY-MM-DD')) AS PAST_DAY
+                       , TRUNC(ADD_MONTHS(TO_DATE(B.REAL_BIZ_DT, 'YYYY-MM-DD'), 3)) - TRUNC(SYSDATE) AS DIFF_DAY
+                  FROM PS_MNG.TBAS_USER_MGMT A 
+                  JOIN DSM_USER B                     ON ( B.USER_ID = A.USER_ID )                
+                  JOIN DSM_APPROVE C                  ON ( C.USER_ID = B.USER_ID )
+                  JOIN PS_MNG.TBAS_OUT_ORG_MGMT D     ON ( D.ORG_ID = A.NEW_ORG_ID AND D.OUT_ORG_ID = A.OUT_ORG_ID )
+                  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_ID = 'ZBAS_C_00210' AND E.COMM_CD_VAL = A.RPSTY )
+                 WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)                   
+                   AND D.ORG_ID = #HDQT_TEAM_ORG_ID#
+                   ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+                   	   D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+                   ]]></isNotEmpty><![CDATA[
+                   ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+                       A.USER_NM LIKE '%'||REPLACE(#USER_NM#, ' ', '')||'%'
+                   ]]></isNotEmpty><![CDATA[                 
+               ) T1
+         WHERE 1=1 
+           ]]><isNotEmpty prepend="AND" property="PAST_DAY"><![CDATA[
+               T1.PAST_DAY >= #PAST_DAY#
+           ]]></isNotEmpty><![CDATA[
+           ]]><isNotEmpty prepend="AND" property="CERT_YN"><![CDATA[
+               T1.DIFF_DAY < 0
+           ]]></isNotEmpty><![CDATA[
+       ) T2
+ WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchUserApprCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchUserApprCnt 가입승인한 회원수 */
+/* IO: 안진갑,2015-04-27T10:20:33(안진갑,2015-02-23T13:46:27) */
+SELECT COUNT(1) AS CNT
+		  FROM (
+				SELECT A.USER_ID            
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                     ON ( A.USER_ID = B.USER_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( I.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT J ON ( J.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT F     ON ( F.OUT_ORG_ID = I.OUT_ORG_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT H     ON ( H.ORG_ID = F.ORG_ID )
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C   ON ( A.DUTY = C.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL L ON ( L.COMM_CD_VAL = A.USER_ST AND L.COMM_CD_ID = 'USER_ST') 				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[            			  
+				 WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+           AND B.SCRB_ST_CD='02'
+				   AND D.CONS_MTH = (                             
+									   SELECT  
+											  MAX(A.CONS_MTH) AS YYYYMM 
+										 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A 
+										WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') AND A.AGNT_ID = D.AGNT_ID
+									)
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   H.ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   J.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+					   I.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_AGNT_ORG_ID"><![CDATA[
+					   A.CPLAZA_ORG_CD = #SALE_AGNT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[      
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   A.DUTY = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[  				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				    
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   D.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[  				   
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[   				  				      
+				UNION
+				SELECT A.USER_ID  				       
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                      ON ( B.USER_ID = A.USER_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT C      ON ( C.ORG_ID = A.NEW_ORG_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT D      ON ( D.ORG_ID = A.NEW_ORG_ID AND D.OUT_ORG_ID = A.OUT_ORG_ID )
+				  JOIN DSM_APPROVE E                   ON ( E.USER_ID = A.USER_ID)
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT G    ON ( G.DUTY_CD = E.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H  ON ( H.COMM_CD_VAL = B.SCRB_ST_CD AND H.COMM_CD_ID = 'DSM_SCRB_ST_CD')			  				  
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I  ON ( I.COMM_CD_VAL = A.USER_ST AND I.COMM_CD_ID = 'USER_ST')				  				   				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[			  
+				 WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+           AND B.SCRB_ST_CD='02'         
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   A.NEW_ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   E.DSM_HEADQ_CD  =  #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   E.DUTY_CD = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[ 
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				     
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[		
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[				  	
+				) T1]]>
+	</select>
+	<select id="dSearchUserBanCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchUserBanCnt 일시접금금지된 회원수 */
+/* IO: 안진갑,2015-04-27T10:21:08(안진갑,2015-02-23T13:47:11) */
+SELECT COUNT(1) AS CNT
+		  FROM (
+				SELECT A.USER_ID            
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                     ON ( A.USER_ID = B.USER_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( I.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT J ON ( J.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT F     ON ( F.OUT_ORG_ID = I.OUT_ORG_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT H     ON ( H.ORG_ID = F.ORG_ID )
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C   ON ( A.DUTY = C.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL L ON ( L.COMM_CD_VAL = A.USER_ST AND L.COMM_CD_ID = 'USER_ST') 				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[            			  
+				 WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+           AND B.SCRB_ST_CD='05'
+				   AND D.CONS_MTH = (                             
+									   SELECT  
+											  MAX(A.CONS_MTH) AS YYYYMM 
+										 FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A 
+										WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') AND A.AGNT_ID = D.AGNT_ID
+									)
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   H.ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   J.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+					   I.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_AGNT_ORG_ID"><![CDATA[
+					   A.CPLAZA_ORG_CD = #SALE_AGNT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[      
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   A.DUTY = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[  				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				    
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   D.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[  				   
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[   				  				      
+				UNION
+				SELECT A.USER_ID  				       
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                      ON ( B.USER_ID = A.USER_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT C      ON ( C.ORG_ID = A.NEW_ORG_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT D      ON ( D.ORG_ID = A.NEW_ORG_ID AND D.OUT_ORG_ID = A.OUT_ORG_ID )
+				  JOIN DSM_APPROVE E                   ON ( E.USER_ID = A.USER_ID)
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT G    ON ( G.DUTY_CD = E.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H  ON ( H.COMM_CD_VAL = B.SCRB_ST_CD AND H.COMM_CD_ID = 'DSM_SCRB_ST_CD')			  				  
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I  ON ( I.COMM_CD_VAL = A.USER_ST AND I.COMM_CD_ID = 'USER_ST')				  				   				  
+ 				 ]]><isNotEmpty property="LOGIN_PRD"><![CDATA[
+ 				  CROSS JOIN ( SELECT TO_NUMBER(ADD_INFO_01)   AS START_DAY
+                                      , TO_NUMBER(ADD_INFO_02) AS END_DAY
+                                 FROM PS_MNG.TBAS_COMM_CD_DTL 
+                                WHERE COMM_CD_ID='DSM_NY_LOGIN_PRD_CD'
+                                  AND COMM_CD_VAL = #LOGIN_PRD#
+                             ) L
+                 ]]></isNotEmpty><![CDATA[			  
+				 WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+           AND B.SCRB_ST_CD='05'         
+				  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+					   A.NEW_ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+					   D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+					   E.DSM_HEADQ_CD  =  #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty prepend="AND" property="DUTY_CD"><![CDATA[
+					   E.DUTY_CD = #DUTY_CD#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isNotEmpty prepend="AND" property="USER_ST"><![CDATA[
+					   A.USER_ST = #USER_ST#
+				  ]]></isNotEmpty><![CDATA[				  
+				  ]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+					   A.USER_ID = #USER_ID#
+				  ]]></isNotEmpty><![CDATA[ 
+				  ]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[ 				     
+				  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					   A.USER_NM LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+				  ]]></isNotEmpty><![CDATA[		
+				  ]]><isNotEmpty prepend="AND" property="LOGIN_PRD"><![CDATA[
+				       L.START_DAY <=
+					   TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(A.LAST_LOGIN_DT, 'YYYYMMDD')
+				  ]]></isNotEmpty><![CDATA[				  	
+				) T1]]>
+	</select>
+	<select id="dSearchUserAuthGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchUserAuthGrp 사용자별권할그룹 조회 */
+/* IO: 안진갑,2015-02-23T14:31:23(안진갑,2015-02-23T14:30:08) */
+SELECT  A.AUTH_GRP_ID
+       ,A.AUTH_GRP_NM
+       ,A.AUTH_GRP_DESC
+  FROM DSM_AUTH_GRP A
+  JOIN DSM_AUTH_GRP_APLY_DUTY B ON (B.AUTH_GRP_ID = A.AUTH_GRP_ID)
+  JOIN PS_MNG.TBAS_USER_MGMT C ON (C.DUTY = B.DUTY_CD)
+ WHERE A.USE_YN = 'Y'
+   AND C.USER_ID = #USER_ID#]]>
+	</select>
+	<insert id="dInsertEmpUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dInsertEmpUser 회원등록(임직원) */
+/* IO: 안진갑,2015-04-08T15:25:05(안진갑,2015-04-08T12:46:51) */
+INSERT INTO DSM_USER
+(
+   USER_ID
+  ,NICK_NM
+  ,BIRTH_DT
+  ,WEDD_YN
+  ,WEDD_DT
+  ,SMS_RCV_AGREE_YN
+  ,EMAIL_RCV_AGREE_YN
+  ,PHON_NUM1
+  ,PHON_NUM2
+  ,PHON_NUM3
+  ,MBL_PHON_NUM1
+  ,MBL_PHON_NUM2
+  ,MBL_PHON_NUM3  
+  ,EMAIL_ID
+  ,EMAIL_DMN_CD
+  ,EMAIL_DMN_NM
+  ,MAIN_JOB
+  ,PIC_FILE_ID
+  ,SCRB_ST_CD
+  ,RGSTR_ID
+  ,RGST_DTM
+  ,UPDR_ID
+  ,UPD_DTM
+  ,POST_NUM
+  ,ADDR_1
+  ,ADDR_2
+  ,TEL_CO_CD
+ )
+VALUES
+(
+   #onlineContext.userInfo.loginId#
+  ,#NICK_NM#
+  ,REPLACE(#BIRTH_DT#, '-' ,'')
+  ,#WEDD_YN#
+  ,REPLACE(#WEDD_DT#, '-', '')
+  ,#SMS_RCV_AGREE_YN#
+  ,#EMAIL_RCV_AGREE_YN#
+  ,#PHON_NUM1#
+  ,#PHON_NUM2#
+  ,#PHON_NUM3#
+  ,#MBL_PHON_NUM1#
+  ,#MBL_PHON_NUM2#
+  ,#MBL_PHON_NUM3#
+  ,#EMAIL_ID#
+  ,#EMAIL_DMN_CD#
+  ,#EMAIL_DMN_NM#
+  ,#MAIN_JOB#
+  ,#ATCH_FILE_ID#
+  ,'02'
+  ,#onlineContext.userInfo.loginId#
+  ,SYSDATE
+  ,#onlineContext.userInfo.loginId#
+  ,SYSDATE
+  ,#POST_NUM#
+  ,#ADDR_1#
+  ,#ADDR_2#
+  ,#TEL_CO_CD#
+)]]>
+	</insert>
+	<update id="dUpdateUserScrbReqSt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dUpdateUserScrbReqSt 회원가입요청상태 변경 */
+/* IO: 안진갑,2015-04-14T12:45:32(안진갑,2015-04-14T12:41:48) */
+UPDATE DSM_USER_SCRB_REQ
+   SET SCRB_ST_CD = #SCRB_ST_CD#
+ WHERE USER_ID = #USER_ID#]]>
+	</update>
+	<insert id="dInsertPwdChgHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dInsertPwdChgHst 비밀번호 변경이력 등록 */
+/* IO: 안진갑,2015-04-29T10:21:14(안진갑,2015-04-29T10:16:12) */
+INSERT INTO DSM_PWD_CHG_HST ( USER_ID 
+                              , HST_SEQ 
+                              , PWD 
+                              , RGSTR_ID 
+                              , RGST_DTM )                               
+SELECT #USER_ID#
+       , (SELECT NVL(MAX(HST_SEQ), 0)+1 FROM DSM_PWD_CHG_HST WHERE USER_ID = #USER_ID#)     
+       , #PWD#
+       , #onlineContext.userInfo.loginId#
+       , SYSDATE
+  FROM DUAL]]>
+	</insert>
+	<select id="dSearchIsRecentPassword" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.usermgmt.db.DUSERMGMT001.dSearchIsRecentPassword 최근 비밀번호 동일 여부 */
+/* IO: 안진갑,2015-04-29T10:32:35(안진갑,2015-04-29T10:27:34) */
+SELECT COUNT(1) AS CNT
+  FROM (
+          SELECT /*+ index_desc(DSM_PWD_CHG_HST PK_DSM_PWD_HST)*/
+                 PWD
+            FROM DSM_PWD_CHG_HST
+           WHERE USER_ID = #USER_ID# 
+             AND ROWNUM <= 3
+        )
+  WHERE PWD = #PWD#]]>
+	</select>
+</sqlMap>

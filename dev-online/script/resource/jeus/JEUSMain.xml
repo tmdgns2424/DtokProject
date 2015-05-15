@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?><jeus-system xmlns="http://www.tmaxsoft.com/xml/ns/jeus" version="6.0">
+   <node>
+      <name>localhost</name>
+      <engine-container>
+         <name>container1</name>
+         <id>47</id>
+         <base-port>10221</base-port>
+         <command-option><!-- -Dfile.encoding=ms949 -->
+                         -Xms256m -Xmx512m 
+                         -Djeus.jndi.rmi.useRmiRegistry=true
+                         -DNEXCORE_HOME=C:/projects/dtok/workspace/runtime 
+                         -Dsystem.id=localhost -DNEXCORE_LOG_HOME=/C:/projects/dtok/logs/ 
+                         -Xrunjdwp:transport=dt_socket,address=8453,server=y,suspend=n 
+         </command-option>
+         <engine-command>
+            <type>jms</type>
+            <name>engine1</name>
+         </engine-command>
+         <engine-command>
+            <type>ejb</type>
+            <name>engine1</name>
+         </engine-command>
+         <engine-command>
+            <type>servlet</type>
+            <name>engine1</name>
+         </engine-command>
+         <!--engine-command>
+ 
+                <type>ws</type>
+ 
+                <name>engine1</name>
+ 
+            </engine-command-->
+      </engine-container>
+      <class-ftp>true</class-ftp>
+      <sequential-start>true</sequential-start>
+      <enable-webadmin>true</enable-webadmin>
+      <system-logging>
+         <level>INFO</level>
+         <handler>
+            <console-handler>
+               <name>
+               </name>
+            </console-handler>
+            <file-handler>
+               <name>fileHandler</name>
+               <enable-rotation>true</enable-rotation>
+               <valid-day>1</valid-day>
+               <append>false</append>
+            </file-handler>
+         </handler>
+      </system-logging>
+   </node>
+   <resource>
+      <data-source>
+	     <!-- FRAMEWORK (XA)-->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/NexcoreDS</export-name>
+		  <data-source-name>NexcoreDS_XA</data-source-name>
+		  <data-source-class-name>oracle.jdbc.xa.client.OracleXADataSource</data-source-class-name>
+		  <data-source-type>XADataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>NCOREDTOK</user>
+		  <password>dtoknc948</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+		
+        <!-- FRAMEWORK (NON XA)-->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/NexcoreDS_NonXA</export-name>
+		  <data-source-name>NexcoreDS_NonXA</data-source-name>
+		  <data-source-class-name>oracle.jdbc.pool.OracleConnectionPoolDataSource</data-source-class-name>
+		  <data-source-type>ConnectionPoolDataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>NCOREDTOK</user>
+		  <password>dtoknc948</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+
+		 <!-- BUSINESS (XA)-->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/BizDS</export-name>
+		  <data-source-name>BizDS</data-source-name>
+		  <data-source-class-name>oracle.jdbc.xa.client.OracleXADataSource</data-source-class-name>
+		  <data-source-type>XADataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>PSNMDTOK</user>
+		  <password>dtpsm882</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+
+		<!-- BUSINESS (NON XA)-->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/BizDS_NonXA</export-name>
+		  <data-source-name>BizDS_NonXA</data-source-name>
+		  <data-source-class-name>oracle.jdbc.pool.OracleConnectionPoolDataSource</data-source-class-name>
+		  <data-source-type>ConnectionPoolDataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>PSNMDTOK</user>
+		  <password>dtpsm882</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+
+		 <!-- BACKOFFICE BUSINESS (XA) -->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/BoBizDS</export-name>
+		  <data-source-name>BoBizDS</data-source-name>
+		  <data-source-class-name>oracle.jdbc.xa.client.OracleXADataSource</data-source-class-name>
+		  <data-source-type>XADataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>psnmapp</user>
+		  <password>apppsm919</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+
+		<!-- BACKOFFICE BUSINESS (NON XA) -->
+		<database>
+		  <vendor>oracle</vendor>
+		  <export-name>jdbc/BoBizDS_NonXA</export-name>
+		  <data-source-name>BoBizDS_NonXA</data-source-name>
+		  <data-source-class-name>oracle.jdbc.pool.OracleConnectionPoolDataSource</data-source-class-name>
+		  <data-source-type>ConnectionPoolDataSource</data-source-type>
+		  <auto-commit>false</auto-commit>
+		  <user>psnmapp</user>
+		  <password>apppsm919</password>
+		  <property>
+			<name>uRL</name>
+			<type>java.lang.String</type>
+			<value>jdbc:oracle:thin:@10.40.10.134:1521:DPSNMDB</value>
+		  </property>
+		  <connection-pool>
+			<pooling>
+			  <min>0</min>
+			  <max>5</max>
+			  <step>1</step>
+			  <period>3600000</period>
+			</pooling>
+			<check-query>SELECT 1 FROM DUAL</check-query>
+			<non-validation-interval>5000</non-validation-interval>
+			<check-query-period>1000000</check-query-period>
+			<connection-trace>
+			  <enabled>false</enabled>
+			</connection-trace>
+			<use-sql-trace>false</use-sql-trace>
+		  </connection-pool>
+		</database>
+
+      </data-source>
+   </resource>
+  <application>
+      <name>EarContent</name>
+      <path>C:/projects/dtok/workspace/runtime/EarContent</path>
+      <deployment-type>EAR</deployment-type>
+      <deployment-target>
+         <target>
+            <engine-container-name>localhost_container1</engine-container-name>
+         </target>
+      </deployment-target>
+   </application>
+
+</jeus-system>

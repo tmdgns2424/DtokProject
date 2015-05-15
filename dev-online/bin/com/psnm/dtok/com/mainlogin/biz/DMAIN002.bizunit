@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMAIN002">
+    <bizUnitName>[DU]메인공지</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>[DU]메인공지 - 메인화면에서 공지사항 관련된 조회,처리</description>
+    <method-list>
+        <method id="dSearchAnncePic">
+            <methodName>[DM]공지사항(이미지)</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchAnncePic</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]공지사항(이미지) 조회 - 이미지 공지사항이 등록되었는지 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-30T10:42:29" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnce">
+            <methodName>[DM]공지사항1건</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]공지사항1건 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-30T10:42:08" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceList">
+            <methodName>[DM]공지사항최근목록10</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchAnnceList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]공지사항최근목록10 - 메인용 최근 공지사항목록 10개를 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-30T10:41:36" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMainad">
+            <methodName>[DM]메인AD조회</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchMainad</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]메인AD조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-18T09:39:57" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAnncePopList">
+            <methodName>[DM]팝업공지목록</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchAnncePopList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]팝업공지목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:52:10" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceMndtList">
+            <methodName>[DM]필수확인공지목록</methodName>
+            <transactionId>com.MAINLOGIN@DMAIN002_dSearchAnnceMndtList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]필수확인공지목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:52:42" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T10:49:14" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DUNLAWSALEEX001">
+	<select id="dSearchUnlawSaleEx" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dSearchUnlawSaleEx  */
+/* IO: 안진갑,2015-01-22T10:51:51(이민재,2014-12-30T10:41:46) */
+SELECT A.*
+	FROM (
+		SELECT ROW_NUMBER() OVER(ORDER BY A.RGST_DTM DESC) RN 
+    		, A.UNLAW_MGMT_NUM 
+    		, D.AGNT_ID AS AGNT_ID 
+    		, F_MASKING('N',D.AGNT_NM) AS AGNT_NM 
+    		, H.ORG_ID AS HDQT_TEAM_ORG_ID
+    		, H.ORG_NM AS HDQT_TEAM_ORG_NM
+    		, G.OUT_ORG_ID AS HDQT_PART_ORG_ID
+    		, G.OUT_ORG_NM AS HDQT_PART_ORG_NM
+    		, F.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+    		, F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+    		, E.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+    		, E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+    		, D.RPSTY
+    		, I.COMM_CD_VAL_NM AS RPSTY_NM
+    		, J.COMM_CD_VAL_NM AS DSM_FAX_UNIT_TYP_NM
+    		, F_MASKING('N',C.USER_NM) AS RGSTR_NM
+    		, TO_CHAR(TO_DATE(A.RGST_DTM),'YYYY-MM-DD') AS RGST_DTM
+  		FROM DSM_UNLAW_SALE_EX A
+       	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')
+       	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = B.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(A.RGST_DTM, 'YYYYMM'))
+       	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON ( F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON ( G.OUT_ORG_ID = F.OUT_ORG_ID )
+       	JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON ( H.ORG_ID = G.ORG_ID )
+       	JOIN PS_MNG.TBAS_COMM_CD_DTL I ON ( I.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND I.COMM_CD_VAL = D.RPSTY )
+       	JOIN PS_MNG.TBAS_COMM_CD_DTL J ON ( A.DSM_FAX_UNIT_TYP_CD = J.COMM_CD_VAL AND J.COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' )
+		WHERE G.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+		]]><isNotEmpty prepend="AND" property="FROM_DT"><![CDATA[		
+			A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			H.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			D.AGNT_ID = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+			B.USER_ID = #USER_ID#
+		]]></isNotEmpty><![CDATA[		
+	) A
+	WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchUnlawSaleExCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dSearchUnlawSaleExCount  */
+/* IO: 안진갑,2015-01-22T10:51:32(이민재,2014-12-30T10:42:06) */
+SELECT COUNT(*) AS totCnt
+	FROM (
+		SELECT ROW_NUMBER() OVER(ORDER BY A.RGST_DTM DESC) RN 
+    		, A.UNLAW_MGMT_NUM 
+    		, D.AGNT_ID AS AGNT_ID 
+    		, F_MASKING('N',D.AGNT_NM) AS AGNT_NM 
+    		, H.ORG_ID AS HDQT_TEAM_ORG_ID
+    		, H.ORG_NM AS HDQT_TEAM_ORG_NM
+    		, G.OUT_ORG_ID AS HDQT_PART_ORG_ID
+    		, G.OUT_ORG_NM AS HDQT_PART_ORG_NM
+    		, F.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+    		, F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+    		, E.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+    		, E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+    		, D.RPSTY
+    		, I.COMM_CD_VAL_NM AS RPSTY_NM
+    		, J.COMM_CD_VAL_NM AS DSM_FAX_UNIT_TYP_NM
+    		, F_MASKING('N',C.USER_NM) AS RGSTR_NM
+    		, TO_CHAR(TO_DATE(A.RGST_DTM),'YYYY-MM-DD') AS RGST_DTM
+  		FROM DSM_UNLAW_SALE_EX A
+       	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')
+       	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = B.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(A.RGST_DTM, 'YYYYMM'))
+       	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON ( F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID )
+       	JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON ( G.OUT_ORG_ID = F.OUT_ORG_ID )
+       	JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON ( H.ORG_ID = G.ORG_ID )
+       	JOIN PS_MNG.TBAS_COMM_CD_DTL I ON ( I.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND I.COMM_CD_VAL = D.RPSTY )
+       	JOIN PS_MNG.TBAS_COMM_CD_DTL J ON ( A.DSM_FAX_UNIT_TYP_CD = J.COMM_CD_VAL AND J.COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' )
+		WHERE G.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+		]]><isNotEmpty prepend="AND" property="FROM_DT"><![CDATA[		
+			A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			H.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			D.AGNT_ID = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+			B.USER_ID = #USER_ID#
+		]]></isNotEmpty><![CDATA[		
+	) A]]>
+	</select>
+	<select id="dDetailUnlawSaleEx" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dDetailUnlawSaleEx  */
+/* IO: 이민재,2014-12-30T10:43:39(이민재,2014-12-30T10:43:39) */
+	SELECT A.UNLAW_MGMT_NUM 
+    , D.AGNT_ID AS AGNT_ID 
+    , F_MASKING('N',D.AGNT_NM) AS AGNT_NM 
+    , H.ORG_ID AS HDQT_TEAM_ORG_ID
+    , H.ORG_NM AS HDQT_TEAM_ORG_NM
+    , G.OUT_ORG_ID AS HDQT_PART_ORG_ID
+    , G.OUT_ORG_NM AS HDQT_PART_ORG_NM
+    , F.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+    , F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+    , E.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+    , E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+    , A.UNLAW_SALE_EX_CTT
+    , D.RPSTY
+    , I.COMM_CD_VAL_NM AS RPSTY_NM
+    , A.DSM_FAX_UNIT_TYP_CD
+    , J.COMM_CD_VAL_NM AS DSM_FAX_UNIT_TYP_NM
+    , F_MASKING('N',C.USER_NM) AS RGSTR_NM
+    , TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM
+  	FROM DSM_UNLAW_SALE_EX A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')
+	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = B.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(A.RGST_DTM, 'YYYYMM'))
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+ 	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON ( F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID )
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON ( G.OUT_ORG_ID = F.OUT_ORG_ID )
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON ( H.ORG_ID = G.ORG_ID )
+	JOIN PS_MNG.TBAS_COMM_CD_DTL I ON ( I.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND I.COMM_CD_VAL = D.RPSTY )
+	JOIN PS_MNG.TBAS_COMM_CD_DTL J ON ( A.DSM_FAX_UNIT_TYP_CD = J.COMM_CD_VAL AND J.COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' )
+	WHERE A.UNLAW_MGMT_NUM = #UNLAW_MGMT_NUM#]]>
+	</select>
+	<select id="dSearchUnlawSaleExIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dSearchUnlawSaleExIdSeq  */
+/* IO: 이민재,2014-12-30T10:43:55(이민재,2014-12-30T10:43:55) */
+	SELECT 'UNL' || LPAD(DSM_UNLAW_SALE_EX_SEQ.NEXTVAL, 12, '0') AS UNLAW_MGMT_NUM FROM DUAL]]>
+	</select>
+	<insert id="dInsertUnlawSaleEx" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dInsertUnlawSaleEx  */
+/* IO: 이민재,2014-12-30T10:42:29(이민재,2014-12-30T10:42:29) */
+	INSERT INTO DSM_UNLAW_SALE_EX (
+       			UNLAW_MGMT_NUM
+				, AGNT_ID
+				, DSM_FAX_UNIT_TYP_CD
+				, UNLAW_SALE_EX_CTT
+				, RGSTR_ID
+				, RGST_DTM
+				, UPDR_ID
+				, UPD_DTM
+	) VALUES (
+	       		#UNLAW_MGMT_NUM#
+				, #AGNT_ID#
+				, #DSM_FAX_UNIT_TYP_CD#
+				, #UNLAW_SALE_EX_CTT#
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+	)]]>
+	</insert>
+	<update id="dUpdateUnlawSaleEx" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dUpdateUnlawSaleEx  */
+/* IO: 이민재,2014-12-30T10:42:43(이민재,2014-12-30T10:42:43) */
+	UPDATE DSM_UNLAW_SALE_EX SET
+			AGNT_ID = #AGNT_ID#
+			, DSM_FAX_UNIT_TYP_CD = #DSM_FAX_UNIT_TYP_CD#
+			, UNLAW_SALE_EX_CTT = #UNLAW_SALE_EX_CTT#
+			, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+ 	WHERE UNLAW_MGMT_NUM = #UNLAW_MGMT_NUM#]]>
+	</update>
+	<delete id="dDeleteUnlawSaleEx" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleex.db.DUNLAWSALEEX001.dDeleteUnlawSaleEx  */
+/* IO: 이민재,2014-12-30T10:43:06(이민재,2014-12-30T10:43:06) */
+	DELETE FROM DSM_UNLAW_SALE_EX
+ 	WHERE UNLAW_MGMT_NUM = #UNLAW_MGMT_NUM#]]>
+	</delete>
+</sqlMap>

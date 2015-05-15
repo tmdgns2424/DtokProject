@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DBLTNBRDAUTHMGMT001">
+	<select id="dSearchBrdAuthOrg" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT001.dSearchBrdAuthOrg  */
+/* IO: 안종광,2015-01-20T11:13:04(안종광,2014-12-31T10:23:41) */
+SELECT oo.OUT_ORG_ID     AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+     , oo.OUT_ORG_NM     AS HDQT_PART_ORG_NM /* 본사파트 조직명 */
+     , oo.ORG_ID         AS HDQT_TEAM_ORG_ID /* 본사팀 조직ID */
+     , od.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /* 영업국 조직ID */
+     , od.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM /* 영업국 조직명 */
+     , NVL2(a.DSM_HEADQ_CD, 'Y', 'N') AS AUTH_YN
+  FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT od
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = od.OUT_ORG_ID )
+  /*LEFT OUTER*/ JOIN DSM_BLTN_BRD_AUTH_ORG a 
+    ON ( od.OUT_ORG_DTL_ID = a.DSM_HEADQ_CD AND BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/ )
+ WHERE od.ORG_LVL = '1'
+   AND od.EFF_ORG_YN = 'Y'
+   AND od.DEL_YN = 'N'
+/*   AND od.SUP_OUT_ORG_DTL_ID != '01090000' /*(제외)DSM특판*/
+   /*AND od.DTOK_EFF_ORG_YN = 'Y'  D-TOK사용여부 */ 
+ ORDER BY od.SORT_SEQ, od.OUT_ORG_DTL_ID]]>
+	</select>
+	<select id="dSearchBrdAuthGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT001.dSearchBrdAuthGrp  */
+/* IO: 안종광,2015-01-20T11:09:17(안종광,2014-12-31T14:42:07) */
+SELECT a.AUTH_GRP_ID
+     , a.AUTH_GRP_NM
+     , a.AUTH_GRP_DESC
+     , case when g.AUTH_TYP_CD='R' or g.AUTH_TYP_CD='W' or g.AUTH_TYP_CD='E' then 'Y' else 'N' end as R_AUTH
+     , case when g.AUTH_TYP_CD='W' or g.AUTH_TYP_CD='E' then 'Y' else 'N' end as W_AUTH
+     , case when g.AUTH_TYP_CD='E' then 'Y' else 'N' end as E_AUTH
+     , g.ALL_USER_APLY_YN
+  FROM DSM_AUTH_GRP a
+  LEFT /*OUTER*/ JOIN DSM_BLTN_BRD_AUTH g ON (a.AUTH_GRP_ID = g.AUTH_GRP_ID)
+ WHERE a.USE_YN = 'Y'
+   AND g.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+   AND g.AUTH_TYP_CD IN ( 'R', 'W', 'E' )
+ ORDER BY a.AUTH_GRP_ID, a.AUTH_PRTY]]>
+	</select>
+	<select id="dSearchBrdAuthUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT001.dSearchBrdAuthUser  */
+/* IO: 안종광,2015-02-23T09:56:58(안종광,2014-12-31T17:02:28) */
+SELECT z.USER_ID
+     , z.USER_ID_M
+     , (SELECT F_MASKING('N', z.USER_NM) FROM DUAL) AS USER_NM
+     , z.USER_NM AS USER_NAME
+     , z.AUTH_GRP_ID
+     , z.AUTH_GRP_NM
+     , z.DUTY_CD
+     , z.DUTY_NM
+     , z.SALE_DEPT_ORG_ID
+     , z.SALE_DEPT_ORG_NM
+     , z.SALE_TEAM_ORG_ID
+     , z.SALE_TEAM_ORG_NM
+     , z.AGNT_ID
+     , z.AGNT_NM
+  FROM (
+        SELECT A.USER_ID
+             , SUBSTR(A.USER_ID, -(LENGTH(A.USER_ID)), (LENGTH(A.USER_ID)-4))||'****' AS USER_ID_M
+             , A.USER_NM
+             , G.AUTH_GRP_ID
+             , J.AUTH_GRP_NM
+             , ap.DUTY_CD
+             , E.DUTY_NM
+             , NULL AS SALE_DEPT_ORG_ID
+             , NULL AS SALE_DEPT_ORG_NM
+             , NULL AS SALE_TEAM_ORG_ID
+             , NULL AS SALE_TEAM_ORG_NM
+             , NULL AS AGNT_ID
+             , NULL AS AGNT_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+          JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+          JOIN DSM_APPROVE ap ON (B.USER_ID = ap.USER_ID) /*DTOK사용자(임직원,계약직,도급직)*/
+          LEFT OUTER JOIN PS_MNG.TBAS_DUTY_MGMT E ON (E.DUTY_CD = ap.DUTY_CD)
+          LEFT OUTER JOIN (SELECT X.USER_ID
+                                , X.AUTH_GRP_ID
+                             FROM (SELECT A.USER_ID
+                                        , D.AUTH_GRP_ID
+                                        , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                                     FROM DSM_APPROVE A
+                                          JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                                      AND B.USER_ST = '1' 
+                                                                      AND B.ATTC_CAT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직)*/)
+                                          JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+                                          JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                                  ) X
+                            WHERE X.RNK = 1
+                           ) G ON (G.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN DSM_AUTH_GRP        J ON (J.AUTH_GRP_ID = G.AUTH_GRP_ID)
+          LEFT JOIN DSM_BLTN_BRD_AUTH_USER    K ON (K.USER_ID = A.USER_ID)
+         WHERE A.USER_ST = '1'
+           AND A.ATTC_CAT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직)*/
+           AND E.DUTY_TYP = '2'
+           AND B.SCRB_ST_CD IN ('02','04','08')
+           AND (E.USER_TYP = '1' OR E.USER_TYP = '2' OR E.DUTY_CD IN ('8', '10', '11', '12'))
+           /* AND A.ORG_ID = onlineContext.userInfo.HDQT_TEAM_ORG_ID */ /*본사팀ID*/
+           AND K.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+
+        UNION /* ___________________________ */
+
+        SELECT A.USER_ID
+             , SUBSTR(A.USER_ID, -(LENGTH(A.USER_ID)) ,(LENGTH(A.USER_ID)-4))||'****' AS USER_ID_M
+             , A.USER_NM
+             , G.AUTH_GRP_ID
+             , J.AUTH_GRP_NM
+             , A.DUTY AS DUTY_CD
+             , E.DUTY_NM
+             , D.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+             , (SELECT PKG_ORGS.F_DSM_ORG_NM('SALE_DEPT', D.SUP_OUT_ORG_DTL_ID) FROM DUAL) AS SALE_DEPT_ORG_NM
+             , D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+             , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+             , C.AGNT_ID
+             , C.AGNT_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+          JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT     F ON (F.OUT_ORG_ID = D.OUT_ORG_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_DUTY_MGMT        E ON (E.DUTY_CD = A.DUTY)
+          LEFT OUTER JOIN (SELECT X.USER_ID
+                                , X.AUTH_GRP_ID
+                             FROM (SELECT A.USER_ID
+                                        , D.AUTH_GRP_ID
+                                        , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                                     FROM DSM_USER A
+                                          JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                                      AND B.USER_ST = '1' 
+                                                                      AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                                          JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = B.DUTY)
+                                          JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                                  ) X
+                            WHERE X.RNK = 1
+                           ) G ON (G.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN DSM_AUTH_GRP        J ON (J.AUTH_GRP_ID = G.AUTH_GRP_ID)
+          LEFT JOIN DSM_BLTN_BRD_AUTH_USER    K ON (K.USER_ID = A.USER_ID)
+         WHERE A.USER_ST = '1'
+           AND A.ATTC_CAT NOT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직) 아님*/
+           AND E.DUTY_TYP = '2'
+           AND B.SCRB_ST_CD IN ('02','04','08')
+           AND (E.USER_TYP = '4' OR E.DUTY_CD = '14')
+           /*AND F.ORG_ID =  onlineContext.userInfo.HDQT_TEAM_ORG_ID */ /*본사팀ID*/
+           AND K.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+           AND C.CONS_MTH = (
+                            SELECT X.YYYYMM
+                              FROM (
+                                    SELECT A.AGNT_ID
+                                         , MAX(A.CONS_MTH) AS YYYYMM
+                                      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                     WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM')
+                                     GROUP BY A.AGNT_ID
+                                   ) X
+                             WHERE X.AGNT_ID = A.CPLAZA_ORG_CD
+               )
+  ) z
+ ORDER BY z.DUTY_CD, z.USER_NM]]>
+	</select>
+	<select id="dSearchDeptUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT001.dSearchDeptUser  */
+/* IO: 채수윤,2015-02-10T13:48:07(안종광,2015-01-05T13:42:33) */
+/*영업국 사용자조회(게시판권한관리 사용자찾기 팝업참용)*/
+SELECT A1.*
+  FROM (
+        SELECT A.USER_ID
+             , SUBSTR(A.USER_ID, -(LENGTH(A.USER_ID)), (LENGTH(A.USER_ID)-4))||'****' AS USER_ID_M
+             , A.USER_NM
+             , G.AUTH_GRP_ID
+             , J.AUTH_GRP_NM
+             , ap.DUTY_CD
+             , E.DUTY_NM
+             , NULL AS SALE_DEPT_ORG_ID
+             , NULL AS SALE_DEPT_ORG_NM
+             , NULL AS SALE_TEAM_ORG_ID
+             , NULL AS SALE_TEAM_ORG_NM
+             , NULL AS AGNT_ID
+             , NULL AS AGNT_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+          JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+          JOIN DSM_APPROVE ap ON (B.USER_ID = ap.USER_ID) /*DTOK사용자(임직원,계약직,도급직)*/
+          LEFT OUTER JOIN PS_MNG.TBAS_DUTY_MGMT E ON (E.DUTY_CD = ap.DUTY_CD)
+          LEFT OUTER JOIN DSM_AUTH_GRP_APLY_DUTY G ON (G.DUTY_CD = ap.DUTY_CD)
+          LEFT OUTER JOIN (SELECT X.USER_ID
+                                , X.AUTH_GRP_ID
+                             FROM (SELECT A.USER_ID
+                                        , D.AUTH_GRP_ID
+                                        , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                                     FROM DSM_APPROVE A
+                                          JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                                      AND B.USER_ST = '1' 
+                                                                      AND B.ATTC_CAT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직)*/)
+                                          JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = A.DUTY_CD)
+                                          JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                                  ) X
+                            WHERE X.RNK = 1
+                           ) G ON (G.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN DSM_AUTH_GRP        J ON (J.AUTH_GRP_ID = G.AUTH_GRP_ID)
+         WHERE A.USER_ST = '1'
+           AND A.ATTC_CAT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직)*/
+           AND E.DUTY_TYP = '2'
+           AND B.SCRB_ST_CD IN ('02','04','08')
+           AND (E.USER_TYP = '1' OR E.USER_TYP = '2' OR E.DUTY_CD IN ('8', '10', '11', '12'))
+         ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+           AND A.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀*/
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="USER_ID_NM"><![CDATA[
+           AND (A.USER_ID LIKE '%' || #USER_ID_NM# || '%' OR A.USER_NM LIKE '%' || #USER_ID_NM# || '%')
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+           AND G.AUTH_GRP_ID IN ]]><iterate property="AUTH_GRP_ID" open="(" close=")" conjunction=","><![CDATA[ #AUTH_GRP_ID[]# ]]></iterate><![CDATA[
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="EXCLUDE_USER_ID"><![CDATA[
+           AND A.USER_ID NOT IN ]]><iterate property="EXCLUDE_USER_ID" open="(" close=")" conjunction=","><![CDATA[ #EXCLUDE_USER_ID[]# ]]></iterate><![CDATA[
+         ]]></isNotEmpty><![CDATA[
+
+        UNION  /* ___________________________ */
+
+        SELECT A.USER_ID
+             , SUBSTR(A.USER_ID, -(LENGTH(A.USER_ID)) ,(LENGTH(A.USER_ID)-4))||'****' AS USER_ID_M
+             , A.USER_NM
+             , G.AUTH_GRP_ID
+             , J.AUTH_GRP_NM
+             , A.DUTY AS DUTY_CD
+             , E.DUTY_NM
+             , D.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+             , (SELECT PKG_ORGS.F_DSM_ORG_NM('SALE_DEPT', D.SUP_OUT_ORG_DTL_ID) FROM DUAL) AS SALE_DEPT_ORG_NM
+             , D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+             , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+             , C.AGNT_ID
+             , C.AGNT_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+          JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT     F ON (F.OUT_ORG_ID = D.OUT_ORG_ID)
+          LEFT OUTER JOIN PS_MNG.TBAS_DUTY_MGMT        E ON (E.DUTY_CD = A.DUTY)
+          LEFT OUTER JOIN (SELECT X.USER_ID
+                                , X.AUTH_GRP_ID
+                             FROM (SELECT A.USER_ID
+                                        , D.AUTH_GRP_ID
+                                        , RANK() OVER (PARTITION BY A.USER_ID ORDER BY D.AUTH_PRTY) AS RNK
+                                     FROM DSM_USER A
+                                          JOIN PS_MNG.TBAS_USER_MGMT B ON(B.USER_ID = A.USER_ID 
+                                                                      AND B.USER_ST = '1' 
+                                                                      AND B.ATTC_CAT NOT IN ('1', '2', '3'))
+                                          JOIN DSM_AUTH_GRP_APLY_DUTY C ON(C.DUTY_CD = B.DUTY)
+                                          JOIN DSM_AUTH_GRP D ON(D.AUTH_GRP_ID = C.AUTH_GRP_ID)
+                                  ) X
+                            WHERE X.RNK = 1
+                           ) G ON (G.USER_ID = A.USER_ID)
+          LEFT OUTER JOIN DSM_AUTH_GRP J ON (J.AUTH_GRP_ID = G.AUTH_GRP_ID)
+         WHERE A.USER_ST = '1'
+           AND A.ATTC_CAT NOT IN ( '1', '2', '3' ) /*DTOK사용자(임직원,계약직,도급직) 아님*/
+           AND E.DUTY_TYP = '2'
+           AND B.SCRB_ST_CD IN ('02','04','08')
+           AND (E.USER_TYP = '4' OR E.DUTY_CD = '14')
+         ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+           AND F.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀*/
+         ]]></isNotEmpty><![CDATA[
+           AND C.CONS_MTH = (
+                            SELECT X.YYYYMM
+                              FROM (
+                                    SELECT A.AGNT_ID
+                                         , MAX(A.CONS_MTH) AS YYYYMM
+                                      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                     WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM')
+                                     GROUP BY A.AGNT_ID
+                                   ) X
+                             WHERE X.AGNT_ID = A.CPLAZA_ORG_CD
+               )
+         ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+           AND D.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국*/
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+           AND D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀*/
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="SALE_AGNT_ORG_ID"><![CDATA[
+           AND C.AGNT_ID = #SALE_AGNT_ORG_ID# /*에이전트*/
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="USER_ID_NM"><![CDATA[
+           AND (A.USER_ID LIKE '%' || #USER_ID_NM# || '%' OR A.USER_NM LIKE '%' || #USER_ID_NM# || '%')
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+           AND G.AUTH_GRP_ID IN ]]><iterate property="AUTH_GRP_ID" open="(" close=")" conjunction=","><![CDATA[ #AUTH_GRP_ID[]# ]]></iterate><![CDATA[
+         ]]></isNotEmpty><![CDATA[
+         ]]><isNotEmpty property="EXCLUDE_USER_ID"><![CDATA[
+           AND A.USER_ID NOT IN ]]><iterate property="EXCLUDE_USER_ID" open="(" close=")" conjunction=","><![CDATA[ #EXCLUDE_USER_ID[]# ]]></iterate><![CDATA[
+         ]]></isNotEmpty><![CDATA[
+  ) A1
+ ORDER BY A1.DUTY_CD, A1.USER_NM]]>
+	</select>
+</sqlMap>

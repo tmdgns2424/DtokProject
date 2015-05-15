@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMENU001">
+    <bizUnitName>[DU]로그인메뉴조회</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>로그인 사용자의 메뉴목록 조회</description>
+    <method-list>
+        <method id="dSearchMenuTree">
+            <methodName>[DM]하위메뉴TREE조회</methodName>
+            <transactionId>com.MAINLOGIN@DMENU001_dSearchMenuTree</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>최상위메뉴ID(0000) 또는 지정된 (탑)메뉴ID로 [사용자]별 하위 메뉴 TREE 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-01T11:17:23" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenuBySup">
+            <methodName>[DM]상위ID로메뉴조회</methodName>
+            <transactionId>com.MAINLOGIN@DMENU001_dSearchMenuBySup</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>상위 메뉴ID로 메뉴 목록 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-20T16:58:58" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-20T16:48:40" user="admin (admin)"/>
+    </history>
+</bizUnit>

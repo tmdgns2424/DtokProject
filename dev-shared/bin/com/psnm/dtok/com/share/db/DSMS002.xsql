@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSMS002">
+	<insert id="dInsertPsnmsmsQueue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS002.dInsertPsnmsmsQueue  */
+/* IO: 안종광,2015-04-09T09:17:54(안종광,2015-01-13T16:45:19) */
+INSERT INTO PSNMSMS.TBO_SUBMIT_QUEUE (
+       CMP_MSG_ID
+     , CMP_MSG_GROUP_ID
+     , USR_ID
+     , SMS_GB
+     , USED_CD
+     , RESERVED_FG
+     , RESERVED_DTTM
+     , SAVED_FG
+     , RCV_PHN_ID
+     , SND_PHN_ID
+     , NAT_CD
+     , ASSIGN_CD
+     , SND_MSG
+     , CALLBACK_URL
+     , CONTENT_CNT
+     , CONTENT_MIME_TYPE
+     , CONTENT_PATH
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , MACHINE_ID
+     , SMS_STATUS
+     , RSLT_VAL
+     , MSG_TITLE
+     , TELCO_ID
+     , ASP_ID
+     , ETC_CHAR_1
+     , ETC_CHAR_2
+     , ETC_CHAR_3
+     , ETC_CHAR_4
+     , ETC_INT_5
+     , ETC_INT_6
+)
+VALUES (
+       SEQ_TBO_SUBMIT_QUEUE_1.NEXTVAL
+     , ''
+     , #USR_ID# /*전송시필수체크*/
+     , '1'
+     , #USED_CD# /*USED_CD*/
+     , 'I'
+     , #SND_DT#||#SND_TM# /*발송시각 : TO_CHAR(SYSDATE,'YYYYMMDDHH24MMSS')*/
+     , '0'
+     , REPLACE(#RCV_PHN_ID#, '-', '') /*수신전화번호*/
+     , REPLACE(#SND_PHN_ID#, '-', '') /*발신전화번호*/
+     , ''
+     , '00000'
+     , #SND_MSG# /*SMS메시지*/
+     , ''
+     , #CONTENT_CNT# /*CONTENT_CNT*/
+     , #CONTENT_MIME_TYPE# /*CONTENT_MIME_TYPE*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , ''
+     , ''
+     , '0'
+     , ''
+     , ''
+     , ''
+     , ''
+     , 'SENDER_ID='
+     , #onlineContext.userInfo.loginId# /*발신자ID(ETC_CHAR_2)*/
+     , 'RECEIVER_ID='
+     , #USER_ID# /*관련된사용자ID(ETC_CHAR_4)*/
+     , ''
+     , ''
+)]]>
+	</insert>
+	<select id="dSearchMsgDtm" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS002.dSearchMsgDtm  */
+/* IO: 안종광,2015-01-13T17:40:43(안종광,2015-01-13T17:33:47) */
+SELECT
+       TO_CHAR(SYSDATE, 'YYYYMMDD') AS SND_DT /*발송일자 */
+     , TO_CHAR(SYSDATE, 'HH24MISS') AS SND_TM /*발송시각 */
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSysMsgSnd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS002.dInsertSysMsgSnd  */
+/* IO: 안종광,2015-01-13T17:42:40(안종광,2015-01-13T17:42:40) */
+INSERT INTO THB_SYS_MSG_SND (
+       SND_DT
+     , SND_TM
+     , SND_TITL_NM
+     , SND_CTT
+     , SYS_CL_CD
+)
+VALUES (
+       #SND_DT#  /*발송일자 */
+     , #SND_TM#  /*발송시각 */
+     , ''        /*발송제목명 */
+     , #SND_MSG# /*발송내용 */
+     , 'DTOK'    /*시스템구분 */
+)]]>
+	</insert>
+	<insert id="dInsertSysMsgSndHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS002.dInsertSysMsgSndHst  */
+/* IO: 안종광,2015-03-04T10:05:44(안종광,2015-01-13T17:51:40) */
+INSERT INTO THB_SYS_MSG_SND_HST (
+       SND_DT
+     , SND_TM
+     , SND_SEQ
+     , MSG_CL_CD
+     , MSG_ID
+     , SND_TYP_CD
+     , SUSS_YN
+     , SNDR_ID
+     , SND_DTM
+     , SND_TS
+     , SND_PGM_ID
+     , RCVR_ID
+     , EMAIL_ADDR
+     , MBL_PHON_PHON_NUM
+     , SYS_CL_CD
+)
+VALUES (
+       #SND_DT#  /*발송일자 */
+     , #SND_TM#  /*발송시각 */
+     , #SND_SEQ# /*발송순번 */
+     , 'SMS'
+     , ''
+     , '02'
+     , 'Y'
+     , #USER_ID# /*발신자ID */
+     , #SND_DT#||#SND_TM# /*발송일시 */
+     , 1
+     , #SND_PHN_ID# /*발신번호(SND_PGM_ID) - 재정의*/
+     , ''
+     , ''
+     , REPLACE(#RCV_PHN_ID#, '-', '') /*수신번호*/
+     , 'DTOK'
+)]]>
+	</insert>
+	<select id="dSearchBoSmsCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS002.dSearchBoSmsCount  */
+/* IO: 안종광,2015-03-11T14:23:27(안종광,2015-03-04T10:48:38) */
+SELECT SUM(CNT) AS CNT
+FROM   (
+        SELECT COUNT(*) AS CNT
+          FROM PSNMSMS.TBO_SUBMIT_QUEUE q
+         WHERE q.RESERVED_DTTM LIKE #SND_DT#||'%' /*발신년월LIKE*/
+           /*AND q.USR_ID = 'DTOK'*/
+           AND q.ETC_CHAR_2 = #SND_USER_ID# /*발신자ID*/
+        UNION ALL
+        SELECT COUNT(*) AS CNT
+          FROM PSNMSMS.TBO_SUBMIT_QUEUE_HIST h
+         WHERE h.RESERVED_DTTM LIKE #SND_DT#||'%' /*발신년월LIKE*/
+           /*AND h.USR_ID = 'DTOK'*/
+           AND h.ETC_CHAR_2 = #SND_USER_ID# /*발신자ID*/
+)]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DANNCERCVGRP001">
+    <bizUnitName>[DU]공지사항그룹</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.ANNCEMGMT</componentId>
+    <description>공지사항그룹 DU</description>
+    <method-list>
+        <method id="dDeleteAnnceRcvGrp">
+            <methodName>[DM]공지그룹삭제</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVGRP001_dDeleteAnnceRcvGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지그룹정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:08:04" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnceRcvGrp">
+            <methodName>[DM]공지그룹저장</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVGRP001_dInsertAnnceRcvGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지그룹정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:07:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceRcvGrpTarget">
+            <methodName>[DM]공지대상그룹조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVGRP001_dSearchAnnceRcvGrpTarget</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지대상그룹 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:06:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceRcvGrpObject">
+            <methodName>[DM]공지할그룹조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCERCVGRP001_dSearchAnnceRcvGrpObject</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지할그룹정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:07:17" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T15:00:29" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

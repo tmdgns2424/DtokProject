@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSCRBCLMOP001">
+    <bizUnitName>[DU]비정상영업소명처리관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SCRBCLM</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchScrbClmOpDtl">
+            <methodName>[DM]비정상영업소명처리 상세조회</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMOP001_dSearchScrbClmOpDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T16:41:06" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dInsertScrbClmOp">
+            <methodName>[DM]비정상영업소명처리 등록</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMOP001_dInsertScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T15:45:26" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dDeleteScrbClmOp">
+            <methodName>[DM]비정상영업소명처리 삭제</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMOP001_dDeleteScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T14:59:18" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dUpdateScrbClmOp">
+            <methodName>[DM]비정상영업소명처리 수정</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMOP001_dUpdateScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T15:44:58" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchScrbClmOp">
+            <methodName>[DM]비정상영업소명처리 조회</methodName>
+            <transactionId>biz.SCRBCLM@DSCRBCLMOP001_dSearchScrbClmOp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T13:51:39" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-16T13:38:58" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

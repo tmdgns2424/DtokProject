@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.batch.CLEARIDINFO">
+    <componentName>PNG정리</componentName>
+    <bizGroupXd>batch</bizGroupXd>
+    <packageName>com.psnm.dtok.batch</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description/>
+    <history>
+        <created date="2015-05-12T15:47:10" user="허용 (06476)"/>
+        <updated date="" user=""/>
+    </history>
+</component>

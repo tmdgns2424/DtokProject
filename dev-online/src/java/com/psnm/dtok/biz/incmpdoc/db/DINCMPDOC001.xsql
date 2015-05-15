@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DINCMPDOC001">
+	<select id="dSearchIncmpDoc" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dSearchIncmpDoc  */
+/* IO: 김보선,2015-04-16T17:27:37(김지홍,2015-01-22T17:36:21) */
+SELECT CASE WHEN A.RGST_DTM + #NEW_PRD# / 24 >= SYSDATE THEN 'NEW' END F
+	     , A.DSM_INCMP_DOC_ID /* 미비서류접수ID */
+	     , A.RCV_TYP_CD  /* 접수유형 */
+	     , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL B WHERE (A.RCV_TYP_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_DOC_RCT_TYP_CD')) AS RCV_TYP_CD_NM
+	     , DECODE(A.PROC_ST_CD, '02', F_MASKING('N', A.CUST_NM), A.CUST_NM) AS CUST_NM     /* 고객명 */
+	     , TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD HH24:MI') RGST_DTM /* 등록일시 */
+	     , TO_CHAR(NVL(TO_DATE(A.OPEN_DT, 'YYYYMMDD'),A.RCV_DT), 'YYYY-MM-DD') OPEN_DT /* 개통/접수일자 */
+	     , A.RETL_ORG_NM /* 판매자 */
+	     , F_MASKING('N', A.RCV_USER_NM) AS RCV_USER_NM /* 접수자 */
+	     , F_MASKING('N', A.PROC_USER_NM) AS PROC_USER_NM /* 처리자 */
+	     , A.PROC_ST_CD /* 처리상태 */
+	     , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL B WHERE (A.PROC_ST_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_DOC_RCV_ST_CD')) AS PROC_ST_CD_NM
+	     , TO_CHAR(A.PROC_DTM, 'YYYY-MM-DD HH24:MI') PROC_DTM /* 처리일시 */
+	     , ( SELECT COUNT(1)
+	           FROM DSM_ATCH_FILE_MGMT K
+	          WHERE K.ATCH_MGMT_ID = A.DSM_INCMP_DOC_ID ) AS FILE_CNT /* 첨부파일건수 K.DSM_CONT_ID=>K.ATCH_MGMT_ID */
+  	FROM ( SELECT A.*
+              	, ROWNUM RN
+           FROM ( SELECT A.RGST_DTM
+                       , A.DSM_INCMP_DOC_ID /* 미비서류접수ID */
+                       , A.RCV_TYP_CD /* 접수유형 */
+                       , A.CUST_NM    /* 고객명 */
+                       , A.OPEN_DT    /* 접수일시 */
+                       , B.USER_NM RETL_ORG_NM /* 판매자 */
+                       , C.USER_NM RCV_USER_NM /* 접수자 */
+                       , A.RCV_DT     /* 접수일시 */
+                       , D.USER_NM PROC_USER_NM /* 처리자 */
+                       , A.PROC_ST_CD /* 처리상태 */
+                       , A.PROC_DTM   /* 처리일시 */
+                    FROM DSM_INCMP_DOC A
+                         JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')   /* A.RETL_ORG_CD => A.AGNT_ID */
+                         JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+                         LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON ( D.USER_ID = A.PROC_ID )
+						 LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT  E ON (B.CPLAZA_ORG_CD = E.AGNT_ID AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+                         LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT      F ON (B.NEW_ORG_ID = F.ORG_ID)
+                         LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  G ON (E.OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID)
+                   WHERE TO_CHAR(A.RGST_DTM,'YYYYMMDD') >= #FROM_DT# 
+                     AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') < TO_CHAR(TO_DATE(#TO_DT#, 'YYYYMMDD') + 1,'YYYYMMDD')
+					]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+					 AND F.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀*/
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+					 AND F.OUT_ORG_ID = #HDQT_PART_ORG_ID# /*본사파트*/
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+					 AND G.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국*/
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+					 AND E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀 */
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty prepend="" property="PROC_ST_CD"><![CDATA[
+                     AND A.PROC_ST_CD = #PROC_ST_CD#
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty prepend="" property="SEARCH_VALUE"><![CDATA[
+					  ]]><isNotEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+                      AND $SEARCH_KIND$ LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%'
+					  ]]></isNotEmpty><![CDATA[
+					  ]]><isEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+                      AND (A.CUST_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+                           B.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+                           C.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+                           D.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' )
+					  ]]></isEmpty><![CDATA[
+					]]></isNotEmpty><![CDATA[
+					]]><isNotEmpty prepend="" property="MA_USER_ID"><![CDATA[
+                     AND A.RGSTR_ID = #MA_USER_ID#
+					]]></isNotEmpty><![CDATA[
+                   ORDER BY A.DSM_INCMP_DOC_ID DESC ) A
+        ) A
+ 	WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchIncmpDocCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dSearchIncmpDocCount  */
+/* IO: 김보선,2015-04-16T17:27:14(이승훈2,2015-04-16T16:30:52) */
+SELECT COUNT(1) TOT_CNT
+  	FROM DSM_INCMP_DOC A
+	/* JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.RETL_ORG_CD || '01' ) */
+       JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')
+       JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON ( D.USER_ID = A.PROC_ID )
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT  E ON (B.CPLAZA_ORG_CD = E.AGNT_ID AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT      F ON (B.NEW_ORG_ID = F.ORG_ID)
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  G ON (E.OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID)
+    WHERE TO_CHAR(A.RGST_DTM,'YYYYMMDD') >= #FROM_DT# 
+      AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') < TO_CHAR(TO_DATE(#TO_DT#, 'YYYYMMDD') + 1,'YYYYMMDD')
+	]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+	  AND F.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+	  AND F.OUT_ORG_ID = #HDQT_PART_ORG_ID# /*본사파트*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+	  AND G.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+	  AND E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀 */
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="PROC_ST_CD"><![CDATA[
+   	  AND A.PROC_ST_CD = #PROC_ST_CD#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="SEARCH_VALUE"><![CDATA[
+	  ]]><isNotEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+      AND $SEARCH_KIND$ LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+      AND (A.CUST_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           B.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           C.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           D.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' )
+	  ]]></isEmpty><![CDATA[
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="MA_USER_ID"><![CDATA[
+      AND A.RGSTR_ID = #MA_USER_ID#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dDetailIncmpDoc" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dDetailIncmpDoc  */
+/* IO: 이승훈2,2015-05-12T15:14:21(이승훈2,2015-05-12T15:14:21) */
+SELECT A.RCV_TYP_CD
+		 , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL B WHERE (A.RCV_TYP_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_DOC_RCT_TYP_CD')) AS RCV_TYP_CD_NM
+     	 , CASE WHEN A.RCV_TYP_CD = '01' THEN TO_CHAR(A.RCV_DT, 'YYYY-MM-DD')  ELSE TO_CHAR(TO_DATE(A.OPEN_DT, 'YYYYMMDD'),'YYYY-MM-DD') END RCV_OPEN_DT
+     	 , A.AGNT_ID AGNT_ID	   
+	     , D.AGNT_NM AS AGNT_NM /* 판매자 */
+	     , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID=E.SUP_OUT_ORG_DTL_ID AND OUT_ORG_ID=E.OUT_ORG_ID) AS HEADADQ_NM /* 영업국명 */
+	     , A.SVC_NUM
+	     , A.MEMO
+	     , A.CUST_NM
+	     , A.PROC_ST_CD
+	     , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL B WHERE (A.PROC_ST_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_DOC_RCV_ST_CD')) AS PROC_ST_CD_NM
+	     , A.PROC_MEMO
+	     , A.PROC_ID
+	     , B.DOC_TYP_CD1
+	     , B.DOC_TYP_CD2
+	     , B.DOC_TYP_CD3
+	     , B.DOC_TYP_CD4
+	     , B.DOC_TYP_CD5
+	     , A.RGSTR_ID
+  	FROM DSM_INCMP_DOC A
+    LEFT JOIN ( SELECT K.DSM_INCMP_DOC_ID
+                     , MAX(CASE WHEN K.DOC_TYP_CD = '01' THEN K.DOC_TYP_CD END  ) DOC_TYP_CD1
+                     , MAX(CASE WHEN K.DOC_TYP_CD = '02' THEN K.DOC_TYP_CD END  ) DOC_TYP_CD2
+                     , MAX(CASE WHEN K.DOC_TYP_CD = '03' THEN K.DOC_TYP_CD END  ) DOC_TYP_CD3
+                     , MAX(CASE WHEN K.DOC_TYP_CD = '04' THEN K.DOC_TYP_CD END  ) DOC_TYP_CD4
+                     , MAX(CASE WHEN K.DOC_TYP_CD = '05' THEN K.DOC_TYP_CD END  ) DOC_TYP_CD5
+                  FROM DSM_INCMP_DOC_TYP_HST K
+                 WHERE K.DSM_INCMP_DOC_ID = #DSM_INCMP_DOC_ID#
+                 GROUP BY K.DSM_INCMP_DOC_ID ) B
+    ON ( A.DSM_INCMP_DOC_ID = B.DSM_INCMP_DOC_ID )
+/*     JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RETL_ORG_CD || '01' )
+    JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = C.CPLAZA_ORG_CD AND D.CONS_MTH = CASE WHEN A.RCV_TYP_CD = '01' THEN TO_CHAR(A.RCV_DT, 'YYYYMM') ELSE SUBSTRB(A.OPEN_DT,1,6) END ) */
+    JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.AGNT_ID AND D.CONS_MTH = CASE WHEN A.RCV_TYP_CD = '01' THEN TO_CHAR(A.RCV_DT, 'YYYYMM') ELSE SUBSTRB(A.OPEN_DT,1,6) END )       
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+ 	WHERE A.DSM_INCMP_DOC_ID = #DSM_INCMP_DOC_ID#]]>
+	</select>
+	<insert id="dInsertIncmpDoc" parameterClass="map" ><![CDATA[
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dInsertIncmpDoc  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+	INSERT INTO DSM_INCMP_DOC (
+						       DSM_INCMP_DOC_ID /* 미비서류접수ID */
+						     , RCV_TYP_CD       /* 접수유형코드 */
+						     , RCV_DT           /* 접수일자  */
+						     , OPEN_DT          /* 개통일자  */
+						     , AGNT_ID      	/* 거래처코드 */
+						     , CUST_NM          /* 고객명  */
+						     , SVC_NUM          /* 개통번호 */
+						     , DOC_TYP_CD       /* 첨부유형 */
+						     , MEMO             /* 메모 */
+						     , PROC_ST_CD       /* 처리 상태 */
+						     , RGSTR_ID         /* 등록자ID */
+						     , RGST_DTM         /* 등록일시 */
+						     , UPDR_ID          /* 수정자ID */
+						     , UPD_DTM          /* 수정일시 */
+					) VALUES (
+						       #DSM_INCMP_DOC_ID#
+						     , #RCV_TYP_CD#
+						     , CASE WHEN #RCV_TYP_CD# = '01' THEN #RCV_OPEN_DT# END
+						     , CASE WHEN #RCV_TYP_CD# IN ( '02', '03') THEN #RCV_OPEN_DT# END
+						     , #AGNT_ID#
+						     , #CUST_NM#
+						     , #SVC_NUM#
+						     , #DOC_TYP_CD#
+						     , #MEMO#
+						     , '01'
+						     , #onlineContext.userInfo.loginId#
+						     , SYSDATE
+						     , #onlineContext.userInfo.loginId#
+						     , SYSDATE
+					)]]>
+	</insert>
+	<select id="dSearchIncmpDocIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dSearchIncmpDocIdSeq  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+		
+	SELECT 'INC' || LPAD( DSM_INCMP_DOC_SEQ.NEXTVAL + 1, 12, '0' ) AS DSM_INCMP_DOC_ID
+  	FROM DUAL
+  ]]>
+	</select>
+	<update id="dUpdateIncmpDoc" ><![CDATA[	
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dUpdateIncmpDoc  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+	
+	UPDATE DSM_INCMP_DOC SET
+	       RCV_TYP_CD       = #RCV_TYP_CD#      /* 접수유형코드 */
+	     , RCV_DT           = CASE WHEN #RCV_TYP_CD# = '01' THEN #RCV_OPEN_DT# END          		 /* 접수일자       */
+	     , OPEN_DT          = CASE WHEN #RCV_TYP_CD# IN ( '02', '03') THEN #RCV_OPEN_DT# END         /* 개통일자       */
+	     , AGNT_ID      	= #AGNT_ID#     	/* 거래처코드 */
+	     , CUST_NM          = #CUST_NM#         /* 고객명 */
+	     , SVC_NUM          = #SVC_NUM#         /* 개통번호 */
+	     , DOC_TYP_CD       = #DOC_TYP_CD#      /* 첨부유형 */
+	     , MEMO             = #MEMO#            /* 메모 */
+	     , UPDR_ID          = #onlineContext.userInfo.loginId#         /* 수정자ID */
+	     , UPD_DTM          = SYSDATE           /* 수정일시 */
+	 WHERE DSM_INCMP_DOC_ID = #DSM_INCMP_DOC_ID#/* 미비서류접수ID */]]>
+	</update>
+	<update id="dUpdateIncmpDocResult" ><![CDATA[
+	/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dUpdateIncmpDoc  */
+	/* IO: 김지홍,2015-01-26T13:34:19(김지홍,2015-01-26T13:34:19) */
+		
+	UPDATE DSM_INCMP_DOC SET
+	       PROC_ST_CD       = #PROC_ST_CD#      						/* 처리상태코드    */
+	     , PROC_MEMO        = #PROC_MEMO#       						/* 처리특이사항    */
+	     , PROC_ID          = #onlineContext.userInfo.loginId#          /* 처리자ID     */
+	     , PROC_DTM         = SYSDATE        							/* 처리일시        */
+	     , UPDR_ID          = #onlineContext.userInfo.loginId#        	/* 수정자ID     */
+	     , UPD_DTM          = SYSDATE           						/* 수정일시        */
+ 	WHERE DSM_INCMP_DOC_ID = #DSM_INCMP_DOC_ID#							/* 미비서류접수ID */]]>
+	</update>
+	<select id="dSearchIncmpDocStCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.incmpdoc.db.DINCMPDOC001.dSearchIncmpDocStCount  */
+/* IO: 이승훈2,2015-04-22T14:17:39(이승훈2,2015-04-22T14:17:39) */
+SELECT
+  NVL(MAX(DECODE(B.PROC_ST_CD, '01',  B.PROC_ST_NM ||' '|| B.PROC_ST_CNT ||'건')), '대기 0건') ||', '||
+  NVL(MAX(DECODE(B.PROC_ST_CD, '02',  B.PROC_ST_NM ||' '|| B.PROC_ST_CNT ||'건')), '첨부완료 0건') ||', '||
+  NVL(MAX(DECODE(B.PROC_ST_CD, '03',  B.PROC_ST_NM ||' '|| B.PROC_ST_CNT ||'건')), '처리불가 0건')  AS PROC_ST_CNT  
+FROM
+(
+  SELECT
+     A.PROC_ST_CD,
+     COUNT(*) AS PROC_ST_CNT,
+     (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL B WHERE A.PROC_ST_CD = B.COMM_CD_VAL AND B.COMM_CD_ID = 'DSM_DOC_RCV_ST_CD') AS PROC_ST_NM
+  FROM
+    DSM_INCMP_DOC A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.CPLAZA_ORG_CD = A.AGNT_ID AND B.ATTC_CAT = '4' AND B.USER_TYP = '4')
+       JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.RGSTR_ID )
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON ( D.USER_ID = A.PROC_ID )
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT  E ON (B.CPLAZA_ORG_CD = E.AGNT_ID AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT      F ON (B.NEW_ORG_ID = F.ORG_ID)
+	   LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  G ON (E.OUT_ORG_DTL_ID = G.OUT_ORG_DTL_ID)
+  WHERE TO_CHAR(A.RGST_DTM,'YYYYMMDD') >= #FROM_DT# 
+    AND TO_CHAR(A.RGST_DTM,'YYYYMMDD') < TO_CHAR(TO_DATE(#TO_DT#, 'YYYYMMDD') + 1,'YYYYMMDD')
+	]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+	  AND F.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+	  AND F.OUT_ORG_ID = #HDQT_PART_ORG_ID# /*본사파트*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+	  AND G.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국*/
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+	  AND E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀 */
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="PROC_ST_CD"><![CDATA[
+   	  AND A.PROC_ST_CD = #PROC_ST_CD#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="SEARCH_VALUE"><![CDATA[
+	  ]]><isNotEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+      AND $SEARCH_KIND$ LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isEmpty prepend="" property="SEARCH_KIND"><![CDATA[
+      AND (A.CUST_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           B.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           C.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' OR
+           D.USER_NM LIKE '%' || REPLACE(#SEARCH_VALUE#, ' ', '') || '%' )
+	  ]]></isEmpty><![CDATA[
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="" property="MA_USER_ID"><![CDATA[
+      AND A.RGSTR_ID = #MA_USER_ID#
+	]]></isNotEmpty><![CDATA[
+  GROUP BY A.PROC_ST_CD
+  ORDER BY A.PROC_ST_CD
+) B]]>
+	</select>
+</sqlMap>

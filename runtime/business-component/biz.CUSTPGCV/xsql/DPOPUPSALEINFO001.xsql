@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPOPUPSALEINFO001">
+	<select id="dSearchSaleInfo" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DPOPUPSALEINFO001.dSearchSaleInfo 매출정보 조회 */
+/* IO: 안진갑,2015-04-15T10:27:54(안진갑,2015-01-28T14:54:15) */
+SELECT T1.*
+       , TO_CHAR(TO_DATE(SUBSTR(T1.SALE_DTM, 1, 8)), 'YYYY-MM-DD') AS SALE_DT
+       , F_MASKING('N', T1.AGNT_NM) AS AGNT_NM2
+       , F_MASKING('N', T1.CUST_NM) AS CUST_NM2
+       , F_MASKING('N', T1.USER_NM) AS UPDR_NM
+       , TO_CHAR(TO_DATE(T1.MOD_DTM, 'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI') AS UPD_DTM
+       , REGEXP_SUBSTR(REGEXP_REPLACE(T1.SVC_NUM,'-'), '(^\d{3})(\d{3,4})(\d{4})', 1, 1, 'i', 1)  AS SVC_NUM1
+       , REGEXP_SUBSTR(REGEXP_REPLACE(T1.SVC_NUM,'-'), '(^\d{3})(\d{3,4})(\d{4})', 1, 1, 'i',2)   AS SVC_NUM2
+       , REGEXP_SUBSTR(REGEXP_REPLACE(T1.SVC_NUM,'-'), '(^\d{3})(\d{3,4})(\d{4})', 1, 1, 'i',3)   AS SVC_NUM3
+  FROM (
+        SELECT ROW_NUMBER() OVER(ORDER BY A.SALE_DTM, A.MOD_DTM) AS RN
+               , COUNT(1) OVER() AS COUNT
+               , A.GNRL_SALE_NO         AS SALE_MGMT_NUM        /* 매출관리번호 */
+               , A.INI_SALE_NO          AS ORGL_SALE_MGMT_NUM
+               , I.COMM_CD_VAL          AS SELL_CL_CD
+               , I.COMM_CD_VAL_NM       AS SELL_CL_NM           /* 판매구분 */
+               , A.SALE_DTM
+               , N.ORG_ID             AS HDQT_TEAM_ORG_ID
+               , N.ORG_NM               AS HDQT_TEAM_ORG_NM                         
+               , A.UKEY_AGENCY_CD       AS AGN_CD
+               , K.AGENCY_NM            AS AGN_NM               /* 대리점 */
+               , B.OUT_ORG_ID           AS HDQT_PART_ORG_ID
+               , B.OUT_ORG_NM           AS HDQT_PART_ORG_NM
+               , M.OUT_ORG_DTL_ID       AS SALE_DEPT_ORG_ID
+               , M.OUT_ORG_DTL_NM       AS SALE_DEPT_ORG_NM
+               , D.OUT_ORG_DTL_ID       AS SALE_TEAM_ORG_ID
+               , D.OUT_ORG_DTL_NM       AS SALE_TEAM_ORG_NM     /* 팀명 */
+               , A.SALE_PLC             AS AGNT_ID             /* 에이전트코드 */
+               , C.AGNT_NM                                      /* 에이전트명 */
+               , A.CUST_NM
+               , A.SVC_NUM                                      /* 개통번호 */
+               , L.COMM_CD_VAL          AS SALE_TYP_CD
+               , L.COMM_CD_VAL_NM       AS SALE_TYP_NM          /* 판매유형 */
+               , A.SVC_TYP_CD           AS SCRB_TYP_CD
+               , G.COMM_CD_VAL_NM       AS SCRB_TYP_NM          /* 가입유형 */
+               , E.PROD_CD
+               , E.PROD_NM                                      /* 모델명 */
+               , H.SER_NUM                                      /* 일련번호 */
+               , A.MOD_USER_ID          AS UPDR_ID                       
+               , J.USER_NM                                      /* 최종처리자 */
+               , A.MOD_DTM                                      /* 최종처리일시 */       
+             FROM PS_MNG.TSAL_N_GENERAL_SALE A
+             JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.SALE_PLC AND C.CONS_MTH = SUBSTR(A.SALE_DTM, 1, 6)) 
+             JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+             JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT M ON (M.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+             JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = D.OUT_ORG_ID)
+             JOIN PS_MNG.TBAS_NEW_ORG_MGMT N ON (N.ORG_ID = B.ORG_ID)
+             LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL F ON (F.COMM_CD_ID = 'ZPOL_C_00040' AND F.COMM_CD_VAL = A.SALE_DTL_TYP)
+             LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL L ON (L.COMM_CD_ID = 'ZPOL_C_00030' AND L.COMM_CD_VAL = F.ADD_INFO_01)
+             LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL G ON (G.COMM_CD_ID = 'SVC_TYP_CD' AND G.COMM_CD_VAL = A.SVC_TYP_CD)
+             LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL I ON (I.COMM_CD_ID = 'ZPOL_C_00020' AND I.COMM_CD_VAL = F.ADD_INFO_02)
+             LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT J ON (J.USER_ID = A.MOD_USER_ID)
+             LEFT OUTER JOIN PS_MNG.TSAL_N_EQUIPMENT_SALE H ON (H.GNRL_SALE_NO = A.GNRL_SALE_NO AND H.GNRL_SALE_CHG_SEQ = A.GNRL_SALE_CHG_SEQ )
+             LEFT OUTER JOIN PS_MNG.TBAS_PROD_MGMT E ON (E.PROD_CD = H.MDL_CD)
+             LEFT OUTER JOIN (SELECT X.UKEY_AGENCY_CD
+                                     , Y.AGENCY_NM
+                                FROM PS_MNG.TBAS_DEAL_CO_MGMT X
+                                     , PS_MNG.TBAS_AGENCY_MGMT Y
+                               WHERE X.DEL_YN = 'N'
+                                 AND X.EFF_STA_DTM <= TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+                                 AND X.EFF_END_DTM >= TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+                                 AND EXISTS (SELECT 'X'
+                                               FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT Z
+                                              WHERE  Z.CONS_MTH = SUBSTRB(#TO_DT#, 0,6)
+                                                AND Z.AGNT_ID = X.DEAL_CO_CD)
+                                                AND X.UKEY_AGENCY_CD IS NOT NULL
+                                                AND X.UKEY_AGENCY_CD = Y.AGENCY_CD
+                                              GROUP BY X.UKEY_AGENCY_CD, Y.AGENCY_NM
+                                             ) K ON (K.UKEY_AGENCY_CD = A.UKEY_AGENCY_CD)
+            WHERE B.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+              AND A.GNRL_SALE_CHG_SEQ = (
+                                         SELECT MAX(GNRL_SALE_CHG_SEQ) 
+                                           FROM PS_MNG.TSAL_N_GENERAL_SALE
+                                          WHERE GNRL_SALE_NO = A.GNRL_SALE_NO
+                                        )
+              AND A.SALE_CHG_HST_CL NOT IN ('07', '08', '23') /* 판매취소, 판매삭제 */
+              AND A.SVC_MGMT_LAST_YN = 'Y'
+              AND A.DEL_YN = 'N'
+              AND A.SALE_CHNL_CD = 'DSM'
+			  ]]><isNotEmpty prepend="AND" property="TO_DT"><![CDATA[
+			       A.SALE_DTM BETWEEN #FROM_DT# AND #TO_DT#
+			  ]]></isNotEmpty><![CDATA[              
+			  ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			       N.ORG_ID = #HDQT_TEAM_ORG_ID#
+			  ]]></isNotEmpty><![CDATA[
+			  ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+				   B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+			  ]]></isNotEmpty><![CDATA[  
+			  ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				   M.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+			  ]]></isNotEmpty><![CDATA[
+			  ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				   D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+			  ]]></isNotEmpty><![CDATA[  
+			  ]]><isNotEmpty prepend="AND" property="SVC_TYP_CD"><![CDATA[
+				   A.SVC_TYP_CD = #SVC_TYP_CD#
+			  ]]></isNotEmpty><![CDATA[	
+			  ]]><isNotEmpty prepend="AND" property="SVC_NUM"><![CDATA[
+				   A.SVC_NUM = #SVC_NUM#
+			  ]]></isNotEmpty><![CDATA[					  		                	
+			  ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				   A.SALE_PLC = #AGNT_ID#
+			  ]]></isNotEmpty><![CDATA[	
+			  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+				   C.AGNT_NM LIKE '%'||REPLACE(#AGNT_NM#, ' ', '')||'%'
+			  ]]></isNotEmpty><![CDATA[		
+			  ]]><isNotEmpty prepend="AND" property="RCV_MGMT_NUM"><![CDATA[
+				   A.GNRL_SALE_NO = #RCV_MGMT_NUM#
+			  ]]></isNotEmpty><![CDATA[				  		  						  
+       ) T1
+  WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+</sqlMap>

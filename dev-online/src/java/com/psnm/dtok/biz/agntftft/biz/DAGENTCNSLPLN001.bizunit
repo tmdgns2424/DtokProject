@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTCNSLPLN001">
+    <bizUnitName>[DU]면담계획/정기면담</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.AGNTFTFT</componentId>
+    <description>면담계획/정기면담DU</description>
+    <method-list>
+        <method id="dDetailAgentCnslPlnCnslYn">
+            <methodName>[DM]면담계획/정기면담면담가능여부조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnCnslYn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 면담가능여부를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-04T17:42:11" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCnslPlnMgmt">
+            <methodName>[DM]면담계획/정기면담면담일지조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 면담일지를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-10T11:46:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCnslPlnCnslr">
+            <methodName>[DM]면담계획/정기면담면담자조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnCnslr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 면담자를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T15:55:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCnslPlnInputYn">
+            <methodName>[DM]면담계획/정기면담면담횟수조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnInputYn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 면담횟수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-04T15:41:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCnslPlnCnslDlDt">
+            <methodName>[DM]면담계획/정기면담면접확정일자조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnCnslDlDt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 면접확정일자를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T18:07:17" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCnslPlnUser">
+            <methodName>[DM]면담계획/정기면담사용자조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDetailAgentCnslPlnUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 사용자를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T15:54:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteAgentCnslPln">
+            <methodName>[DM]면담계획/정기면담삭제</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dDeleteAgentCnslPln</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-04T17:23:01" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateAgentCnslPln">
+            <methodName>[DM]면담계획/정기면담수정</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dUpdateAgentCnslPln</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T15:31:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAgentCnslPln">
+            <methodName>[DM]면담계획/정기면담저장</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dInsertAgentCnslPln</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T15:21:08" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslPlnCount">
+            <methodName>[DM]면담계획/정기면담건수조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dSearchAgentCnslPlnCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획현황건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-02T17:35:08" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslPln">
+            <methodName>[DM]면담계획/정기면담조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dSearchAgentCnslPln</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-02T17:34:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslPlnTotCount">
+            <methodName>[DM]면담계획/정기면담총건수조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSLPLN001_dSearchAgentCnslPlnTotCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/정기면담총건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T15:02:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-02T17:33:10" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

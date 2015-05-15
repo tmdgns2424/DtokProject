@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DCHRGROPABSN001">
+    <bizUnitName>[DU]담당자별업무부재설정</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.OPABSN</componentId>
+    <description>담당자별업무부재설정 DU</description>
+    <method-list>
+        <method id="dSearchChrgrOpabsnUser">
+            <methodName>[DM]담당자별업무부재설정사용자조회</methodName>
+            <transactionId>biz.OPABSN@DCHRGROPABSN001_dSearchChrgrOpabsnUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>담당자별업무부재설정사용자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T16:14:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteChrgrOpabsn">
+            <methodName>[DM]담당자별업무부재설정삭제</methodName>
+            <transactionId>biz.OPABSN@DCHRGROPABSN001_dDeleteChrgrOpabsn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>담당자별업무부재설정 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T16:16:06" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateChrgrOpabsn">
+            <methodName>[DM]담당자별업무부재설정수정</methodName>
+            <transactionId>biz.OPABSN@DCHRGROPABSN001_dUpdateChrgrOpabsn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>담당자별업무부재설정 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T16:15:42" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertChrgrOpabsn">
+            <methodName>[DM]담당자별업무부재설정저장</methodName>
+            <transactionId>biz.OPABSN@DCHRGROPABSN001_dInsertChrgrOpabsn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>담당자별업무부재설정 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T16:15:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchChrgrOpabsn">
+            <methodName>[DM]담당자별업무부재설정조회</methodName>
+            <transactionId>biz.OPABSN@DCHRGROPABSN001_dSearchChrgrOpabsn</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>담당자별업무부재설정 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T16:14:16" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-26T15:19:59" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

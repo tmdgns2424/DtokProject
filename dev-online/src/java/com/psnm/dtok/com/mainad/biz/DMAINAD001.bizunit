@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMAINAD001">
+    <bizUnitName>[DU]메인광고관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MAINAD</componentId>
+    <description/>
+    <method-list>
+        <method id="dDeleteMainAd">
+            <methodName>[DM]메인광고 삭제</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dDeleteMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T17:53:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchMainAdDtl">
+            <methodName>[DM]메인광고 상세조회</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dSearchMainAdDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T16:43:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchMainAdSeq">
+            <methodName>[DM]메인광고 시퀀스 채번</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dSearchMainAdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T16:38:45" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertMainAd">
+            <methodName>[DM]메인광고 저장</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dInsertMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T14:55:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchMainAdCnt">
+            <methodName>[DM]메인광고조회 갯수</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dSearchMainAdCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T13:36:56" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchMainAd">
+            <methodName>[DM]메인정보 조회</methodName>
+            <transactionId>com.MAINAD@DMAINAD001_dSearchMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T13:34:49" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-03-16T13:34:12" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DUSERSTRCT001">
+	<select id="dSearchDay" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.userstrct.db.DUSERSTRCT001.dSearchDay  */
+/* IO: 이승훈2,2015-02-16T16:43:18(이승훈2,2015-01-27T11:14:57) */
+SELECT DOW_CL,DOW_NM FROM DSM_USE_RSTRCT GROUP BY DOW_CL,DOW_NM
+ORDER BY DOW_CL ASC]]>
+	</select>
+	<select id="dSearchUseRstrctMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.userstrct.db.DUSERSTRCT001.dSearchUseRstrctMgmt  */
+/* IO: 이승훈2,2015-02-16T16:42:48(이승훈2,2015-01-27T14:30:59) */
+select  
+          ( SELECT OUT_ORG_NM
+				  FROM PS_MNG.TBAS_OUT_ORG_MGMT
+				  WHERE out_org_id = c.out_org_id
+				  ) AS HDQT_PART_ORG_NM,
+          
+          ( SELECT org_nm
+				  FROM PS_MNG.TBAS_OUT_ORG_MGMT a
+          join ps_mng.tbas_new_org_mgmt b
+          on (a.org_id=b.org_id)
+				  WHERE a.out_org_id = c.out_org_id
+				  ) AS HDQT_TEAM_ORG_NM
+          , dow_cl
+        ,out_org_id 
+        ,dow_nm     
+        ,aply_yn    
+        ,aply_sta_hm 
+        ,(select substr(aply_sta_hm, 0,2) FROM DUAL) APLY_STA_H
+        ,(select substr(aply_sta_hm, 3) FROM DUAL) APLY_STA_M
+        ,aply_end_hm
+        ,(select substr(aply_end_hm, 0,2) FROM DUAL) APLY_END_H
+        ,(select substr(aply_end_hm, 3) FROM DUAL) APLY_END_M 
+  from DSM_USE_RSTRCT C
+  where DOW_CL = #DOW_CL#]]>
+	</select>
+	<select id="dSearchToDay" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.userstrct.db.DUSERSTRCT001.dSearchToDay  */
+/* IO: 이승훈2,2015-02-16T16:43:13(이승훈2,2015-01-27T15:11:51) */
+select to_char(sysdate,'d') as DOW_CL from dual]]>
+	</select>
+	<update id="dSaveUseRstrctMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.userstrct.db.DUSERSTRCT001.dSaveUseRstrctMgmt  */
+/* IO: 이승훈2,2015-02-16T16:43:06(이승훈2,2015-01-28T14:27:29) */
+UPDATE DSM_USE_RSTRCT
+SET 
+	APLY_YN = #APLY_YN#
+	,APLY_STA_HM = #APLY_STA_H#||#APLY_STA_M#
+	,APLY_END_HM = #APLY_END_H#||#APLY_END_M# 
+  ,UPDR_ID = #onlineContext.userInfo.loginId#
+	,UPD_DTM = SYSDATE
+WHERE DOW_CL = #DOW_CL# AND OUT_ORG_ID= #OUT_ORG_ID#]]>
+	</update>
+</sqlMap>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMENU001">
+	<select id="dSearchMenu" parameterClass="map" resultClass="hmap" fetchSize="500" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dSearchMenu  */
+/* IO: 안종광,2015-03-10T14:47:13(안종광,2014-12-09T17:36:12) */
+SELECT m.MENU_ID
+       , m.MENU_TYP_CD
+       , c.COMM_CD_VAL_NM AS MENU_TYP_NM
+       , m.MENU_NM
+       , m.MENU_URL
+       , m.BRWS_SEQ
+       , m.SUP_MENU_ID
+       , m.CS_YN
+       , m.RSTRCT_CL
+       , m.AUTH_OBJ_YN
+       , m.USE_YN
+       , (SELECT COUNT(*) FROM DSM_MENU WHERE SUP_MENU_ID=m.MENU_ID) AS SUB_MENU_CNT /*하위메뉴개수*/
+       , TO_CHAR(m.UPD_DTM,'YYYY-MM-DD') AS UPD_YMD
+       , u.NICK_NM AS UPDR_NM
+    FROM DSM_MENU m
+    JOIN PS_MNG.TBAS_COMM_CD_DTL c 
+      ON m.MENU_TYP_CD = c.COMM_CD_VAL 
+     AND c.COMM_CD_ID = 'DSM_MENU_TYP_CD'
+    LEFT JOIN DSM_USER u
+      ON m.UPDR_ID = u.USER_ID
+   START WITH m.MENU_TYP_CD = 1
+         ]]><isNotEmpty property="TOP_MENU_ID"><![CDATA[
+          AND m.MENU_ID = #TOP_MENU_ID# /*탑메뉴ID*/
+         ]]></isNotEmpty><![CDATA[
+ CONNECT BY PRIOR m.MENU_ID = m.SUP_MENU_ID
+   ORDER SIBLINGS BY m.BRWS_SEQ]]>
+	</select>
+	<insert id="dInsertMenu" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dInsertMenu  */
+/* IO: 안종광,2015-03-10T14:51:19(안종광,2014-12-09T17:39:56) */
+INSERT INTO DSM_MENU (
+       MENU_ID
+     , MENU_NM
+     , MENU_TYP_CD
+     , SUP_MENU_ID
+     , MENU_URL
+     , BRWS_SEQ
+     , CS_YN
+     , RSTRCT_CL
+     , AUTH_OBJ_YN
+     , USE_YN
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #MENU_ID#
+     , #MENU_NM#
+     , #MENU_TYP_CD#
+     , #SUP_MENU_ID#
+     , #MENU_URL#
+     , #BRWS_SEQ#
+     , #CS_YN#
+     , #RSTRCT_CL#
+     , #AUTH_OBJ_YN#
+     , #USE_YN#
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<update id="dUpdateMenu" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dUpdateMenu  */
+/* IO: 안종광,2015-03-10T14:50:44(안종광,2014-12-09T17:45:03) */
+UPDATE DSM_MENU
+   SET UPD_DTM = SYSDATE
+     , UPDR_ID = #onlineContext.userInfo.loginId#
+     ]]><isNotEmpty property="MENU_NM"><![CDATA[, MENU_NM     = #MENU_NM#    ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="MENU_TYP_CD"><![CDATA[, MENU_TYP_CD = #MENU_TYP_CD#]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="SUP_MENU_ID"><![CDATA[, SUP_MENU_ID = #SUP_MENU_ID#]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="MENU_URL"><![CDATA[, MENU_URL    = #MENU_URL#   ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="BRWS_SEQ"><![CDATA[, BRWS_SEQ    = #BRWS_SEQ#   ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="CS_YN"><![CDATA[, CS_YN      = #CS_YN#     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="RSTRCT_CL"><![CDATA[, RSTRCT_CL      = #RSTRCT_CL#     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="AUTH_OBJ_YN"><![CDATA[, AUTH_OBJ_YN  = #AUTH_OBJ_YN#   ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="USE_YN"><![CDATA[, USE_YN      = #USE_YN#     ]]></isNotEmpty><![CDATA[
+ WHERE MENU_ID = #MENU_ID#]]>
+	</update>
+	<delete id="dDeleteMenu" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dDeleteMenu  */
+/* IO: 안종광,2014-12-09T17:45:40(안종광,2014-12-09T17:45:40) */
+DELETE FROM DSM_MENU
+ WHERE MENU_ID = #MENU_ID#]]>
+	</delete>
+	<select id="dSearchMenuBySup" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dSearchMenuBySup  */
+/* IO: 안종광,2015-03-10T14:47:38(안종광,2014-12-10T18:11:22) */
+SELECT m.MENU_ID
+     , m.MENU_TYP_CD
+     , c.COMM_CD_VAL_NM AS MENU_TYP_NM
+     , m.MENU_NM
+     , m.MENU_URL
+     , m.BRWS_SEQ
+     , m.SUP_MENU_ID
+     , m.CS_YN
+     , m.RSTRCT_CL
+     , m.AUTH_OBJ_YN
+     , m.USE_YN
+     , (SELECT COUNT(*) FROM DSM_MENU WHERE SUP_MENU_ID=m.MENU_ID) AS SUB_MENU_CNT /*하위메뉴개수*/
+     , TO_CHAR(m.UPD_DTM,'YYYY-MM-DD') AS UPD_YMD
+     , u.NICK_NM AS UPDR_NM
+  FROM DSM_MENU m
+  JOIN PS_MNG.TBAS_COMM_CD_DTL c 
+    ON m.MENU_TYP_CD = c.COMM_CD_VAL 
+   AND c.COMM_CD_ID = 'DSM_MENU_TYP_CD'
+  LEFT JOIN DSM_USER u
+    ON m.UPDR_ID = u.USER_ID
+ WHERE 1=1
+  ]]><isEmpty property="SUP_MENU_ID"><![CDATA[
+   AND m.SUP_MENU_ID = '0000' /*root메뉴id*/
+  ]]></isEmpty><![CDATA[
+  ]]><isNotEmpty property="SUP_MENU_ID"><![CDATA[
+   AND m.SUP_MENU_ID = #SUP_MENU_ID# /*상위메뉴id*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="USE_YN"><![CDATA[
+   AND m.USE_YN = #USE_YN# /*상위메뉴id*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY m.BRWS_SEQ]]>
+	</select>
+	<select id="dSearchMenuPop" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dSearchMenuPop  */
+/* IO: 안종광,2015-03-10T14:48:12(안종광,2015-01-28T15:18:37) */
+SELECT m2.MENU_ID
+     , m2.MENU_TYP_CD
+     , m2.MENU_NM
+     , m2.MENU_URL
+     , m2.BRWS_SEQ
+     , m2.SUP_MENU_ID
+     , m2.CS_YN
+     , m2.RSTRCT_CL
+     , m2.AUTH_OBJ_YN
+     , m2.USE_YN
+     , F_DSM_CODE_NM('DSM_MENU_TYP_CD', m2.MENU_TYP_CD) AS MENU_TYP_NM
+  FROM (
+        SELECT DISTINCT MENU_ID
+             , m.MENU_TYP_CD
+             , m.MENU_NM
+             , m.MENU_URL
+             , m.BRWS_SEQ
+             , m.SUP_MENU_ID
+             , m.CS_YN
+             , m.RSTRCT_CL
+             , m.AUTH_OBJ_YN
+             , m.USE_YN
+            FROM DSM_MENU m
+           START WITH m.MENU_ID IN ( 
+                    SELECT MENU_ID
+                      FROM DSM_MENU
+                       WHERE 'Y' = USE_YN
+                        ]]><isNotEmpty property="MENU_NM"><![CDATA[
+                         AND MENU_NM LIKE '%'||#MENU_NM#||'%' /*메뉴명*/
+                        ]]></isNotEmpty><![CDATA[
+                        ]]><isNotEmpty property="SECOND_MENU_ID"><![CDATA[
+                         AND SUP_MENU_ID = #SECOND_MENU_ID# /*중메뉴ID*/
+                        ]]></isNotEmpty><![CDATA[
+                 )
+         CONNECT BY PRIOR m.SUP_MENU_ID = m.MENU_ID
+  ) m2
+  START WITH m2.MENU_ID = ]]><isNotEmpty property="TOP_MENU_ID"><![CDATA[#TOP_MENU_ID# /*탑메뉴ID*/]]></isNotEmpty><![CDATA[
+                          ]]><isEmpty property="TOP_MENU_ID"><![CDATA['0000']]></isEmpty><![CDATA[
+CONNECT BY PRIOR m2.MENU_ID = m2.SUP_MENU_ID
+  ORDER SIBLINGS BY m2.BRWS_SEQ]]>
+	</select>
+	<select id="dSearchMenuByPk" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.menu.db.DMENU001.dSearchMenuByPk  */
+/* IO: 안종광,2015-03-10T14:47:27(안종광,2015-02-12T10:32:20) */
+SELECT m.MENU_ID
+     , m.MENU_TYP_CD
+     , (SELECT F_DSM_CODE_NM('DSM_MENU_TYP_CD', m.MENU_TYP_CD) FROM DUAL) AS MENU_TYP_NM
+     , m.MENU_NM
+     , m.MENU_URL
+     , m.BRWS_SEQ
+     , m.SUP_MENU_ID
+     , m.CS_YN
+     , m.RSTRCT_CL
+     , m.AUTH_OBJ_YN
+     , m.USE_YN
+     , (SELECT COUNT(*) FROM DSM_MENU WHERE SUP_MENU_ID=m.MENU_ID) AS SUB_MENU_CNT /*하위메뉴개수*/
+     , TO_CHAR(m.UPD_DTM,'YYYY-MM-DD') AS UPD_YMD
+     , u.NICK_NM AS UPDR_NM
+     , F_DSM_USER_RSTRCT(#onlineContext.userInfo.loginId#) AS CURR_RSTRCT_CL
+  FROM DSM_MENU m
+  LEFT JOIN DSM_USER u ON ( m.UPDR_ID = u.USER_ID )
+ WHERE m.MENU_ID = #MENU_ID# /*메뉴ID*/]]>
+	</select>
+</sqlMap>

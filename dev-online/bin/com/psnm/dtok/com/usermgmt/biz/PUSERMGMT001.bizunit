@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PUSERMGMT001">
+    <bizUnitName>[PU]회원관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.USERMGMT</componentId>
+    <description>회원관리</description>
+    <method-list>
+        <method id="pSearchCareerMtrCntrt">
+            <methodName>[PM]경력사항(계약 후)</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchCareerMtrCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T14:21:15" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchEduHst">
+            <methodName>[PM]교육이력 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchEduHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:01:39" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchFtftHst">
+            <methodName>[PM]면담이력 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchFtftHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:40:02" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchNonRealBizUser">
+            <methodName>[PM]미인증회원 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchNonRealBizUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T14:31:59" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSaveTempAccessOrDeny">
+            <methodName>[PM]임시접근금지/해제 처리</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSaveTempAccessOrDeny</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T16:19:16" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pUpdatePassword">
+            <methodName>[PM]패스워드 변경</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pUpdatePassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T10:58:33" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pInitPassword">
+            <methodName>[PM]패스워드 초기화</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pInitPassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:14:32" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pInsertEmpUser">
+            <methodName>[PM]회원등록(임직원)</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pInsertEmpUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-08T12:43:51" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchMbrStHst">
+            <methodName>[PM]회원상태이력 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchMbrStHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T10:41:07" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchCertMember">
+            <methodName>[PM]회원인증</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchCertMember</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T16:55:02" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchUser">
+            <methodName>[PM]회원정보 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T09:31:38" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchUserDtl">
+            <methodName>[PM]회원정보 상세조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchUserDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T11:35:16" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSaveUser">
+            <methodName>[PM]회원정보 수정</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSaveUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T16:19:46" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="pSearchActvCareer">
+            <methodName>[PM]활동경력 조회</methodName>
+            <transactionId>com.USERMGMT@PUSERMGMT001_pSearchActvCareer</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T19:44:30" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-15T09:27:25" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

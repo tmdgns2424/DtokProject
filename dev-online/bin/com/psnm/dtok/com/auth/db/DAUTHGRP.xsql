@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAUTHGRP">
+	<select id="dSearchAuthGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dSearchAuthGrp  */
+/* IO: 안종광,2014-12-16T10:55:51(안종광,2014-12-15T14:36:20) */
+SELECT AUTH_GRP_ID
+     , AUTH_GRP_NM
+     , AUTH_GRP_DESC
+     , USE_YN
+     , AUTH_PRTY
+     , AUTH_TYP_ID
+     , AUTH_TYP_NM
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+  FROM DSM_AUTH_GRP a
+ WHERE 1=1
+  ]]><isNotEmpty property="USE_YN"><![CDATA[
+   AND a.USE_YN = #USE_YN# /*사용여부*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="AUTH_TYP_ID"><![CDATA[
+   AND a.AUTH_TYP_ID = #AUTH_TYP_ID# /*권한구분*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY a.AUTH_PRTY]]>
+	</select>
+	<update id="dMergeAuthGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dMergeAuthGrp  */
+/* IO: 안종광,2014-12-15T14:56:11(안종광,2014-12-15T14:56:11) */
+MERGE INTO DSM_AUTH_GRP ag
+USING (
+        SELECT #AUTH_GRP_ID#   AS AUTH_GRP_ID
+             , #AUTH_GRP_NM#   AS AUTH_GRP_NM
+             , #AUTH_GRP_DESC# AS AUTH_GRP_DESC
+             , #USE_YN#        AS USE_YN
+             , #AUTH_PRTY#     AS AUTH_PRTY
+             , #AUTH_TYP_ID#   AS AUTH_TYP_ID
+             , #AUTH_TYP_NM#   AS AUTH_TYP_NM
+         FROM DUAL
+    ) u
+   ON ( ag.AUTH_GRP_ID = u.AUTH_GRP_ID )
+ WHEN MATCHED THEN
+      UPDATE SET
+             ag.AUTH_GRP_NM   = u.AUTH_GRP_NM
+           , ag.AUTH_GRP_DESC = u.AUTH_GRP_DESC
+           , ag.USE_YN        = u.USE_YN
+           , ag.AUTH_PRTY     = u.AUTH_PRTY
+           , ag.AUTH_TYP_ID   = u.AUTH_TYP_ID
+           , ag.AUTH_TYP_NM   = u.AUTH_TYP_NM
+           , ag.UPD_DTM = SYSDATE
+           , ag.UPDR_ID = #onlineContext.userInfo.loginId#
+ WHEN NOT MATCHED THEN
+      INSERT (
+             AUTH_GRP_ID
+           , AUTH_GRP_NM
+           , AUTH_GRP_DESC
+           , USE_YN
+           , AUTH_PRTY
+           , AUTH_TYP_ID
+           , AUTH_TYP_NM
+           , RGSTR_ID
+           , RGST_DTM
+           , UPDR_ID
+           , UPD_DTM
+      )
+      VALUES (
+             u.AUTH_GRP_ID
+           , u.AUTH_GRP_NM
+           , u.AUTH_GRP_DESC
+           , u.USE_YN
+           , u.AUTH_PRTY
+           , u.AUTH_TYP_ID
+           , u.AUTH_TYP_NM
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+      )]]>
+	</update>
+	<delete id="dDeleteAuthGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dDeleteAuthGrp  */
+/* IO: 안종광,2014-12-15T14:57:12(안종광,2014-12-15T14:57:12) */
+DELETE 
+  FROM DSM_AUTH_GRP
+ WHERE AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/]]>
+	</delete>
+	<select id="dSearchAuthGrpAplyDuty" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dSearchAuthGrpAplyDuty  */
+/* IO: 안종광,2014-12-16T19:49:59(안종광,2014-12-15T20:33:51) */
+SELECT d.DUTY_CD
+     , d.DUTY_NM
+     , d.USER_TYP
+     , (SELECT X.COMM_CD_VAL_NM 
+          FROM PS_MNG.TBAS_COMM_CD_DTL X
+          JOIN PS_MNG.TBAS_COMM_CD_DTL Z ON (X.COMM_CD_VAL = Z.ADD_INFO_01)
+         WHERE X.COMM_CD_ID = 'DSM_DUTY_TYP_CD'
+           AND Z.COMM_CD_ID = 'ZBAS_C_00380'
+           AND d.USER_TYP = Z.COMM_CD_VAL
+       ) AS USER_TYP_NM
+     , ( SELECT COUNT(*)
+           FROM DSM_AUTH_GRP_APLY_DUTY ad
+          WHERE ad.DUTY_CD = d.DUTY_CD
+            AND ad.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+       ) AS IS_APLY /*적용여부(1or0)*/
+     , #AUTH_GRP_ID# AS AUTH_GRP_ID
+     , (SELECT AUTH_GRP_NM FROM DSM_AUTH_GRP WHERE AUTH_GRP_ID = #AUTH_GRP_ID#) AS AUTH_GRP_NM
+     , CASE WHEN ad.AUTH_GRP_ID IS NULL THEN 0 ELSE 1 END AS IS_APPLIED /*적용여부(1or0)*/
+  FROM PS_MNG.TBAS_DUTY_MGMT d
+  LEFT JOIN DSM_AUTH_GRP_APLY_DUTY ad
+    ON ad.DUTY_CD = d.DUTY_CD 
+   AND ad.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+ WHERE 1=1
+   AND d.DUTY_TYP = '2'
+  ]]><isNotEmpty property="USER_TYP"><![CDATA[
+   AND d.USER_TYP = #USER_TYP# /*사용자유형*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY d.USER_TYP, d.DUTY_CD]]>
+	</select>
+	<insert id="dInsertAuthGrpAplyDuty" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dInsertAuthGrpAplyDuty  */
+/* IO: 안종광,2014-12-15T20:39:36(안종광,2014-12-15T20:39:36) */
+INSERT INTO DSM_AUTH_GRP_APLY_DUTY (
+      AUTH_GRP_ID
+    , DUTY_CD
+    , RGSTR_ID
+    , RGST_DTM
+    , UPDR_ID
+    , UPD_DTM
+)
+VALUES (
+      #AUTH_GRP_ID#
+    , #DUTY_CD#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteAuthGrpAplyDuty" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHGRP.dDeleteAuthGrpAplyDuty  */
+/* IO: 안종광,2014-12-15T20:41:52(안종광,2014-12-15T20:41:52) */
+DELETE FROM DSM_AUTH_GRP_APLY_DUTY
+ WHERE AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+  ]]><isNotEmpty property="DUTY_CD"><![CDATA[
+   AND DUTY_CD = #DUTY_CD# /*직무코드*/
+  ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

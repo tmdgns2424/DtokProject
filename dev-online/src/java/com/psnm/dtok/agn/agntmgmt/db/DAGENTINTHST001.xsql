@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTINTHST001">
+	<select id="dSearchAgentIntHst" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTINTHST001.dSearchAgentIntHst  */
+/* IO: 김보선,2015-03-16T09:39:52(한상곤,2014-12-30T18:30:06) */
+SELECT A.CNTRT_MGMT_NUM ,
+  	   A.HST_SEQ ,
+  	   TO_CHAR(TO_DATE(A.INT_DT),'YYYY-MM-DD') AS INT_DT ,
+  	   SUBSTR(A.INT_STA_TM,0,2) AS INT_STA_H,
+  	   SUBSTR(A.INT_STA_TM,3,4) AS INT_STA_M,
+  	   SUBSTR(A.INT_END_TM,0,2) AS INT_END_H,
+  	   SUBSTR(A.INT_END_TM,3,4) AS INT_END_M,
+  	   A.INTR_ID ,
+  	   B.USER_NM AS INTR_NM ,
+  	   B.DUTY AS DUTY_CD,
+  	   (SELECT DUTY_NM FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_CD = B.DUTY) AS DUTY_NM ,
+  	   c.RPSTY AS RETL_CLASS_CD ,
+  	   CASE WHEN B.ATTC_CAT = '4' THEN
+  	   	   (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' AND COMM_CD_VAL=C.RPSTY)
+  	        ELSE
+           (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID='ZBAS_C_00210' AND COMM_CD_VAL=B.RPSTY)
+  	   END AS RETL_CLASS_NM ,
+  	   F.ORG_ID AS HDQT_TEAM_ORG_ID ,/*본사팀*/
+  	   F.ORG_NM AS HDQT_TEAM_ORG_NM ,
+       E.OUT_ORG_ID AS HDQT_PART_ORG_ID, /*본사파트*/
+       E.OUT_ORG_NM AS HDQT_PART_ORG_NM,
+  	   D.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID ,	/*영업국*/
+  	   (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE D.SUP_OUT_ORG_DTL_ID = OUT_ORG_DTL_ID AND DEL_YN='N') AS SALE_DEPT_ORG_NM ,
+  	   D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID ,	/*영업팀*/
+  	   D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM ,
+  	   A.INT_CMNT ,
+  	   A.RGSTR_ID ,
+  	   A.INT_PNT ,
+  	   A.INT_SUIT_CD ,
+  	   (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID='DSM_CNSL_SUIT_CD' AND COMM_CD_VAL=A.INT_SUIT_CD) AS INT_SUIT_NM ,
+  	   (SELECT USER_NM FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID = A.RGSTR_ID) AS RGSTR_NM ,
+  	   TO_CHAR(A.RGST_DTM,'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM
+  FROM DSM_AGENT_INT_HST A
+  JOIN PS_MNG.TBAS_USER_MGMT B ON (A.INTR_ID = B.USER_ID)
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (B.CPLAZA_ORG_CD = C.AGNT_ID AND C.CONS_MTH = TO_CHAR(TO_DATE(A.INT_DT),'YYYYMM'))
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON(C.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID AND D.DEL_YN ='N')
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (D.OUT_ORG_ID = E.OUT_ORG_ID AND E.EFF_ORG_YN = 'Y')
+  LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON(E.ORG_ID = F.ORG_ID)
+  WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#
+]]><isNotEmpty prepend="AND" property="HST_SEQ"><![CDATA[
+       HST_SEQ = #HST_SEQ#
+]]></isNotEmpty><![CDATA[
+ORDER BY HST_SEQ]]>
+	</select>
+	<insert id="dInsertAgentIntHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTINTHST001.dInsertAgentIntHst  */
+/* IO: 김보선,2015-04-17T16:30:01(김보선,2015-02-26T16:51:09) */
+MERGE  INTO DSM_AGENT_INT_HST 
+	USING DUAL ON (CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM# AND HST_SEQ = #HST_SEQ#)
+WHEN MATCHED THEN
+	UPDATE SET INT_SUIT_CD = #INT_SUIT_CD#
+	          ,INT_CMNT = #INT_CMNT#
+	          ,UPDR_ID = #onlineContext.userInfo.loginId#
+  	          ,UPD_DTM = SYSDATE
+WHEN NOT MATCHED THEN
+INSERT
+(
+       CNTRT_MGMT_NUM
+     , HST_SEQ
+     , INT_DT
+     , INT_STA_TM
+     , INT_END_TM
+     , INTR_ID
+     , INT_CMNT
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+     , INT_PNT
+     , INT_SUIT_CD
+)
+VALUES
+(
+       #CNTRT_MGMT_NUM#
+     , NVL((SELECT MAX(HST_SEQ)+1 FROM DSM_AGENT_INT_HST WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#), 1)
+     , #INT_DT#
+     , #INT_STA_TM#
+     , #INT_END_TM#
+     , #INTR_ID#
+     , #INT_CMNT#
+     , #USER_ID#
+     , SYSDATE
+     , #USER_ID#
+     , SYSDATE
+     , #INT_PNT#
+     , #INT_SUIT_CD#
+)]]>
+	</insert>
+	<update id="dUpdateAgentIntHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTINTHST001.dUpdateAgentIntHst  */
+/* IO: 김보선,2015-04-14T18:12:53(김보선,2015-02-26T17:37:13) */
+UPDATE DSM_AGENT_CNTRT SET
+CNTRT_ST_CD=
+(
+  SELECT CASE WHEN HST_CNT < INT_CNT THEN '2' ELSE '21' END AS CNTRT_ST_CD
+  FROM 
+  (
+    SELECT
+      (SELECT COUNT(*) FROM DSM_AGENT_INT_HST WHERE CNTRT_MGMT_NUM= #CNTRT_MGMT_NUM#) AS HST_CNT,                       /*에이전트면접건수*/
+      (SELECT DECODE(MGMT_ORG_YN, 'Y', 2, 'N', 3, 3)
+         FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT 
+        WHERE OUT_ORG_DTL_ID IN (SELECT APP_DSM_HEADQ_CD FROM DSM_AGENT_CNTRT WHERE CNTRT_MGMT_NUM= #CNTRT_MGMT_NUM#)   /*외부조직상세관리의 조직유형(MGMT_ORG_YN)이 국 직속1조직(Y)이면 2회, 일반조직이면(N) 3회*/
+      ) AS INT_CNT
+    FROM DUAL
+  )
+)
+WHERE CNTRT_MGMT_NUM= #CNTRT_MGMT_NUM#]]>
+	</update>
+	<delete id="dDeleteAgentIntHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTINTHST001.dDeleteAgentIntHst  */
+/* IO: 김보선,2015-03-02T18:03:04(김보선,2015-03-02T18:03:04) */
+DELETE FROM DSM_AGENT_INT_HST
+ WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#
+]]><isNotEmpty prepend="AND" property="HST_SEQ"><![CDATA[
+       HST_SEQ = #HST_SEQ#
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

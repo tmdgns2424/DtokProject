@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DLOG">
+	<insert id="dInsertJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DLOG.dInsertJobLog 작업로그 등록 */
+/* IO: 안진갑,2015-03-10T16:50:18(안진갑,2015-03-10T15:52:32) */
+INSERT INTO DSM_SYS_JOB_LOG
+(
+  USER_ID
+  , MENU_ID
+  , USE_DTM
+  , IP
+  , JOB_CTT
+  , RGST_DTM
+)
+VALUES(
+        #onlineContext.userInfo.loginId#
+        , #MENU_ID#
+        , SYSDATE
+        , #onlineContext.userInfo.ip#
+        , #JOB_CTT#
+        , SYSDATE                      
+)]]>
+	</insert>
+</sqlMap>

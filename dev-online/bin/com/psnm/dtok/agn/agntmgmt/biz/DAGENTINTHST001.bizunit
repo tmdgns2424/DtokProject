@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTINTHST001">
+    <bizUnitName>[DU]에이전트면접정보</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>에이전트면접정보 DU</description>
+    <method-list>
+        <method id="dDeleteAgentIntHst">
+            <methodName>[DM]에이전트면접정보 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTINTHST001_dDeleteAgentIntHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접정보 삭제 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T18:01:42" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentIntHst">
+            <methodName>[DM]에이전트면접정보 상세조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTINTHST001_dDetailAgentIntHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접정보 상세조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:51:53" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dUpdateAgentIntHst">
+            <methodName>[DM]에이전트면접정보 상태수정</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTINTHST001_dUpdateAgentIntHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접정보 상태수정 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T17:32:49" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dInsertAgentIntHst">
+            <methodName>[DM]에이전트면접정보 저장</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTINTHST001_dInsertAgentIntHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접정보 저장 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T16:49:13" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentIntHst">
+            <methodName>[DM]에이전트면접정보 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTINTHST001_dSearchAgentIntHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접정보 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T16:13:54" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-19T16:13:03" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FUSERMGMT001">
+    <bizUnitName>[FU]회원관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.USERMGMT</componentId>
+    <description/>
+    <method-list>
+        <method id="fSearchCareerMtrCntrt">
+            <methodName>[FM]경력사항(계약 후)</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchCareerMtrCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T14:21:48" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchEduHst">
+            <methodName>[FM]교육이력 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchEduHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:01:59" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchFtftHst">
+            <methodName>[FM]면담이력 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchFtftHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:40:23" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchNonRealBizUser">
+            <methodName>[FM]미인증회원 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchNonRealBizUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T14:32:50" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSaveTempAccessOrDeny">
+            <methodName>[FM]임시접근금지/해제 처리</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSaveTempAccessOrDeny</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T16:20:10" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fUpdatePassword">
+            <methodName>[FM]패스워드 변경</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fUpdatePassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T11:00:48" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fInitPassword">
+            <methodName>[FM]패스워드 초기화</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fInitPassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:15:02" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchActvCareer">
+            <methodName>[FM]활동경력 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchActvCareer</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T19:44:53" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fInsertEmpUser">
+            <methodName>[FM]회원등록(임직원)</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fInsertEmpUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-08T12:44:26" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchMbrStHst">
+            <methodName>[FM]회원상태이력 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchMbrStHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T10:41:32" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchCertMember">
+            <methodName>[FM]회원인증</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchCertMember</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T16:55:33" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchUserDtl">
+            <methodName>[FM]회원정보 상세조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchUserDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T11:35:49" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fUpdateUser">
+            <methodName>[FM]회원정보 수정</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fUpdateUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T16:20:27" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSearchUser">
+            <methodName>[FM]회원정보 조회</methodName>
+            <transactionId>com.USERMGMT@FUSERMGMT001_fSearchUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T09:32:00" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-15T09:30:20" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

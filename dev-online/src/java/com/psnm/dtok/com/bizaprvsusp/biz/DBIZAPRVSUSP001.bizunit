@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DBIZAPRVSUSP001">
+    <bizUnitName>[DU]업무승인일시정지관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.BIZAPRVSUSP</componentId>
+    <description>업무승인일시정지관리 DU</description>
+    <method-list>
+        <method id="dDeleteBizAprvSusp">
+            <methodName>[DM]업무승인일시정지관리삭제</methodName>
+            <transactionId>com.BIZAPRVSUSP@DBIZAPRVSUSP001_dDeleteBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:53:51" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateBizAprvSusp">
+            <methodName>[DM]업무승인일시정지관리수정</methodName>
+            <transactionId>com.BIZAPRVSUSP@DBIZAPRVSUSP001_dUpdateBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:53:28" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertBizAprvSusp">
+            <methodName>[DM]업무승인일시정지관리저장</methodName>
+            <transactionId>com.BIZAPRVSUSP@DBIZAPRVSUSP001_dInsertBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:53:07" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchBizAprvSusp">
+            <methodName>[DM]업무승인일시정지관리조회</methodName>
+            <transactionId>com.BIZAPRVSUSP@DBIZAPRVSUSP001_dSearchBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:52:37" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-26T14:05:26" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

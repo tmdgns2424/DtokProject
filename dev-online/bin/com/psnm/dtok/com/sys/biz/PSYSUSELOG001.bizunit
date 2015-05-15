@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSYSUSELOG001">
+    <bizUnitName>[PU]시스템사용로그</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.SYS</componentId>
+    <description>[PU]시스템사용로그</description>
+    <method-list>
+        <method id="pInsertSysUseLog">
+            <methodName>[PM]시스템사용로그등록</methodName>
+            <transactionId>com.SYS@PSYSUSELOG001_pInsertSysUseLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]시스템사용로그등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T16:46:37" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-24T16:46:13" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

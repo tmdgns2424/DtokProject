@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DCUSTPGCVHST001">
+    <bizUnitName>[DU]고객민원재접수</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.CUSTPGCV</componentId>
+    <description/>
+    <method-list>
+        <method id="dInsertCustPgcvHst">
+            <methodName>[DM]고객민원재접수 추가</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCVHST001_dInsertCustPgcvHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T16:16:54" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-12T16:15:38" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

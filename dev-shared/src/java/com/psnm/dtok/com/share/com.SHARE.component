@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.SHARE">
+    <componentName>[SC]공유공통</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.share</packageName>
+    <componentTypeXd>SC</componentTypeXd>
+    <description>공유공통 컴포넌트. FU, DU 로만 구성</description>
+    <custom-props/>
+    <history>
+        <created date="2014-11-12T20:15:17" user="admin (admin)"/>
+    </history>
+</component>

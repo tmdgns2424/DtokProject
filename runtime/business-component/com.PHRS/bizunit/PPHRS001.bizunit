@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PPHRS001">
+    <bizUnitName>[PU]명언관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.PHRS</componentId>
+    <description>명언관리PU</description>
+    <method-list>
+        <method id="pSavePhrs">
+            <methodName>[PM]명언정보 관리</methodName>
+            <transactionId>com.PHRS@PPHRS001_pSavePhrs</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T16:09:59" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchPhrs">
+            <methodName>[PM]명언정보 조회</methodName>
+            <transactionId>com.PHRS@PPHRS001_pSearchPhrs</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T16:09:34" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-05T15:18:05" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

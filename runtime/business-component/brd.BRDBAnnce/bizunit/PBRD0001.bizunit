@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PBRD0001">
+    <bizUnitName>[PU]공지사항</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>brd.BRDBAnnce</componentId>
+    <description>공지사항</description>
+    <method-list>
+        <method id="pBRD01001">
+            <methodName>[PM]공지사항 목록조회</methodName>
+            <transactionId>brd.BRDBAnnce@PBRD0001_pBRD01001</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 목록조회(페이징처리)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-05T11:41:13" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="pSearchAnnce">
+            <methodName>[PM]공지사항 1건조회</methodName>
+            <transactionId>brd.BRDBAnnce@PBRD0001_pSearchAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 1건조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-07T10:37:43" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="pSaveAnnce">
+            <methodName>[PM]공지사항 저장(등록|수정)</methodName>
+            <transactionId>brd.BRDBAnnce@PBRD0001_pSaveAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항 저장(등록|수정)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-11T10:09:41" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-05T11:36:47" user="admin (admin)"/>
+    </history>
+</bizUnit>

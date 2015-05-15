@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSCHRCVORG001">
+	<select id="dSearchSchRcvOrg" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVORG001.dSearchSchRcvOrg  */
+/* IO: 이승훈2,2015-01-15T19:47:07(이승훈2,2015-01-15T16:59:02) */
+SELECT DISTINCT A.OUT_ORG_ID AS HDQT_PART_ORG_ID
+				,B.OUT_ORG_NM AS HDQT_PART_ORG_NM
+  FROM DSM_SCH_RCV_ORG A
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID)
+ WHERE A.SCH_ID = #SCH_ID#
+ ORDER BY A.OUT_ORG_ID]]>
+	</select>
+	<insert id="dInsertSchRcvOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVORG001.dInsertSchRcvOrg  */
+/* IO: 이승훈2,2015-01-15T19:47:40(이승훈2,2015-01-15T18:31:57) */
+INSERT INTO DSM_SCH_RCV_ORG
+		(  
+			SCH_ID
+  			, OUT_ORG_ID
+  			, RGSTR_ID
+  			, RGST_DTM
+  			, UPDR_ID
+  			, UPD_DTM
+  		)
+VALUES
+		(  
+			#SCH_ID#
+  			, #HDQT_PART_ORG_ID#
+  			, #onlineContext.userInfo.loginId#
+  			, SYSDATE
+  			, #onlineContext.userInfo.loginId#
+  			, SYSDATE 
+  		)]]>
+	</insert>
+	<delete id="dDeleteSchRcvOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVORG001.dDeleteSchRcvOrg  */
+/* IO: 이승훈2,2015-01-15T19:45:33(이승훈2,2015-01-15T18:32:24) */
+DELETE FROM DSM_SCH_RCV_ORG
+ WHERE SCH_ID = #SCH_ID#]]>
+	</delete>
+</sqlMap>

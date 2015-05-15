@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DPHONBK001">
+    <bizUnitName>[DU]전화번호부</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.BIZMGMT</componentId>
+    <description/>
+    <method-list>
+        <method id="dDetailPhonBk">
+            <methodName>[DM]전화번호부상세조회</methodName>
+            <transactionId>biz.BIZMGMT@DPHONBK001_dDetailPhonBk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>전화번호부 정보를 상세 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T09:55:41" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchPhonBkCondi">
+            <methodName>[DM]전화번호부조건별조회</methodName>
+            <transactionId>biz.BIZMGMT@DPHONBK001_dSearchPhonBkCondi</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>전화번호부 정보를 조건 별로 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T14:45:06" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchPhonBk">
+            <methodName>[DM]전화번호부조회</methodName>
+            <transactionId>biz.BIZMGMT@DPHONBK001_dSearchPhonBk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>전화번호부를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T10:53:20" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleTeam">
+            <methodName>[DM]조직도 영업팀 검색</methodName>
+            <transactionId>biz.BIZMGMT@DPHONBK001_dSearchSaleTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T17:12:35" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-23T10:51:45" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

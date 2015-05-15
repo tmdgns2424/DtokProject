@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DANNCEMGMT001">
+    <bizUnitName>[DU]공지사항</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.ANNCEMGMT</componentId>
+    <description>공지사항 DU</description>
+    <method-list>
+        <method id="dSearchAnnceBrwsCount">
+            <methodName>[DM]공지사항건수조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceBrwsCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T14:49:06" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceIdSeq">
+            <methodName>[DM]공지사항관리ID시퀀스채번</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리ID 시퀀스 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:02:56" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceCount">
+            <methodName>[DM]공지사항관리건수조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:02:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceAuthGrp">
+            <methodName>[DM]공지사항관리권한그룹조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리권한그룹 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T18:24:16" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteAnnce">
+            <methodName>[DM]공지사항관리삭제</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dDeleteAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:03:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDetailAnnce">
+            <methodName>[DM]공지사항관리상세</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dDetailAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리상세정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:47:35" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateAnnce">
+            <methodName>[DM]공지사항관리수정</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dUpdateAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:03:31" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnce">
+            <methodName>[DM]공지사항관리저장</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dInsertAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:03:13" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnce">
+            <methodName>[DM]공지사항관리조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnce</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:02:00" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceBrws">
+            <methodName>[DM]공지사항조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T14:48:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAnnceMndtChk">
+            <methodName>[DM]공지사항필수확인여부저장</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dInsertAnnceMndtChk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항필수확인여부정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T18:32:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceMndtChk">
+            <methodName>[DM]공지사항필수확인여부조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceMndtChk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항필수확인여부정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T10:55:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceMndtDept">
+            <methodName>[DM]공지사항필수확인영업국명조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceMndtDept</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항필수확인영업국명 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-01T15:49:59" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAnnceMndt">
+            <methodName>[DM]공지사항필수확인현황조회</methodName>
+            <transactionId>com.ANNCEMGMT@DANNCEMGMT001_dSearchAnnceMndt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>공지사항필수확인현황 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-01T15:51:05" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T09:31:37" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

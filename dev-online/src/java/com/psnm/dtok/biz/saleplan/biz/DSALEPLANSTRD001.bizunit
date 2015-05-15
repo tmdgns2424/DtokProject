@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSALEPLANSTRD001">
+    <bizUnitName>[DU]영업계획기준관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEPLAN</componentId>
+    <description>영업계획기준관리 DU</description>
+    <method-list>
+        <method id="dDeleteSalePlanStrdCtt">
+            <methodName>[DM]영업계획기준관리기준제목삭제</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dDeleteSalePlanStrdCtt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리기준제목 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:48:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertSalePlanStrdCtt">
+            <methodName>[DM]영업계획기준관리기준제목저장</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dInsertSalePlanStrdCtt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리기준제목 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:48:02" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchSalePlanStrdCtt">
+            <methodName>[DM]영업계획기준관리기준제목조회</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dSearchSalePlanStrdCtt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리기준제목 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:47:36" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteSalePlanStrdProd">
+            <methodName>[DM]영업계획기준관리상품유형삭제</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dDeleteSalePlanStrdProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리상품유형 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:47:00" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertSalePlanStrdProd">
+            <methodName>[DM]영업계획기준관리상품유형저장</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dInsertSalePlanStrdProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리상품유형 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:46:32" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchSalePlanStrdProd">
+            <methodName>[DM]영업계획기준관리상품유형조회</methodName>
+            <transactionId>biz.SALEPLAN@DSALEPLANSTRD001_dSearchSalePlanStrdProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리상품유형 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:45:28" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-29T10:39:13" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

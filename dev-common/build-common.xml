@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="dev-common" default="mkjar-dev-common" basedir="..">
+
+    <property environment="env" />
+
+    <property file="${NEXCORE_HOME_ANT}/script/build/nexcore.build.properties" />
+    <property file="${ant.home}/nexcore.build.properties" />
+	<property name="dev-common"        value="./dev-common"/>
+	<property name="nexcore-framework" value="../nexcore-framework-1-0"/>
+    <property name="compress.jar" value="false" /><!-- jar 파일 생성 시, 압축을 할 것인지 여부 -->
+
+    <target name="check.nexcore.property" unless="NEXCORE_HOME">
+        <echo message="____________________________________" />
+        <available file="${ant.home}/nexcore.build.properties" property="check.property.ant" />
+        <antcall target="check.nexcore.property.anthome" />
+        <property file="${ant.home}/nexcore.build.properties" />
+    </target>
+    <target name="check.nexcore.property.anthome" unless="check.property.ant">
+        <echo message="ERROR: " />
+        <echo message="      define property 'NEXCORE_HOME_ANT' first " />
+        <echo message="      in your Eclipse Preferences [Ant-Runtime-properties]" />
+        <echo message="      before depoying" />
+        <fail message="ERROR: Ant runtime property 에 'NEXCORE_HOME_ANT'을 등록하세요. " />
+    </target>
+
+    <!-- ################################################################## -->
+
+    <target name="all">
+        <antcall target="mkjar-dev-common" />
+        <antcall target="javadocs" />
+    </target>
+
+	<!-- (작업1) PSNM common 라이브러리를 빌드하고 jar 파일을 생성하고 runtime에 배포 -->
+    <target name="mkjar-dev-common" >
+        <delete dir="./build"/>
+        <mkdir dir="./build"/>
+    	
+    	<echo message="lib dir : ${app.ear.common.lib.path}" />
+    	<echo message="lib dir : ${dev-common}/lib" />
+    	<echo message="lib dir : ${app.ear.ejb.path}" />
+    	
+        <javac srcdir="${dev-common}/src" destdir="./build" encoding="UTF-8" debug="true">
+            <exclude name="**/*Test.java" />
+            <include name="com/psnm/**/*.java" />
+            <classpath>
+                <fileset dir="${app.ear.common.lib.path}" includes="*.jar" />
+                <fileset dir="${dev-common}/lib" includes="*.jar" />
+                <fileset dir="${app.ear.ejb.path}" includes="*.jar" />
+            </classpath>
+        </javac>
+        <jar destfile="${app.ear.common.lib.path}/psnm-common.jar" compress="${compress.jar}">
+            <fileset dir="build">
+                <include name="com/psnm/**/*.class" />
+            </fileset>
+            <fileset dir="${dev-common}/src">
+            	<include name="com/psnm/**/*.xsql" />
+            </fileset>
+        </jar>
+        <delete dir="./build"/>
+    </target>
+
+	<!-- (작업2) 자바 문서를 생성 -->
+	<target name="javadocs">
+        <mkdir dir="javadocs"/>
+        <delete dir="javadocs" includeemptydirs="true" includes="**/*" verbose="true"/>
+		<javadoc
+			destdir="javadocs" 
+		    author="true"
+		    version="true"
+		    use="true"
+			protected="true"
+		    windowtitle="NEXCORE"
+			encoding="utf-8"
+			docencoding="euc-kr"
+			verbose="true">
+			
+		    <classpath>
+		        <fileset dir="${app.ear.common.lib.path}" includes="*.jar" excludes="dev-common.jar"/>
+		        <fileset dir="${dev-common}/lib" includes="*.jar" />
+		    </classpath>
+
+		    <fileset dir="${dev-common}/src/java" defaultexcludes="yes">
+				<patternset refid="javadocpatternset" />
+		    </fileset>
+
+		    <fileset dir="${dev-common}/src/java" defaultexcludes="yes">
+				<patternset refid="javadocpatternset" />
+		    </fileset>
+			
+		    <doctitle><![CDATA[<h1>NEXCORE</h1>]]></doctitle>
+		    <bottom><![CDATA[NEXCORE]]></bottom>
+		 </javadoc>
+	</target>
+
+	<patternset id="javadocpatternset">
+		<include name="com/psnm/**/*.java" />
+	</patternset>	
+	
+</project>

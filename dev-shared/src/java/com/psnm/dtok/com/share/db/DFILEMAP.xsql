@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFILEMAP">
+	<select id="dSearchFileMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileMgmt  */
+/* IO: 안종광,2014-12-15T16:02:21(안종광,2014-12-15T16:00:04) */
+SELECT m.DSM_CONT_ID AS CONTENT_ID /*컨텐츠ID(공통칼럼용)*/
+     , m.DSM_CONT_ID /*컨텐츠ID*/
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_ATCH_FILE_MGMT m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.DSM_CONT_ID = #DSM_CONT_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileAnnce" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileAnnce  */
+/* IO: 안종광,2014-12-15T16:03:45(안종광,2014-12-15T16:03:45) */
+SELECT m.ANNCE_ID AS CONTENT_ID /*컨텐츠ID(공통칼럼용)*/
+     , m.ANNCE_ID /*컨텐츠ID*/
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_ANNCE_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.ANNCE_ID = #ANNCE_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileBiztrgt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileBiztrgt  */
+/* IO: 안종광,2014-12-15T16:06:40(안종광,2014-12-15T16:06:40) */
+SELECT m.BIZ_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.BIZ_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_BIZTRGT_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.BIZ_ID = #BIZ_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchBltcont" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchBltcont  */
+/* IO: 안종광,2014-12-15T16:07:36(안종광,2014-12-15T16:07:36) */
+SELECT m.BLTCONT_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.BLTCONT_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_BLTCONT_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.BLTCONT_ID = #BLTCONT_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileEdu" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileEdu  */
+/* IO: 안종광,2014-12-15T16:08:22(안종광,2014-12-15T16:08:22) */
+SELECT m.AGENT_EDUT_MGMT_NUM AS CONTENT_ID /*컨텐츠ID*/
+     , m.AGENT_EDUT_MGMT_NUM
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_EDU_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileFaq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileFaq  */
+/* IO: 안종광,2014-12-15T16:09:27(안종광,2014-12-15T16:08:22) */
+SELECT m.FAQ_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.FAQ_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_FAQ_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.FAQ_ID = #FAQ_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileIssue" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileIssue  */
+/* IO: 안종광,2014-12-15T16:10:29(안종광,2014-12-15T16:08:22) */
+SELECT m.ISS_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.ISS_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_ISSUE_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.ISS_ID = #ISS_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileP2p" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileP2p  */
+/* IO: 안종광,2014-12-15T16:11:17(안종광,2014-12-15T16:08:22) */
+SELECT m.BLTCONT_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.BLTCONT_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_P2P_CNSL_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.BLTCONT_ID = #BLTCONT_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFilePaper" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFilePaper  */
+/* IO: 안종광,2014-12-15T16:12:05(안종광,2014-12-15T16:08:22) */
+SELECT m.PAPER_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.PAPER_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_PAPER_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.PAPER_ID = #PAPER_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchFileSchmgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dSearchFileSchmgmt  */
+/* IO: 안종광,2014-12-15T16:13:16(안종광,2014-12-15T16:08:22) */
+SELECT m.SCH_ID AS CONTENT_ID /*컨텐츠ID*/
+     , m.SCH_ID
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , F_DSM_FILE_SZ(f.FILE_SIZE) AS FILE_SZ
+  FROM DSM_SCHMGMT_ATCH_FILE m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.SCH_ID = #SCH_ID# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<insert id="dInsertFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileMgmt  */
+/* IO: 안종광,2014-12-15T18:16:43(안종광,2014-12-15T18:16:43) */
+INSERT INTO DSM_ATCH_FILE_MGMT /*컨텐트테이블*/ (
+       DSM_CONT_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #DSM_CONT_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_ATCH_FILE_MGMT
+        WHERE DSM_CONT_ID = #DSM_CONT_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileAnnce  */
+/* IO: 안종광,2014-12-15T18:18:11(안종광,2014-12-15T18:18:11) */
+INSERT INTO DSM_ANNCE_ATCH_FILE /*컨텐트테이블*/ (
+       ANNCE_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #ANNCE_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_ANNCE_ATCH_FILE
+        WHERE ANNCE_ID = #ANNCE_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileBiztrgt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileBiztrgt  */
+/* IO: 안종광,2014-12-15T18:19:07(안종광,2014-12-15T18:19:07) */
+INSERT INTO DSM_BIZTRGT_ATCH_FILE /*컨텐트테이블*/ (
+       BIZ_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #BIZ_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_BIZTRGT_ATCH_FILE
+        WHERE BIZ_ID = #BIZ_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileBltcont" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileBltcont  */
+/* IO: 안종광,2014-12-15T18:20:16(안종광,2014-12-15T18:20:16) */
+INSERT INTO DSM_BLTCONT_ATCH_FILE /*컨텐트테이블*/ (
+       BLTCONT_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #BLTCONT_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_BLTCONT_ATCH_FILE
+        WHERE BLTCONT_ID = #BLTCONT_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileEdu" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileEdu  */
+/* IO: 안종광,2014-12-15T18:21:28(안종광,2014-12-15T18:21:28) */
+INSERT INTO DSM_EDU_ATCH_FILE /*컨텐트테이블*/ (
+       AGENT_EDUT_MGMT_NUM
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #AGENT_EDUT_MGMT_NUM# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_EDU_ATCH_FILE
+        WHERE AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileFaq" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileFaq  */
+/* IO: 안종광,2014-12-15T18:22:04(안종광,2014-12-15T18:22:04) */
+INSERT INTO DSM_FAQ_ATCH_FILE /*컨텐트테이블*/ (
+       FAQ_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #FAQ_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_FAQ_ATCH_FILE
+        WHERE FAQ_ID = #FAQ_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileIssue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileIssue  */
+/* IO: 안종광,2014-12-15T18:22:40(안종광,2014-12-15T18:22:40) */
+INSERT INTO DSM_ISSUE_ATCH_FILE /*컨텐트테이블*/ (
+       ISS_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #ISS_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_ISSUE_ATCH_FILE
+        WHERE ISS_ID = #ISS_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileP2p" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileP2p  */
+/* IO: 안종광,2014-12-15T18:23:17(안종광,2014-12-15T18:23:17) */
+INSERT INTO DSM_P2P_CNSL_ATCH_FILE /*컨텐트테이블*/ (
+       BLTCONT_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #BLTCONT_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_P2P_CNSL_ATCH_FILE
+        WHERE BLTCONT_ID = #BLTCONT_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFilePaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFilePaper  */
+/* IO: 안종광,2014-12-15T19:15:16(안종광,2014-12-15T19:09:50) */
+INSERT INTO DSM_PAPER_ATCH_FILE /*컨텐트테이블*/ (
+       PAPER_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #PAPER_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_PAPER_ATCH_FILE
+        WHERE PAPER_ID = #PAPER_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<insert id="dInsertFileSchmgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dInsertFileSchmgmt  */
+/* IO: 안종광,2014-12-15T19:10:39(안종광,2014-12-15T19:10:39) */
+INSERT INTO DSM_SCHMGMT_ATCH_FILE /*컨텐트테이블*/ (
+       SCH_ID
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+      #SCH_ID# /*컨텐츠ID*/
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_SCHMGMT_ATCH_FILE
+        WHERE SCH_ID = #SCH_ID#)
+    , #ATCH_FILE_ID#
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileMgmt  */
+/* IO: 안종광,2014-12-15T19:13:40(안종광,2014-12-15T19:13:40) */
+DELETE FROM DSM_ATCH_FILE_MGMT /*컨텐트테이블*/
+ WHERE DSM_CONT_ID = #DSM_CONT_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileAnnce  */
+/* IO: 안종광,2014-12-15T19:14:20(안종광,2014-12-15T19:14:20) */
+DELETE FROM DSM_ANNCE_ATCH_FILE /*컨텐트테이블*/
+ WHERE ANNCE_ID = #ANNCE_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileBiztrgt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileBiztrgt  */
+/* IO: 안종광,2014-12-15T19:14:53(안종광,2014-12-15T19:14:53) */
+DELETE FROM DSM_BIZTRGT_ATCH_FILE /*컨텐트테이블*/
+ WHERE BIZ_ID = #BIZ_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileBltcont" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileBltcont  */
+/* IO: 안종광,2014-12-15T19:16:09(안종광,2014-12-15T19:16:09) */
+DELETE FROM DSM_BLTCONT_ATCH_FILE /*컨텐트테이블*/
+ WHERE BLTCONT_ID = #BLTCONT_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileEdu" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileEdu  */
+/* IO: 안종광,2014-12-15T19:16:45(안종광,2014-12-15T19:16:45) */
+DELETE FROM DSM_EDU_ATCH_FILE /*컨텐트테이블*/
+ WHERE AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileFaq" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileFaq  */
+/* IO: 안종광,2014-12-15T19:17:17(안종광,2014-12-15T19:17:17) */
+DELETE FROM DSM_FAQ_ATCH_FILE /*컨텐트테이블*/
+ WHERE FAQ_ID = #FAQ_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileIssue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileIssue  */
+/* IO: 안종광,2014-12-15T19:17:52(안종광,2014-12-15T19:17:52) */
+DELETE FROM DSM_ISSUE_ATCH_FILE /*컨텐트테이블*/
+ WHERE ISS_ID = #ISS_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileP2p" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileP2p  */
+/* IO: 안종광,2014-12-15T19:18:34(안종광,2014-12-15T19:18:34) */
+DELETE FROM DSM_P2P_CNSL_ATCH_FILE /*컨텐트테이블*/
+ WHERE BLTCONT_ID = #BLTCONT_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFilePaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFilePaper  */
+/* IO: 안종광,2014-12-15T19:19:09(안종광,2014-12-15T19:19:09) */
+DELETE FROM DSM_PAPER_ATCH_FILE /*컨텐트테이블*/
+ WHERE PAPER_ID = #PAPER_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteFileSchmgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILEMAP.dDeleteFileSchmgmt  */
+/* IO: 안종광,2014-12-15T19:20:29(안종광,2014-12-15T19:20:29) */
+DELETE FROM DSM_SCHMGMT_ATCH_FILE /*컨텐트테이블*/
+ WHERE SCH_ID = #SCH_ID# /*컨텐츠ID*/
+]]><isNotEmpty property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

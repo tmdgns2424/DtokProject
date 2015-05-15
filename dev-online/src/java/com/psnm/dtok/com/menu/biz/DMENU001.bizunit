@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMENU001">
+    <bizUnitName>[DU]메뉴관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MENU</componentId>
+    <description>메뉴관리 DU</description>
+    <method-list>
+        <method id="dUpdateMenu">
+            <methodName>[DM]메뉴갱신</methodName>
+            <transactionId>com.MENU@DMENU001_dUpdateMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴갱신</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T17:05:21" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertMenu">
+            <methodName>[DM]메뉴등록</methodName>
+            <transactionId>com.MENU@DMENU001_dInsertMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T17:05:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dDeleteMenu">
+            <methodName>[DM]메뉴삭제</methodName>
+            <transactionId>com.MENU@DMENU001_dDeleteMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T17:05:41" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenuByPk">
+            <methodName>[DM]메뉴조회(1건)</methodName>
+            <transactionId>com.MENU@DMENU001_dSearchMenuByPk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]메뉴조회(1건)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T10:32:51" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenuBySup">
+            <methodName>[DM]메뉴조회(상위조건)</methodName>
+            <transactionId>com.MENU@DMENU001_dSearchMenuBySup</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>상위메뉴ID 조건으로 바로 하위 메뉴 목록을 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-10T18:13:35" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenu">
+            <methodName>[DM]메뉴조회</methodName>
+            <transactionId>com.MENU@DMENU001_dSearchMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴조회(TREE)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T17:03:42" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenuPop">
+            <methodName>[DM]메뉴찾기(팝업)</methodName>
+            <transactionId>com.MENU@DMENU001_dSearchMenuPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]메뉴찾기(팝업)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T15:19:09" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-09T17:02:41" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

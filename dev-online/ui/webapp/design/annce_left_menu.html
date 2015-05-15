@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>회원찾기</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-default.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-layout.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/alopex-grid-render.js"></script>
+<script type="text/javascript" src="../script/psnm-config.js"></script>
+<script type="text/javascript" src="../script/psnm-common.js"></script>
+<script type="text/javascript" src="../script/psnm-utils.js"></script>
+<script type="text/javascript">
+    $.alopex.page({
+
+        init : function(id, param) { 
+            $.PSNM.initialize(id, param); //PSNM공통 초기화함수 호출
+
+            $("#btnSearch").tap($a.page.btnSearch);
+            $("#btnSave").tap($a.page.btnSave);
+            $("#FIRST_NAME").keyup(function(e) {
+                if (13==e.which) {
+                    $a.page.btnSearch();
+                }
+            });
+
+            //$("#grid-pagination").pagination();
+            $('[data-type="pagination"]').bind('pagechange', function(e, page) {
+                var target = e.currentTarget;
+                alert(target.id + " == " + page);
+                $a.page.btnSearch('', page);
+            });
+
+            //그리드 초기화
+            $("#grid").alopexGrid({
+                rowClickSelect : false,
+                rowInlineEdit : true,
+                columnMapping : [
+                    //{ columnIndex : 0, selectorColumn : true, width : "20px" },
+                    { columnIndex : 0, key : "RN",            title : "번호",       align : "center", width : "40px" },
+                    { columnIndex : 1, key : "FLAG",          title : "F",          align : "center", width : "40px" },
+                    { columnIndex : 2, key : "ANNCE_ID",      title : "공지사항ID", align : "center", width : "80px" },
+                    { columnIndex : 3, key : "RCV_TYP_NM",    title : "공지대상",   align : "center", width : "80px" },
+                    { columnIndex : 4, key : "ANNCE_TITL_NM", title : "제목",       resizing : true, /* sorting : true, align : "center", */ width : "300px" },
+                    { columnIndex : 5, key : "VIEW_CNT",      title : "조회수",     align : "right", width : "50px" },
+                    { columnIndex : 6, key : "ATCH_YN",       title : "첨부파일",   align : "center", width : "80px" },
+                    { columnIndex : 7, key : "POPUP_YN",      title : "팝업여부",   align : "center", width : "80px" },
+                    { columnIndex : 8, key : "POPUP_STA_DT",  title : "팝업시작일", align : "center", width : "100px" },
+                    { columnIndex : 9, key : "POPUP_END_DT",  title : "팝업종료일", align : "center", width : "100px" },
+                    { columnIndex :10, key : "BLTNR_NM",      title : "게시자",     align : "center", width : "100px" },
+                    { columnIndex :11, key : "BLTN_DT",       title : "게시일",     align : "center", width : "100px" }
+                ],
+                data : [
+                ]
+                ,
+                message : {
+                    nodata : "<p style='text-align:center;'>조회된 데이터가 없습니다!</p>"
+                },
+
+                on : {
+                    perPageChange : function(arg1) {
+                        alert("perPageChange : arg1 = " + arg1);
+                    }
+                    ,
+                    pageSet : function(arg1) {
+                        alert("perSet : arg1 = " + arg1);
+                    }
+                }
+            });
+
+            $("#grid").alopexGrid('updateOption', {
+                on : {
+                    'cell' : {
+                        "dblclick" : function(data, eh, e) {
+                            console.log("더블클릭된 데이터 : " + data.ANNCE_ID + "\n\n" + data["ANNCE_ID"] + "\n\n" + $.PSNMUtils.toString(data));
+                            //alert("updateOption 클릭된 데이터 : " + data[data["_key"]]);
+                            //var d = $("#grid").alopexGrid( "dataGet" , { _state : { selected : true } } ); //선택된 데이터
+                            //alert("선택된 데이터 : " + $.PSNMUtils.toString(d));
+
+                            toGeta(data.ANNCE_ID);
+                        }
+                    }
+                }
+            });
+        }
+        ,
+        btnSearch: function(a, pageNo) {
+            console.log("조회처리 시작 ... pageNo = [%s] [%s]", a, pageNo);
+
+            var brdListData = [
+                {"RN":"1","FLAG":"","ANNCE_ID":"1000002531","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"TEST1","ATCH_YN":"Y","POPUP_YN":"Y","POPUP_STA_DT":"2014-11-01","POPUP_END_DT":"2014-11-02","BLTNR_NM":"D****자","BLTN_DT":"2014-11-05","VIEW_CNT":"0"},
+                {"RN":"2","FLAG":"","ANNCE_ID":"1000002523","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"'14년 4Q 위탁 재고실사 마감일정 공지","ATCH_YN":"Y","POPUP_YN":"Y","POPUP_STA_DT":"2014-10-15","POPUP_END_DT":"2014-10-18","BLTNR_NM":"D****자","BLTN_DT":"2014-11-05","VIEW_CNT":"1"},
+                {"RN":"3","FLAG":"","ANNCE_ID":"1000002522","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"[작업 공지] FAX 서버 개선 작업(10월 16일 오후 10시 ~)","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-10-15","POPUP_END_DT":"2014-10-16","BLTNR_NM":"이*건","BLTN_DT":"2014-10-15","VIEW_CNT":"5"},
+                {"RN":"4","FLAG":"","ANNCE_ID":"1000002502","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"[중요] 온라인 인증 및 불법 행위 집중 점검 기간","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-10-13","POPUP_END_DT":"2014-10-17","BLTNR_NM":"이*민","BLTN_DT":"2014-10-13","VIEW_CNT":"21"},
+                {"RN":"5","FLAG":"","ANNCE_ID":"1000002482","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"추석 연휴 판매 Contest 결과 공지 1","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-29","POPUP_END_DT":"2014-10-06","BLTNR_NM":"D****자","BLTN_DT":"2014-11-03","VIEW_CNT":"26"},
+                {"RN":"6","FLAG":"","ANNCE_ID":"1000002463","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"'14년 4Q 위탁 재고실사","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-29","POPUP_END_DT":"2014-10-16","BLTNR_NM":"이*택","BLTN_DT":"2014-09-29","VIEW_CNT":"40"},
+                {"RN":"7","FLAG":"","ANNCE_ID":"1000002462","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"9월 Cafissimo 마감 (28일 주문건까지)","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-26","POPUP_END_DT":"2014-09-28","BLTNR_NM":"이*택","BLTN_DT":"2014-09-26","VIEW_CNT":"27"},
+                {"RN":"8","FLAG":"","ANNCE_ID":"1000002445","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"정지기간 준수사항","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-11","POPUP_END_DT":"2014-09-17","BLTNR_NM":"이*택","BLTN_DT":"2014-09-11","VIEW_CNT":"44"},
+                {"RN":"9","FLAG":"","ANNCE_ID":"1000002444","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"[중요] 추석 연휴 및 SKT 영업정지 전 업무 공지 ","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-05","POPUP_END_DT":"2014-09-11","BLTNR_NM":"이*상","BLTN_DT":"2014-09-05","VIEW_CNT":"88"},
+                {"RN":"10","FLAG":"","ANNCE_ID":"1000002443","ANNCE_TYP_CD":"","RCV_TYP_CD":"02","RCV_TYP_NM":"관리자","RCV_TYP_NM_1":"관리자","ANNCE_TITL_NM":"9월 영업목표 등록","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-09-05","POPUP_END_DT":"2014-09-11","BLTNR_NM":"이*택","BLTN_DT":"2014-09-05","VIEW_CNT":"15"},
+                {"RN":"11","FLAG":"","ANNCE_ID":"1000002442","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"번호이동성 010 업무 중단","ATCH_YN":"N","POPUP_YN":"N","POPUP_STA_DT":"","POPUP_END_DT":"","BLTNR_NM":"이*상","BLTN_DT":"2014-09-05","VIEW_CNT":"97"},
+                {"RN":"12","FLAG":"","ANNCE_ID":"1000002422","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"가입비 인하","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-08-29","POPUP_END_DT":"2014-09-05","BLTNR_NM":"이*민","BLTN_DT":"2014-08-29","VIEW_CNT":"75"},
+                {"RN":"13","FLAG":"","ANNCE_ID":"1000002403","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"[CIA] 주민등록증 뒷면 수집 불가","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-08-26","POPUP_END_DT":"2014-08-31","BLTNR_NM":"이*민","BLTN_DT":"2014-08-26","VIEW_CNT":"69"},
+                {"RN":"14","FLAG":"","ANNCE_ID":"1000002402","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"8월 Cafissimo 마감 (28일 주문건까지)","ATCH_YN":"N","POPUP_YN":"Y","POPUP_STA_DT":"2014-08-25","POPUP_END_DT":"2014-08-28","BLTNR_NM":"이*택","BLTN_DT":"2014-08-25","VIEW_CNT":"16"},
+                {"RN":"15","FLAG":"","ANNCE_ID":"1000002382","ANNCE_TYP_CD":"","RCV_TYP_CD":"01","RCV_TYP_NM":"전에이전트","RCV_TYP_NM_1":"전에이전트","ANNCE_TITL_NM":"DSM 로고 공모전 우승작 발표","ATCH_YN":"Y","POPUP_YN":"N","POPUP_STA_DT":"","POPUP_END_DT":"","BLTNR_NM":"이*민","BLTN_DT":"2014-08-14","VIEW_CNT":"45"}
+            ];
+            
+                    //var brdListData = res.dataSet.recordSets.grid.nc_list;
+                    var currPageNo  = 1;
+                    var totalCount  = 169;
+                    var totalPage   = Math.ceil(totalCount / 15);
+                    $("#grid").alopexGrid("dataSet", brdListData, {
+						current : 1,
+						dataLength : 170,
+						perPage : 15
+					});
+
+                    $("#grid-pagination").setTotalPage(totalPage);
+                    $("#grid-pagination").setMaxPage(10);
+                    $("#grid-pagination").setSelectedPage(currPageNo);
+            
+            /*
+            $.alopex.request('brd.BRDBAnnce@PBRD0001_pBRD01001', {
+                data: {
+                    dataSet: {
+                        transaction: {
+                            id: 'brd.BRDBAnnce@PBRD0001_pBRD01001' // HTTP 통신 서비스를 구분하는 식별자
+                        },
+                        fields: {
+                            RCV_TYP_CD  : $("#RCV_TYP_CD").val(),
+                            BO_CD       : $("#BO_CD").val(),
+                            AUTH_GRP_ID : $("#AUTH_GRP_ID").val(),
+                            USER_NM     : $("#USER_NM").val(),
+                            page        : $.PSNMUtils.isEmpty(pageNo) ? 1 : pageNo,
+                            page_size   : $("#grid .perPage").val(),
+                        }
+                    }
+                },
+                success: function(res) {
+                    var brdListData = res.dataSet.recordSets.grid.nc_list;
+                    var currPageNo  = res.dataSet.recordSets.grid.nc_pageNo;
+                    var totalCount  = res.dataSet.recordSets.grid.nc_totalRecordCount;
+                    var totalPage   = Math.ceil(totalCount / 15);
+                    $("#grid").alopexGrid("dataSet", brdListData);
+
+                    //alert("JSON.stringify(res)\n\n" +JSON.stringify(brdListData));
+                    //console.log("dept.js 성공경과...\n%s", JSON.stringify(res.dataSet.recordSets.grid));
+                    //$("#grid").dataSet( eval(res.dataSet.recordSets.grid.nc_list) ); //success: '#grid', //res.dataSet.recordSets.grid.nc_list
+                    //$("#FIRST_NAME").focus();
+                    var pageInfo = $("#grid").alopexGrid("pageInfo");
+                    //alert("- totalCount = " + totalCount + "\n\n11111111\n\n" + JSON.stringify(pageInfo));
+                    $("#grid").alopexGrid("updateOption", { paging : { total : 2 } });
+                    //$("#grid").alopexGrid("updateOption", {pager : !pageInfo.enabled});
+                    $("#grid-pagination").setTotalPage(totalPage);
+                    $("#grid-pagination").setMaxPage(10);
+                    $("#grid-pagination").setSelectedPage(currPageNo);
+
+                    var docHeight = $(document).height();
+                    
+                    var s = "- totalCount = " + totalCount + "\n\n";
+                        s+= "- nc_pageNo  = " + currPageNo + "\n\n";
+                        s+= "- totalPage  = " + totalPage + "\n\n";
+                        s+= "- $(document).height() = " + docHeight + "\n\n";
+                        s+= "- pageInfo : " + JSON.stringify(pageInfo);
+                    
+                    $('#document-content-body-loadhtml', window.parent.document).height(docHeight + 30);
+                    alert(s);
+                },
+                fail: function(res) {
+                    alert("통신 실패 ---\n\n" + res + "\n\n" + JSON.stringify(res));
+                },
+                error: function(errObject) {
+                    alert("통신 에러 ---\n\n" + errObject + "\n\n" + JSON.stringify(errObject));
+                }
+            });
+            */
+        } //end of btnSearch()
+    });
+    
+    function toGeta(annceId) {
+        console.log("상세조회 : 공지사항ID = [%s]", annceId);
+
+        var param = {
+        	ANNCE_ID   : annceId,
+        	FROM_DT   : $("#FROM_DT").val(),
+        	TO_DT     : $("#TO_DT").val(),
+        	RCV_TYP_CD: $("#RCV_TYP_CD").val(),
+        	ANNCE_CTT : $("#ANNCE_CTT").val(),
+        	USER_ID   : $("#USER_ID").val(),
+        	S_USER_ID : $("#S_USER_ID").val(),
+        	S_BO_CD   : $("#S_BO_CD").val(),
+            page : 1,
+            page_size : $("#grid .perPage").val()
+        };
+
+		$a.navigate("/jsp/bbs/notice-detail.jsp", param);
+    }
+    </script>
+<style type="text/css"></style>
+</head>
+
+<body>
+<div id="Wrap"> 
+  <!-- header start -->
+  <div id="header">
+    <div class="nhearder">
+      <h1><img src="../image/logo.gif" ></h1>
+      <ul class="toptxt1" style="width: 395px;">
+        <li class="ft01"><img src="../image/blat_a1.gif"> <a href="#"><b>22통 [d*m운영자]</b></a> 님 로그인 <b>ㆍ</b></li>
+        <li class="ft02"><a href="#">마이페이지</a></li>
+        <li class="ft03"><a href="#">전체메뉴</a></li>
+        <li class="ft04"><a href="#"><img src="../image/btn_a1.gif"></a></li>
+      </ul>
+    </div>
+    <div class="gnb">
+      <ul>
+        <li>영업 정보</li>
+        <li>커뮤니티</li>
+        <li>본사 업무</li>
+        <li style="padding-right:15px;">영업국 업무</li>
+        <li>영업팀 업무</li>
+      </ul>
+      <p class="dimenu"><b> 바로가기 메뉴 +</b></p>
+    </div>
+  </div>
+  <!--// header end --> 
+  
+  <!-- sub title area -->
+  <div id="lay_out">
+    <div id="ub_txt6"> <span class="txt6_img"><b>처리내용</b> <span class="notice-more"> <img src="../image/blat_a6.gif"> <span class="a2">본사업무</span> <span class="a3"> > </span> <b>공지사항관리</b> </span> </span> </div>
+  </div>
+  
+  <!-- find condition area -->
+  <div id="left_bar"> <img src="../image/left_bar.gif" width="22" height="106"></div>
+  <div class="textAR"> 
+    <!-- 1줄 find condition area -->
+    <form id="result_area">      
+      <table class="board02" style="width:93%;">
+        <tr>
+          <th scope="col">공지대상</th>
+          <td class="tleft"><select id="RCV_TYP_CD" data-type="select" data-wrap="true" style="width:80%">
+              <option value="">-전체-</option>
+              <option value="01">전에이전트</option>
+              <option value="02">관리자</option>
+              <option value="03">국장</option>
+            </select></td>
+          <th >지사</th>
+          <td class="tleft"><select id="BO_CD" data-type="select" data-wrap="true" style="width:185px!important">
+              <option value="">-전체-</option>
+              <option value="324031">(324031) B2B사업팀</option>
+            </select></td>
+          <th >권한그룹</th>
+          <td class="tleft"><select id="AUTH_GRP_ID" data-type="select" data-wrap="true" style="width:185px!important">
+              <option value="">-전체-</option>
+              <option value="01">(01) 관리자</option>
+              <option value="02">(02) 부문</option>
+              <option value="03">(03) 영업관리</option>
+            </select></td>
+        </tr>
+      </table>
+      <div class="ab_pos5"><!-- 1줄 2줄일경우 class="ab_pos5"-->
+        <input id="btnSearch" type="button" value="" data-type="button" data-theme="af-psnm" >
+      </div>
+    </form>   
+  </div>
+  <!-- find condition area 끝 -->
+  <!-- 그리드영역 -->
+  <div class="floatL1"> <img src="../image/blat_a7.gif"> <b>내용 등록</b>
+    <div class="ab_pos1">
+      <button id="btnInit"  data-type="button"  data-theme="af-psnm0">초기화</button>
+      <button id="btnInit" data-type="button" data-theme="af-btn2"></button>
+      <button id="btnInit" data-type="button" data-theme="af-btn3"></button>
+      <button id="btnInit" data-type="button" data-theme="af-btn4"></button>
+      <button id="btnInit" data-type="button" data-theme="af-btn5"></button>
+      <button id="btnInit" data-type="button" data-theme="af-btn6"></button>
+      <!--
+            <input type="button" value="" data-type="button" data-theme="af-btn2">
+            <input type="button" value="" data-type="button" data-theme="af-btn3">
+            --> 
+    </div>
+  </div>
+  <div id="grid" data-bind="grid" data-ui="ds"> </div>
+   <div class="floatL1"> <img src="../image/blat_a7.gif"> <b>파일첨부</b>
+    <div class="ab_pos1">
+      <button id="btnInit"  data-type="button"  data-theme="af-btn16"></button>
+      <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+      <!--
+            <input type="button" value="" data-type="button" data-theme="af-btn2">
+            <input type="button" value="" data-type="button" data-theme="af-btn3">
+            --> 
+    </div>
+  </div>
+  <div id="grid" data-bind="grid" data-ui="ds"> </div>
+  <!-- 그리드영역끝 -->
+</div>
+<!-- body 끝-->
+<footer id="footer">
+<div class="footer">
+  <div class="masterbotm">
+    <p class="foot_logo"><img src="../image/blat_b1.gif"> </p>
+    <ul class="footdept">
+      <li class="foot01">개인정보 취급방침</li>
+      <li class="foot02">이용약관</li>
+      <li class="foot03">개인정보 수집이용안내</li>
+      <li class="foot04">개인정보 위탁</li>
+    </ul>
+    <ul class="footbotm">
+      <li class="botm01">서울특별시 성동구 아차산로 38 개룡빌딩 10층 상호: 피에스앤마케팅(주)</li>
+    </ul>
+    <ul class="footaddr">
+      <li class="addr01">대표이사:박병근 / 사업자등록번호: 104-86-20016 </li>
+      <li class="addr01">COPYRIGHT© 2014 PS&MARKETION CO,LTD. ALL RIGHTS RESERVED.</li>
+    </ul>
+    <ul class="sns">
+      <li class="textc2">대표번호</li>
+      <li class="textc3">070-7470-1000 </li>
+      <li class="textc4">평일 9시 - 18시</li>
+      <li class="blue"><img src="../image/btn_a3.gif"> <img src="../image/btn_a4.gif"></li>
+    </ul>
+  </div>
+  </div>
+</footer>
+</body>
+</html>

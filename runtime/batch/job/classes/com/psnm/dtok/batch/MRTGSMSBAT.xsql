@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.MRTGSMSBAT">
+	<select id="dSelectBatchJobSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectBatchJobSeq 배치작업번호채번 */
+/* IO: 허용,2015-04-13T16:15:34(허용,2015-04-13T16:15:34) */
+SELECT DSM_BATCH_JOB_SEQ.NEXTVAL AS BATCH_JOB_SEQ 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dInsertBatchJobLog 배치작업정보입력 */
+/* IO: 허용,2015-04-13T16:25:28(허용,2015-04-13T16:25:28) */
+INSERT INTO DSM_BATCH_LOG
+     ( BATCH_JOB_SEQ
+     , JOB_BATCH_NM
+     , JOB_STA_DTM
+     )
+VALUES
+     ( #BATCH_JOB_SEQ#
+     , #JOB_BATCH_NM#
+     , SYSDATE
+     )]]>
+	</insert>
+	<select id="dSelectMrtgList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectMrtgList  */
+/* IO: 허용,2015-04-14T15:47:24(허용,2015-04-13T18:20:20) */
+SELECT
+     AGNT_ID
+    ,DAYS_BEFORE
+    ,RCV_PHON
+    ,USER_NM
+    ,TEAM_CD
+    ,HEADQ_CD
+    ,DECODE (DAYS_BEFORE , 28 , '4주' , 14 , '2주' , 7 , '1주' ) WEEK_BEFORE
+FROM 
+( 
+    SELECT E.DEAL_CO_CD AS AGNT_ID
+         , E.EXPIR_DT
+         , CEIL(TO_DATE(E.EXPIR_DT) - SYSDATE) AS DAYS_BEFORE
+         , (
+              SELECT COUNT(*) FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT 
+               WHERE DEL_YN = 'N'
+                 AND DEAL_CO_CD = F.DEAL_CO_CD
+                 AND EXPIR_DT > F.MAX_EXPIR_DT
+           ) AS OVER_EXPIR_DT_CNT /*현재담보만료일자이후의 데이터건수*/
+         , L.MBL_PHON_NUM1 || L.MBL_PHON_NUM2 || L.MBL_PHON_NUM3  RCV_PHON
+         , K.USER_NM
+         , O.OUT_ORG_DTL_NM  HEADQ_CD
+         , N.OUT_ORG_DTL_NM  TEAM_CD
+    FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT  E /*현재담보*/
+    JOIN (
+            SELECT D.DEAL_CO_CD, D.SER_NUM, D.HST_SEQ
+                 , MAX(D.EXPIR_DT) AS MAX_EXPIR_DT /*가장늦은만료일*/
+              FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT  D
+              JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT  OM ON ( OM.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND OM.DEL_YN = 'N' )
+             WHERE D.DEL_YN = 'N'
+               AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN D.SET_DT AND D.EXPIR_DT
+               AND D.EXPIR_DT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+             GROUP BY D.DEAL_CO_CD, D.SER_NUM, D.HST_SEQ
+      ) F ON ( E.DEAL_CO_CD = F.DEAL_CO_CD AND E.SER_NUM = F.SER_NUM AND E.HST_SEQ = F.HST_SEQ AND E.EXPIR_DT = F.MAX_EXPIR_DT )
+    JOIN PS_MNG.TBAS_USER_MGMT  K ON(K.CPLAZA_ORG_CD = E.DEAL_CO_CD )
+    JOIN DSM_USER  L ON (L.USER_ID  = K.USER_ID )
+    JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT  M ON (M.AGNT_ID =E.DEAL_CO_CD AND CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') ) 
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  N ON (N.OUT_ORG_DTL_ID = M.OUT_ORG_DTL_ID )
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT O ON (O.OUT_ORG_DTL_ID = N.SUP_OUT_ORG_DTL_ID )
+    WHERE E.DEL_YN = 'N' /*불필요하지만명시적으로*/
+      AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN E.SET_DT AND E.EXPIR_DT /*불필요하지만명시적으로*/      
+) 
+WHERE OVER_EXPIR_DT_CNT = 0 
+    AND DAYS_BEFORE IN ('28','14','7')]]>
+	</select>
+	<update id="dUpdateBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dUpdateBatchJobLog 배치작업정보수정 */
+/* IO: 허용,2015-04-13T18:35:23(허용,2015-04-13T18:35:23) */
+UPDATE DSM_BATCH_LOG
+   SET JOB_END_DTM = SYSDATE
+     , JOB_SUSS_YN = #JOB_SUSS_YN#
+     , ERR_MSG = #ERR_MSG#
+ WHERE BATCH_JOB_SEQ = #BATCH_JOB_SEQ#]]>
+	</update>
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 허용,2015-04-14T09:34:08(허용,2015-04-14T09:34:08) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 허용,2015-04-14T09:34:37(허용,2015-04-14T09:34:37) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dInsertSmsTran  */
+/* IO: 허용,2015-04-14T15:02:36(허용,2015-04-14T14:58:36) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , #CONTEXT#
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+     , '[D-tok] ' || #USER_NM# ||' 님이 제출하신 담보가 '|| #WEEK_BEFORE# || ' 뒤에 만료 됩니다. ' || #HEADQ_CD# || ' ' || #TEAM_CD#/*발송메시지*/
+]]></isEqual><![CDATA[      
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 허용,2015-04-14T13:45:09(채수윤,2015-04-08T22:00:27) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , #RCV_PHON#/*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.MRTGSMSBAT.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-14T15:19:50(허용,2015-04-14T13:47:39) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , #RCV_PHON# /*수신전화번호*/ 
+     , '0264005567'/*발송전화번호*/
+]]><isEqual property="ERR_YN" compareValue="Y"><![CDATA[
+     , #SND_MSG#
+]]></isEqual><![CDATA[     
+]]><isEqual property="ERR_YN" compareValue="N"><![CDATA[
+     , '[D-tok] ' || #USER_NM# ||' 님이 제출하신 담보가 '|| #WEEK_BEFORE# || ' 뒤에 만료 됩니다. ' || #HEADQ_CD# || ' ' || #TEAM_CD#/*발송메시지*/
+]]></isEqual><![CDATA[     
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+</sqlMap>

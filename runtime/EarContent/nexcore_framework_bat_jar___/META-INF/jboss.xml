@@ -1,0 +1,31 @@
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+ <loader-repository>nexcore.framework:loader=application</loader-repository>
+ <enterprise-beans>
+  <session>
+   <ejb-name>nexcore.batch.BatchFacade</ejb-name>
+   <jndi-name>ejb/nexcore/batch/BatchFacade</jndi-name>
+   <local-jndi-name>ejb/nexcore/batch/BatchFacadeLocal</local-jndi-name>
+   <configuration-name>BatchFacade Pool</configuration-name>
+   <method-attributes>
+    <method>
+     <method-name>*</method-name>
+     <transaction-timeout>0</transaction-timeout>
+    </method>
+   </method-attributes>
+  </session>
+ </enterprise-beans>
+
+
+ <container-configurations>
+  <container-configuration extends="Standard Stateless SessionBean">
+   <container-name>BatchFacade Pool</container-name>
+   <container-pool-conf>
+    <MinimumSize>20</MinimumSize>
+    <MaximumSize>100</MaximumSize>
+   </container-pool-conf>
+  </container-configuration>
+ </container-configurations>
+
+</jboss>
+

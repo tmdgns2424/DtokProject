@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSCHRCVGRP001">
+	<select id="dSearchSchRcvGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVGRP001.dSearchSchRcvGrp  */
+/* IO: 이승훈2,2015-01-30T09:11:52(이승훈2,2015-01-15T16:29:33) */
+SELECT X.*
+  FROM (
+		SELECT A.AUTH_GRP_ID
+       		   ,B.AUTH_GRP_NM
+      		   ,B.AUTH_GRP_DESC
+  		  FROM DSM_SCH_RCV_GRP A
+  		  JOIN DSM_AUTH_GRP B ON (A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+ 		 WHERE A.SCH_ID = #SCH_ID#
+ 
+ 		 UNION 
+ 
+ 		SELECT A.AUTH_GRP_ID
+        	   ,A.AUTH_GRP_NM
+               ,A.AUTH_GRP_DESC
+   		  FROM DSM_AUTH_GRP A
+   		  LEFT JOIN DSM_SCH_RCV_GRP B ON (A.AUTH_GRP_ID = B.SCH_ID)
+  		 WHERE A.AUTH_GRP_ID = '99' /* 시스템 관리자 */
+		) X
+ 
+ ORDER BY X.AUTH_GRP_ID]]>
+	</select>
+	<insert id="dInsertSchRcvGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVGRP001.dInsertSchRcvGrp  */
+/* IO: 이승훈2,2015-01-15T19:25:13(이승훈2,2015-01-15T18:30:25) */
+INSERT INTO DSM_SCH_RCV_GRP
+		(  
+			SCH_ID
+			, AUTH_GRP_ID
+  			, RGSTR_ID
+  			, RGST_DTM
+  			, UPDR_ID
+  			, UPD_DTM 
+  		)
+VALUES
+		(  
+			#SCH_ID#
+  			, #AUTH_GRP_ID#
+  			, #onlineContext.userInfo.loginId#
+  			, SYSDATE
+  			, #onlineContext.userInfo.loginId#
+  			, SYSDATE 
+  		)]]>
+	</insert>
+	<delete id="dDeleteSchRcvGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.mainschd.db.DSCHRCVGRP001.dDeleteSchRcvGrp  */
+/* IO: 이승훈2,2015-01-15T18:35:44(이승훈2,2015-01-15T18:30:55) */
+DELETE FROM DSM_SCH_RCV_GRP WHERE SCH_ID = #SCH_ID#]]>
+	</delete>
+</sqlMap>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMISC">
+	<update id="dMergeReadrMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DMISC.dMergeReadrMgmt  */
+/* IO: 안종광,2015-01-14T11:19:31(안종광,2015-01-14T11:19:31) */
+MERGE INTO DSM_READR_MGMT r
+USING (
+        SELECT #READ_MGMT_ID# AS READ_MGMT_ID /*열람관리ID*/
+             , #onlineContext.userInfo.loginId# AS READR_ID /*열람자ID*/
+         FROM DUAL
+    ) u
+   ON ( r.READ_MGMT_ID = u.READ_MGMT_ID AND r.READR_ID = u.READR_ID )
+ WHEN MATCHED THEN
+      UPDATE SET
+             r.UPD_DTM = SYSDATE
+ WHEN NOT MATCHED THEN
+      INSERT (
+             READ_MGMT_ID
+           , READR_ID
+           , RGST_DTM
+           , UPD_DTM
+      )
+      VALUES (
+             u.READ_MGMT_ID
+           , u.READR_ID
+           , SYSDATE
+           , SYSDATE
+      )]]>
+	</update>
+	<select id="dSearchWeekDayInfo" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DMISC.dSearchWeekDayInfo  */
+/* IO: 안종광,2015-03-13T10:24:05(안종광,2015-03-12T13:50:05) */
+SELECT (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+0, 'YYYY-MM-DD') FROM DUAL) AS WEEK_START_YMD /*금주 첫날(월요일) 일자*/
+     , (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+0, 'DY') FROM DUAL)         AS WEEK_START_DY
+     , (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+0, 'DAY') FROM DUAL)        AS WEEK_START_DAY
+     , (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+6, 'YYYY-MM-DD') FROM DUAL) AS WEEK_END_YMD /*금주 마지막날(일요일) 일자*/
+     , (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+6, 'DY') FROM DUAL)         AS WEEK_END_DY
+     , (SELECT TO_CHAR(TRUNC(SYSDATE, 'IW')+6, 'DAY') FROM DUAL)        AS WEEK_END_DAY
+     , (SELECT TO_CHAR(SYSDATE, 'IW') FROM DUAL)                        AS WEEK_NTH /*년별 주차 1~56*/
+     , (SELECT TO_CHAR(LAST_DAY(SYSDATE), 'YYYY-MM-DD') FROM DUAL)      AS LAST_YMD /*이달의 마지막 날짜*/
+     , TO_CHAR(SYSDATE+0, 'YYYY-MM-DD') AS TODAY
+     , TO_CHAR(SYSDATE+1, 'YYYY-MM-DD') AS TOMORROW
+     , TO_CHAR(SYSDATE-1, 'YYYY-MM-DD') AS YESTERDAY
+     , CEIL((TO_NUMBER(SUBSTRB(TO_CHAR(SYSDATE,'YYYYMMDD'), -2, 2)) + 7 - TO_NUMBER(TO_CHAR(SYSDATE,'D')))/7) AS WEEK_MM_NTH /*월별 주차 1~5*/ 
+  FROM DUAL]]>
+	</select>
+</sqlMap>

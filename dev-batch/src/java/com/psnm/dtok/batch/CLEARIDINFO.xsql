@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.CLEARIDINFO">
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 채수윤,2015-04-08T20:25:36(채수윤,2015-04-08T20:12:11) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 채수윤,2015-04-08T20:26:56(채수윤,2015-04-08T20:26:56) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectBatchJobSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectBatchJobSeq 배치작업번호채번 */
+/* IO: 채수윤,2015-04-08T20:02:09(채수윤,2015-04-08T20:02:09) */
+SELECT DSM_BATCH_JOB_SEQ.NEXTVAL AS BATCH_JOB_SEQ 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-14T13:51:56(채수윤,2015-04-08T20:31:09) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , '01047567552' /*수신전화번호*/
+     , '0264005567'/*발송전화번호*/
+     , #SND_MSG# /*메시지*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 채수윤,2015-04-08T20:29:27(채수윤,2015-04-08T20:29:27) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , '01047567552' /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertSmsTran SMS발송정보입력 */
+/* IO: 채수윤,2015-04-08T21:31:31(채수윤,2015-04-08T20:15:28) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+     , #CONTEXT# /*발송메시지*/
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertBatchJobLog 배치작업정보입력 */
+/* IO: 채수윤,2015-04-08T20:02:48(채수윤,2015-04-08T20:02:48) */
+INSERT INTO DSM_BATCH_LOG
+     ( BATCH_JOB_SEQ
+     , JOB_BATCH_NM
+     , JOB_STA_DTM
+     )
+VALUES
+     ( #BATCH_JOB_SEQ#
+     , #JOB_BATCH_NM#
+     , SYSDATE
+     )]]>
+	</insert>
+	<update id="dUpdateBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dUpdateBatchJobLog 배치작업정보수정 */
+/* IO: 채수윤,2015-04-08T20:03:20(채수윤,2015-04-08T20:03:20) */
+UPDATE DSM_BATCH_LOG
+   SET JOB_END_DTM = SYSDATE
+     , JOB_SUSS_YN = #JOB_SUSS_YN#
+     , ERR_MSG = #ERR_MSG#
+ WHERE BATCH_JOB_SEQ = #BATCH_JOB_SEQ#]]>
+	</update>
+	<update id="dUpdateDsmUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateDsmUser  */
+/* IO: 허용,2015-05-13T13:32:28(허용,2015-05-13T13:30:25) */
+UPDATE DSM_USER
+   SET NICK_NM = '***'
+     , BIRTH_DT = ''
+     , WEDD_YN = ''
+     , WEDD_DT = ''
+     , PHON_NUM2 = '****'
+     , MBL_PHON_NUM2 = '****'
+     , EMAIL_ID = ''
+     , EMAIL_DMN_CD = ''
+     , EMAIL_DMN_NM = ''
+     , PIC_FILE_ID = ''
+     , ADDR_2 = ''     
+ WHERE SCRB_ST_CD = '04'
+   AND NVL(RETR_DT,'20150101') <= TO_CHAR((SYSDATE  -5), 'YYYYMMDD')   
+   AND NICK_NM <> '***']]>
+	</update>
+	<update id="dUpdateScrbReq" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateScrbReq  */
+/* IO: 허용,2015-05-13T13:34:32(허용,2015-05-13T13:34:32) */
+UPDATE  DSM_USER_SCRB_REQ
+SET USER_NM = SUBSTR(USER_NM ,1,1) || '**' ||  SUBSTR(USER_NM ,3)
+   ,NICK_NM = '***'
+   ,BIRTH_DT = ''
+   ,WEDD_YN = ''
+   ,WEDD_DT = ''
+   ,PHON_NUM2 = '****'
+   ,MBL_PHON_NUM2 = '****'         
+   ,EMAIL_ID = ''
+   ,EMAIL_DMN_CD = ''
+   ,EMAIL_DMN_NM = ''
+   ,PIC_FILE_ID = ''
+   ,ADDR_2 = ''
+WHERE SCRB_REQ_SEQ IN 
+(
+    /*회원정보가 있을 경우 해촉5일뒤 삭제*/
+    SELECT 
+     A.SCRB_REQ_SEQ 
+    FROM DSM_USER_SCRB_REQ A
+    JOIN DSM_USER B ON ( A.USER_ID = B.USER_ID 
+                                          AND B.SCRB_ST_CD = '04'     
+                                          AND RETR_DT IS NOT NULL     
+                                          AND B.RETR_DT <= TO_CHAR((SYSDATE  -5), 'YYYYMMDD')                                                                       
+                                         ) 
+    UNION
+    /*반려시 즉시 삭제*/    
+    SELECT 
+     SCRB_REQ_SEQ  
+    FROM DSM_USER_SCRB_REQ
+    WHERE SCRB_ST_CD = '03' 
+    UNION
+    /*요청 후 3개월 경과 시 삭제*/    
+    SELECT 
+     SCRB_REQ_SEQ 
+    FROM DSM_USER_SCRB_REQ
+    WHERE ADD_MONTHS ( UPD_DTM , 3 ) < SYSDATE    
+    AND SCRB_ST_CD = '01'    
+)
+AND NICK_NM <> '***']]>
+	</update>
+	<update id="dUpdateAgentCntrt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateAgentCntrt  */
+/* IO: 허용,2015-05-13T13:36:47(허용,2015-05-13T13:36:47) */
+UPDATE DSM_AGENT_CNTRT 
+SET NAME_KOR =  SUBSTR(NAME_KOR ,1,1) || '**' ||  SUBSTR(NAME_KOR ,3)
+   ,NAME_HAN =SUBSTR(NAME_HAN ,1,1) || '**' ||  SUBSTR(NAME_HAN ,3)
+   ,BIRTH_DT = ''
+   ,WEDD_YN = ''
+   ,PHON_NUM2 = '****'
+   ,MBL_PHON_NUM2 = '****'         
+   ,EMAIL_ID = ''
+   ,EMAIL_DMN_CD = ''
+   ,EMAIL_DMN_NM = ''
+   ,ADDR_2 = ''
+   ,PIC_FILE_ID = ''   
+WHERE CNTRT_MGMT_NUM IN (
+    /*반려시즉시삭제*/
+    SELECT 
+     A.CNTRT_MGMT_NUM
+    FROM   DSM_AGENT_CNTRT A 
+    WHERE A.CNTRT_ST_CD = '4'
+    UNION 
+    /*회원가입 완료 시 해촉5일 경과시 삭제*/
+    SELECT
+     A.CNTRT_MGMT_NUM
+    FROM DSM_AGENT_CNTRT A
+        ,PS_MNG.TBAS_USER_MGMT B
+        ,DSM_USER C  
+    WHERE  A.CNTRT_ST_CD = '6'
+      AND A.AGNT_ID = B.CPLAZA_ORG_CD
+      AND B.USER_ID = C.USER_ID
+      AND C.SCRB_ST_CD = '04'
+      AND NVL(C.RETR_DT,'20150101') <= TO_CHAR((SYSDATE  -5), 'YYYYMMDD')
+    UNION 
+    /*회원정보가 없는 경우 3개월 이전 자료 삭제*/
+    SELECT 
+     A.CNTRT_MGMT_NUM
+    FROM   DSM_AGENT_CNTRT A 
+    WHERE NOT EXISTS (SELECT 'c' FROM PS_MNG.TBAS_USER_MGMT B
+                       WHERE A.AGNT_ID = B.CPLAZA_ORG_CD )
+       AND ADD_MONTHS ( UPD_DTM , 3 ) < SYSDATE  
+)
+AND PIC_FILE_ID IS NOT NULL    ]]>
+	</update>
+	<delete id="dDeleteAplcnsl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dDeleteAplcnsl  */
+/* IO: 허용,2015-05-13T13:37:28(허용,2015-05-13T13:37:28) */
+
+DELETE  DSM_APLCNSL_BRD
+WHERE APLCNSL_MGMT_NUM IN (
+/*회원정보 있을 경우 해촉 5일 경과 시  자료 삭제*/
+    SELECT 
+     A.APLCNSL_MGMT_NUM
+    FROM DSM_APLCNSL_BRD A
+    JOIN PS_MNG.TBAS_USER_MGMT B ON (
+         A.AGNT_ID = B.CPLAZA_ORG_CD )
+    JOIN DSM_USER C ON (
+             B.USER_ID = C.USER_ID
+          AND C.SCRB_ST_CD = '04' /*해촉*/
+          AND C.RETR_DT <= TO_CHAR((SYSDATE  -5), 'YYYYMMDD')
+         )      
+    UNION                                      
+/*회원정보 없을 경우 3달 이전 자료 삭제*/
+    SELECT 
+     A.APLCNSL_MGMT_NUM
+    FROM DSM_APLCNSL_BRD A
+    WHERE AGNT_ID IS NULL 
+    AND ADD_MONTHS ( UPD_DTM , 3 ) < SYSDATE
+)]]>
+	</delete>
+	<update id="dUpdateCustPgcv" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateCustPgcv  */
+/* IO: 허용,2015-05-13T15:31:26(허용,2015-05-13T14:03:10) */
+UPDATE  DSM_CUST_PGCV
+SET CNSLR_TEL_NUM2 = '****'
+   ,SVC_NUM = SUBSTR(SVC_NUM , 1,3 ) || '****' || SUBSTR(SVC_NUM ,-4,4)  
+WHERE CUST_PGCV_ST_CD = 'Y'
+  AND CNSLR_TEL_NUM2 <> '****']]>
+	</update>
+	<update id="dUpdateScrbClm" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateScrbClm  */
+/* IO: 허용,2015-05-13T15:30:58(허용,2015-05-13T14:06:44) */
+UPDATE  DSM_SCRB_CLM
+SET CNSLR_TEL_NUM2 = '****'
+   ,SVC_NUM = SUBSTR(SVC_NUM , 1,3 ) || '****' || SUBSTR(SVC_NUM ,-4,4)  
+WHERE SCRB_CLM_ST_CD = 'Y'
+  AND CNSLR_TEL_NUM2 <> '****']]>
+	</update>
+	<update id="dUpdateInmpDoc" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateInmpDoc  */
+/* IO: 허용,2015-05-13T13:40:54(허용,2015-05-13T13:40:54) */
+UPDATE  DSM_INCMP_DOC
+SET SVC_NUM  = CASE WHEN LENGTH (SVC_NUM)  < 4 
+               THEN RPAD (SVC_NUM , 4, '*')
+               ELSE SUBSTR(SVC_NUM ,-4,4) END
+WHERE PROC_ST_CD IN ('02' , '03')
+AND LENGTH (SVC_NUM)  <> 4 ]]>
+	</update>
+	<update id="dUpdateDutyHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dUpdateDutyHst  */
+/* IO: 허용,2015-05-13T14:11:07(허용,2015-05-13T14:11:07) */
+UPDATE  DSM_DUTY_CHG_HST A
+SET DEL_YN = 'Y'
+   ,UPDR_ID = '91204841'
+   ,UPD_DTM = SYSDATE 
+WHERE NOT EXISTS (SELECT 'X' FROM  DSM_APPROVE B
+                  WHERE A.USER_ID = B.USER_ID )
+AND NVL(DEL_YN , 'N' ) = 'N'                  
+  ]]>
+	</update>
+	<delete id="dDeleteDsmApprove" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CLEARIDINFO.dDeleteDsmApprove  */
+/* IO: 허용,2015-05-13T14:09:06(허용,2015-05-13T14:09:06) */
+DELETE  DSM_APPROVE A 
+WHERE EXISTS (SELECT 'X' FROM PS_MNG.TBAS_USER_MGMT B
+              WHERE A.USER_ID = B.USER_ID
+                AND B.EFF_USER_YN = 'N')  ]]>
+	</delete>
+</sqlMap>

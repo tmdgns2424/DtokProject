@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PUSERSTRCT001">
+    <bizUnitName>[PU]사용제한관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.USERSTRCT</componentId>
+    <description/>
+    <method-list>
+        <method id="pSearchToDay">
+            <methodName>[PM]현재일요일조회</methodName>
+            <transactionId>com.USERSTRCT@PUSERSTRCT001_pSearchToDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T15:03:46" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchDay">
+            <methodName>[PM]사용제한요일조회</methodName>
+            <transactionId>com.USERSTRCT@PUSERSTRCT001_pSearchDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:24:08" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSaveUseRstrctMgmt">
+            <methodName>[PM]사용제한저장</methodName>
+            <transactionId>com.USERSTRCT@PUSERSTRCT001_pSaveUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T11:25:13" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchUseRstrctMgmt">
+            <methodName>[PM]사용제한조회</methodName>
+            <transactionId>com.USERSTRCT@PUSERSTRCT001_pSearchUseRstrctMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T09:53:01" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T09:52:03" user="채수윤 (chesuyun)"/>
+    </history>
+</bizUnit>

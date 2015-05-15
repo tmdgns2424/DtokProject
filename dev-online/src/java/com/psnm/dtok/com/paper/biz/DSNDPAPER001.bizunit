@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSNDPAPER001">
+    <bizUnitName>[DU]보낸 쪽지함</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.PAPER</componentId>
+    <description>보낸쪽지함 DU</description>
+    <method-list>
+        <method id="dSearchSndCount">
+            <methodName>[DM]보낸쪽지 갯수</methodName>
+            <transactionId>com.PAPER@DSNDPAPER001_dSearchSndCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T13:15:53" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSndPaperDtl">
+            <methodName>[DM]보낸쪽지 상세조회</methodName>
+            <transactionId>com.PAPER@DSNDPAPER001_dSearchSndPaperDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:07:57" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSndPaper">
+            <methodName>[DM]보낸쪽지 정보조회</methodName>
+            <transactionId>com.PAPER@DSNDPAPER001_dSearchSndPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T14:07:57" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDeleteSndPaper">
+            <methodName>[DM]보낸쪽지 정보삭제</methodName>
+            <transactionId>com.PAPER@DSNDPAPER001_dDeleteSndPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T14:08:35" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertSndPaper">
+            <methodName>[DM]보낸쪽지 정보추가</methodName>
+            <transactionId>com.PAPER@DSNDPAPER001_dInsertSndPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T17:17:30" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-07T13:52:37" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTCNSLPLN001">
+    <bizUnitName>[DU]면담계획/정기면담</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.AGENTCNSL</componentId>
+    <description>면담계획/정기면담DU</description>
+    <method-list>
+        <method id="dSearchAgentCnslPlnCount">
+            <methodName>[DM]면담계획현황건수조회</methodName>
+            <transactionId>biz.AGENTCNSL@DAGENTCNSLPLN001_dSearchAgentCnslPlnCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획현황건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T17:24:57" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslPln">
+            <methodName>[DM]면담계획현황조회</methodName>
+            <transactionId>biz.AGENTCNSL@DAGENTCNSLPLN001_dSearchAgentCnslPln</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:59:27" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-21T16:56:42" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

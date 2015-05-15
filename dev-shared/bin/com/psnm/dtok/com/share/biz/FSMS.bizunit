@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FSMS">
+    <bizUnitName>[FU]SMS전송관리</bizUnitName>
+    <parentClassXd>SFU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[FU]SMS전송관리</description>
+    <method-list>
+        <method id="fSendSmsDirectly">
+            <methodName>[FM]SMS발송(직접)</methodName>
+            <transactionId>com.SHARE@FSMS_fSendSmsDirectly</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]SMS발송(직접) - 발송할 문자(SND_MSG), 발송대상번호로 SMS를 바로 발송함.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T11:16:07" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchSmsCount">
+            <methodName>[FM]SMS발송건수조회</methodName>
+            <transactionId>com.SHARE@FSMS_fSearchSmsCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]SMS발송건수조회 : 발신년월(디폴트 이번달), 발신번호 조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-04T10:51:16" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSendSms">
+            <methodName>[FM]SMS전송</methodName>
+            <transactionId>com.SHARE@FSMS_fSendSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]SMS전송 : 필드맵 { TRAN_MENU_ID, TRAN_TYP_CD } 필수, 'ds' 레코드셋 [ USER_ID, RCV_PHN_ID, {0}, {1}, {2} ]</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T17:42:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-12T20:13:34" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

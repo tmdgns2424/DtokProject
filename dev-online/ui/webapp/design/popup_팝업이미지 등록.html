@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-popup.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+<body>
+<div id="Wrap">
+
+<!-- title area -->
+<div class="pop_header" ><span class="title">팝업이미지 등록</span> <a href="#" class="pop_close" onclick="javascript:self.close();"> <img src="../image/blat_a9.gif" alt="팝업닫기" ></a>
+  <!--view_table area -->
+  <div class="textAR">
+    <table class="board02" width="100%" >
+	  <colgroup>
+		<col style="width:20%;">
+		<col style="*">
+	  </colgroup>
+	  <tr>
+        <th scope="col">적용이미지</th>
+        <td class="tleft"></td>
+      </tr>
+      <tr>
+        <th scope="col">게시기간</th>
+        <td class="tleft">
+			<div data-type="daterange" data-image>
+				<input id="FROM_DT" name="FROM_DT" data-role="startdate" data-bind="" style="width:70px;"/>
+				~ <input id="TO_DT" name="TO_DT" data-role="enddate" data-bind="" style="width:70px;"/>
+			</div>
+		</td>
+      </tr>
+    </table>
+    <div class="floatL1" style="padding-left:34%;">
+      <div style="position:relative;">
+		<span class="file-button type4"><input type="file"></span>
+	  </div>&nbsp;
+      <input type="button" value="" data-type="button" data-theme="af-btn4">
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

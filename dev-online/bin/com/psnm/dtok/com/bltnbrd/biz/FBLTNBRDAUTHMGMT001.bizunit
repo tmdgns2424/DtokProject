@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FBLTNBRDAUTHMGMT001">
+    <bizUnitName>[FU]게시판권한관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.BLTNBRD</componentId>
+    <description>[FU]게시판권한관리</description>
+    <method-list>
+        <method id="fCopyBrdAuth">
+            <methodName>[FM]게시판권한복사</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDAUTHMGMT001_fCopyBrdAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]게시판권한복사</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-23T11:21:49" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSaveBrdAuth">
+            <methodName>[FM]게시판권한저장</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDAUTHMGMT001_fSaveBrdAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]게시판권한저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T10:09:56" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchDeptUser">
+            <methodName>[FM]게시판사용자조회(팝업)</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDAUTHMGMT001_fSearchDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]게시판권한관리 - 사용자조회(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T13:48:16" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAuthDeptUser">
+            <methodName>[FM]권한그룹+영업국+회원정보조회</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDAUTHMGMT001_fSearchAuthDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM] 적용대상권한, 적용권한, 적용대상영업국, 적용영업국 및 회원정보를 조회하여 반환</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T10:34:46" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-31T10:32:51" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

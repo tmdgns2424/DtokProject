@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DPLCYRCVORG001">
+    <bizUnitName>[DU]영업정책조직관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEPLCY</componentId>
+    <description>영업정책조직관리DU</description>
+    <method-list>
+        <method id="dSearchPlcyRcvOrgDeptObject">
+            <methodName>[DM]영업정책수신조직공지할영업국조회</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVORG001_dSearchPlcyRcvOrgDeptObject</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책수신조직 공지할 영업국을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T15:54:02" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeletePlcyRcvOrg">
+            <methodName>[DM]영업정책수신조직삭제</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVORG001_dDeletePlcyRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책 수신조직 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T13:03:43" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchPlcyRcvOrgDeptTarget">
+            <methodName>[DM]영업정책수신조직공지대상영업국조회</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVORG001_dSearchPlcyRcvOrgDeptTarget</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책수신조직 공지대상 영업국을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T15:35:31" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertPlcyRcvOrg">
+            <methodName>[DM]영업정책수신조직저장</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVORG001_dInsertPlcyRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책 수신조직 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T13:03:08" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-21T13:01:54" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

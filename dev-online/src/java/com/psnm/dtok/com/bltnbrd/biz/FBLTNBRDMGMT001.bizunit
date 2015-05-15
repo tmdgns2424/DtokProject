@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FBLTNBRDMGMT001">
+    <bizUnitName>[FU]게시판관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.BLTNBRD</componentId>
+    <description>게시판관리</description>
+    <method-list>
+        <method id="fSearchBltnBrdChrgr">
+            <methodName>[FM]게시판담당자목록</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSearchBltnBrdChrgr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]게시판담당자목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T09:34:32" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchBltnBrd">
+            <methodName>[FM]게시판목록TREE</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSearchBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 게시판 포함 하위 게시판목록 조회(TREE형)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-26T15:12:05" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSaveBltnBrd">
+            <methodName>[FM]게시판저장</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSaveBltnBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]게시판저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T10:38:13" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchBltnBrdByPk">
+            <methodName>[FM]게시판정보1</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSearchBltnBrdByPk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>게시판 정보 1건 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-26T16:02:23" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchBltnBrdByType">
+            <methodName>[FM]유형별게시판목록</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSearchBltnBrdByType</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>유형별 게시판 목록 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-26T13:46:47" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchBltnBrdBySup">
+            <methodName>[FM]하위게시판목록</methodName>
+            <transactionId>com.BLTNBRD@FBLTNBRDMGMT001_fSearchBltnBrdBySup</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]하위게시판목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T10:18:28" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-26T13:26:16" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

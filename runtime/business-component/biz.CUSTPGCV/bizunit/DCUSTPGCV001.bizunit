@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DCUSTPGCV001">
+    <bizUnitName>[DU]고객민원관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.CUSTPGCV</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchCustPgcvDtl">
+            <methodName>[DM]고객민원 상세조회</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchCustPgcvDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T17:44:26" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchCustPgcvPrst">
+            <methodName>[DM]고객민원발생 현황</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchCustPgcvPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-11T18:16:15" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchCustPgcvStCnt">
+            <methodName>[DM]고객민원상태별 건수</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchCustPgcvStCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T15:59:50" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dDeleteCustPgcv">
+            <methodName>[DM]고객민원정보 삭제</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dDeleteCustPgcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T15:35:34" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dUpdateCustPgcv">
+            <methodName>[DM]고객민원정보 수정</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dUpdateCustPgcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T14:32:59" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchCustPgcv">
+            <methodName>[DM]고객민원정보 조회</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchCustPgcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T10:59:01" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dInsertCustPgcv">
+            <methodName>[DM]고객민원정보 추가</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dInsertCustPgcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T17:56:36" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchSmsRecordSet">
+            <methodName>[DM]sms발송정보조회</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchSmsRecordSet</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T09:47:40" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchIsMa">
+            <methodName>[DM]판매자의 해당월 기준 MA/S-MA 여부 조회</methodName>
+            <transactionId>biz.CUSTPGCV@DCUSTPGCV001_dSearchIsMa</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-23T16:03:02" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T10:30:17" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DRCVPAPER001">
+    <bizUnitName>[DU]받은 쪽지함</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.PAPER</componentId>
+    <description>받은 쪽지함 DU</description>
+    <method-list>
+        <method id="dSearchRcvPaperDtl">
+            <methodName>[DM]받은쪽지 상세조회</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dSearchRcvPaperDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:10:56" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchRcvCount">
+            <methodName>[DM]받은쪽지 갯수</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dSearchRcvCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T10:06:10" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dUpdateRcvPaper">
+            <methodName>[DM]받은쪽지 정보수정</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dUpdateRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T13:37:10" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchRcvPaper">
+            <methodName>[DM]받은쪽지 정보조회</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dSearchRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T14:04:06" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDeleteRcvPaper">
+            <methodName>[DM]받은쪽지 정보삭제</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dDeleteRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T14:05:18" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertRcvPaper">
+            <methodName>[DM]받은쪽지 정보추가</methodName>
+            <transactionId>com.PAPER@DRCVPAPER001_dInsertRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T17:17:58" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-07T13:52:17" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

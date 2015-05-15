@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FPAPERMGMT001">
+    <bizUnitName>[FU]쪽지함</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.PAPER</componentId>
+    <description>쪽지함 FU</description>
+    <method-list>
+        <method id="fInsertRePaper">
+            <methodName>[FM]답장등록</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fInsertRePaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-06T15:25:43" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDeleteRcvPaper">
+            <methodName>[FM]받은쪽지 삭제</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fDeleteRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T16:19:21" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDeleteSndPaper">
+            <methodName>[FM]보낸쪽지 삭제</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fDeleteSndPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T13:55:32" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchRcvPaperDtl">
+            <methodName>[FM]받은쪽지 상세조회</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchRcvPaperDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:10:02" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSndPaperDtl">
+            <methodName>[FM]보낸쪽지 상세조회</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchSndPaperDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:04:36" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSndPaper">
+            <methodName>[FM]보낸쪽지 정보조회</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchSndPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T13:54:55" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchRcvPaper">
+            <methodName>[FM]받은쪽지 정보조회</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchRcvPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-07T13:54:40" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fAgntList">
+            <methodName>[FM]에이전트 리스트</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fAgntList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T15:18:59" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSaleTeam">
+            <methodName>[FM]조직도 영업팀 검색</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchSaleTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T13:45:44" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDeletePaper">
+            <methodName>[FM]쪽지 삭제</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fDeletePaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T09:52:14" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fInsertPaper">
+            <methodName>[FM]쪽지쓰기</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fInsertPaper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T17:09:48" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchOpend">
+            <methodName>[FM]쪽지열람조회</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchOpend</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-17T09:22:13" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchUserPop">
+            <methodName>[FM]팝업유저검색</methodName>
+            <transactionId>com.PAPER@FPAPERMGMT001_fSearchUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T17:28:11" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-07T13:51:42" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

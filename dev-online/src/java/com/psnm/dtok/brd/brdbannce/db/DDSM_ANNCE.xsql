@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DDSM_ANNCE">
+	<select id="S001" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.S001  */
+/* IO: 안종광,2015-01-21T19:12:49(admin,2014-11-06T14:00:39) */
+SELECT * 
+  FROM (
+    SELECT ROWNUM rn, ALL_LIST.* 
+      FROM (
+        /* ==================================================================== */
+            SELECT 
+                    DECODE(X.POPUP_VALUE,'0','NW',NULL) AS FLAG
+                  , X.ANNCE_ID
+                  , X.ANNCE_TYP_CD
+                  , X.RCV_TYP_CD
+                  , Y.COMM_CD_VAL_NM AS RCV_TYP_NM
+                  , CASE WHEN Y.COMM_CD_VAL_NM = '' OR Y.COMM_CD_VAL_NM IS NULL THEN '전체' ELSE Y.COMM_CD_VAL_NM END AS RCV_TYP_NM_1
+                  , X.ANNCE_TITL_NM
+                  , X.ATCH_YN
+                  , X.POPUP_YN
+                  , TO_CHAR(TO_DATE(X.POPUP_STA_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_STA_DT
+                  , TO_CHAR(TO_DATE(X.POPUP_END_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_END_DT
+                  , F_MASKING('N',X.BLTNR_NM) AS BLTNR_NM
+                  , X.BLTN_DT
+                  , ( SELECT NVL(COUNT(I.READ_MGMT_ID) , 0)
+                        FROM DSM_READR_MGMT I
+                       WHERE I.READ_MGMT_ID = TO_CHAR(X.ANNCE_ID)
+                    ) VIEW_CNT /* 조회건수 */
+              FROM (
+                        SELECT 
+                               '0' AS POPUP_VALUE
+                             , A.ANNCE_ID
+                             , A.ANNCE_TYP_CD
+                             , A.RCV_TYP_CD
+                             , A.ANNCE_TITL_NM
+                             , (SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+                                  FROM DSM_ATCH_FILE_MGMT X
+                                 WHERE A.ANNCE_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+                             , A.POPUP_YN
+                             , A.POPUP_STA_DT
+                             , A.POPUP_END_DT
+                             , D.USER_NM AS BLTNR_NM
+                             , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT
+                          FROM DSM_ANNCE A
+                          LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                           WHERE 1=1
+                             AND A.POPUP_YN = 'Y' 
+                             AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.POPUP_STA_DT AND A.POPUP_END_DT
+                           ]]><isNotEmpty property="ANNCE_TYP_CD"><![CDATA[
+                             AND A.ANNCE_TYP_CD = #ANNCE_TYP_CD#
+                           ]]></isNotEmpty><![CDATA[
+                           ]]><isNotEmpty property="RCV_TYP_CD"><![CDATA[
+                             AND A.RCV_TYP_CD = #RCV_TYP_CD#
+                           ]]></isNotEmpty><![CDATA[
+                           ]]><isNotEmpty property="USER_NM"><![CDATA[
+                             AND D.USER_NM LIKE '%'||#USER_NM#||'%'
+                           ]]></isNotEmpty><![CDATA[
+
+                        UNION
+
+                        SELECT 
+                               '1' AS POPUP_VALUE
+                             , A.ANNCE_ID
+                             , A.ANNCE_TYP_CD
+                             , A.RCV_TYP_CD
+                             , A.ANNCE_TITL_NM
+                             , (SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+                                  FROM DSM_ATCH_FILE_MGMT X
+                                 WHERE A.ANNCE_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+                             , A.POPUP_YN
+                             , A.POPUP_STA_DT
+                             , A.POPUP_END_DT
+                             , D.USER_NM AS BLTNR_NM
+                             , TO_CHAR(A.UPD_DTM, 'YYYY-MM-DD') AS BLTN_DT
+                          FROM DSM_ANNCE A
+                          LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                         WHERE 1=1
+                           AND (POPUP_YN = 'N' OR A.POPUP_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD') OR A.POPUP_STA_DT > TO_CHAR(SYSDATE,'YYYYMMDD'))
+                         ]]><isNotEmpty property="ANNCE_TYP_CD"><![CDATA[
+                           AND A.ANNCE_TYP_CD = #ANNCE_TYP_CD#
+                         ]]></isNotEmpty><![CDATA[
+                         ]]><isNotEmpty property="RCV_TYP_CD"><![CDATA[
+                           AND A.RCV_TYP_CD = #RCV_TYP_CD#
+                         ]]></isNotEmpty><![CDATA[
+                         ]]><isNotEmpty property="USER_NM"><![CDATA[
+                           AND D.USER_NM LIKE '%'||#USER_NM#||'%'
+                         ]]></isNotEmpty><![CDATA[
+                     ) X
+              LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL Y ON (Y.COMM_CD_ID = 'DSM_RCV_TYP_CD' AND 
+                                               Y.COMM_CD_VAL = X.RCV_TYP_CD)
+              ORDER BY X.POPUP_VALUE, X.ANNCE_ID DESC
+        /* ==================================================================== */
+        ) ALL_LIST
+    )
+ WHERE rn BETWEEN (#page#-1) * #page_size#+1 AND #page# * #page_size#]]>
+	</select>
+	<select id="S002" parameterClass="map" resultClass="hmap" fetchSize="1" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.S002  */
+/* IO: 안종광,2015-01-21T19:14:02(admin,2014-11-06T14:03:25) */
+SELECT COUNT(1) AS ANNCE_CNT
+      FROM (
+        /* ==================================================================== */
+            SELECT 
+                    DECODE(X.POPUP_VALUE,'0','NW',NULL) AS FLAG
+                  , X.ANNCE_ID
+                  , X.ANNCE_TYP_CD
+                  , X.RCV_TYP_CD
+                  , Y.COMM_CD_VAL_NM AS RCV_TYP_NM
+                  , CASE WHEN Y.COMM_CD_VAL_NM = '' OR Y.COMM_CD_VAL_NM IS NULL THEN '전체' ELSE Y.COMM_CD_VAL_NM END AS RCV_TYP_NM_1
+                  , X.ANNCE_TITL_NM
+                  , X.ATCH_YN
+                  , X.POPUP_YN
+                  , TO_CHAR(TO_DATE(X.POPUP_STA_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_STA_DT
+                  , TO_CHAR(TO_DATE(X.POPUP_END_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_END_DT
+                  , F_MASKING('N',X.BLTNR_NM) AS BLTNR_NM
+                  , X.BLTN_DT
+                  , ( SELECT NVL(COUNT(I.READ_MGMT_ID) , 0)
+                        FROM DSM_READR_MGMT I
+                       WHERE I.READ_MGMT_ID = TO_CHAR(X.ANNCE_ID)
+                    ) VIEW_CNT /* 조회건수 */
+              FROM (
+                        SELECT 
+                               '0' AS POPUP_VALUE
+                             , A.ANNCE_ID
+                             , A.ANNCE_TYP_CD
+                             , A.RCV_TYP_CD
+                             , A.ANNCE_TITL_NM
+                             , (SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+                                  FROM DSM_ATCH_FILE_MGMT X
+                                 WHERE A.ANNCE_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+                             , A.POPUP_YN
+                             , A.POPUP_STA_DT
+                             , A.POPUP_END_DT
+                             , D.USER_NM AS BLTNR_NM
+                             , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT
+                          FROM DSM_ANNCE A
+                          LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                           WHERE 1=1
+                             AND A.POPUP_YN = 'Y' 
+                             AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.POPUP_STA_DT AND A.POPUP_END_DT
+                           ]]><isNotEmpty property="ANNCE_TYP_CD"><![CDATA[
+                             AND A.ANNCE_TYP_CD = #ANNCE_TYP_CD#
+                           ]]></isNotEmpty><![CDATA[
+                           ]]><isNotEmpty property="RCV_TYP_CD"><![CDATA[
+                             AND A.RCV_TYP_CD = #RCV_TYP_CD#
+                           ]]></isNotEmpty><![CDATA[
+                           ]]><isNotEmpty property="USER_NM"><![CDATA[
+                             AND D.USER_NM LIKE '%'||#USER_NM#||'%'
+                           ]]></isNotEmpty><![CDATA[
+
+                        UNION
+
+                        SELECT 
+                               '1' AS POPUP_VALUE
+                             , A.ANNCE_ID
+                             , A.ANNCE_TYP_CD
+                             , A.RCV_TYP_CD
+                             , A.ANNCE_TITL_NM
+                             , (SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+                                  FROM DSM_ATCH_FILE_MGMT X
+                                 WHERE A.ANNCE_ID = X.ATCH_MGMT_ID) AS ATCH_YN
+                             , A.POPUP_YN
+                             , A.POPUP_STA_DT
+                             , A.POPUP_END_DT
+                             , D.USER_NM AS BLTNR_NM
+                             , TO_CHAR(A.UPD_DTM, 'YYYY-MM-DD') AS BLTN_DT
+                          FROM DSM_ANNCE A
+                          LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                         WHERE 1=1
+                           AND (POPUP_YN = 'N' OR A.POPUP_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD') OR A.POPUP_STA_DT > TO_CHAR(SYSDATE,'YYYYMMDD'))
+                         ]]><isNotEmpty property="ANNCE_TYP_CD"><![CDATA[
+                           AND A.ANNCE_TYP_CD = #ANNCE_TYP_CD#
+                         ]]></isNotEmpty><![CDATA[
+                         ]]><isNotEmpty property="RCV_TYP_CD"><![CDATA[
+                           AND A.RCV_TYP_CD = #RCV_TYP_CD#
+                         ]]></isNotEmpty><![CDATA[
+                         ]]><isNotEmpty property="USER_NM"><![CDATA[
+                           AND D.USER_NM LIKE '%'||#USER_NM#||'%'
+                         ]]></isNotEmpty><![CDATA[
+                     ) X
+              LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL Y ON (Y.COMM_CD_ID = 'DSM_RCV_TYP_CD' AND 
+                                               Y.COMM_CD_VAL = X.RCV_TYP_CD)
+        /* ==================================================================== */
+        )]]>
+	</select>
+	<select id="dSearchAnnce" parameterClass="map" resultClass="hmap" fetchSize="1" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dSearchAnnce  */
+/* IO: 안종광,2015-01-21T19:15:46(admin,2014-11-07T10:33:25) */
+SELECT '' FLAG
+      , A.ANNCE_ID
+      , A.ANNCE_TITL_NM
+      , ANNCE_TYP_CD
+      , F_DSM_CODE_NM('DSM_ANNCE_TYP_CD', A.ANNCE_TYP_CD) AS ANNCE_TYP_NM
+      , RCV_TYP_CD
+      , F_DSM_CODE_NM('DSM_RCV_TYP_CD', RCV_TYP_CD) AS RCV_TYP_CD_NM
+      , A.POPUP_YN
+      , TO_CHAR(TO_DATE(A.POPUP_STA_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_STA_DT
+      , TO_CHAR(TO_DATE(A.POPUP_END_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_END_DT
+      , B.USER_NM AS BLTNR_NM
+      , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT
+      , A.ANNCE_CTT
+  FROM DSM_ANNCE A
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.UPDR_ID = B.USER_ID)
+ WHERE A.ANNCE_ID = #ANNCE_ID#]]>
+	</select>
+	<select id="dSearchAnnceAtchFile" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dSearchAnnceAtchFile  */
+/* IO: admin,2014-11-13T19:46:59(admin,2014-11-07T10:42:52) */
+SELECT
+       A.ATCH_SEQ
+     , A.ATCH_FILE_ID
+     , B.FILE_NM
+     , B.FILE_GRP_ID
+     , B.FILE_PATH
+     , (CASE
+        WHEN B.FILE_SIZE < (1024*1024)
+        THEN
+       (CASE
+       WHEN ROUND(B.FILE_SIZE/1024, 2) < 1
+       THEN '0'||ROUND(B.FILE_SIZE/1024, 2)||'Kb'
+       ELSE ROUND(B.FILE_SIZE/1024, 2)||'Kb' END)
+       ELSE
+       (CASE
+       WHEN ROUND((B.FILE_SIZE/1024)/1024, 2) < 1
+       THEN '0'||ROUND((B.FILE_SIZE/1024)/1024, 2)||'Mb'
+       ELSE ROUND((B.FILE_SIZE/1024)/1024, 2)||'Mb' END)
+       END) AS FILE_SIZE
+  FROM DSM_ANNCE_ATCH_FILE A
+  LEFT JOIN DSM_ATCH_FILE B ON (A.ATCH_FILE_ID = B.ATCH_FILE_ID)
+ WHERE A.ANNCE_ID = #ANNCE_ID# 
+ ORDER BY A.ATCH_SEQ]]>
+	</select>
+	<select id="dSearchAnnceIdSeq" parameterClass="map" resultClass="hmap" fetchSize="1" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dSearchAnnceIdSeq  */
+/* IO: admin,2014-11-11T09:32:09(admin,2014-11-11T09:31:15) */
+SELECT DSM_ANNCE_SEQ.NEXTVAL AS ANNCE_ID 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dInsertAnnce  */
+/* IO: admin,2014-11-11T09:34:27(admin,2014-11-11T09:34:27) */
+INSERT INTO DSM_ANNCE (
+      ANNCE_ID
+    , RCV_TYP_CD
+    , ANNCE_TITL_NM
+    , ANNCE_CTT
+    , POPUP_YN
+    , POPUP_STA_DT
+    , POPUP_END_DT
+    , RGSTR_ID
+    , RGST_DTM
+    , UPDR_ID
+    , UPD_DTM
+)
+VALUES (
+      #ANNCE_ID#
+    , #RCV_TYP_CD#
+    , #ANNCE_TITL_NM#
+    , #ANNCE_CTT#
+    , #POPUP_YN#
+    , #POPUP_STA_DT#
+    , #POPUP_END_DT#
+    , #USER_ID#
+    , SYSDATE
+    , #USER_ID#
+    , SYSDATE 
+)]]>
+	</insert>
+	<update id="dUpdateAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dUpdateAnnce  */
+/* IO: admin,2014-11-14T09:49:13(admin,2014-11-11T09:43:25) */
+UPDATE DSM_ANNCE SET
+      UPD_DTM = SYSDATE
+    ]]><isNotEmpty property="ANNCE_TYP_CD"><![CDATA[, ANNCE_TYP_CD = #ANNCE_TYP_CD#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="RCV_TYP_CD"><![CDATA[, RCV_TYP_CD = #RCV_TYP_CD#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="ANNCE_TITL_NM"><![CDATA[, ANNCE_TITL_NM = #ANNCE_TITL_NM#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="ANNCE_CTT"><![CDATA[, ANNCE_CTT = #ANNCE_CTT#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="POPUP_YN"><![CDATA[, POPUP_YN = #POPUP_YN#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="POPUP_STA_DT"><![CDATA[, POPUP_STA_DT = #POPUP_STA_DT#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="POPUP_END_DT"><![CDATA[, POPUP_END_DT = #POPUP_END_DT#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="UPDR_ID"><![CDATA[, UPDR_ID = #UPDR_ID#]]></isNotEmpty><![CDATA[
+ WHERE ANNCE_ID = #ANNCE_ID# /* 공지사항ID */]]>
+	</update>
+	<delete id="dDeleteAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dDeleteAnnce  */
+/* IO: admin,2014-11-11T09:44:21(admin,2014-11-11T09:44:21) */
+DELETE FROM DSM_ANNCE
+ WHERE ANNCE_ID = #ANNCE_ID#]]>
+	</delete>
+	<insert id="dInsertAnnceAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dInsertAnnceAtchFile  */
+/* IO: admin,2014-11-11T09:55:44(admin,2014-11-11T09:55:44) */
+INSERT INTO DSM_ANNCE_ATCH_FILE (
+      ANNCE_ID
+    , ATCH_SEQ
+    , ATCH_FILE_ID
+    , RGSTR_ID
+    , RGST_DTM
+    , UPDR_ID
+    , UPD_DTM
+)
+VALUES (
+      #ANNCE_ID#
+    , (SELECT NVL(MAX(ATCH_SEQ),0)+1
+         FROM DSM_ANNCE_ATCH_FILE
+        WHERE ANNCE_ID = #ANNCE_ID#)
+    , #ATCH_FILE_ID#
+    , #USER_ID#
+    , SYSDATE
+    , #USER_ID#
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteAnnceAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.brd.brdbannce.db.DDSM_ANNCE.dDeleteAnnceAtchFile  */
+/* IO: admin,2014-11-11T10:02:24(admin,2014-11-11T10:01:19) */
+DELETE DSM_ANNCE_ATCH_FILE
+ WHERE ANNCE_ID = #ANNCE_ID#
+   AND ATCH_SEQ = #ATCH_SEQ#]]>
+	</delete>
+</sqlMap>

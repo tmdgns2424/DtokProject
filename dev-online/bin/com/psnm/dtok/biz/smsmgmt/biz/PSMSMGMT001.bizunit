@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSMSMGMT001">
+    <bizUnitName>[PU]SMS관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SMSMGMT</componentId>
+    <description/>
+    <method-list>
+        <method id="pDeleteSmsSnd">
+            <methodName>[PM]SMS수신자 삭제</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pDeleteSmsSnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T15:16:25" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchSmsMgmt">
+            <methodName>[PM]SMS관리 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchSmsMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T13:05:33" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSaveSmsSnd">
+            <methodName>[PM]SMS관리 저장</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSaveSmsSnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T14:26:37" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchDutySMgtm">
+            <methodName>[PM]SMS관리직무조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchDutySMgtm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-20T14:49:38" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchReCount">
+            <methodName>[PM]메세지 잔여건수 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchReCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-04T15:42:18" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSndMessage">
+            <methodName>[PM]메세지 전송</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSndMessage</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T10:20:35" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchMsgGrp">
+            <methodName>[PM]메세지구분 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchMsgGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T13:08:59" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchHTeam">
+            <methodName>[PM]본사팀 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchHTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T15:25:11" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchHPart">
+            <methodName>[PM]본사파트 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchHPart</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T09:38:33" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchDeptUser">
+            <methodName>[PM]영업국회원정보 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchDeptUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T16:08:58" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchMsgCount">
+            <methodName>[PM]메세지건수 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchMsgCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-04T14:16:42" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchDuty">
+            <methodName>[PM]직무구분 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchDuty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T09:21:01" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchUser">
+            <methodName>[PM]회원정보 조회</methodName>
+            <transactionId>biz.SMSMGMT@PSMSMGMT001_pSearchUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T10:51:27" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-11T14:59:56" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

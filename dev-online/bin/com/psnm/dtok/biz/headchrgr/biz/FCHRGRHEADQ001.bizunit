@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FCHRGRHEADQ001">
+    <bizUnitName>[FU]영업국별담당자관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.HEADCHRGR</componentId>
+    <description>영업국별담당자관리 FU</description>
+    <method-list>
+        <method id="fSearchChrgrHeadqUser">
+            <methodName>[FM]영업국별담당자관리담당자조회</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fSearchChrgrHeadqUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리담당자 정볼르 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-31T15:12:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fDeleteChrgrHeadq">
+            <methodName>[FM]영업국별담당자관리삭제</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fDeleteChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T10:55:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fUpdateChrgrHeadq">
+            <methodName>[FM]영업국별담당자관리수정</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fUpdateChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T10:55:22" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchChrgrHeadq">
+            <methodName>[FM]영업국별담당자관리영업국조회</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fSearchChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리 영업국 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T18:15:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertChrgrHeadq">
+            <methodName>[FM]영업국별담당자관리저장</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fInsertChrgrHeadq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T10:54:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchChrgrHeadqApprove">
+            <methodName>[FM]영업국별담당자관리회원정보조회</methodName>
+            <transactionId>biz.HEADCHRGR@FCHRGRHEADQ001_fSearchChrgrHeadqApprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국별담당자관리회원정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-05T09:56:03" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-30T16:05:31" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

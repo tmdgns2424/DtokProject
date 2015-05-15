@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DUSER001">
+	<select id="dSearchUserId" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DUSER001.dSearchUserId  */
+/* IO: 안종광,2015-01-22T14:51:30(안종광,2015-01-09T15:09:54) */
+SELECT tu.USER_ID, tu.ATTC_CAT
+     , SUBSTR(tu.USER_ID,0,2)||'****'||SUBSTR(tu.USER_ID,LENGTH(tu.USER_ID)) AS USER_ID_M
+  FROM PS_MNG.TBAS_USER_MGMT tu
+     , DSM_USER u
+ WHERE tu.USER_ID = u.USER_ID
+   AND tu.USER_ST = '1'  /*재직(퇴직구분)*/
+   AND tu.EFF_USER_YN = 'Y' /*승인(사용승인여부)*/
+   /* AND tu.OUT_USER_TYP IN ('1', '2') */ 
+   AND u.MBL_PHON_NUM1 = #MBL_PHON_NUM1#
+   AND u.MBL_PHON_NUM2 = #MBL_PHON_NUM2#
+   AND u.MBL_PHON_NUM3 = #MBL_PHON_NUM3#
+   AND u.EMAIL_ID     = #EMAIL_ID#
+   AND u.EMAIL_DMN_NM = #EMAIL_DMN_NM#
+  ]]><isNotEmpty property="USER_ID"><![CDATA[
+   AND tu.USER_ID = #USER_ID# /*사용자ID*/
+  ]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<update id="dUpdateTempPwd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DUSER001.dUpdateTempPwd  */
+/* IO: 안종광,2015-01-14T13:11:50(안종광,2015-01-13T11:15:07) */
+UPDATE PS_MNG.TBAS_USER_MGMT SET
+	   PWD = #PWD# /*신규비밀번호*/
+     , PWD_END_DT = TO_CHAR(ADD_MONTHS(SYSDATE, 3),'YYYYMMDD')
+     , LOGIN_FAIL_CNT = 0
+     , MOD_USER_ID = #USER_ID#
+     , MOD_DTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+ WHERE USER_ID = #USER_ID# /*사용자ID*/
+   AND ATTC_CAT = '4' /* 외부사용자 */
+   /*AND OUT_USER_TYP = '1'*/ /*MA제한*/]]>
+	</update>
+	<select id="dSearchSmsRecordSet" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DUSER001.dSearchSmsRecordSet  */
+/* IO: 안종광,2015-01-14T20:16:35(안종광,2015-01-13T13:34:48) */
+SELECT #USER_ID# AS USER_ID
+     , #MBL_PHON_NUM1# || #MBL_PHON_NUM2# || #MBL_PHON_NUM3# AS RCV_PHN_ID
+     , #USER_ID# AS "{0}"
+     , #PWD# AS "{1}"
+  FROM DUAL]]>
+	</select>
+</sqlMap>

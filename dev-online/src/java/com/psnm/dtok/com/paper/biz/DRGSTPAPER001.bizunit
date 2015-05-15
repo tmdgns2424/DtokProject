@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DRGSTPAPER001">
+    <bizUnitName>[DU]쪽지쓰기</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.PAPER</componentId>
+    <description/>
+    <method-list>
+        <method id="dAgntList">
+            <methodName>[DM]에이전트 리스트</methodName>
+            <transactionId>com.PAPER@DRGSTPAPER001_dAgntList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T15:14:30" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleTeam">
+            <methodName>[DM]조직도 영업팀 검색</methodName>
+            <transactionId>com.PAPER@DRGSTPAPER001_dSearchSaleTeam</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T13:50:02" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSeqSelect">
+            <methodName>[DM]쪽지번호 시퀀스 취득</methodName>
+            <transactionId>com.PAPER@DRGSTPAPER001_dSeqSelect</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T17:04:25" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchRead">
+            <methodName>[DM]쪽지열람조회</methodName>
+            <transactionId>com.PAPER@DRGSTPAPER001_dSearchRead</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-17T09:22:32" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchUserPop">
+            <methodName>[DM]팝업유저검색</methodName>
+            <transactionId>com.PAPER@DRGSTPAPER001_dSearchUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T17:28:27" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-12T16:59:48" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

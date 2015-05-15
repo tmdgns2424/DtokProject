@@ -1,0 +1,38 @@
+<html style='height:100%'>
+<head>
+    <script type = "text/javascript" src = "http://127.0.0.1:8080/oz60/ozrviewer/ztransferx_browers.js"></script>
+    <script type = "text/javascript" src = "http://127.0.0.1:8080/oz60/ozrviewer/ozviewer_browers.js"></script>
+    <script type ="text/javascript">
+        function ZTInstallEndCommand_ZTransferX(param1,param2) {
+            Create_Div();
+            Initialize_OZViewer("OZReportViewer", "CLSID:0DEF32F8-170F-46f8-B1FF-4BF7443F5F25", "98%", "98%", "application/OZRViewer");
+            Insert_OZViewer_Param("connection.servlet", "http://127.0.0.1:8080/oz60/server");
+            Insert_OZViewer_Param("connection.reportname", "/sample.ozr");
+            Insert_OZViewer_Param("connection.fetchtype", "concurrent");
+            Insert_OZViewer_Param("connection.pcount", "1");
+            Insert_OZViewer_Param("connection.args1", "formparam=");
+            Insert_OZViewer_Param("odi.odinames", "sample");
+            Insert_OZViewer_Param("odi.sample.pcount", "1");
+            Insert_OZViewer_Param("odi.sample.args1", "odiparam=");
+            Insert_OZViewer_Param("viewer.isframe", "false");
+            Insert_OZViewer_Param("information.debug", "true");
+            Insert_OZViewer_Param("viewer.namespace", "custom_namespace\\ozviewer");
+            Start_OZViewer();
+        }
+    </script>
+</head>
+
+<body style='height:100%'>
+<div id = "InstallOZViewer">
+    <script type = "text/javascript">
+        Initialize_ZT("ZTransferX", "CLSID:C7C7225A-9476-47AC-B0B0-FF3B79D55E67", "0", "0", "http://127.0.0.1:8080/oz60/ozrviewer/ZTransferX.cab#version=2,2,4,9", "application/OZTransferX_1026");
+        Insert_ZT_Param("download.server", "http://127.0.0.1/oz60/ozrviewer/");
+        Insert_ZT_Param("download.port", "8080");
+        Insert_ZT_Param("download.instruction", "ozrviewer.idf");
+        Insert_ZT_Param("install.base", "<PROGRAMS>/Forcs");
+        Insert_ZT_Param("install.namespace", "custom_namespace");
+        Start_ZT("http://127.0.0.1:9090/oz60/ozrviewer");
+    </script>
+</div>
+</body>
+</html>

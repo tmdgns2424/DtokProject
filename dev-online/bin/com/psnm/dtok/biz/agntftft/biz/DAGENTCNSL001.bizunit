@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTCNSL001">
+    <bizUnitName>[DU]면담계획/수시면담</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.AGNTFTFT</componentId>
+    <description>면담계획/수시면담 PU</description>
+    <method-list>
+        <method id="dSearchAgentCnslCount">
+            <methodName>[DM]면담계획/수시면담건수조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dSearchAgentCnslCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/수시면담 건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T11:23:17" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteAgentCnsl">
+            <methodName>[DM]면담계획/수시면담삭제</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dDeleteAgentCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/수시면담을 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T15:37:11" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertAgentCnsl">
+            <methodName>[DM]면담계획/수시면담저장</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dInsertAgentCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/수시면담을 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T14:13:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnsl">
+            <methodName>[DM]면담계획/수시면담조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dSearchAgentCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/수시면담을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:46:46" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslTotalCount">
+            <methodName>[DM]면담계획/수시면담총건수조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dSearchAgentCnslTotalCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획/수시면담총건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T15:37:54" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCnslSms">
+            <methodName>[DM]면담계획SMS대상자조회</methodName>
+            <transactionId>biz.AGNTFTFT@DAGENTCNSL001_dSearchAgentCnslSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>면담계획SMS대상자정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T17:18:02" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-12T10:41:10" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

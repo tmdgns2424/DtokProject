@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PAGENTEDU001">
+    <bizUnitName>[PU]교육관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.AGNTEDU</componentId>
+    <description>교육관리PU</description>
+    <method-list>
+        <method id="pDeleteAgentEdu">
+            <methodName>[PM]교육관리삭제</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pDeleteAgentEdu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T11:40:42" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDetailAgentEdu">
+            <methodName>[PM]교육관리상세</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pDetailAgentEdu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육관리 상세를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T11:01:43" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveAgentEdu">
+            <methodName>[PM]교육관리저장(등록|수정)</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pSaveAgentEdu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육관리 정보를 입력, 수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T10:47:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentEdu">
+            <methodName>[PM]교육관리조회</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pSearchAgentEdu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-24T17:34:09" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentEduAtndr">
+            <methodName>[PM]교육관리참석자엑셀조회</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pSearchAgentEduAtndr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육관리참석자 엑셀업로드 정보를 조회한다.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-16T15:31:48" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchAgentEduPrst">
+            <methodName>[PM]교육현황조회</methodName>
+            <transactionId>biz.AGNTEDU@PAGENTEDU001_pSearchAgentEduPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>교육현황 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-26T10:35:09" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-24T17:33:25" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

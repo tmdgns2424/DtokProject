@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DUSERMGMT001">
+    <bizUnitName>[DU]회원관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.USERMGMT</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchCareerMtrCntrt">
+            <methodName>[DM]경력사항(계약 후)</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchCareerMtrCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T14:22:07" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchEduHst">
+            <methodName>[DM]교육이력 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchEduHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:02:19" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchFtftHst">
+            <methodName>[DM]면담이력 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchFtftHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T11:40:50" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchNonRealBizUser">
+            <methodName>[DM]미인증회원 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchNonRealBizUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T14:33:11" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchUserBanCnt">
+            <methodName>[DM]일시접근금지 회원수</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchUserBanCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T13:42:09" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dUpdatePassword">
+            <methodName>[DM]패스워드 수정</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dUpdatePassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:15:21" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchActvCareer">
+            <methodName>[DM]활동경력 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchActvCareer</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T19:45:13" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dInsertUserInfoHst">
+            <methodName>[DM]회원가입이력 저장</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dInsertUserInfoHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T16:26:52" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchMbrStHst">
+            <methodName>[DM]회원상태이력 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchMbrStHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T10:41:50" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchCertPwd">
+            <methodName>[DM]패스워드 인증</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchCertPwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T16:56:44" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchUserApprCnt">
+            <methodName>[DM]가입승인한 회원수</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchUserApprCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T13:41:25" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dInsertEmpUser">
+            <methodName>[DM]회원등록(임직원)</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dInsertEmpUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-08T12:44:58" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dUpdateUserScrbReqSt">
+            <methodName>[DM]회원요청정보상태 변경</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dUpdateUserScrbReqSt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-14T12:40:08" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchUserDtl">
+            <methodName>[DM]회원정보 상세조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchUserDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T11:36:10" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchUser">
+            <methodName>[DM]회원정보 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T09:34:16" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dUpdateUser">
+            <methodName>[DM]회원정보 수정</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dUpdateUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T16:20:42" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchUserAuthGrp">
+            <methodName>[DM]사용자별권한그룹 조회</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchUserAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T14:27:36" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dInsertPwdChgHst">
+            <methodName>비밀번호 변경이력 등록</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dInsertPwdChgHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-29T10:18:45" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="dSearchIsRecentPassword">
+            <methodName>최근 비밀번호 동일 여부</methodName>
+            <transactionId>com.USERMGMT@DUSERMGMT001_dSearchIsRecentPassword</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-29T10:27:52" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-15T09:33:49" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

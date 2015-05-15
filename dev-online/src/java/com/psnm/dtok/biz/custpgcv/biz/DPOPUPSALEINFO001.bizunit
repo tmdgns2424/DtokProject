@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DPOPUPSALEINFO001">
+    <bizUnitName>[DU]매출정보</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.CUSTPGCV</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchSaleInfo">
+            <methodName>[DM]매출정보 조회</methodName>
+            <transactionId>biz.CUSTPGCV@DPOPUPSALEINFO001_dSearchSaleInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T14:47:42" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-28T14:44:11" user="안진갑 (ahnjingap)"/>
+    </history>
+</bizUnit>

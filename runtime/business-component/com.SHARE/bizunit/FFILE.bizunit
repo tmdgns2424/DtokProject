@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FFILE">
+    <bizUnitName>[FU]파일관리</bizUnitName>
+    <parentClassXd>SFU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>공통 첨부파일 정보처리 기능 클래스</description>
+    <method-list>
+        <method id="fSavePictuerFile">
+            <methodName>[FM]사진파일저장</methodName>
+            <transactionId>com.SHARE@FFILE_fSavePictuerFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T17:05:10" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fInsertFileMapping">
+            <methodName>[FM]첨부파일매핑등록</methodName>
+            <transactionId>com.SHARE@FFILE_fInsertFileMapping</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일ID와 각 업무별 컨텐츠의 매핑정보를 등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T10:54:36" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fDeleteFileMapping">
+            <methodName>[FM]첨부파일매핑삭제</methodName>
+            <transactionId>com.SHARE@FFILE_fDeleteFileMapping</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일매핑삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T11:37:25" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchFileMapping">
+            <methodName>[FM]첨부파일매핑조회</methodName>
+            <transactionId>com.SHARE@FFILE_fSearchFileMapping</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>해당 컨텐츠ID(예, 공지사항ID, FAQ ID등)로 해당 게시글의 첨부파일목록을 조회하여 반환&#13;
+(참고) 첨부파일의 업무구분ID(FILE_GRP_ID)가 파라미터로 전달되며, 없으면 디폴트 DSM (DSM_ATCH_FILE_MGMT) 참조함.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-01T16:29:22" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fDeleteFileByMgmtId">
+            <methodName>[FM]첨부파일삭제(매핑ID조건)</methodName>
+            <transactionId>com.SHARE@FFILE_fDeleteFileByMgmtId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]첨부파일삭제(매핑ID조건) - 첨부파일과 첨부파일매핑 정보 삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-13T10:39:23" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fDeleteFileByFileId">
+            <methodName>[FM]첨부파일삭제(파일ID조건)</methodName>
+            <transactionId>com.SHARE@FFILE_fDeleteFileByFileId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-11T09:36:24" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+        <method id="fSaveFile">
+            <methodName>[FM]첨부파일저장_단건</methodName>
+            <transactionId>com.SHARE@FFILE_fSaveFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보(DSM_ATCH_FILE)와 첨부파일매핑정보(DSM_ATCH_FILE_MGMT)를 저장(등록 or 삭제)함&#13;
+이 함수는 데이터셋의 필드맵(단건)을 참조하여 처리함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-13T09:36:40" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="fSaveFileList">
+            <methodName>[FM]첨부파일저장_목록</methodName>
+            <transactionId>com.SHARE@FFILE_fSaveFileList</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보(DSM_ATCH_FILE)와 첨부파일매핑정보(DSM_ATCH_FILE_MGMT)를 저장(등록 or 삭제)함&#13;
+이 함수는 레코드셋(recordSets)에서 키=[fileList] 인 목록을 참조하여 처리함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-13T16:14:34" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="fSearchFile">
+            <methodName>[FM]첨부파일조회</methodName>
+            <transactionId>com.SHARE@FFILE_fSearchFile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>첨부파일정보 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-12T20:28:22" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-12T20:23:56" user="admin (admin)"/>
+    </history>
+</bizUnit>

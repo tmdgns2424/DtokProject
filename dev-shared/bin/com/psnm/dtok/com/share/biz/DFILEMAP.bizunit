@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DFILEMAP">
+    <bizUnitName>[DU]파일매핑</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>첨부파일과 각 컨텐츠와의 매핑정보를 조회,등록,삭제하는 DU 클래스</description>
+    <method-list>
+        <method id="dInsertFileMapByType">
+            <methodName>[DM]파일매핑등록(업무구분별)</methodName>
+            <transactionId>com.SHARE@DFILEMAP_dInsertFileMapByType</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무구분별로 첨부파일매핑 정보를 각 매핑테이블에 등록함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T19:34:17" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dDeleteFileMapByType">
+            <methodName>[DM]파일매핑삭제(업무구분별)</methodName>
+            <transactionId>com.SHARE@DFILEMAP_dDeleteFileMapByType</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무구분별로 첨부파일 매핑정보를 삭제함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T19:36:35" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchFileMapByType">
+            <methodName>[DM]파일매핑조회(업무구분별)</methodName>
+            <transactionId>com.SHARE@DFILEMAP_dSearchFileMapByType</transactionId>
+            <webServiceOpenXd>1</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무구분에 따른 첨부파일매핑조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T16:15:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-15T15:57:07" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

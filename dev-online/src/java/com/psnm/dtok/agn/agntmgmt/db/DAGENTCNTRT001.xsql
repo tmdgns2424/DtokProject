@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTCNTRT001">
+	<select id="dSearchAgentInfo" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentInfo  */
+/* IO: 안진갑,2015-04-23T14:44:22(한상곤,2014-11-26T10:07:03) */
+SELECT X.*
+  FROM (
+    SELECT ROW_NUMBER() OVER(ORDER BY  A.HDQT_TEAM_ORG_ID, A.SALE_DEPT_ORG_ID, A.SALE_TEAM_ORG_NM, A.RPSTY, A.AGNT_NM) RN, A.*
+      FROM (
+       SELECT 
+             DECODE(B.MBL_PHON_NUM1,NULL,'',B.MBL_PHON_NUM1||'-'||MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3) AS MBL_PHON_NUM
+           , DECODE(B.FAX_NUM1,NULL,'',B.FAX_NUM1||'-'||FAX_NUM2||'-'||B.FAX_NUM3) AS FAX_NUM
+           , DECODE(B.EMAIL_ID,NULL,'',B.EMAIL_ID||'@'||B.EMAIL_DMN_NM) AS EMAIL
+           , SUBSTR(C.AGNT_ID, -(LENGTH(C.AGNT_ID)) ,(LENGTH(C.AGNT_ID)-4))||'****' AS AGNT_ID_M
+           , C.AGNT_ID 
+           , SUBSTR(C.AGNT_NM,1,1)||'**'||(CASE WHEN LENGTH(C.AGNT_NM)>2 THEN SUBSTR(C.AGNT_NM,3,LENGTH(C.AGNT_NM)) ELSE NULL END) AS AGNT_NM_M
+           , C.AGNT_NM 
+           , C.RPSTY 
+           , H.ORG_ID HDQT_TEAM_ORG_ID
+           , H.ORG_NM HDQT_TEAM_ORG_NM
+           , E.OUT_ORG_DTL_ID SALE_TEAM_ORG_ID
+           , E.OUT_ORG_DTL_NM SALE_TEAM_ORG_NM
+           , E.SUP_OUT_ORG_DTL_ID SALE_DEPT_ORG_ID
+           , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE E.SUP_OUT_ORG_DTL_ID = OUT_ORG_DTL_ID AND DEL_YN ='N') SALE_DEPT_ORG_NM
+           , B.BIRTH_LUNAR_YN
+           , F.COMM_CD_VAL_NM AS RPSTY_NM
+           , (B.ADDR_1||' '||B.ADDR_2) AS ADDR
+           , G.OUT_ORG_NM
+           , A.USER_ID
+           , A.DUTY AS DUTY_CD
+           , B.SCRB_ST_CD
+           , A.ATTC_CAT
+       FROM PS_MNG.TBAS_USER_MGMT A
+            JOIN DSM_USER B ON (A.USER_ID = B.USER_ID)
+            JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON(C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM'))
+            JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON(E.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+            JOIN PS_MNG.TBAS_COMM_CD_DTL F ON (C.RPSTY = F.COMM_CD_VAL AND F.COMM_CD_ID = 'DSM_RETL_CLASS_CD')
+            JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON(G.OUT_ORG_ID = E.OUT_ORG_ID)
+            JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON(H.ORG_ID = G.ORG_ID)
+      WHERE G.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+        AND A.ATTC_CAT = '4'
+        AND A.USER_TYP = '4'
+     ]]><isNotEmpty property="MBL_PHON_NUM1"><![CDATA[
+            AND B.MBL_PHON_NUM1 LIKE '%'||#MBL_PHON_NUM1#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="MBL_PHON_NUM2"><![CDATA[
+            AND B.MBL_PHON_NUM2 LIKE '%'||#MBL_PHON_NUM2#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="MBL_PHON_NUM3"><![CDATA[
+            AND B.MBL_PHON_NUM3 LIKE '%'||#MBL_PHON_NUM3#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+            AND C.AGNT_NM LIKE '%'||#AGNT_NM#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="EMAIL"><![CDATA[
+            AND B.EMAIL_ID||B.EMAIL_DMN_NM LIKE '%'||REPLACE(#EMAIL#,'@','')||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="ADDR"><![CDATA[
+            AND B.ADDR_1 LIKE '%'||#ADDR#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="FAX_NUM1"><![CDATA[
+            AND B.FAX_NUM1 LIKE '%'||#FAX_NUM1#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="FAX_NUM2"><![CDATA[
+            AND B.FAX_NUM2 LIKE '%'||#FAX_NUM2#||'%'
+     ]]></isNotEmpty><![CDATA[
+     ]]><isNotEmpty property="FAX_NUM3"><![CDATA[
+            AND B.FAX_NUM3 LIKE '%'||#FAX_NUM3#||'%'
+     ]]></isNotEmpty><![CDATA[      
+     ]]><isNotEmpty property="REPLY"><![CDATA[
+            AND EXISTS( SELECT 1
+                          FROM DSM_CMNT_MGMT
+                         WHERE CMNT_MGMT_ID = A.USER_ID
+                           AND UPPER(CMNT_CTT) LIKE '%'||UPPER(#REPLY#)||'%' )              
+     ]]></isNotEmpty><![CDATA[       
+     ]]><isNotEmpty property="INT_CMNT"><![CDATA[
+            AND EXISTS( SELECT 1
+                          FROM DSM_AGENT_CNTRT S1
+                          JOIN DSM_AGENT_INT_HST S2 ON ( S2.CNTRT_MGMT_NUM = S1.CNTRT_MGMT_NUM )
+                         WHERE S1.AGNT_ID = A.CPLAZA_ORG_CD
+                           AND S1.CNTRT_ST_CD = '6'
+                           AND UPPER(S2.INT_CMNT) LIKE '%'||UPPER(#INT_CMNT#)||'%' )   
+     ]]></isNotEmpty><![CDATA[ 
+     ]]><isNotEmpty property="UNLAW_SALE_EX_CTT"><![CDATA[
+            AND EXISTS( SELECT 1
+                          FROM DSM_UNLAW_SALE_EX S1
+                         WHERE S1.AGNT_ID = A.CPLAZA_ORG_CD
+                           AND UPPER(S1.UNLAW_SALE_EX_CTT) LIKE '%'||UPPER(#UNLAW_SALE_EX_CTT#)||'%' )   
+     ]]></isNotEmpty><![CDATA[      
+           ) A
+     ) X
+    WHERE X.RN BETWEEN (#page#-1) * #page_size#+1 AND #page# * #page_size#]]>
+	</select>
+	<select id="dSearchAgentInfoCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentInfoCnt  */
+/* IO: 안진갑,2015-04-23T14:44:34(한상곤,2014-11-26T10:10:34) */
+SELECT COUNT(*) AS count
+  FROM (
+  SELECT 
+         DECODE(B.MBL_PHON_NUM1,NULL,'',B.MBL_PHON_NUM1||'-'||MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3) AS MBL_PHON_NUM
+       , DECODE(B.EMAIL_ID,NULL,'',B.EMAIL_ID||'@'||B.EMAIL_DMN_NM) AS EMAIL
+       , C.AGNT_ID 
+       , C.AGNT_NM 
+       , C.RPSTY 
+       , H.ORG_ID HDQT_TEAM_ORG_ID
+       , H.ORG_NM HDQT_TEAM_ORG_NM
+       , E.OUT_ORG_DTL_ID SALE_TEAM_ORG_ID
+       , E.OUT_ORG_DTL_NM SALE_TEAM_ORG_NM
+       , E.SUP_OUT_ORG_DTL_ID SALE_DEPT_ORG_ID
+       , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE E.SUP_OUT_ORG_DTL_ID = OUT_ORG_DTL_ID AND DEL_YN ='N') SALE_DEPT_ORG_NM
+       , B.BIRTH_LUNAR_YN
+       , F.COMM_CD_VAL_NM AS RPSTY
+       , DECODE(B.ADDR_1,NULL,'',B.ADDR_1||' '||B.ADDR_2) AS ADDR
+    FROM PS_MNG.TBAS_USER_MGMT A
+         JOIN DSM_USER B ON (A.USER_ID = B.USER_ID)
+         JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON(C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM'))
+         JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON(E.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+         JOIN PS_MNG.TBAS_COMM_CD_DTL F ON (C.RPSTY = F.COMM_CD_VAL AND F.COMM_CD_ID = 'DSM_RETL_CLASS_CD')
+         JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON(G.OUT_ORG_ID = E.OUT_ORG_ID)
+         JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON(H.ORG_ID = G.ORG_ID)
+   WHERE G.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+     AND A.ATTC_CAT = '4'
+     AND A.USER_TYP = '4'
+        ]]><isNotEmpty property="MBL_PHON_NUM1"><![CDATA[
+           AND B.MBL_PHON_NUM1 LIKE '%'||#MBL_PHON_NUM1#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="MBL_PHON_NUM2"><![CDATA[
+           AND B.MBL_PHON_NUM2 LIKE '%'||#MBL_PHON_NUM2#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="MBL_PHON_NUM3"><![CDATA[
+           AND B.MBL_PHON_NUM3 LIKE '%'||#MBL_PHON_NUM3#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+          AND C.AGNT_NM LIKE '%'||#AGNT_NM#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="EMAIL"><![CDATA[
+          AND B.EMAIL_ID||B.EMAIL_DMN_NM LIKE '%'||REPLACE(#EMAIL#,'@','')||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="ADDR"><![CDATA[
+           AND B.ADDR_1||B.ADDR_2 LIKE '%'||#ADDR#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="FAX_NUM1"><![CDATA[
+           AND B.FAX_NUM1 LIKE '%'||#FAX_NUM1#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="FAX_NUM2"><![CDATA[
+          AND B.FAX_NUM2 LIKE '%'||#FAX_NUM2#||'%'
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="FAX_NUM3"><![CDATA[
+           AND B.FAX_NUM3 LIKE '%'||#FAX_NUM3#||'%'
+    ]]></isNotEmpty><![CDATA[  
+    ]]><isNotEmpty property="REPLY"><![CDATA[
+           AND EXISTS( SELECT 1
+                         FROM DSM_CMNT_MGMT
+                        WHERE CMNT_MGMT_ID = A.USER_ID
+                          AND UPPER(CMNT_CTT) LIKE '%'||UPPER(#REPLY#)||'%' )              
+    ]]></isNotEmpty><![CDATA[  
+    ]]><isNotEmpty property="INT_CMNT"><![CDATA[
+            AND EXISTS( SELECT '1'
+                          FROM DSM_AGENT_CNTRT S1
+                          JOIN DSM_AGENT_INT_HST S2 ON ( S2.CNTRT_MGMT_NUM = S1.CNTRT_MGMT_NUM )
+                         WHERE S1.AGNT_ID = A.CPLAZA_ORG_CD
+                           AND S1.CNTRT_ST_CD = '6'
+                           AND UPPER(S2.INT_CMNT) LIKE '%'||UPPER(#INT_CMNT#)||'%' )   
+    ]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="UNLAW_SALE_EX_CTT"><![CDATA[
+            AND EXISTS( SELECT 1
+                          FROM DSM_UNLAW_SALE_EX S1
+                         WHERE S1.AGNT_ID = A.CPLAZA_ORG_CD
+                           AND UPPER(S1.UNLAW_SALE_EX_CTT) LIKE '%'||UPPER(#UNLAW_SALE_EX_CTT#)||'%' )   
+    ]]></isNotEmpty><![CDATA[             
+ )]]>
+	</select>
+	<select id="dSearchAgentCntrt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrt  */
+/* IO: 안진갑,2015-05-13T16:51:21(한상곤,2014-12-17T17:11:02) */
+SELECT 
+  RN
+  ,X.REQ_HDQT_TEAM_ORG_ID  /*희망본사팀*/
+  ,(SELECT ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = X.REQ_HDQT_TEAM_ORG_ID) AS REQ_HDQT_TEAM_ORG_NM
+  ,X.REQ_OUT_ORG_ID AS REQ_HDQT_PART_ORG_ID  /*희망본사파트*/
+  ,(SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE OUT_ORG_ID = X.REQ_OUT_ORG_ID) REQ_HDQT_PART_ORG_NM
+  ,X.REQ_DSM_HEADQ_CD AS REQ_SALE_DEPT_ORG_ID /*희망영업국*/
+  ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = X.REQ_DSM_HEADQ_CD) REQ_SALE_DEPT_ORG_NM
+  ,X.REQ_DSM_TEAM_NM AS REQ_SALE_TEAM_ORG_NM/*희망영업팀명*/
+  ,X.APP_HDQT_TEAM_ORG_ID /*지정본사팀*/
+  ,(SELECT ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = X.APP_HDQT_TEAM_ORG_ID) AS APP_HDQT_TEAM_ORG_NM
+  ,X.APP_OUT_ORG_ID AS APP_HDQT_PART_ORG_ID /*지정본사파트*/
+  ,(SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE OUT_ORG_ID = X.APP_OUT_ORG_ID) APP_HDQT_PART_ORG_NM
+  ,X.APP_DSM_HEADQ_CD AS APP_SALE_DEPT_ORG_ID    /*지정영업국*/
+  ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = X.APP_DSM_HEADQ_CD) APP_SALE_DEPT_ORG_NM
+  ,X.APP_DSM_TEAM_CD AS APP_SALE_TEAM_ORG_ID  /*지정영업팀*/ 
+  ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = X.APP_DSM_TEAM_CD) APP_SALE_TEAM_ORG_NM
+  ,X.CNTRT_MGMT_NUM   /*계약관리번호*/
+  ,TO_CHAR(X.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM   /*지원일시(등록일시)*/
+  ,F_MASKING('N', X.NAME_KOR) AS NAME_KOR /*지원자명*/
+  ,X.CNTRT_ST_CD  /*계약상태코드[DSM_CNTRT_ST_CD]*/
+  ,(SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNTRT_ST_CD' AND COMM_CD_VAL = X.CNTRT_ST_CD) AS CNTRT_ST_NM  /*계약상태명*/
+  ,(SELECT NVL(COUNT(*),0) FROM DSM_AGENT_INT_HST B WHERE B.CNTRT_MGMT_NUM = X.CNTRT_MGMT_NUM)||'/'||
+        NVL((SELECT DECODE(MGMT_ORG_YN,'Y',2,'N',3,'N') FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE X.REQ_OUT_ORG_ID = OUT_ORG_DTL_ID),3) AS INT_HST_SEQ
+  ,X.AGENT_OPR_ID /*에이전트처리자ID*/
+  ,(SELECT USER_NM FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID = X.AGENT_OPR_ID) AS AGENT_OPR_NM /*에이전트처리자명*/
+  ,X.AGENT_OP_DTM /*에이전트처리일시*/
+  ,X.USER_ID AS INTR_ID   /*면접관ID*/
+  ,X.USER_NM AS INTR_NM   /*면접관명*/
+FROM 
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY A.RGST_DTM DESC) RN
+        ,(SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.REQ_OUT_ORG_ID )
+         ) AS REQ_HDQT_TEAM_ORG_ID
+        ,A.REQ_OUT_ORG_ID
+        ,A.REQ_DSM_HEADQ_CD        
+        ,A.REQ_DSM_TEAM_NM
+        ,(SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.APP_OUT_ORG_ID )
+         ) AS APP_HDQT_TEAM_ORG_ID
+        ,A.APP_OUT_ORG_ID        
+        ,A.APP_DSM_HEADQ_CD        
+        ,A.APP_DSM_TEAM_CD        
+        ,A.CNTRT_MGMT_NUM
+        ,A.RGST_DTM
+        ,A.NAME_KOR
+        ,A.CNTRT_ST_CD
+        ,A.AGENT_OPR_ID
+        ,A.AGENT_OP_DTM
+        ,C.USER_ID
+        ,C.USER_NM
+  FROM DSM_AGENT_CNTRT A
+       LEFT JOIN (SELECT B1.CNTRT_MGMT_NUM, B2.USER_ID ,B2.USER_NM 
+                    FROM DSM_AGENT_INT_HST B1,
+                         PS_MNG.TBAS_USER_MGMT B2                         
+                   WHERE B1.INTR_ID = B2.USER_ID
+                     AND B2.ATTC_CAT = '1'
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+       LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.AGNT_ID AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+       LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )                 
+      WHERE 1=1
+        AND A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+      ]]><isNotEmpty property="REQ_HDQT_PART_ORG_ID"><![CDATA[
+        AND A.REQ_OUT_ORG_ID = #REQ_HDQT_PART_ORG_ID# /*희망본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="REQ_SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.REQ_DSM_HEADQ_CD = #REQ_SALE_DEPT_ORG_ID# /*희망영업국*/
+      ]]></isNotEmpty><![CDATA[       
+      ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+        AND A.APP_OUT_ORG_ID = #HDQT_PART_ORG_ID# /*지정본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*지정영업국*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+        AND A.APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID# /*지정영업팀*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+        AND A.CNTRT_ST_CD = #CNTRT_ST_CD#   /*계약상태코드[DSM_CNTRT_ST_CD]*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+        AND A.NAME_KOR LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="INTR_NM"><![CDATA[
+        AND C.USER_NM LIKE '%'||REPLACE(#INTR_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="14"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_DSM_HEADQ_CD = #S_DEPT_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="16"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="19"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="20"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[       
+      
+      ]]><isEqual property="DIV" compareValue="HDQT"><![CDATA[
+	    AND (A.AGNT_ID IS NULL
+	         OR E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#))
+      ]]></isEqual><![CDATA[
+      ]]><isNotEmpty property="onlineContext.userInfo.SALE_DEPT_ORG_ID"><![CDATA[
+      	]]><isEqual property="DIV" compareValue="HEAD"><![CDATA[
+        	AND (A.AGNT_ID IS NULL 
+            	 OR E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#)
+      	]]></isEqual><![CDATA[  
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="onlineContext.userInfo.SALE_TEAM_ORG_ID"><![CDATA[ 
+      	]]><isEqual property="DIV" compareValue="TEAM"><![CDATA[
+        	AND (A.AGNT_ID IS NULL 
+            	 OR E.OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_TEAM_ORG_ID#)
+      	]]></isEqual><![CDATA[
+      ]]></isNotEmpty><![CDATA[      
+) X
+WHERE X.RN BETWEEN (#page#-1) * #page_size#+1 AND #page# * #page_size#
+]]><isNotEmpty property="REQ_HDQT_TEAM_ORG_ID"><![CDATA[
+  AND X.REQ_HDQT_TEAM_ORG_ID = #REQ_HDQT_TEAM_ORG_ID# /*희망본사팀*/
+]]></isNotEmpty><![CDATA[ 
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+  AND X.APP_HDQT_TEAM_ORG_ID = #HDQT_TEAM_ORG_ID# /*지정본사팀*/
+]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchAgentCntrtCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrtCnt  */
+/* IO: 안진갑,2015-05-13T16:55:00(한상곤,2014-12-17T17:11:20) */
+SELECT COUNT(*) AS count
+FROM
+(
+  SELECT 
+        (SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.REQ_OUT_ORG_ID )
+         ) AS REQ_HDQT_TEAM_ORG_ID
+        ,(SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.APP_OUT_ORG_ID )
+         ) AS APP_HDQT_TEAM_ORG_ID
+  FROM DSM_AGENT_CNTRT A
+       LEFT JOIN (SELECT B1.CNTRT_MGMT_NUM, B2.USER_ID ,B2.USER_NM 
+                    FROM DSM_AGENT_INT_HST B1,
+                         PS_MNG.TBAS_USER_MGMT B2                         
+                   WHERE B1.INTR_ID = B2.USER_ID
+                     AND B2.ATTC_CAT = '1'
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+       LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.AGNT_ID AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+       LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )                                  
+      WHERE 1=1
+        AND A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+      ]]><isNotEmpty property="REQ_HDQT_PART_ORG_ID"><![CDATA[
+        AND A.REQ_OUT_ORG_ID = #REQ_HDQT_PART_ORG_ID# /*희망본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="REQ_SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.REQ_DSM_HEADQ_CD = #REQ_SALE_DEPT_ORG_ID# /*희망영업국*/
+      ]]></isNotEmpty><![CDATA[       
+      ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+        AND A.APP_OUT_ORG_ID = #HDQT_PART_ORG_ID# /*지정본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*지정영업국*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+        AND A.APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID# /*지정영업팀*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+        AND A.CNTRT_ST_CD = #CNTRT_ST_CD#   /*계약상태코드[DSM_CNTRT_ST_CD]*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+        AND A.NAME_KOR LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="INTR_NM"><![CDATA[
+        AND C.USER_NM LIKE '%'||REPLACE(#INTR_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="14"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_DSM_HEADQ_CD = #S_DEPT_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="16"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="19"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="20"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[  
+      
+      ]]><isEqual property="DIV" compareValue="HDQT"><![CDATA[
+	    AND (A.AGNT_ID IS NULL
+	         OR E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#))
+      ]]></isEqual><![CDATA[
+      ]]><isNotEmpty property="onlineContext.userInfo.SALE_DEPT_ORG_ID"><![CDATA[
+      	]]><isEqual property="DIV" compareValue="HEAD"><![CDATA[
+        	AND (A.AGNT_ID IS NULL 
+            	 OR E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#)
+      	]]></isEqual><![CDATA[  
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="onlineContext.userInfo.SALE_TEAM_ORG_ID"><![CDATA[ 
+      	]]><isEqual property="DIV" compareValue="TEAM"><![CDATA[
+        	AND (A.AGNT_ID IS NULL 
+            	 OR E.OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_TEAM_ORG_ID#)
+      	]]></isEqual><![CDATA[
+      ]]></isNotEmpty><![CDATA[       
+) X
+WHERE 1=1
+]]><isNotEmpty property="REQ_HDQT_TEAM_ORG_ID"><![CDATA[
+  AND X.REQ_HDQT_TEAM_ORG_ID = #REQ_HDQT_TEAM_ORG_ID# /*희망본사팀*/
+]]></isNotEmpty><![CDATA[ 
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+  AND X.APP_HDQT_TEAM_ORG_ID = #HDQT_TEAM_ORG_ID# /*지정본사팀*/
+]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dDetailAgentCntrt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dDetailAgentCntrt  */
+/* IO: 김보선,2015-03-02T09:28:58(한상곤,2014-12-17T17:12:21) */
+SELECT TO_CHAR(A.RGST_DTM,'YYYY-MM-DD HH24:MI') AS RGST_DT
+     , A.NAME_KOR
+     , A.NAME_HAN
+     , TO_CHAR(TO_DATE(A.BIRTH_DT),'YYYY-MM-DD') AS BIRTH_DT
+     , A.WEDD_YN
+     , DECODE(A.WEDD_YN,'Y','기혼','미혼') AS WEDD_NM
+     , A.PHON_NUM1
+     , A.PHON_NUM2
+     , A.PHON_NUM3
+     , A.PHON_NUM1||' - '||A.PHON_NUM2||' - '||A.PHON_NUM3 F_PHON_NUM
+     , A.MBL_PHON_NUM1
+     , A.MBL_PHON_NUM2
+     , A.MBL_PHON_NUM3
+     , A.MBL_PHON_NUM1||' - '||A.MBL_PHON_NUM2||' - '||A.MBL_PHON_NUM3 F_MBL_PHON_NUM
+     , A.EMAIL_ID
+     , A.EMAIL_DMN_NM
+     , A.EMAIL_ID||'@'||A.EMAIL_DMN_NM F_EMAIL
+     , A.POST_NUM
+     , A.ADDR_1
+     , A.ADDR_2
+     , A.POST_NUM||' '||A.ADDR_1||' '||A.ADDR_2 F_ADDR
+     /*사진*/
+     , F.FILE_NM
+     , F.FILE_GRP_ID
+     , F.FILE_PATH
+     , F.ATCH_FILE_ID
+     , A.PIC_FILE_ID
+     , A.SELF_INTDC
+     , A.SALE_PLAN
+     /*월별판매계획*/
+     , A.QUART1_MTH_AVG_QTY
+     , A.QUART1_MTH_TOT_QTY
+     , A.QUART2_MTH_AVG_QTY
+     , A.QUART2_MTH_TOT_QTY
+     , A.SHYR_MTH_AVG_QTY
+     , A.SHYR_MTH_TOT_QTY
+     , A.YR_MTH_AVG_QTY
+     , A.YR_MTH_TOT_QTY
+     /*기타사항*/
+     , A.GUIDE_PRCPL
+     , A.HOBBY_SKILL
+     , A.HEIGHT
+     , A.WEIGHT
+     , A.MAIN_ACTV_AREA
+     , A.DSM_RETL_TYPE
+     , A.DSM_RETL_TYPE_RMK
+     , A.ACTV_ACQN_NM
+     /*희망*/
+     , A.REQ_OUT_ORG_ID AS REQ_HDQT_PART_ORG_ID /*희망외부조직*/
+     ,(SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE A.REQ_OUT_ORG_ID = OUT_ORG_ID) REQ_HDQT_PART_ORG_NM /*희망외부조직명*/   
+     , A.REQ_DSM_HEADQ_CD AS REQ_SALE_DEPT_ORG_ID /*희망영업국코드*/
+     , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE A.REQ_DSM_HEADQ_CD = OUT_ORG_DTL_ID) REQ_SALE_DEPT_ORG_NM /*희망영업국명*/
+     , A.REQ_DSM_TEAM_NM AS REQ_SALE_TEAM_ORG_NM /*희망영업팀명*/
+     /*지정*/
+     , A.APP_OUT_ORG_ID AS HDQT_PART_ORG_ID /*지정외부조직*/
+     ,(SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE A.APP_OUT_ORG_ID = OUT_ORG_ID) HDQT_PART_ORG_NM /*지정외부조직명*/  
+     , A.APP_DSM_HEADQ_CD AS SALE_DEPT_ORG_ID /*지정영업국코드*/
+     , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE A.APP_DSM_HEADQ_CD = OUT_ORG_DTL_ID) SALE_DEPT_ORG_NM /*지정영업국명*/
+     , A.APP_DSM_TEAM_CD AS SALE_TEAM_ORG_ID/*지정영업팀코드*/
+     ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE A.APP_DSM_TEAM_CD = OUT_ORG_DTL_ID) SALE_TEAM_ORG_NM /*지정영업팀명*/ 
+     , A.CNTRT_ST_CD/* 계약상태코드 */
+     , (SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNTRT_ST_CD' AND A.CNTRT_ST_CD = COMM_CD_VAL) AS CNTRT_ST_NM/* 계약상태코드명 */
+     , A.APRV_DTM /*승인일시*/
+     , A.APRVR_ID /*승인자ID*/
+     , (SELECT USER_NM FROM PS_MNG.TBAS_USER_MGMT WHERE A.APRVR_ID = USER_ID) AS APRVR_NM/*승인자명*/
+     , A.APRVR_CMNT /*승인자의견*/
+     /* 에이전트 처리자 */
+     , B.AGNT_ID 
+     , B.AGNT_NM 
+     , E.ORG_ID AS AGNT_HDQT_TEAM_ORG_ID/*본사팀*/
+  	 , E.ORG_NM AS AGNT_HDQT_TEAM_ORG_NM     
+     , D.OUT_ORG_ID AS AGNT_HDQT_PART_ORG_ID /*본사파트*/
+     , D.OUT_ORG_NM AS AGNT_HDQT_PART_ORG_NM
+     , C.SUP_OUT_ORG_DTL_ID AS AGNT_SALE_DEPT_ORG_ID  /*영업국*/
+     , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE C.SUP_OUT_ORG_DTL_ID = OUT_ORG_DTL_ID) AS AGNT_SALE_DEPT_ORG_NM
+     , C.OUT_ORG_DTL_ID AS AGNT_SALE_TEAM_ORG_ID /*영업팀*/
+  	 , C.OUT_ORG_DTL_NM AS AGNT_SALE_TEAM_ORG_NM 
+     , A.AGENT_OPR_ID
+     , (SELECT USER_NM FROM PS_MNG.TBAS_USER_MGMT WHERE A.AGENT_OPR_ID = USER_ID) AS AGENT_OPR_NM
+     , A.AGENT_OP_DTM
+ FROM DSM_AGENT_CNTRT A
+      LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON ( A.AGNT_ID = B.AGNT_ID 
+                                                     AND B.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM')
+                                                   )
+      LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON(B.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND C.DEL_YN = 'N')
+      LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON(C.OUT_ORG_ID = D.OUT_ORG_ID)
+      LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON(D.ORG_ID = E.ORG_ID)
+      LEFT JOIN DSM_ATCH_FILE F ON (A.PIC_FILE_ID = F.ATCH_FILE_ID)  
+WHERE A.CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</select>
+	<select id="dSearchAgentCntrtNoSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrtNoSeq  */
+/* IO: 김보선,2015-02-16T10:18:00(김보선,2015-02-16T10:12:22) */
+SELECT DSM_CNTRT_MGMT_NUM_SEQ.NEXTVAL AS CNTRT_MGMT_NUM FROM DUAL]]>
+	</select>
+	<insert id="dInsertAgentCntrt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dInsertAgentCntrt  */
+/* IO: 김보선,2015-03-05T13:18:08(김보선,2015-02-16T12:42:04) */
+INSERT INTO DSM_AGENT_CNTRT
+(
+   CNTRT_MGMT_NUM
+  ,NAME_KOR
+  ,NAME_HAN
+  ,BIRTH_DT
+  ,WEDD_YN
+  ,PHON_NUM1
+  ,PHON_NUM2
+  ,PHON_NUM3
+  ,MBL_PHON_NUM1
+  ,MBL_PHON_NUM2
+  ,MBL_PHON_NUM3
+  ,BIRTH_LUNAR_YN
+  ,EMAIL_ID
+  ,EMAIL_DMN_CD
+  ,EMAIL_DMN_NM
+  ,POST_NUM
+  ,ADDR_1
+  ,ADDR_2
+  ,PIC_FILE_ID
+  ,SELF_INTDC
+  ,SALE_PLAN
+  ,GUIDE_PRCPL
+  ,HOBBY_SKILL
+  ,HEIGHT
+  ,WEIGHT
+  ,REQ_OUT_ORG_ID 	/*희망외부조직*/
+  ,REQ_DSM_HEADQ_CD	/*희망영업국코드*/
+  ,REQ_DSM_TEAM_NM	/*희망영업팀명*/
+  ,CNTRT_ST_CD		/*계약상태코드[DSM_CNTRT_ST_CD]*/
+  ,APRV_DTM
+  ,APRVR_ID
+  ,APRVR_CMNT
+  ,APP_DSM_HEADQ_CD
+  ,AGENT_OPR_ID
+  ,AGENT_OP_DTM
+  ,QUART1_MTH_AVG_QTY
+  ,QUART1_MTH_TOT_QTY
+  ,QUART2_MTH_AVG_QTY
+  ,QUART2_MTH_TOT_QTY
+  ,SHYR_MTH_AVG_QTY
+  ,SHYR_MTH_TOT_QTY
+  ,YR_MTH_AVG_QTY
+  ,YR_MTH_TOT_QTY
+  ,MAIN_ACTV_AREA
+  ,DSM_RETL_TYPE
+  ,DSM_RETL_TYPE_RMK
+  ,ACTV_ACQN_NM
+  ,RGSTR_ID
+  ,RGST_DTM
+  ,UPDR_ID
+  ,UPD_DTM
+)
+VALUES
+(
+   #CNTRT_MGMT_NUM#
+  ,REPLACE(#NAME_KOR#,' ','')
+  ,#NAME_HAN#
+  ,#BIRTH_DT#
+  ,#WEDD_YN#
+  ,#PHON_NUM1#
+  ,#PHON_NUM2#
+  ,#PHON_NUM3#
+  ,#MBL_PHON_NUM1#
+  ,#MBL_PHON_NUM2#
+  ,#MBL_PHON_NUM3#
+  ,#BIRTH_LUNAR_YN#
+  ,#EMAIL_ID#
+  ,#EMAIL_DMN_CD#
+  ,#EMAIL_DMN_NM#
+  ,#POST_NUM#
+  ,#ADDR_1#
+  ,#ADDR_2#
+  ,#PIC_FILE_ID#
+  ,#SELF_INTDC#
+  ,#SALE_PLAN#
+  ,#GUIDE_PRCPL#
+  ,#HOBBY_SKILL#
+  ,#HEIGHT#
+  ,#WEIGHT#
+  ,#HDQT_PART_ORG_ID#
+  ,#SALE_DEPT_ORG_ID#
+  ,#REQ_DSM_TEAM_NM#
+  ,'1'
+  ,''
+  ,''
+  ,''
+  ,''
+  ,''
+  ,''
+  ,#QUART1_MTH_AVG_QTY#
+  ,#QUART1_MTH_TOT_QTY#
+  ,#QUART2_MTH_AVG_QTY#
+  ,#QUART2_MTH_TOT_QTY#
+  ,#SHYR_MTH_AVG_QTY#
+  ,#SHYR_MTH_TOT_QTY#
+  ,#YR_MTH_AVG_QTY#
+  ,#YR_MTH_TOT_QTY#
+  ,#MAIN_ACTV_AREA#
+  ,#DSM_RETL_TYPE#
+  ,#DSM_RETL_TYPE_RMK#
+  ,#ACTV_ACQN_NM#  
+  ,#USER_ID#
+  ,SYSDATE
+  ,#USER_ID#
+  ,SYSDATE
+)]]>
+	</insert>
+	<select id="dSelectAgentCntrtSmsSend2" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend2  */
+/* IO: 김보선,2015-03-05T17:32:57(김보선,2015-02-16T14:21:36) */
+SELECT
+	   #USER_ID# AS USER_ID
+	  ,MBL_PHON_NUM1||MBL_PHON_NUM2||MBL_PHON_NUM3 AS RCV_PHN_ID
+      ,NAME_KOR AS "{0}"
+      ,AGNT_ID AS "{1}"
+ FROM DSM_AGENT_CNTRT
+WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</select>
+	<select id="dSearchAgentCntrtInt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrtInt  */
+/* IO: 김지홍,2015-02-09T10:12:23(한상곤,2014-12-17T17:11:02) */
+SELECT X.* 
+  FROM 
+(
+  SELECT ROW_NUMBER() OVER (ORDER BY A.RGST_DTM DESC) RN
+        ,A.CNTRT_MGMT_NUM                                                                                                           /*계약관리번호*/
+        ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE A.APP_DSM_HEADQ_CD = OUT_ORG_DTL_ID) APP_SALE_DEPT_ORG_NM   /*지정영업국명*/
+        ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE A.APP_DSM_TEAM_CD = OUT_ORG_DTL_ID) APP_SALE_TEAM_ORG_NM    /*지정영업팀명*/
+        ,A.NAME_KOR                                                                                                                 /*지원자명*/
+        ,(SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNTRT_ST_CD' AND A.CNTRT_ST_CD = COMM_CD_VAL) AS CNTRT_ST_NM  /*계약상태명*/
+        ,F_MASKING('N', C.USER_NM_EMP) AS USER_NM_EMP                                                                               /*면접관명(임직원)*/
+        ,TO_CHAR(C.RGST_DTM_EMP, 'YYYY-MM-DD HH24:MI:ss') AS RGST_DTM_EMP                                                           /*등록일시(마케터)*/
+        ,C.USER_ID_GUK                                                                                                              /*면접관코드(국장)*/
+        ,F_MASKING('N', C.USER_NM_GUK) AS USER_NM_GUK                                                                               /*면접관명(국장)*/
+        ,TO_CHAR(C.RGST_DTM_GUK, 'YYYY-MM-DD HH24:MI:ss') AS RGST_DTM_GUK                                                           /*등록일시(국장)*/
+        ,(SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNSL_SUIT_CD' AND C.INT_SUIT_GUK = COMM_CD_VAL) AS INT_SUIT_GUK /*내용충실도(국장)*/
+        ,CASE WHEN C.RGST_DTM_EMP - C.RGST_DTM_GUK < 0 THEN '지연' ELSE '' END AS DELAY_GUK                                         /*지연여부(국장)*/
+        ,C.USER_ID_TEAM                                                                                                              /*면접관코드(팀장)*/
+        ,F_MASKING('N', C.USER_NM_TEAM) AS USER_NM_TEAM                                                                               /*면접관명(팀장)*/
+        ,TO_CHAR(C.RGST_DTM_TEAM, 'YYYY-MM-DD HH24:MI:ss') AS RGST_DTM_TEAM                                                           /*등록일시(팀장)*/
+        ,(SELECT COMM_CD_VAL_NM as CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNSL_SUIT_CD' AND C.INT_SUIT_TEAM = COMM_CD_VAL) AS INT_SUIT_TEAM /*내용충실도(팀장)*/
+        ,CASE WHEN C.RGST_DTM_EMP - C.RGST_DTM_TEAM < 0 THEN '지연' ELSE '' END AS DELAY_TEAM                                         /*지연여부(팀장)*/
+  FROM DSM_AGENT_CNTRT A        /*에이전트계약*/
+       LEFT JOIN (SELECT B.CNTRT_MGMT_NUM
+                       , MIN(DECODE(B.ATTC_CAT, 1, B.USER_NM)) USER_NM_EMP      
+                       , MIN(DECODE(B.ATTC_CAT, 1, B.RGST_DTM)) RGST_DTM_EMP
+                       , MIN(DECODE(B.DUTY, '14', B.USER_ID)) USER_ID_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.USER_NM)) USER_NM_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.RGST_DTM)) RGST_DTM_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.INT_SUIT_CD)) INT_SUIT_GUK
+                       , MIN(DECODE(B.DUTY, '16', B.USER_ID)) USER_ID_TEAM
+                       , MIN(DECODE(B.DUTY, '16', B.USER_NM)) USER_NM_TEAM
+                       , MIN(DECODE(B.DUTY, '16', B.RGST_DTM)) RGST_DTM_TEAM
+                       , MIN(DECODE(B.DUTY, '16', B.INT_SUIT_CD)) INT_SUIT_TEAM
+                  FROM (
+                        SELECT B2.CNTRT_MGMT_NUM, B1.USER_ID ,B1.USER_NM ,B1.DUTY, B1.ATTC_CAT, B2.HST_SEQ, B2.RGST_DTM, B2.INT_SUIT_CD
+                        FROM PS_MNG.TBAS_USER_MGMT B1,  /*사용자관리*/
+                             DSM_AGENT_INT_HST B2       /*에이전트면접이력*/
+                        WHERE B1.USER_ID = B2.INTR_ID                      
+                        )B
+                  GROUP BY CNTRT_MGMT_NUM
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+  WHERE 1=1
+        AND A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+      ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+        AND A.REQ_OUT_ORG_ID = #HDQT_PART_ORG_ID# /*희망본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.REQ_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*희망영업국*/
+      ]]></isNotEmpty><![CDATA[       
+      ]]><isNotEmpty property="APP_HDQT_PART_ORG_ID"><![CDATA[
+        AND A.APP_OUT_ORG_ID = #APP_HDQT_PART_ORG_ID# /*지정본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="APP_SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.APP_DSM_HEADQ_CD = #APP_SALE_DEPT_ORG_ID# /*지정영업국*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+        AND A.CNTRT_ST_CD = #CNTRT_ST_CD#   /*계약상태코드[DSM_CNTRT_ST_CD]*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+        AND A.NAME_KOR LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="USER_NM_EMP"><![CDATA[
+        AND C.USER_NM_EMP LIKE '%'||REPLACE(#USER_NM_EMP#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="14"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_DSM_HEADQ_CD = #S_DEPT_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="16"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="19"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="20"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[       
+) X
+WHERE X.RN BETWEEN (#page#-1) * #page_size#+1 AND #page# * #page_size#]]>
+	</select>
+	<select id="dSearchAgentCntrtIntCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrtIntCnt  */
+/* IO: 김지홍,2015-01-30T10:32:38(한상곤,2014-12-17T17:11:20) */
+SELECT COUNT(*) AS count
+  FROM DSM_AGENT_CNTRT A
+       LEFT JOIN (SELECT B.CNTRT_MGMT_NUM
+                       , MIN(DECODE(B.ATTC_CAT, 1, B.USER_NM)) USER_NM_EMP      
+                       , MIN(DECODE(B.ATTC_CAT, 1, B.RGST_DTM)) RGST_DTM_EMP
+                       , MIN(DECODE(B.DUTY, '14', B.USER_ID)) USER_ID_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.USER_NM)) USER_NM_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.RGST_DTM)) RGST_DTM_GUK
+                       , MIN(DECODE(B.DUTY, '14', B.INT_SUIT_CD)) INT_SUIT_GUK
+                       , MIN(DECODE(B.DUTY, '16', B.USER_ID)) USER_ID_TEAM
+                       , MIN(DECODE(B.DUTY, '16', B.USER_NM)) USER_NM_TEAM
+                       , MIN(DECODE(B.DUTY, '16', B.RGST_DTM)) RGST_DTM_TEAM
+                       , MIN(DECODE(B.DUTY, '14', B.INT_SUIT_CD)) INT_SUIT_TEAM
+                  FROM (
+                        SELECT B2.CNTRT_MGMT_NUM, B1.USER_ID ,B1.USER_NM ,B1.DUTY, B1.ATTC_CAT, B2.HST_SEQ, B2.RGST_DTM, B2.INT_SUIT_CD
+                        FROM PS_MNG.TBAS_USER_MGMT B1,  /*사용자관리*/
+                             DSM_AGENT_INT_HST B2       /*에이전트면접이력*/
+                        WHERE B1.USER_ID = B2.INTR_ID                      
+                        )B
+                  GROUP BY CNTRT_MGMT_NUM
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+      WHERE 1=1
+        AND A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+      ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+        AND A.REQ_OUT_ORG_ID = #HDQT_PART_ORG_ID# /*희망본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.REQ_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*희망영업국*/
+      ]]></isNotEmpty><![CDATA[       
+      ]]><isNotEmpty property="APP_HDQT_PART_ORG_ID"><![CDATA[
+        AND A.APP_OUT_ORG_ID = #APP_HDQT_PART_ORG_ID# /*지정본사파트*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="APP_SALE_DEPT_ORG_ID"><![CDATA[
+        AND A.APP_DSM_HEADQ_CD = #APP_SALE_DEPT_ORG_ID# /*지정영업국*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+        AND A.CNTRT_ST_CD = #CNTRT_ST_CD#   /*계약상태코드[DSM_CNTRT_ST_CD]*/
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+        AND A.NAME_KOR LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+      ]]><isNotEmpty property="USER_NM_EMP"><![CDATA[
+        AND C.USER_NM_EMP LIKE '%'||REPLACE(#USER_NM_EMP#,' ','')||'%'
+      ]]></isNotEmpty><![CDATA[
+      
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="14"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.APP_DSM_HEADQ_CD = #S_DEPT_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="16"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="19"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[
+      ]]><isEqual property="S_DUTY_TYP_CD" compareValue="20"><![CDATA[
+        AND A.CNTRT_ST_CD <> '1'
+        AND A.REQ_OUT_ORG_ID = #S_ORG_CD#
+      ]]></isEqual><![CDATA[]]>
+	</select>
+	<update id="dUpdateAgentCntrt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dUpdateAgentCntrt  */
+/* IO: 김보선,2015-03-03T12:32:57(김보선,2015-02-27T11:17:41) */
+UPDATE DSM_AGENT_CNTRT
+   SET CNTRT_ST_CD = #CNTRT_ST_CD#
+
+]]><isEqual property="PIC_CHG_YN" compareValue="Y"><![CDATA[	/*접수,승인,반려*/
+     , PIC_FILE_ID = #ATCH_FILE_ID#
+]]></isEqual><![CDATA[
+]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+     , APP_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+     , APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+     , APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isEqual property="CNTRT_ST_CD" compareValue="3"><![CDATA[	/*승인*/
+     , APRV_DTM = SYSDATE
+     , APRVR_ID = #USER_ID#
+     , APRVR_CMNT = #APRVR_CMNT#
+]]></isEqual><![CDATA[
+]]><isEqual property="CNTRT_ST_CD" compareValue="4"><![CDATA[	/*반려*/
+     , APRV_DTM = SYSDATE
+     , APRVR_ID = #USER_ID#
+     , APRVR_CMNT = #APRVR_CMNT#
+]]></isEqual><![CDATA[
+
+]]><isNotEmpty property="REQ_DSM_HEADQ_CD"><![CDATA[
+     , REQ_DSM_HEADQ_CD = #REQ_DSM_HEADQ_CD#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="REQ_DSM_GRP_CD"><![CDATA[
+     , REQ_DSM_GRP_CD = #REQ_DSM_GRP_CD#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="APP_DSM_HEADQ_CD"><![CDATA[
+     , APP_DSM_HEADQ_CD = #APP_DSM_HEADQ_CD#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="RCMNDR_ID"><![CDATA[
+     , RCMNDR_ID = #RCMNDR_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="RCMNDR_REL"><![CDATA[
+     , RCMNDR_REL = #RCMNDR_REL#
+]]></isNotEmpty><![CDATA[
+     , UPDR_ID = #USER_ID#
+     , UPD_DTM = SYSDATE
+WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</update>
+	<update id="dUpdateAgentCntrtAgentMap" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dUpdateAgentCntrtAgentMap  */
+/* IO: 김보선,2015-03-02T17:31:15(김보선,2015-03-02T16:43:40) */
+UPDATE DSM_AGENT_CNTRT SET 
+       CNTRT_ST_CD = DECODE(
+                 (SELECT 'X' FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT 
+                   WHERE AGNT_ID=#AGNT_ID# AND CONS_MTH=TO_CHAR(SYSDATE,'YYYYMM')),'X','5',#CNTRT_ST_CD#)
+      ,AGNT_ID = #AGNT_ID#
+      ,AGENT_OPR_ID = #USER_ID#
+      ,AGENT_OP_DTM = SYSDATE
+      ,UPDR_ID = #USER_ID#
+      ,UPD_DTM = SYSDATE
+]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+      ,APP_OUT_ORG_ID = #HDQT_PART_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+      ,APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+      ,APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</update>
+	<select id="dSelectAgentCntrtDealCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtDealCnt  */
+/* IO: 김보선,2015-03-02T17:02:31(김보선,2015-03-02T17:02:31) */
+SELECT COUNT(*) AS TOTCNT 
+FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT B
+WHERE B.DEAL_CO_CD=#AGNT_ID#
+AND B.DEL_YN='N'
+AND B.HST_SEQ = (SELECT MAX(HST_SEQ) FROM  PS_MNG.TBAS_DEAL_CO_CRD_MGMT WHERE DEAL_CO_CD=B.DEAL_CO_CD AND SER_NUM=B.SER_NUM)   
+AND SYSDATE BETWEEN B.SET_DT AND B.EXPIR_DT]]>
+	</select>
+	<delete id="dDeleteAgentCntrt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dDeleteAgentCntrt  */
+/* IO: 김보선,2015-03-03T09:46:11(김보선,2015-03-02T17:56:16) */
+DELETE FROM DSM_AGENT_CNTRT
+ WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</delete>
+	<update id="dUpdateAgentCntrtAppCan" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dUpdateAgentCntrtAppCan  */
+/* IO: 김보선,2015-03-03T15:29:11(김보선,2015-03-03T12:27:03) */
+UPDATE DSM_AGENT_CNTRT
+   SET CNTRT_ST_CD = #CNTRT_ST_CD#
+     , APRV_DTM = ''
+     , APRVR_ID = ''
+     , APRVR_CMNT = ''
+     , APP_OUT_ORG_ID = ''
+     , APP_DSM_HEADQ_CD = ''
+     , APP_DSM_TEAM_CD = ''
+     , AGNT_ID = ''
+     , AGENT_OPR_ID = ''
+     , AGENT_OP_DTM = ''
+     , UPDR_ID = #USER_ID#
+     , UPD_DTM = SYSDATE
+ WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</update>
+	<select id="dSelectAgentCntrtSmsSend1" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend1  */
+/* IO: 김보선,2015-03-05T18:00:44(김보선,2015-03-05T17:34:00) */
+SELECT
+	   '' AS USER_ID
+	  ,#MBL_PHON_NUM1#||#MBL_PHON_NUM2#||#MBL_PHON_NUM3# AS RCV_PHN_ID
+	  ,#NAME_KOR# AS "{0}"
+ FROM DUAL]]>
+	</select>
+	<select id="dSearchAgentCntrtStCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSearchAgentCntrtStCnt  */
+/* IO: 안진갑,2015-05-13T16:56:22(김보선,2015-03-19T14:33:09) */
+SELECT
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '1',  C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '요청 0명') AS CNTRT_ST_CNT1,
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '2',  C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '접수 0명') AS CNTRT_ST_CNT2,
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '21', C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '면접완료 0명') AS CNTRT_ST_CNT3,
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '3',  C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '계약승인 0명') AS CNTRT_ST_CNT4,
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '5',  C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '코드발급완료 0명') AS CNTRT_ST_CNT5,
+  NVL(MAX(DECODE(C.CNTRT_ST_CD, '6',  C.CNTRT_ST_NM ||' '|| TO_CHAR(C.CNTRT_ST_CNT, 'FM999G999G999G999') ||'명')), '회원가입완료 0명') AS CNTRT_ST_CNT6 
+FROM
+(
+  SELECT
+    B.CNTRT_ST_CD,
+    COUNT(*) AS CNTRT_ST_CNT,
+    (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_CNTRT_ST_CD' AND COMM_CD_VAL = B.CNTRT_ST_CD) AS CNTRT_ST_NM
+  FROM
+  (
+    SELECT 
+          A.CNTRT_ST_CD,
+          (SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.REQ_OUT_ORG_ID )
+          ) AS REQ_HDQT_TEAM_ORG_ID,
+          (SELECT ORG_ID FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = 
+                ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE EFF_ORG_YN = 'Y' AND OUT_ORG_ID = A.APP_OUT_ORG_ID )
+           ) AS APP_HDQT_TEAM_ORG_ID
+    FROM DSM_AGENT_CNTRT A
+    LEFT JOIN (SELECT B1.CNTRT_MGMT_NUM, B2.USER_ID ,B2.USER_NM 
+                    FROM DSM_AGENT_INT_HST B1,
+                         PS_MNG.TBAS_USER_MGMT B2                         
+                   WHERE B1.INTR_ID = B2.USER_ID
+                     AND B2.ATTC_CAT = '1'
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+    LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.AGNT_ID AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+    LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )                                  
+  WHERE A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#||'000000','YYYYMMDDHH24MISS') AND TO_DATE(#TO_DT#||'235959','YYYYMMDDHH24MISS')
+  ]]><isNotEmpty property="REQ_HDQT_PART_ORG_ID"><![CDATA[
+    AND A.REQ_OUT_ORG_ID = #REQ_HDQT_PART_ORG_ID# /*희망본사파트*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="REQ_SALE_DEPT_ORG_ID"><![CDATA[
+    AND A.REQ_DSM_HEADQ_CD = #REQ_SALE_DEPT_ORG_ID# /*희망영업국*/
+  ]]></isNotEmpty><![CDATA[       
+  ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+    AND A.APP_OUT_ORG_ID = #HDQT_PART_ORG_ID#   /*지정본사파트*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+    AND A.APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*지정영업국*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+    AND A.APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID# /*지정영업팀*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+    AND A.CNTRT_ST_CD = #CNTRT_ST_CD#   /*계약상태코드[DSM_CNTRT_ST_CD]*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="AGNT_NM"><![CDATA[
+    AND A.NAME_KOR LIKE '%'||REPLACE(#AGNT_NM#,' ','')||'%'
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="INTR_NM"><![CDATA[
+    AND C.USER_NM LIKE '%'||REPLACE(#INTR_NM#,' ','')||'%'
+  ]]></isNotEmpty><![CDATA[
+        
+  ]]><isEqual property="S_DUTY_TYP_CD" compareValue="14"><![CDATA[
+    AND A.CNTRT_ST_CD <> '1'
+    AND A.APP_DSM_HEADQ_CD = #S_DEPT_CD#
+  ]]></isEqual><![CDATA[
+  ]]><isEqual property="S_DUTY_TYP_CD" compareValue="16"><![CDATA[
+    AND A.CNTRT_ST_CD <> '1'
+    AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+  ]]></isEqual><![CDATA[
+  ]]><isEqual property="S_DUTY_TYP_CD" compareValue="19"><![CDATA[
+    AND A.CNTRT_ST_CD <> '1'
+    AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+  ]]></isEqual><![CDATA[
+  ]]><isEqual property="S_DUTY_TYP_CD" compareValue="20"><![CDATA[
+    AND A.CNTRT_ST_CD <> '1'
+    AND A.APP_OUT_ORG_ID = #S_ORG_CD#
+  ]]></isEqual><![CDATA[    
+  
+  ]]><isEqual property="DIV" compareValue="HDQT"><![CDATA[
+	AND (A.AGNT_ID IS NULL
+	         OR E.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#))
+  ]]></isEqual><![CDATA[
+  ]]><isNotEmpty property="onlineContext.userInfo.SALE_DEPT_ORG_ID"><![CDATA[
+   	]]><isEqual property="DIV" compareValue="HEAD"><![CDATA[
+      	AND (A.AGNT_ID IS NULL 
+           	 OR E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#)
+   	]]></isEqual><![CDATA[  
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="onlineContext.userInfo.SALE_TEAM_ORG_ID"><![CDATA[ 
+   	]]><isEqual property="DIV" compareValue="TEAM"><![CDATA[
+      	AND (A.AGNT_ID IS NULL 
+            	 OR E.OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_TEAM_ORG_ID#)
+   	]]></isEqual><![CDATA[
+  ]]></isNotEmpty><![CDATA[ 
+    
+  ) B
+  WHERE 1=1
+  ]]><isNotEmpty property="REQ_HDQT_TEAM_ORG_ID"><![CDATA[
+    AND B.REQ_HDQT_TEAM_ORG_ID = #REQ_HDQT_TEAM_ORG_ID# /*희망본사팀*/
+  ]]></isNotEmpty><![CDATA[   
+  ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+    AND B.APP_HDQT_TEAM_ORG_ID = #HDQT_TEAM_ORG_ID# /*지정본사팀*/
+  ]]></isNotEmpty><![CDATA[
+  GROUP BY B.CNTRT_ST_CD
+  ORDER BY B.CNTRT_ST_CD
+) C]]>
+	</select>
+	<select id="dSelectAgentCntrtSmsSend3" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend3  */
+/* IO: 김보선,2015-04-08T18:33:48(김보선,2015-04-08T18:07:11) */
+SELECT
+	   #USER_ID# AS USER_ID
+	  ,A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+	  ,E.NAME_KOR AS "{0}"
+FROM DSM_USER A
+JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID AND B.DUTY = '14' )
+JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND D.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)
+JOIN DSM_AGENT_CNTRT E ON ( E.CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM# )]]>
+	</select>
+	<select id="dSelectAgentCntrtSmsSend4" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend4  */
+/* IO: 김보선,2015-04-08T21:39:06(김보선,2015-04-08T20:25:17) */
+SELECT
+    '' AS USER_ID
+  , D.MBL_PHON_NUM1||D.MBL_PHON_NUM2||D.MBL_PHON_NUM3 AS RCV_PHN_ID
+  , #NAME_KOR# AS "{0}"
+  , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = A.DSM_HEADQ_CD) AS "{1}"
+  , #REQ_DSM_TEAM_NM# AS "{2}"
+FROM
+  DSM_CHRGR_HEADQ A
+JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.CHRGR_ID )
+JOIN DSM_USER D ON ( D.USER_ID = A.CHRGR_ID )
+WHERE 1=1
+  AND A.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+  AND A.DSM_CHRGR_ROLE_CL_CD = '01']]>
+	</select>
+	<select id="dSelectAgentCntrtSmsSend5" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend5  */
+/* IO: 김보선,2015-04-13T16:11:02(김보선,2015-04-13T15:48:17) */
+SELECT 
+    #USER_ID# AS USER_ID
+  , B.MBL_PHON_NUM1||B.MBL_PHON_NUM2||B.MBL_PHON_NUM3 AS RCV_PHN_ID
+  , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#) AS "{0}"
+  , E.NAME_KOR AS "{1}"    
+FROM DSM_SMS_MGMT A
+JOIN DSM_USER B ON ( B.USER_ID = A.USER_ID )
+INNER JOIN PS_MNG.TBAS_OUT_ORG_MGMT C ON ( C.OUT_ORG_ID = A.OUT_ORG_ID)
+INNER JOIN PS_MNG.TBAS_NEW_ORG_MGMT D ON ( D.ORG_ID = C.ORG_ID )
+JOIN DSM_AGENT_CNTRT E ON ( E.CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM# )
+WHERE 1=1
+AND C.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+AND A.TRAN_TYP_CD = '43']]>
+	</select>
+	<select id="dSelectAgentCntrtSmsSend6" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtSmsSend6  */
+/* IO: 김보선,2015-04-13T17:18:22(김보선,2015-04-13T17:18:01) */
+SELECT 
+    B2.USER_ID
+  , B3.MBL_PHON_NUM1||B3.MBL_PHON_NUM2||B3.MBL_PHON_NUM3 AS RCV_PHN_ID
+  , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#) AS "{0}"
+  , B4.NAME_KOR AS "{1}"  
+  FROM DSM_AGENT_INT_HST B1
+  JOIN PS_MNG.TBAS_USER_MGMT B2 ON ( B2.USER_ID = B1.INTR_ID AND B2.ATTC_CAT = '1')
+  JOIN DSM_USER B3 ON ( B3.USER_ID = B2.USER_ID )
+  JOIN DSM_AGENT_CNTRT B4 ON ( B4.CNTRT_MGMT_NUM = B1.CNTRT_MGMT_NUM )
+ WHERE 1=1
+   AND B1.CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</select>
+	<select id="dSelectAgentCntrtStCd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.agn.agntmgmt.db.DAGENTCNTRT001.dSelectAgentCntrtStCd  */
+/* IO: 김보선,2015-04-13T18:00:02(김보선,2015-04-13T18:00:02) */
+SELECT 
+ 	  CNTRT_ST_CD
+ FROM DSM_AGENT_CNTRT
+WHERE CNTRT_MGMT_NUM = #CNTRT_MGMT_NUM#]]>
+	</select>
+</sqlMap>

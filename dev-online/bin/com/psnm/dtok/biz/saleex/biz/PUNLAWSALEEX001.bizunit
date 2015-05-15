@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PUNLAWSALEEX001">
+    <bizUnitName>[PU]불/편법영업사례</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SALEEX</componentId>
+    <description>불/편법영업사례 PU</description>
+    <method-list>
+        <method id="pDeleteUnlawSaleEx">
+            <methodName>[PM]불/편법영업사례삭제</methodName>
+            <transactionId>biz.SALEEX@PUNLAWSALEEX001_pDeleteUnlawSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>불/편법영업사례 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T13:20:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDetailUnlawSaleEx">
+            <methodName>[PM]불/편법영업사례상세</methodName>
+            <transactionId>biz.SALEEX@PUNLAWSALEEX001_pDetailUnlawSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>불/편법영업사례상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T13:20:01" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveUnlawSaleEx">
+            <methodName>[PM]불/편법영업사례저장(등록|수정)</methodName>
+            <transactionId>biz.SALEEX@PUNLAWSALEEX001_pSaveUnlawSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>불/편법영업사례 정보를 등록, 수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T13:19:26" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchUnlawSaleEx">
+            <methodName>[PM]불/편법영업사례조회</methodName>
+            <transactionId>biz.SALEEX@PUNLAWSALEEX001_pSearchUnlawSaleEx</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>불/편법영업사례 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-30T13:18:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-30T10:39:25" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

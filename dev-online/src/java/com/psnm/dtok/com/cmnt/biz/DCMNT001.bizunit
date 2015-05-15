@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DCMNT001">
+    <bizUnitName>[DU]댓글관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.CMNT</componentId>
+    <description>댓글관리 DU</description>
+    <method-list>
+        <method id="dSearchCmntCount">
+            <methodName>[DM]댓글관리건수조회</methodName>
+            <transactionId>com.CMNT@DCMNT001_dSearchCmntCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>댓글 목록 건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:12:23" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteCmnt">
+            <methodName>[DM]댓글관리삭제</methodName>
+            <transactionId>com.CMNT@DCMNT001_dDeleteCmnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>댓글을 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:17:05" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertCmnt">
+            <methodName>[DM]댓글관리저장</methodName>
+            <transactionId>com.CMNT@DCMNT001_dInsertCmnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>댓글을 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:15:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchCmnt">
+            <methodName>[DM]댓글관리조회</methodName>
+            <transactionId>com.CMNT@DCMNT001_dSearchCmnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>댓글 목록을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T17:09:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-05T17:06:11" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

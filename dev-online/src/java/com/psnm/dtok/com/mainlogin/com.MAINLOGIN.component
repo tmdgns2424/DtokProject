@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.MAINLOGIN">
+    <componentName>[BC]공통-메인</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.mainlogin</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>메인 홈 및 로그인 처리 관련 컴포넌트</description>
+    <custom-props/>
+    <history>
+        <created date="2014-11-19T15:07:40" user="admin (admin)"/>
+    </history>
+</component>

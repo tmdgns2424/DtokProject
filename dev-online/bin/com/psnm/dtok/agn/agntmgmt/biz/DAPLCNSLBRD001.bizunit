@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAPLCNSLBRD001">
+    <bizUnitName>[DU]MA지원상담조회</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>MA지원상담조회 DU</description>
+    <method-list>
+        <method id="dSelectAgentEccrSmsSend">
+            <methodName>[DM]MA지원상담 SMS발송조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD001_dSelectAgentEccrSmsSend</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 SMS발송조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-05T13:49:50" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dDeleteAgentEccr">
+            <methodName>[DM]MA지원상담 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD001_dDeleteAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 삭제 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T18:34:23" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dDetailAplCnslBrd">
+            <methodName>[DM]MA지원상담 상세조회</methodName>
+            <transactionId>agn.AGNTMGMT@DSM_APLCNSL_BRD_dDetailAplCnslBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 상세조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-24T09:28:20" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dUpdateAplCnslBrd">
+            <methodName>[DM]MA지원상담 상담국배정및상태수정</methodName>
+            <transactionId>agn.AGNTMGMT@DSM_APLCNSL_BRD_dUpdateAplCnslBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 상담국배정및상태수정 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-25T11:09:49" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dUpdateAplCnslBrdAgentId">
+            <methodName>[DM]MA지원상담 에이전트ID저장</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD001_dUpdateAplCnslBrdAgentId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 에이전트ID저장 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T10:24:28" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dMergeAgentEccr">
+            <methodName>[DM]MA지원상담 저장</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD001_dMergeAgentEccr</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 저장 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-17T13:44:51" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAplCnslBrd">
+            <methodName>[DM]MA지원상담 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD_dSearchAplCnslBrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T17:35:51" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSearchAplCnslBrdCnt">
+            <methodName>[DM]MA지원상담 건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD_dSearchAplCnslBrdCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 건수조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T17:43:47" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSelectAgentEccrNoSeq">
+            <methodName>[DM]MA지원상담 채번</methodName>
+            <transactionId>agn.AGNTMGMT@DAPLCNSLBRD001_dSelectAgentEccrNoSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>MA지원상담 채번 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-23T09:07:49" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T17:35:16" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

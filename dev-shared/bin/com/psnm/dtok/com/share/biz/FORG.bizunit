@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FORG">
+    <bizUnitName>[FU]조직정보조회</bizUnitName>
+    <parentClassXd>SFU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[FU]조직정보조회</description>
+    <method-list>
+        <method id="fSelectSaleDept">
+            <methodName>[FM]영업국조회</methodName>
+            <transactionId>com.SHARE@FORG_fSelectSaleDept</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]영업국조회 - 본사팀, 본사파트 조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T14:19:06" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchOrgByUpper">
+            <methodName>[FM]조직정보조회(세션없음)</methodName>
+            <transactionId>com.SHARE@FORG_fSearchOrgByUpper</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>상위조직코드 정보 조건으로 조직정보조회(세션없음)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-08T16:13:56" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-08T16:12:45" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

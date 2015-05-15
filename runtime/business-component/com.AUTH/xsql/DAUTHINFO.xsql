@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAUTHINFO">
+	<select id="dSearchAuthMenu" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHINFO.dSearchAuthMenu  */
+/* IO: 안종광,2014-12-24T15:53:56(안종광,2014-12-24T15:44:39) */
+SELECT m.SUP_MENU_ID
+     , m.MENU_TYP_CD
+     , F_DSM_CODE_NM('DSM_MENU_TYP_CD', m.MENU_TYP_CD) AS MENU_TYP_NM
+     , m.MENU_ID
+     , m.MENU_NM
+     , m.USE_YN
+     , DECODE(m.USE_YN,'Y','사용','미사용') AS USE_NM
+  FROM DSM_MENU m
+  JOIN DSM_MENU_AUTH a ON (m.MENU_ID = a.MENU_ID AND a.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/)
+ WHERE 1=1
+ START WITH m.MENU_TYP_CD = 1
+ CONNECT BY PRIOR m.MENU_ID = m.SUP_MENU_ID
+ ORDER SIBLINGS BY m.BRWS_SEQ]]>
+	</select>
+	<select id="dSearchAuthUserCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHINFO.dSearchAuthUserCount  */
+/* IO: 채수윤,2015-02-10T12:55:58(안종광,2014-12-24T16:04:30) */
+SELECT COUNT(1) AS CNT
+  FROM (SELECT u.USER_ID
+          FROM (SELECT B.USER_ID, B.DUTY, B.CPLAZA_ORG_CD
+                  FROM DSM_AUTH_GRP_APLY_DUTY A
+                     , PS_MNG.TBAS_USER_MGMT B
+                     , DSM_USER C
+                 WHERE A.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+                   AND A.DUTY_CD = B.DUTY
+                   AND B.USER_ID = C.USER_ID
+                   AND B.ATTC_CAT = '4'
+                   AND B.USER_TYP = '4'
+                   AND B.USER_ST = '1'
+                  ) u
+                  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON (u.CPLAZA_ORG_CD = om.AGNT_ID AND om.CONS_MTH = TO_CHAR(SYSDATE, 'yyyymm'))
+                  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT od ON (om.OUT_ORG_DTL_ID = od.OUT_ORG_DTL_ID)
+                  JOIN PS_MNG.TBAS_OUT_ORG_MGMT oo ON (oo.OUT_ORG_ID = od.OUT_ORG_ID)
+                  JOIN PS_MNG.TBAS_NEW_ORG_MGMT no ON (no.ORG_ID = oo.ORG_ID)
+                  JOIN PS_MNG.TBAS_DUTY_MGMT d ON (u.DUTY = d.DUTY_CD)
+                  /* JOIN PS_MNG.THB_RETL_ORG_CD r ON (om.RETL_ORG_CD = r.RETL_ORG_CD) */
+           WHERE d.DUTY_TYP = '2'
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+             AND no.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀ID*/
+]]></isNotEmpty><![CDATA[
+         UNION ALL
+        SELECT C.USER_ID
+          FROM DSM_AUTH_GRP_APLY_DUTY A
+             , DSM_APPROVE B
+             , PS_MNG.TBAS_USER_MGMT C
+         WHERE A.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+           AND A.DUTY_CD = B.DUTY_CD
+           AND B.USER_ID = C.USER_ID
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+           AND C.NEW_ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀ID*/
+]]></isNotEmpty><![CDATA[
+           AND C.USER_ST = '1'
+       )]]>
+	</select>
+	<select id="dSearchAuthUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.auth.db.DAUTHINFO.dSearchAuthUser  */
+/* IO: 채수윤,2015-02-10T12:56:13(안종광,2014-12-24T16:49:19) */
+SELECT *
+  FROM (
+    SELECT ROWNUM RN, ALL_LIST.* 
+      FROM (
+            SELECT u.USER_ID
+                 , SUBSTR(u.USER_ID, -(LENGTH(u.USER_ID)) ,(LENGTH(u.USER_ID)-4))||'****' AS USER_ID_M
+                 , u.USER_NM
+                 , u.DUTY
+                 , d.DUTY_NM
+                 , no.ORG_ID             AS HDQT_TEAM_ORG_ID
+                 , no.ORG_NM             AS HDQT_TEAM_ORG_NM
+                 , oo.OUT_ORG_ID         AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+                 , oo.OUT_ORG_NM         AS HDQT_PART_ORG_NM /* 본사파트 조직명 */
+                 , od.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+                 , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID=od.SUP_OUT_ORG_DTL_ID AND OUT_ORG_ID=od.OUT_ORG_ID) AS SALE_DEPT_ORG_NM
+                 , od.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+                 , od.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+                 , om.AGNT_ID        AS SALE_AGNT_ORG_ID /* 에이전트 조직ID */
+                 , om.AGNT_NM        AS SALE_AGNT_ORG_NM /* 에이전트 조직ID */
+              FROM (SELECT B.USER_ID, B.USER_NM, B.DUTY, B.CPLAZA_ORG_CD
+                  FROM DSM_AUTH_GRP_APLY_DUTY A
+                     , PS_MNG.TBAS_USER_MGMT B
+                     , DSM_USER C
+                 WHERE A.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+                   AND A.DUTY_CD = B.DUTY
+                   AND B.USER_ID = C.USER_ID
+                   AND B.ATTC_CAT = '4'
+                   AND B.USER_TYP = '4'
+                   AND B.USER_ST = '1') u
+              JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON (u.CPLAZA_ORG_CD = om.AGNT_ID AND om.CONS_MTH = TO_CHAR(SYSDATE, 'yyyymm'))
+              JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT od ON (om.OUT_ORG_DTL_ID = od.OUT_ORG_DTL_ID)
+              JOIN PS_MNG.TBAS_OUT_ORG_MGMT oo ON (oo.OUT_ORG_ID = od.OUT_ORG_ID)
+              JOIN PS_MNG.TBAS_NEW_ORG_MGMT no ON (no.ORG_ID = oo.ORG_ID)
+              JOIN PS_MNG.TBAS_DUTY_MGMT d ON (u.DUTY = d.DUTY_CD)
+              /* JOIN THB_RETL_ORG_CD r ON (om.RETL_ORG_CD = r.RETL_ORG_CD) */
+             WHERE d.DUTY_TYP = '2'
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+               AND no.ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀ID*/
+]]></isNotEmpty><![CDATA[
+             UNION ALL
+            SELECT u.USER_ID
+                 , SUBSTR(u.USER_ID, -(LENGTH(u.USER_ID)) ,(LENGTH(u.USER_ID)-4))||'****' AS USER_ID_M
+                 , u.USER_NM
+                 , u.DUTY
+                 , d.DUTY_NM
+                 , u.ORG_ID              AS HDQT_TEAM_ORG_ID
+                 , no.ORG_NM             AS HDQT_TEAM_ORG_NM
+                 , oo.OUT_ORG_ID         AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+                 , oo.OUT_ORG_NM         AS HDQT_PART_ORG_NM /* 본사파트 조직명 */
+                 , '' AS SALE_DEPT_ORG_ID
+                 , '' AS SALE_DEPT_ORG_NM
+                 , '' AS SALE_TEAM_ORG_ID
+                 , '' AS SALE_TEAM_ORG_NM
+                 , '' AS SALE_AGNT_ORG_ID /* 에이전트 조직ID */
+                 , '' AS SALE_AGNT_ORG_NM /* 에이전트 조직ID */
+             FROM (SELECT C.USER_ID, C.USER_NM, B.DUTY_CD AS DUTY, C.NEW_ORG_ID AS ORG_ID, C.OUT_ORG_ID
+                     FROM DSM_AUTH_GRP_APLY_DUTY A
+                        , DSM_APPROVE B
+                        , PS_MNG.TBAS_USER_MGMT C
+                    WHERE A.AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+                      AND A.DUTY_CD = B.DUTY_CD
+                      AND B.USER_ID = C.USER_ID
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+                      AND C.NEW_ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀ID*/
+]]></isNotEmpty><![CDATA[
+                      AND C.USER_ST = '1'
+                  ) u
+                  JOIN PS_MNG.TBAS_OUT_ORG_MGMT oo ON (oo.OUT_ORG_ID = u.OUT_ORG_ID)
+                  JOIN PS_MNG.TBAS_NEW_ORG_MGMT no ON (no.ORG_ID = oo.ORG_ID)
+                  JOIN PS_MNG.TBAS_DUTY_MGMT d ON (u.DUTY = d.DUTY_CD)
+            WHERE d.DUTY_TYP = '2'
+            ORDER BY USER_ID
+       ) ALL_LIST
+    )
+ WHERE RN BETWEEN (#page#-1) * #page_size#+1
+   AND #page# * #page_size#]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMENUAUTH001">
+    <bizUnitName>[DU]메뉴권한관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.MENU</componentId>
+    <description>메뉴권한관리(DSM_MENU_AUTH)</description>
+    <method-list>
+        <method id="dMergeMenuAuth">
+            <methodName>[DM]메뉴권한merge</methodName>
+            <transactionId>com.MENU@DMENUAUTH001_dMergeMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한merge(update or insert)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T14:46:27" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertMenuAuth">
+            <methodName>[DM]메뉴권한등록</methodName>
+            <transactionId>com.MENU@DMENUAUTH001_dInsertMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:07:55" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dDeleteMenuAuth">
+            <methodName>[DM]메뉴권한삭제</methodName>
+            <transactionId>com.MENU@DMENUAUTH001_dDeleteMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:08:18" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertMenuAuthHst">
+            <methodName>[DM]메뉴권한이력등록</methodName>
+            <transactionId>com.MENU@DMENUAUTH001_dInsertMenuAuthHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]메뉴권한이력등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-28T17:44:44" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchMenuAuth">
+            <methodName>[DM]메뉴권한조회</methodName>
+            <transactionId>com.MENU@DMENUAUTH001_dSearchMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:07:31" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-12T09:42:20" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

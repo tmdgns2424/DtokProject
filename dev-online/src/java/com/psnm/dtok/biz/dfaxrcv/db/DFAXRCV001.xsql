@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFAXRCV001">
+	<select id="dSearchFaxRcv" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcv  */
+/* IO: 이민재,2014-12-24T16:11:42(이민재,2014-12-24T16:11:42) */
+	SELECT A.*
+	FROM (
+		SELECT A1.*
+        FROM (
+			SELECT ROW_NUMBER() OVER(ORDER BY A.FAX_RECEIVE_DTM desc) AS RN 
+				, A.FAX_RCV_NO 
+				, A.FAX_RECEIVE_DTM AS RCV_DTM
+				, A.RCV_NO AS RCV_FAX_NUM 					/* 수신번호 */
+               	, A.PROD_TYP_CD AS FAX_UNIT_TYP_CD 			/* 상품유형코드 */
+               	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = A.PROD_TYP_CD) AS FAX_UNIT_TYP_NM
+               	, A.FAX_SCRB_TYP_CD  						/* 가입유형코드  */ 
+               	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_SCRB_TYP_CD' AND COMM_CD_VAL = A.FAX_SCRB_TYP_CD) AS FAX_SCRB_TYP_NM
+               	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_SCRB_TYP_CD' AND ADD_INFO_01 = 'Y' AND COMM_CD_VAL = A.FAX_SCRB_TYP_CD) AS FAX_SCRB_TYP_YN   
+               	, (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'BF_COM_CD' AND COMM_CD_VAL = A.BF_COM_CD) AS BF_COM_NM             
+               	, A.PROD_ABBR_NM  							/* 상품약어명 */
+               	, F_MASKING('N',A.CUST_NM) AS CUST_NM
+               	, G.ORG_ID AS HDQT_TEAM_ORG_ID 				/*본사팀ID */
+               	, G.ORG_NM AS HDQT_TEAM_ORG_NM 
+               	, F.OUT_ORG_ID AS HDQT_PART_ORG_ID 			/*본사파트ID*/
+               	, F.OUT_ORG_NM AS HDQT_PART_ORG_NM 
+               	, E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID 	/*영업국ID*/
+               	, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+               	, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID 		/*영업팀ID*/
+               	, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+               	, A.AGENT_CD AS AGNT_ID 					/* 에이전트 코드 */
+               	, F_MASKING('N',A.AGENT_NM) AS AGNT_NM		/* 에이전트명 */
+               	, C.AGNT_NM AS RETL_ORG_NM
+               	, A.FAX_OPR_ID AS OPR_ID  					/* 처리자ID */
+               	, F_MASKING('N',A.CHGRG_NM) AS OPR_NM
+               	, A.OP_ST_CD AS FAX_OP_ST_CD  				/* 처리현황코드 */
+               	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_OP_ST_CD' AND COMM_CD_VAL = A.OP_ST_CD) AS FAX_OP_ST_NM                             
+               	, A.MEMO
+               	, A.SND_FAX_NO AS SND_FAX_NUM 				/* 팩스발신자번호*/
+               	, A.PAGE_NUM AS FAX_FILE_PG 				/* 수신페이지수 */
+               	, A.AGREE_CTT AS CNSNT_MEMO 				/* 사전동의메모 */
+               	/* , A.BIZ_APRV_TPY_CD							업무승인유형코드 */
+               	/* , (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = A.BIZ_APRV_TPY_CD) AS BIZ_APRV_TPY_NM */
+               	/* , (SELECT ADD_INFO_01 AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = A.BIZ_APRV_TPY_CD) AS BIZ_APRV_TPY_YN */
+               	/* , A.BIZ_APRV_ST_CD							 업무승인상태코드 */
+               	/* , (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_ST_CD' AND COMM_CD_VAL = A.BIZ_APRV_ST_CD) AS BIZ_APRV_ST_NM */
+          		, H.BIZ_APRV_REQ_CL_CD						/* 업무승인요청구분코드 */
+              	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_REQ_CL_CD' AND COMM_CD_VAL = H.BIZ_APRV_REQ_CL_CD) AS BIZ_APRV_REQ_CL_NM
+                , H.BIZ_APRV_OP_ST_CD						/* 업무승인처리상태코드 */
+              	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_OP_ST_CD' AND COMM_CD_VAL = H.BIZ_APRV_OP_ST_CD) AS BIZ_APRV_OP_ST_NM
+                , I.BIZ_APRV_SUSP_HST_SEQ
+          	FROM PS_MNG.TSAL_N_FAX A
+          	LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.FAX_OPR_ID )  
+          	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.AGENT_CD AND C.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM') )
+          	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+          	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+          	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+          	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON ( G.ORG_ID = F.ORG_ID )
+          	LEFT JOIN DSM_BIZ_APRV H ON ( H.FAX_RCV_NO = A.FAX_RCV_NO )
+          	LEFT JOIN DSM_BIZ_APRV_SUSP I ON ( I.DSM_HEADQ_CD = E.SUP_OUT_ORG_DTL_ID /* AND I.BIZ_APRV_TPY_CD = A.BIZ_APRV_TPY_CD */ AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN I.SUSP_STA_DT AND I.SUSP_END_DT )
+			WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+			AND A.FAX_RECEIVE_DTM BETWEEN #FROM_DT#||'000000' AND #TO_DT#||'235959'
+          	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+				G.ORG_ID = #HDQT_TEAM_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+				F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				A.AGENT_CD = #AGNT_ID#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty prepend="AND" property="FAX_OP_ST_CD"><![CDATA[      
+           		A.OP_ST_CD = #FAX_OP_ST_CD#
+         	]]></isNotEmpty><![CDATA[
+         	]]><isNotEmpty prepend="AND" property="BIZ_APRV_ST_CD"><![CDATA[      
+           		A.BIZ_APRV_ST_CD = #BIZ_APRV_ST_CD#
+         	]]></isNotEmpty><![CDATA[ 
+		) A1                     
+	) A            
+ 	WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchFaxRcvCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvCount  */
+/* IO: 이민재,2014-12-24T17:23:55(이민재,2014-12-24T17:23:55) */
+	SELECT COUNT(*) AS totCnt
+       FROM (
+		SELECT *
+         	FROM PS_MNG.TSAL_N_FAX A
+         	LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.FAX_OPR_ID )  
+         	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.AGENT_CD AND C.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM') )
+         	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+         	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+         	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+         	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON ( G.ORG_ID = F.ORG_ID )
+         	LEFT JOIN DSM_BIZ_APRV H ON ( H.FAX_RCV_NO = A.FAX_RCV_NO )
+         	LEFT JOIN DSM_BIZ_APRV_SUSP I ON ( I.DSM_HEADQ_CD = E.SUP_OUT_ORG_DTL_ID /* AND I.BIZ_APRV_TPY_CD = A.BIZ_APRV_TPY_CD */ AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN I.SUSP_STA_DT AND I.SUSP_END_DT )
+		WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+		AND A.FAX_RECEIVE_DTM BETWEEN #FROM_DT#||'000000' AND #TO_DT#||'235959'
+        ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			G.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			A.AGENT_CD = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="FAX_OP_ST_CD"><![CDATA[      
+			A.OP_ST_CD = #FAX_OP_ST_CD#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="BIZ_APRV_ST_CD"><![CDATA[      
+			A.BIZ_APRV_ST_CD = #BIZ_APRV_ST_CD#
+		]]></isNotEmpty><![CDATA[ 
+	) A1]]>
+	</select>
+	<update id="dUpdateFaxRcvTsal" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dUpdateFaxRcvTsal  */
+/* IO: 이민재,2015-02-27T17:06:49(이민재,2015-02-27T17:06:49) */
+	UPDATE PS_MNG.TSAL_N_FAX
+	SET BIZ_APRV_TPY_CD = #BIZ_APRV_TPY_CD#
+		, BIZ_APRV_ST_CD = #BIZ_APRV_ST_CD#
+	WHERE FAX_RCV_NO = #FAX_RCV_NO#]]>
+	</update>
+	<insert id="dInsertFaxRcvBizAprv" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dInsertFaxRcvBizAprv  */
+/* IO: 이민재,2015-02-27T15:34:46(이민재,2015-02-27T15:34:46) */
+	MERGE INTO DSM_BIZ_APRV
+	USING DUAL
+	ON ( FAX_RCV_NO = #FAX_RCV_NO# )
+	WHEN MATCHED THEN
+		UPDATE SET BIZ_APRV_REQ_CL_CD = #BIZ_APRV_REQ_CL_CD#
+				, BIZ_APRV_OP_ST_CD = #BIZ_APRV_OP_ST_CD#
+				]]><isNotEmpty property="BIZ_APRV_FNSHR_ID"><![CDATA[
+				, BIZ_APRV_FNSHR_ID = #BIZ_APRV_FNSHR_ID#
+				, BIZ_APRV_FNSH_DTM = SYSDATE
+				]]></isNotEmpty><![CDATA[
+				, UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+            FAX_RCV_NO
+			, BIZ_APRV_REQ_CL_CD
+			, BIZ_APRV_OP_ST_CD
+			, BIZ_APRV_REQR_ID
+			, BIZ_APRV_REQ_DTM
+			, BIZ_APRV_FNSHR_ID
+			, BIZ_APRV_FNSH_DTM
+			, RGSTR_ID
+			, RGST_DTM
+			, UPDR_ID
+			, UPD_DTM
+		)VALUES(
+			#FAX_RCV_NO#
+			, #BIZ_APRV_REQ_CL_CD#
+			, #BIZ_APRV_OP_ST_CD#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, ''
+			, ''
+	    	, #onlineContext.userInfo.loginId#
+	  		, SYSDATE
+	  		, #onlineContext.userInfo.loginId#
+	  		, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertFaxRcvBizAprvHst" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dInsertFaxRcvBizAprvHst  */
+/* IO: 이민재,2015-02-27T15:38:45(이민재,2015-02-27T15:38:45) */
+	INSERT INTO DSM_BIZ_APRV_HST
+  	(
+    	FAX_RCV_NO
+		, BIZ_APRV_HST_SEQ
+		]]><isNotEmpty property="BIZ_APRV_FNSHR_ID"><![CDATA[
+		, BIZ_APRV_OPR_ID
+		, BIZ_APRV_OP_DTM
+		]]></isNotEmpty><![CDATA[
+		, BIZ_APRV_OP_ST_CD
+		, BIZ_APRV_OP_RSN_CTT
+		, BIZ_APRV_REQ_CL_CD
+		, RGSTR_ID
+		, RGST_DTM
+		, UPDR_ID
+		, UPD_DTM
+  	)
+  	VALUES
+  	(
+    	#FAX_RCV_NO#
+		, (SELECT NVL(MAX(BIZ_APRV_HST_SEQ)+1, 0) FROM DSM_BIZ_APRV_HST)
+		]]><isNotEmpty property="BIZ_APRV_FNSHR_ID"><![CDATA[
+		, #BIZ_APRV_FNSHR_ID#
+		, SYSDATE
+		]]></isNotEmpty><![CDATA[
+		, #BIZ_APRV_OP_ST_CD#
+		, #BIZ_APRV_OP_RSN_CTT#
+		, #BIZ_APRV_REQ_CL_CD#
+    	, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  	)]]>
+	</insert>
+	<select id="dSearchFaxRcvReqSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvReqSms  */
+/* IO: 이민재,2015-03-03T17:43:39(이민재,2015-03-03T17:43:39) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+     	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND C.AGNT_ID = #AGNT_ID# )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )]]>
+	</select>
+	<select id="dSearchFaxRcvReqSms01" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvReqSms01  */
+/* IO: 이민재,2015-03-03T15:58:19(이민재,2015-03-03T15:58:19) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, #BIZ_APRV_REQ_CL_NM# AS "{0}"
+    	, '' AS "{1}"
+     	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{2}"
+     	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{3}"
+      , #AGNT_NM# AS "{4}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID AND B.DUTY = '14' )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND D.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)]]>
+	</select>
+	<select id="dSearchFaxRcvReqSms02" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvReqSms02  */
+/* IO: 이민재,2015-03-03T15:58:36(이민재,2015-03-03T15:58:36) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, #BIZ_APRV_REQ_CL_NM# AS "{0}"
+      	, '' AS "{1}"
+     	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{2}"
+     	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{3}"
+      , #AGNT_NM# AS "{4}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID AND B.DUTY = '14' )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND D.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)
+    UNION
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, '' AS "{0}"
+      	, '(팀장代)' AS "{1}"
+     	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{2}"
+     	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{3}"
+      	, #AGNT_NM# AS "{4}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND C.AGNT_ID = #AGNT_ID# )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )]]>
+	</select>
+	<select id="dSearchFaxRcvReqSms03" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvReqSms03  */
+/* IO: 이민재,2015-03-03T15:58:46(이민재,2015-03-03T15:58:46) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, '' AS "{0}"
+      	, '(국장代)' AS "{1}"
+     	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{2}"
+     	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{3}"
+      	, #AGNT_NM# AS "{4}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND C.AGNT_ID = #AGNT_ID# )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )]]>
+	</select>
+	<select id="dSearchFaxRcvAppSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvAppSms  */
+/* IO: 이민재,2015-03-03T17:21:42(이민재,2015-03-03T17:05:17) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+      	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{1}"
+      	, #AGNT_NM# AS "{2}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+  	JOIN DSM_BIZ_APRV E ON (E.BIZ_APRV_REQR_ID = A.USER_ID AND E.FAX_RCV_NO = #FAX_RCV_NO#)
+	UNION
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+      	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+      	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{1}"
+      	, #AGNT_NM# AS "{2}"
+  	FROM DSM_USER A
+    JOIN DSM_CHRGR_HEADQ B ON ( B.CHRGR_ID = A.USER_ID  )
+  	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.USER_ID )
+    JOIN PS_MNG.TBAS_DUTY_MGMT D ON ( D.DUTY_CD = C.DUTY ) 
+    JOIN DSM_APPROVE E ON ( E.USER_ID = B.CHRGR_ID )
+    WHERE B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+    AND D.DUTY_CD = #DUTY_CD#]]>
+	</select>
+	<select id="dSearchFaxRcvAppReqSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvAppReqSms  */
+/* IO: 이민재,2015-03-03T17:54:26(이민재,2015-03-03T17:54:26) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+      	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+      	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{1}"
+      	, #AGNT_NM# AS "{2}"
+  	FROM DSM_USER A
+    JOIN DSM_CHRGR_HEADQ B ON ( B.CHRGR_ID = A.USER_ID  )
+  	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.USER_ID )
+    JOIN PS_MNG.TBAS_DUTY_MGMT D ON ( D.DUTY_CD = C.DUTY ) 
+    JOIN DSM_APPROVE E ON ( E.USER_ID = B.CHRGR_ID )
+    WHERE B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+    AND D.DUTY_CD = #DUTY_CD#]]>
+	</select>
+	<select id="dSearchFaxRcvReturnSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvReturnSms  */
+/* IO: 이민재,2015-03-03T18:02:05(이민재,2015-03-03T18:01:39) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+    	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+      	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{1}"
+      	, #AGNT_NM# AS "{2}"
+      	, '사유 : ' || #BIZ_APRV_OP_RSN_CTT# AS "{3}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+  	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+  	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+  	JOIN DSM_BIZ_APRV E ON (E.BIZ_APRV_REQR_ID = A.USER_ID AND E.FAX_RCV_NO = #FAX_RCV_NO#)
+	UNION
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+      	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = #BIZ_APRV_TPY_CD#) AS "{0}"
+      	, #SALE_DEPT_ORG_NM# || ' ' || #SALE_TEAM_ORG_NM# AS "{1}"
+      	, #AGNT_NM# AS "{2}"
+      	, '사유 : ' || #BIZ_APRV_OP_RSN_CTT# AS "{3}"
+  	FROM DSM_USER A
+    JOIN DSM_CHRGR_HEADQ B ON ( B.CHRGR_ID = A.USER_ID  )
+  	JOIN PS_MNG.TBAS_USER_MGMT C ON ( C.USER_ID = A.USER_ID )
+    JOIN PS_MNG.TBAS_DUTY_MGMT D ON ( D.DUTY_CD = C.DUTY ) 
+    JOIN DSM_APPROVE E ON ( E.USER_ID = B.CHRGR_ID )
+    WHERE B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+    AND D.DUTY_CD = #DUTY_CD#]]>
+	</select>
+	<select id="dSearchFaxRcvMobile" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvMobile  */
+/* IO: 이민재,2015-03-09T14:22:44(이민재,2015-03-09T14:22:44) */
+	SELECT ROW_NUMBER() OVER(ORDER BY A.FAX_RECEIVE_DTM desc) AS RN 
+		, A.FAX_RCV_NO 
+		, A.FAX_RECEIVE_DTM AS RCV_DTM
+		, A.RCV_NO AS RCV_FAX_NUM 					/* 수신번호 */
+ 		, A.PROD_TYP_CD AS FAX_UNIT_TYP_CD 			/* 상품유형코드 */
+       	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_UNIT_TYP_CD' AND COMM_CD_VAL = A.PROD_TYP_CD) AS FAX_UNIT_TYP_NM
+       	, A.FAX_SCRB_TYP_CD  						/* 가입유형코드  */ 
+       	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_SCRB_TYP_CD' AND COMM_CD_VAL = A.FAX_SCRB_TYP_CD) AS FAX_SCRB_TYP_NM
+       	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_SCRB_TYP_CD' AND ADD_INFO_01 = 'Y' AND COMM_CD_VAL = A.FAX_SCRB_TYP_CD) AS FAX_SCRB_TYP_YN   
+       	, (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'BF_COM_CD' AND COMM_CD_VAL = A.BF_COM_CD) AS BF_COM_NM             
+       	, A.PROD_ABBR_NM  							/* 상품약어명 */
+       	, F_MASKING('N',A.CUST_NM) AS CUST_NM
+       	, G.ORG_ID AS HDQT_TEAM_ORG_ID 				/*본사팀ID */
+       	, G.ORG_NM AS HDQT_TEAM_ORG_NM 
+       	, F.OUT_ORG_ID AS HDQT_PART_ORG_ID 			/*본사파트ID*/
+       	, F.OUT_ORG_NM AS HDQT_PART_ORG_NM 
+       	, E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID 	/*영업국ID*/
+       	, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+       	, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID 		/*영업팀ID*/
+       	, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+       	, A.AGENT_CD AS AGNT_ID 					/* 에이전트 코드 */
+       	, F_MASKING('N',A.AGENT_NM) AS AGNT_NM		/* 에이전트명 */
+       	, C.AGNT_NM AS RETL_ORG_NM
+       	, A.FAX_OPR_ID AS OPR_ID  					/* 처리자ID */
+       	, F_MASKING('N',A.CHGRG_NM) AS OPR_NM
+       	, A.OP_ST_CD AS FAX_OP_ST_CD  				/* 처리현황코드 */
+       	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_FAX_OP_ST_CD' AND COMM_CD_VAL = A.OP_ST_CD) AS FAX_OP_ST_NM                             
+       	, A.MEMO
+       	, A.SND_FAX_NO AS SND_FAX_NUM 				/* 팩스발신자번호*/
+       	, A.PAGE_NUM AS FAX_FILE_PG 				/* 수신페이지수 */
+       	, A.AGREE_CTT AS CNSNT_MEMO 				/* 사전동의메모 */
+       	/* , A.BIZ_APRV_TPY_CD							 업무승인유형코드 */
+       	/* , (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = A.BIZ_APRV_TPY_CD) AS BIZ_APRV_TPY_NM */
+       	/* , (SELECT ADD_INFO_01 AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_TPY_CD' AND COMM_CD_VAL = A.BIZ_APRV_TPY_CD) AS BIZ_APRV_TPY_YN */
+       	/* , A.BIZ_APRV_ST_CD							 업무승인상태코드 */
+       	/* , (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_ST_CD' AND COMM_CD_VAL = A.BIZ_APRV_ST_CD) AS BIZ_APRV_ST_NM */
+  		, H.BIZ_APRV_REQ_CL_CD						/* 업무승인요청구분코드 */
+       	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_REQ_CL_CD' AND COMM_CD_VAL = H.BIZ_APRV_REQ_CL_CD) AS BIZ_APRV_REQ_CL_NM
+        , H.BIZ_APRV_OP_ST_CD						/* 업무승인처리상태코드 */
+      	, (SELECT COMM_CD_VAL_NM AS CD_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_BIZ_APRV_OP_ST_CD' AND COMM_CD_VAL = H.BIZ_APRV_OP_ST_CD) AS BIZ_APRV_OP_ST_NM
+        , I.BIZ_APRV_SUSP_HST_SEQ
+	FROM PS_MNG.TSAL_N_FAX A
+	LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.FAX_OPR_ID )  
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.AGENT_CD AND C.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM') )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON ( G.ORG_ID = F.ORG_ID )
+	LEFT JOIN DSM_BIZ_APRV H ON ( H.FAX_RCV_NO = A.FAX_RCV_NO )
+	LEFT JOIN DSM_BIZ_APRV_SUSP I ON ( I.DSM_HEADQ_CD = E.SUP_OUT_ORG_DTL_ID AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN I.SUSP_STA_DT AND I.SUSP_END_DT )
+	WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+	AND A.FAX_RECEIVE_DTM BETWEEN #FROM_DT#||'000000' AND #TO_DT#||'235959'
+	AND H.BIZ_APRV_OP_ST_CD = #BIZ_APRV_OP_ST_CD#
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+	G.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+	F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+	E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchFaxRcvTotalCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dfaxrcv.db.DFAXRCV001.dSearchFaxRcvTotalCount  */
+/* IO: 이민재,2015-03-19T13:33:37(이민재,2015-03-19T13:33:37) */
+	SELECT TO_CHAR(COUNT(*), 'FM999G999G999G999') AS TOT_CNT 
+		, TO_CHAR(NVL(SUM(CASE WHEN A.OP_ST_CD = '10' THEN 1 ELSE 0 END),0), 'FM999G999G999G999') AS CNT1 
+		, TO_CHAR(NVL(SUM(CASE WHEN A.OP_ST_CD = '20' THEN 1 ELSE 0 END),0), 'FM999G999G999G999') AS CNT2
+		, TO_CHAR(NVL(SUM(CASE WHEN A.OP_ST_CD = '30' THEN 1 ELSE 0 END),0), 'FM999G999G999G999') AS CNT3
+		, TO_CHAR(NVL(SUM(CASE WHEN A.OP_ST_CD = '40' THEN 1 ELSE 0 END),0), 'FM999G999G999G999') AS CNT4
+		, TO_CHAR(NVL(SUM(CASE WHEN A.OP_ST_CD = '50' THEN 1 ELSE 0 END),0), 'FM999G999G999G999') AS CNT5
+	FROM PS_MNG.TSAL_N_FAX A
+	LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.FAX_OPR_ID )  
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.AGENT_CD AND C.CONS_MTH = TO_CHAR(TO_DATE('20150319'), 'YYYYMM') )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON ( G.ORG_ID = F.ORG_ID )
+	LEFT JOIN DSM_BIZ_APRV H ON ( H.FAX_RCV_NO = A.FAX_RCV_NO )
+	LEFT JOIN DSM_BIZ_APRV_SUSP I ON ( I.DSM_HEADQ_CD = E.SUP_OUT_ORG_DTL_ID /* AND I.BIZ_APRV_TPY_CD = A.BIZ_APRV_TPY_CD */ AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN I.SUSP_STA_DT AND I.SUSP_END_DT )
+	WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+	AND A.FAX_RECEIVE_DTM BETWEEN #FROM_DT#||'000000' AND #TO_DT#||'235959'
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		G.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+		D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+</sqlMap>

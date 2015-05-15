@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DFAXRCV001">
+    <bizUnitName>[DU]D-FAX접수결과</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.DFAXRCV</componentId>
+    <description>D-FAX접수결과 DU</description>
+    <method-list>
+        <method id="dSearchFaxRcvCount">
+            <methodName>[DM]D-FAX접수결과건수조회</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과 건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T17:26:20" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcv">
+            <methodName>[DM]D-FAX접수결과조회</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T16:11:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvMobile">
+            <methodName>[DM]D-FAX접수결과조회모바일</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvMobile</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과조회모바일 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-09T14:28:39" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvTotalCount">
+            <methodName>[DM]D-FAX접수결과총건수조회</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvTotalCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수결과총건수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T13:36:38" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvReturnSms">
+            <methodName>[DM]D-FAX접수반려SMS발송</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvReturnSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수반려SMS발송</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T18:03:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvAppReqSms">
+            <methodName>[DM]D-FAX접수승인SMS발송(국장승인)</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvAppReqSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인SMS발송(국장승인)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T17:55:25" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvAppSms">
+            <methodName>[DM]D-FAX접수승인SMS발송</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvAppSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인SMS발송</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T17:22:19" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvReqSms03">
+            <methodName>[DM]D-FAX접수승인요청SMS발송(MA)</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvReqSms03</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인요청SMS발송(MA)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T16:19:39" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvReqSms01">
+            <methodName>[DM]D-FAX접수승인요청SMS발송(국장)</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvReqSms01</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인요청SMS발송(국장)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T16:18:39" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvReqSms02">
+            <methodName>[DM]D-FAX접수승인요청SMS발송(팀장)</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvReqSms02</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인요청SMS발송(팀장)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T16:19:15" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchFaxRcvReqSms">
+            <methodName>[DM]D-FAX접수승인요청SMS발송</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dSearchFaxRcvReqSms</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수승인요청SMS발송</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T17:45:24" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertFaxRcvBizAprvHst">
+            <methodName>[DM]D-FAX접수업무승인이력저장</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dInsertFaxRcvBizAprvHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수업무승인이력 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T15:50:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertFaxRcvBizAprv">
+            <methodName>[DM]D-FAX접수업무승인저장</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dInsertFaxRcvBizAprv</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수업무승인 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T15:49:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateFaxRcvTsal">
+            <methodName>[DM]D-FAX접수팩스관리수정</methodName>
+            <transactionId>biz.DFAXRCV@DFAXRCV001_dUpdateFaxRcvTsal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>D-FAX접수팩스관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-27T17:10:26" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-24T16:09:35" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

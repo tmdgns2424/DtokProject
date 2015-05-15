@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSALEPRST001">
+	<select id="CRD_PRST" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.CRD_PRST 여신현황조회 */
+/* IO: 허용,2015-04-28T16:13:41(허용,2015-04-28T16:13:41) */
+SELECT *
+  FROM (
+SELECT
+      ROW_NUMBER() OVER(ORDER BY AA.OUT_ORG_DTL_ID,G.PRT_SEQ DESC , A.AGNT_ID) AS RN
+    ,(SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT K WHERE K.OUT_ORG_ID = AA.OUT_ORG_ID) AS ORG_NM1
+    ,(SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT K WHERE K.OUT_ORG_DTL_ID = AA.SUP_OUT_ORG_DTL_ID) AS ORG_NM2
+    ,AA.OUT_ORG_DTL_NM AS ORG_NM3
+    ,A.AGNT_ID         AS AGNT_ID
+    ,G.COMM_CD_VAL_NM  AS DUTY_NM
+    ,AGNT_NM           AS AGNT_NM
+    ,NVL(B.BAS_AMT,0)         AS BAS_AMT
+    ,NVL(C.ADJ_INC_AMT,0)     AS ADJ_INC_AMT
+    ,NVL(C.ADJ_DEC_AMT,0)     AS ADJ_DEC_AMT
+    ,NVL(B.BAS_AMT,0) + NVL(C.ADJ_INC_AMT,0) - NVL(C.ADJ_DEC_AMT,0)  AS LMT_AMT
+    ,NVL(D.STK_AMT,0)         AS STK_AMT
+    ,NVL(E.FEE_AMT,0)         AS FEE_AMT
+    ,NVL(F.SALE_AMT,0)        AS SALE_AMT
+    ,NVL(B.BAS_AMT,0) + NVL(C.ADJ_INC_AMT,0) - NVL(C.ADJ_DEC_AMT,0) - (NVL(D.STK_AMT,0) + NVL(E.FEE_AMT,0) +NVL(F.SALE_AMT,0) ) AS BAL_AMT
+    ,B.EFF_END_DT             AS EFF_END_DT
+FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A 
+JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT AA ON (A.OUT_ORG_DTL_ID = AA.OUT_ORG_DTL_ID)
+LEFT JOIN 
+(
+    SELECT 
+       A.AGNT_ID
+     , SUM (C.MRTG_SET_AMT) AS BAS_AMT
+     , MAX (C.EXPIR_DT) AS EFF_END_DT 
+    FROM  PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID  = B.OUT_ORG_DTL_ID)
+    JOIN PS_MNG.TBAS_DEAL_CO_CRD_MGMT C ON ( C.DEAL_CO_CD = A.AGNT_ID
+                                          AND  C.DEL_YN = 'N'
+                                          AND TO_CHAR (SYSDATE, 'yyyymmdd') BETWEEN SET_DT AND  EXPIR_DT )                                      
+    WHERE A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')
+      AND A.DEL_YN = 'N'
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[      
+      AND B.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#  
+]]></isNotEmpty><![CDATA[           
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[      
+      AND B.OUT_ORG_DTL_ID =   #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[           
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+      AND A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[                    
+    GROUP BY A.AGNT_ID 
+) B ON (A.AGNT_ID = B.AGNT_ID)  
+LEFT JOIN 
+(
+    SELECT 
+       A.AGNT_ID
+     , SUM(DECODE(C.CTRL_CL_CD,'P', C.SET_AMT, 0)) AS ADJ_INC_AMT
+     , SUM(DECODE(C.CTRL_CL_CD,'P', 0, C.SET_AMT)) AS ADJ_DEC_AMT
+    FROM  PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID  = B.OUT_ORG_DTL_ID)
+    JOIN PS_MNG.TACC_CRDT_CTRL C ON ( C.AGENT_ID = A.AGNT_ID
+                                   AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN SUBSTR(C.APLY_STA_DTM,1,8) AND SUBSTR(C.APLY_END_DTM,1,8) )                                      
+    WHERE A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')
+      AND A.DEL_YN = 'N'
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[      
+      AND B.SUP_OUT_ORG_DTL_ID =#SALE_DEPT_ORG_ID#   
+]]></isNotEmpty><![CDATA[        
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[         
+      AND B.OUT_ORG_DTL_ID =   #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[             
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+      AND A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[        
+    GROUP BY  A.AGNT_ID     
+) C  ON (A.AGNT_ID = C.AGNT_ID)
+LEFT JOIN 
+(
+    SELECT 
+       A.AGNT_ID
+     , SUM (DECODE (D.ADD_INFO_02, 'Y', C.DIS_AMT, 0)) STK_AMT
+    FROM  PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID  = B.OUT_ORG_DTL_ID)
+    JOIN PS_MNG.TDIS_DIS C ON (  C.HLD_PLC_ID = A.AGNT_ID
+                          AND C.DEL_YN = 'N'
+                       )                                 
+    JOIN PS_MNG.TBAS_COMM_CD_DTL D ON (
+                             D.COMM_CD_ID = 'ZDIS_C_00050'
+                         AND D.COMM_CD_VAL = C.LAST_INOUT_DTL_CL
+                        )                          
+    WHERE A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')
+      AND A.DEL_YN = 'N'
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[      
+      AND B.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[           
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[      
+      AND B.OUT_ORG_DTL_ID =   #SALE_TEAM_ORG_ID#     
+]]></isNotEmpty><![CDATA[      
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+      AND A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[            
+    GROUP BY  A.AGNT_ID
+) D ON (A.AGNT_ID = D.AGNT_ID )
+LEFT JOIN 
+(
+    SELECT 
+       A.AGNT_ID
+     ,SUM(DECODE(C.OP_ST_CD, 'OS04', -1, 1) * TO_NUMBER(NVL(D.PAY_AMT,0))) AS FEE_AMT
+    FROM  PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (A.OUT_ORG_DTL_ID  = B.OUT_ORG_DTL_ID)
+    JOIN PS_MNG.TSAL_N_SKT_CHARGE C ON ( A.AGNT_ID = C.STL_PLC
+                                                          AND C.PAY_DTM       BETWEEN TO_CHAR(SYSDATE,'yyyymm') || '01000000' AND TO_CHAR(SYSDATE,'yyyymm')||'235959'
+                                                          AND C.DEL_YN        = 'N'
+                       )                                 
+    JOIN PS_MNG.TSAL_N_SKT_CHARGE_PAYMENT D ON (
+                                                             D.DEL_YN        = 'N'
+                                                         AND D.SKT_CHARGE_NO = C.SKT_CHARGE_NO
+                                                         AND D.SEQ           = C.SEQ
+                                                         AND D.PAY_MTHD_CD   = 'PM01' /*현금*/
+                        )                          
+    WHERE A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')
+      AND A.DEL_YN = 'N'
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[      
+      AND B.SUP_OUT_ORG_DTL_ID =   #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[        
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[      
+      AND B.OUT_ORG_DTL_ID =   #SALE_TEAM_ORG_ID#      
+]]></isNotEmpty><![CDATA[         
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+      AND A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[     
+    GROUP BY  A.AGNT_ID
+) E ON (A.AGNT_ID = E.AGNT_ID )
+LEFT JOIN 
+(
+          SELECT STL_PLC       AS AGNT_ID
+                ,SUM(SALE_AMT) AS SALE_AMT
+          FROM  (          
+                  /* 채권발생 현금매출 - 일반판매  (월초~현재) */
+                  SELECT SGS.STL_PLC
+                         ,DECODE(SGS.GNRL_SALE_CHG_SEQ,1,1,-1) * SCSD.MDL_CASH_SALE_PRC AS SALE_AMT
+                    FROM PS_MNG.TSAL_N_CASH_SALE_DTL    SCSD
+                        ,PS_MNG.TSAL_N_GENERAL_SALE     SGS                      
+                   WHERE SCSD.GNRL_SALE_NO       = SGS.GNRL_SALE_NO
+                     AND SCSD.GNRL_SALE_CHG_SEQ  = SGS.GNRL_SALE_CHG_SEQ
+                     AND SGS.DEL_YN              = 'N'
+                     AND SGS.SALE_CHG_DTM        BETWEEN TO_CHAR(SYSDATE,'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd')
+                     AND NVL(SCSD.MDL_CASH_SALE_PRC, 0) != 0                                          
+                  UNION ALL                  
+                  /* 채권발생 현금매출 - 공기기판매  (월초~현재) */
+                  SELECT SFS.STL_PLC
+                        ,DECODE(SFS.FREE_PROD_SALE_CHG_SEQ,1,1,-1) * SCSD.MDL_CASH_SALE_PRC AS  SALE_AMT
+                    FROM PS_MNG.TSAL_N_CASH_SALE_DTL    SCSD
+                        ,PS_MNG.TSAL_N_FREEPROD_SALE    SFS                      
+                   WHERE SCSD.GNRL_SALE_NO       = SFS.FREE_PROD_SALE_NO
+                     AND SCSD.GNRL_SALE_CHG_SEQ  = SFS.FREE_PROD_SALE_CHG_SEQ
+                     AND SFS.DEL_YN             = 'N'
+                     AND SFS.SALE_CHG_DTM     BETWEEN TO_CHAR(SYSDATE,'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd')
+                     AND  NVL(SCSD.MDL_CASH_SALE_PRC, 0) != 0                                                      
+                  UNION ALL                  
+      /*채권발생 현금매출 - 매출출고 */ 
+                  SELECT DOM.OUT_PLC_ID  AS STL_PLC
+                        ,DOMD.AMT        AS SALE_AMT
+                    FROM PS_MNG.TDIS_OUT_M     DOM
+                        ,PS_MNG.TDIS_OUT_DTL_D DOMD                          
+                  WHERE  DOM.OUT_FIX_DT   BETWEEN TO_CHAR(SYSDATE,'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd')
+                  AND DOM.OUT_SCHD_DT  BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE,-2),'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd') /* 수행속도향상을 위해  */
+                     AND DOM.DEL_YN = 'N'
+                     AND DOM.OUT_MGMT_NO = DOMD.OUT_MGMT_NO
+                     AND DOM.OUT_CL = '213'
+                     AND DOM.OUT_FIX_YN = 'Y'
+                     AND NVL(DOMD.AMT,0) != 0                                                          
+                  UNION ALL                  
+      /* 매출반품 (매출출고에 대한 반품 . 차감) */ 
+                  SELECT DIM.IN_PLC_ID     AS STL_PLC
+                        ,(-1 * DIDD.IN_PRAC)  AS SALE_AMT
+                    FROM PS_MNG.TDIS_IN_M     DIM
+                        ,PS_MNG.TDIS_IN_DTL_D DIDD                          
+                   WHERE DIM.IN_FIX_DT BETWEEN TO_CHAR(SYSDATE,'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd')
+                  AND DIM.IN_SCHD_DT  BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE,-2),'yyyymm') || '01' AND TO_CHAR(SYSDATE,'yyyymmdd') /* 수행속도향상을 위해  */
+                     AND DIM.DEL_YN = 'N'
+                     AND DIM.IN_MGMT_NO = DIDD.IN_MGMT_NO
+                     AND DIM.IN_CL = '111'
+                     AND DIM.IN_FIX_YN = 'Y'
+                     AND NVL(DIDD.IN_PRAC,0) != 0                                                                
+                 ) SSL
+           GROUP BY SSL.STL_PLC      
+) F ON (A.AGNT_ID = F.AGNT_ID )
+JOIN PS_MNG.TBAS_COMM_CD_DTL G ON (G.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND G.COMM_CD_VAL = A.RPSTY)
+WHERE 1=1
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+  AND AA.SUP_OUT_ORG_DTL_ID =   #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[    
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[  
+  AND AA.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[    
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+      AND A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[
+  AND A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')  
+ORDER BY AA.OUT_ORG_DTL_ID,G.PRT_SEQ DESC , A.AGNT_ID
+       ) X
+ WHERE 1=1
+]]><isNotEmpty property="page"><![CDATA[ 
+   AND X.RN BETWEEN (#page#-1) * #page_size#+1 AND #page# * #page_size#
+]]></isNotEmpty><![CDATA[
+ORDER BY X.RN]]>
+	</select>
+	<select id="CRD_PRST_CNT" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.CRD_PRST_CNT 여신현황조회건수 */
+/* IO: 허용,2015-04-28T16:15:34(허용,2015-04-28T16:15:34) */
+SELECT 
+ COUNT(*) AS TOT_CNT
+FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A 
+,    PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+WHERE A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID 
+  AND A.CONS_MTH = TO_CHAR (SYSDATE, 'YYYYMM')  
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+   and B.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+   and A.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+   and A.AGNT_ID = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[  ]]>
+	</select>
+	<select id="dSearchCnsgInvePrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchCnsgInvePrst 위탁재고현황조회 */
+/* IO: 이승훈2,2015-04-15T13:19:23(이승훈2,2015-02-10T17:16:26) */
+SELECT X.* 
+  FROM 
+(
+	SELECT	ROWNUM RN, T.*
+	  FROM
+			(
+				SELECT	 I.OUT_ORG_ID       AS HDQT_PART_ORG_ID
+             			 , I.OUT_ORG_NM     AS HDQT_PART_ORG_NM     /*본사파트*/
+						 , F.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+						 , F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM		/*영업국명*/
+					     , E.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+						 , E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM		/*영업팀명*/
+						 , D.AGNT_ID        AS AGNT_ID
+						 , F_MASKING('N', D.AGNT_NM) AS AGNT_NM
+						 , G.DUTY           AS DUTY_CD
+						 , (SELECT Z.DUTY_NM 
+						 	  FROM PS_MNG.TBAS_DUTY_MGMT Z 
+						 	 WHERE Z.DUTY_CD = G.DUTY) AS DUTY_NM
+						 , D.RPSTY AS RETL_CLASS_CD
+						 , (SELECT Z.COMM_CD_VAL_NM 
+						      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+						     WHERE Z.COMM_CD_ID = 'DSM_RETL_CLASS_CD' 
+						           AND Z.COMM_CD_VAL = D.RPSTY) AS RETL_CLASS_NM
+						 , TO_CHAR(TO_DATE(A.LAST_INOUT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS IN_DT
+						 , C.MFACT_ID AS STTL_OWNR_CD
+		 				 ,(SELECT Z.DEAL_CO_NM
+							 FROM PS_MNG.TBAS_DEAL_CO_MGMT Z 
+							WHERE Z.DEAL_CO_CD   = C.MFACT_ID
+				  				  AND Z.EFF_STA_DTM <= TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+				 				  AND Z.EFF_END_DTM >= to_char(SYSDATE,'YYYYMMDDHH24MISS')
+								  AND Z.DEL_YN = 'N'
+								  AND ROWNUM = 1) AS STTL_OWNR_NM
+						 , C.PROD_NM
+						 , A.DIS_AMT AS CRD_AMT
+						 , A.COLOR_CD
+						 , (SELECT Z.COMM_CD_VAL_NM 
+						      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+						     WHERE Z.COMM_CD_ID = 'ZBAS_C_00040' 
+						           AND Z.COMM_CD_VAL = A.COLOR_CD) AS COLOR_NM
+						 , A.SER_NUM AS PROD_SER_NUM
+						 , A.DIS_ST AS ST_CD
+						 , (SELECT Z.COMM_CD_VAL_NM 
+						      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+						     WHERE Z.COMM_CD_ID = 'ZDIS_C_00090' 
+						           AND Z.COMM_CD_VAL = A.BAD_YN) AS ST_NM
+						 , H.SALE_IMR AS DSM_UNIT_MANAGE
+						 , (SELECT Z.COMM_CD_VAL_NM 
+						      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+						     WHERE Z.COMM_CD_ID = 'ZDIS_C_00600' 
+						           AND Z.COMM_CD_VAL = H.SALE_IMR) AS DSM_UNIT_NM
+						 , TRUNC(SYSDATE - TO_DATE(A.LAST_INOUT_DT), 0) AS IN_DCHA
+				  FROM 	 PS_MNG.TDIS_DIS A
+						 , PS_MNG.TBAS_PROD_MGMT C
+						 , PS_MNG.TBAS_OUT_ORG_MBR_MGMT D
+						 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT E
+						 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT F
+						 , PS_MNG.TBAS_USER_MGMT G
+						 , PS_MNG.TDIS_DSM_OP_PROD H
+						 , PS_MNG.TBAS_OUT_ORG_MGMT I
+				 WHERE 	 A.HLD_PLC_ID = D.AGNT_ID
+						 AND A.DEL_YN = 'N' 
+						 AND A.DIS_ST = '01'
+						 AND A.PROD_CD = C.PROD_CD
+						 AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+						 AND D.OUT_ORG_DTL_ID = E.OUT_ORG_DTL_ID
+						 AND E.SUP_OUT_ORG_DTL_ID = F.OUT_ORG_DTL_ID
+						 AND F.ORG_LVL = '1'
+						 AND D.AGNT_ID = G.CPLAZA_ORG_CD
+						 AND G.ATTC_CAT = '4'
+						 AND A.PROD_CD = H.PROD_CD(+)
+						 AND F.OUT_ORG_ID = I.OUT_ORG_ID
+						 AND I.ORG_ID = #HDQT_TEAM_ORG_ID# 				/* 본사팀 */
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[						 
+						 AND E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#  /*영업국 조건*/
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+						 AND D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# 		/*영업팀 조건 */
+]]></isNotEmpty><![CDATA[						 
+						 and nvl(g.user_typ , '99') = '4'
+					     /*AND TO_CHAR(SYSDATE, 'YYYYMMDD') >= CASE WHEN A.LAST_INOUT_CL='100' THEN A.LAST_INOUT_DT
+															      WHEN A.LAST_INOUT_CL='200' THEN A.FST_IN_FIX_DT
+														      END  
+					     AND TO_CHAR(SYSDATE, 'YYYYMMDD') <  CASE WHEN A.LAST_INOUT_CL='100' THEN '99999999'
+															      WHEN A.LAST_INOUT_CL='200' THEN  A.LAST_INOUT_DT
+														      END */
+							  
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+						 AND D.AGNT_ID            = #AGNT_ID# 
+]]></isNotEmpty><![CDATA[ 
+]]><isNotEmpty property="PROD_NM"><![CDATA[
+						 AND UPPER(C.PROD_NM) LIKE '%'||UPPER(#PROD_NM#)||'%' /* 상품명 */
+]]></isNotEmpty><![CDATA[           
+			) T
+	 ORDER BY HDQT_PART_ORG_ID, SALE_DEPT_ORG_ID, SALE_TEAM_ORG_ID, AGNT_NM, STTL_OWNR_CD, PROD_NM
+) X
+ WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchCnsgInvePrstCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchCnsgInvePrstCnt 위탁재교현황조회건수 */
+/* IO: 이승훈2,2015-04-15T13:20:16(이승훈2,2015-02-10T16:28:42) */
+SELECT	 COUNT(*) AS TOT_CNT
+  FROM	 PS_MNG.TDIS_DIS A
+		 , PS_MNG.TBAS_PROD_MGMT C
+		 , PS_MNG.TBAS_OUT_ORG_MBR_MGMT D
+		 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT E
+		 , PS_MNG.TBAS_USER_MGMT G
+		 , PS_MNG.TBAS_OUT_ORG_MGMT I
+ WHERE 	 A.HLD_PLC_ID =D.AGNT_ID
+		 AND A.DEL_YN = 'N' 
+		 AND A.DIS_ST = '01'
+	     AND A.PROD_CD = C.PROD_CD
+	     AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+	     AND D.OUT_ORG_DTL_ID = E.OUT_ORG_DTL_ID
+	     AND D.AGNT_ID = G.CPLAZA_ORG_CD
+	     AND G.ATTC_CAT = '4'
+	     AND I.ORG_ID = #HDQT_TEAM_ORG_ID# 	  /* 본사팀 */
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[						 
+						 AND E.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#  /*영업국 조건*/
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+						 AND D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# 		/*영업팀 조건 */
+]]></isNotEmpty><![CDATA[
+		and nvl(g.user_typ , '99') = '4'
+		/* AND TO_CHAR(SYSDATE, 'YYYYMMDD') >= CASE WHEN A.LAST_INOUT_CL='100' THEN A.LAST_INOUT_DT
+												  WHEN A.LAST_INOUT_CL='200' THEN A.FST_IN_FIX_DT
+											  END  
+		 AND TO_CHAR(SYSDATE, 'YYYYMMDD') < CASE WHEN A.LAST_INOUT_CL='100' THEN '99999999'
+												 WHEN A.LAST_INOUT_CL='200' THEN  A.LAST_INOUT_DT
+											 END */
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+		 AND D.AGNT_ID = #AGNT_ID#
+]]></isNotEmpty><![CDATA[ 
+]]><isNotEmpty property="PROD_NM"><![CDATA[
+		 AND UPPER(C.PROD_NM) LIKE '%'||UPPER(#PROD_NM#)||'%'
+]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchProdRsltPrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchProdRsltPrst 상품별실적현황조회 */
+/* IO: 채수윤,2015-03-13T16:30:27(이승훈2,2015-02-16T18:07:35) */
+SELECT A.PROD_CD
+     , A.MF_COP_NAME
+     , A.MDL
+     , A.QTY_TOT
+     , A.QTY_NEW /* 01	010신규 */
+     , A.QTY_KMNP /* 02	KMNP */
+     , A.QTY_LMNP /* 03	LMNP */
+     , A.QTY_EMNP /* 04	기타MNP */
+     , A.QTY_EQP_CHG /* 05	기변 */
+     , A.QTY_ETC /* 06	기타 */
+     , A.QTY_USIM /* USIM */
+     , A.QTY_SMART /* 스마트 디바이스 */
+     , A.QTY_NEQP /* 공기계 */
+  FROM (SELECT
+               A.MDL_CD AS PROD_CD
+             , C.DEAL_CO_NM AS MF_COP_NAME
+             , B.PROD_NM    AS MDL
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_TOT /* 합계 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEW /* 01	010신규 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) AS QTY_KMNP /* 02	KMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) AS QTY_LMNP /* 03	LMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) AS QTY_EMNP /* 04	기타MNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) AS QTY_EQP_CHG /* 05	기변 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_ETC /* 06	기타 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '2' THEN A.SALE_QTY ELSE 0 END) AS QTY_USIM /* USIM */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '3' THEN A.SALE_QTY ELSE 0 END) AS QTY_SMART /* 스마트 디바이스 */
+             , SUM(CASE WHEN A.PROD_CL = 'FREE' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEQP /* 공기계 */
+          FROM (/* 개통상품 : 단말기, U-SIM, 스마트디바이스 ... */
+                SELECT /*+ index(GS ITSAL_N_GENERAL_SALE_04) */
+                       'PHON' AS PROD_CL
+                     , GS.GNRL_SALE_NO
+                     , GS.GNRL_SALE_CHG_SEQ
+                     , GS.SALE_ORG
+                     , AG.OUT_ORG_DTL_ID
+                     , GS.SALE_PLC            AS AGNT_ID
+                     , ES.PROD_CL_CD          AS PROD_CL_CD
+                     , ES.MDL_CD              AS MDL_CD
+                     , GS.SALE_DTM            AS SALE_DT
+                     , NVL((SELECT Z.ADD_INFO_03 
+                              FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                             WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                               AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)), '06') AS SALE_CL_CD
+                     , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)               AS SALE_TYP
+                     /*, DECODE(GS.SALE_CHG_HST_CL ,'01' ,  1, '07' , -1, 0)                              AS SALE_QTY*/
+				 ,  DECODE (GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY                        
+                     , GS.SALE_CHG_DTM
+                  FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                     , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                     , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                     , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                 WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                   AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+/*SALE_CHG_DTM 날짜 ? OR 날짜 시 분 초 */	
+                   AND GS.SALE_CHG_DTM     >= #APLY_MTH# || '01'
+                   AND GS.SALE_CHG_DTM     <= #APLY_MTH# || '31'
+                   AND GS.DEL_YN = 'N'
+                   AND ES.MDL_CD   IS NOT NULL
+                   AND GS.SALE_ORG = OG.ORG_ID
+                   AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                   AND GS.SALE_PLC = AG.AGNT_ID
+                    AND AG.CONS_MTH = #APLY_MTH#                   
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                    AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                    AND AG.AGNT_ID = #AGNT_ID#
+]]></isNotEmpty><![CDATA[
+                 UNION ALL
+                /* 미개통상품 : 공기기판매 팬매수 ... */
+                SELECT
+                       'FREE' AS PROD_CL
+                     , FS.FREE_PROD_SALE_NO                    AS GNRL_SALE_NO
+                     , FS.FREE_PROD_SALE_CHG_SEQ               AS GNRL_SALE_CHG_SEQ
+                     , FS.SALE_ORG
+                     , AG.OUT_ORG_DTL_ID
+                     , FS.SALE_PLC                             AS AGNT_ID
+                     , FP.PROD_CL                              AS PROD_CL_CD
+                     , FP.MDL_CD                               AS MDL_CD
+                     , FS.SALE_DTM                             AS SALE_DT
+                     , 'NEQP'                                  AS SALE_CL_CD
+                     , DECODE(FP.PROD_CL, '1', '97', '98')     AS SALE_TYP
+				   ,  DECODE (FS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY
+                     , FS.SALE_CHG_DTM
+                  FROM PS_MNG.TSAL_N_FREEPROD_SALE   FS
+                     , PS_MNG.TSAL_N_FREEPROD_PROD   FP
+                     , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                     , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                 WHERE FS.FREE_PROD_SALE_NO      = FP.FREE_PROD_SALE_NO
+                   AND FS.FREE_PROD_SALE_CHG_SEQ = FP.FREE_PROD_SALE_CHG_SEQ       
+/*SALE_CHG_DTM 날짜 ? OR 날짜 시 분 초 */				   
+                   AND FS.SALE_CHG_DTM           >= #APLY_MTH# || '01'
+                   AND FS.SALE_CHG_DTM           <= #APLY_MTH# || '31'
+                   AND FS.DEL_YN = 'N'
+                   AND FS.SALE_ORG = OG.ORG_ID
+                   AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                    AND AG.CONS_MTH = #APLY_MTH#                   
+                   AND FS.SALE_PLC = AG.AGNT_ID
+]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                    AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                    AND AG.AGNT_ID = #AGNT_ID#
+]]></isNotEmpty><![CDATA[
+               ) A
+             , PS_MNG.TBAS_PROD_MGMT B
+             , PS_MNG.TBAS_DEAL_CO_MGMT C
+             , PS_MNG.TBAS_OUT_ORG_DTL_MGMT D
+         WHERE A.MDL_CD = B.PROD_CD
+           AND B.MFACT_ID = C.DEAL_CO_CD
+           AND C.EFF_STA_DTM <= A.SALE_DT 
+           AND C.EFF_END_DTM >= A.SALE_DT 
+           AND A.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID
+]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+           AND D.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[
+         GROUP BY A.MDL_CD, C.DEAL_CO_NM, B.PROD_NM
+       ) A
+ ORDER BY A.QTY_TOT DESC]]>
+	</select>
+	<select id="dSearchMthRsltPrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchMthRsltPrst 월별실적현황조회 */
+/* IO: 채수윤,2015-03-03T15:57:04(이승훈2,2015-03-02T17:54:57) */
+SELECT TO_CHAR(TO_DATE(A.SALE_MTH, 'YYYYMM'), 'YYYY-MM') AS SALE_MTH
+     , A.QTY_TOT
+     , A.QTY_NEW /* 01	010신규 */
+     , A.QTY_KMNP /* 02	KMNP */
+     , A.QTY_LMNP /* 03	LMNP */
+     , A.QTY_EMNP /* 04	기타MNP */
+     , A.QTY_EQP_CHG /* 05	기변 */
+     , A.QTY_ETC /* 06	기타 */
+     , A.QTY_USIM /* USIM */
+     , A.QTY_SMART /* 스마트 디바이스 */
+     , A.QTY_NEQP /* 공기계 */
+  FROM (SELECT
+               A.SALE_MTH
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_TOT /* 합계 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEW /* 01	010신규 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) AS QTY_KMNP /* 02	KMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) AS QTY_LMNP /* 03	LMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) AS QTY_EMNP /* 04	기타MNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) AS QTY_EQP_CHG /* 05	기변 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_ETC /* 06	기타 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '2' THEN A.SALE_QTY ELSE 0 END) AS QTY_USIM /* USIM */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '3' THEN A.SALE_QTY ELSE 0 END) AS QTY_SMART /* 스마트 디바이스 */
+             , SUM(CASE WHEN A.PROD_CL = 'FREE' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEQP /* 공기계 */
+          FROM (SELECT
+                       A.SALE_MTH
+                     , A.PROD_CL 
+                     , A.PROD_CL_CD 
+                     , A.SALE_CL_CD
+                     , SUM(A.SALE_QTY) AS SALE_QTY
+                  FROM (/* 개통상품 : 단말기, U-SIM, 스마트디바이스 ... */
+                        SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , ES.PROD_CL_CD          AS PROD_CL_CD
+                             , ES.MDL_CD              AS MDL_CD
+                             , SUBSTR(GS.SALE_DTM, 1, 6) AS SALE_MTH
+                             , SUBSTR(GS.SALE_DTM, 1, 8) AS SALE_DT
+                             , NVL((SELECT Z.ADD_INFO_03 
+                                      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                                     WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                       AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)), '06') AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)               AS SALE_TYP
+                             /*, DECODE(GS.SALE_CHG_HST_CL ,'01' ,  1, '07' , -1, 0)                              AS SALE_QTY*/
+                             ,  DECODE (GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY                        
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #APLY_FR_MTH# || '01'
+                           AND GS.SALE_CHG_DTM     <= #APLY_TO_MTH# || '31'
+                           AND GS.DEL_YN = 'N'
+                           AND ES.MDL_CD   IS NOT NULL
+                           AND GS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = SUBSTR(GS.SALE_CHG_DTM, 1, 6)
+                           AND GS.SALE_PLC = AG.AGNT_ID
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+                         UNION ALL
+                        /* 미개통상품 : 공기기판매 팬매수 ... */
+                        SELECT
+                               'FREE' AS PROD_CL
+                             , FS.FREE_PROD_SALE_NO                    AS GNRL_SALE_NO
+                             , FS.FREE_PROD_SALE_CHG_SEQ               AS GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , FS.SALE_PLC            AS AGNT_ID
+                             , FP.PROD_CL                              AS PROD_CL_CD
+                             , FP.MDL_CD                               AS MDL_CD
+                             , SUBSTR(FS.SALE_DTM, 1, 6)               AS SALE_MTH
+                             , SUBSTR(FS.SALE_DTM, 1, 8)               AS SALE_DT
+                             , 'NEQP'                                  AS SALE_CL_CD
+                             , DECODE(FP.PROD_CL, '1', '97', '98')     AS SALE_TYP
+                   ,  DECODE (FS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY
+                             , FS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_FREEPROD_SALE   FS
+                             , PS_MNG.TSAL_N_FREEPROD_PROD   FP
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                         WHERE FS.FREE_PROD_SALE_NO      = FP.FREE_PROD_SALE_NO
+                           AND FS.FREE_PROD_SALE_CHG_SEQ = FP.FREE_PROD_SALE_CHG_SEQ          
+                           AND FS.SALE_CHG_DTM     >= #APLY_FR_MTH# || '01'
+                           AND FS.SALE_CHG_DTM     <= #APLY_TO_MTH# || '31'
+                           AND FS.DEL_YN = 'N'
+                           AND FS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = SUBSTR(FS.SALE_CHG_DTM, 1, 6)
+                           AND FS.SALE_PLC = AG.AGNT_ID
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+                      ) A
+    ]]><isEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD ON(AD.OUT_ORG_DTL_ID = A.SALE_TEAM_ORG_ID
+                                                           AND AD.OUT_ORG_ID = #HDQT_PART_ORG_ID#)
+        ]]></isNotEmpty><![CDATA[
+    ]]></isEmpty><![CDATA[
+    ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD ON(AD.OUT_ORG_DTL_ID = A.SALE_TEAM_ORG_ID)
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AE ON(AE.OUT_ORG_DTL_ID = AD.SUP_OUT_ORG_DTL_ID
+                                                           AND AE.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)
+    ]]></isNotEmpty><![CDATA[
+                GROUP BY A.SALE_MTH, A.PROD_CL , A.PROD_CL_CD, A.SALE_CL_CD
+               ) A
+         GROUP BY A.SALE_MTH
+       ) A
+ ORDER BY SALE_MTH]]>
+	</select>
+	<select id="dSearchDayRsltPrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchDayRsltPrst 일별실적현황조회 */
+/* IO: 이승훈2,2015-05-13T14:27:02(이승훈2,2015-02-27T17:07:13) */
+SELECT Y.* 
+FROM
+(
+SELECT ROWNUM RN, X.* 
+FROM 
+(
+SELECT DECODE(A.WEEK_DT,NULL,'',A.WEEK_DT) AS WEEK_DT
+     , DECODE(A.SALE_DT, NULL ,DECODE(A.WEEK_DT,NULL,NULL,'소계'),TO_CHAR(TO_DATE(A.SALE_DT, 'YYYYMMDD'), 'YYYY-MM-DD')) AS SALE_DT
+     , A.QTY_TOT
+     , A.QTY_NEW /* 01	010신규 */
+     , A.QTY_KMNP /* 02	KMNP */
+     , A.QTY_LMNP /* 03	LMNP */
+     , A.QTY_EMNP /* 04	기타MNP */
+     , A.QTY_EQP_CHG /* 05	기변 */
+     , A.QTY_ETC /* 06	기타 */
+     , A.QTY_USIM /* USIM */
+     , A.QTY_SMART /* 스마트 디바이스 */
+     , A.QTY_NEQP /* 공기계 */
+     , A.GROUP_WEEK_DT
+  FROM (SELECT
+               A.WEEK_DT
+             , A.SALE_DT
+             , GROUPING (A.WEEK_DT) AS GROUP_WEEK_DT
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) +
+               SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_TOT /* 합계 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEW /* 01	010신규 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) AS QTY_KMNP /* 02	KMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) AS QTY_LMNP /* 03	LMNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) AS QTY_EMNP /* 04	기타MNP */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) AS QTY_EQP_CHG /* 05	기변 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_ETC /* 06	기타 */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '2' THEN A.SALE_QTY ELSE 0 END) AS QTY_USIM /* USIM */
+             , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '3' THEN A.SALE_QTY ELSE 0 END) AS QTY_SMART /* 스마트 디바이스 */
+             , SUM(CASE WHEN A.PROD_CL = 'FREE' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEQP /* 공기계 */
+          FROM (SELECT
+                       A.WEEK_DT
+                     , A.SALE_DT
+                     , A.PROD_CL 
+                     , A.PROD_CL_CD 
+                     , A.SALE_CL_CD
+                     , SUM(A.SALE_QTY) AS SALE_QTY
+                  FROM (SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , ES.PROD_CL_CD          AS PROD_CL_CD
+                             , ES.MDL_CD              AS MDL_CD
+                             , TO_CHAR (TO_DATE(SUBSTR(GS.SALE_CHG_DTM, 1, 8), 'YYYYMMDD'), 'W') || '주차' AS WEEK_DT
+                             , SUBSTR(GS.SALE_CHG_DTM, 1, 8) AS SALE_DT
+                             , NVL((SELECT Z.ADD_INFO_03 
+                                      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                                     WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                       AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)), '06') AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)               AS SALE_TYP
+                             /*, DECODE(GS.SALE_CHG_HST_CL ,'01' ,  1, '07' , -1, 0)                              AS SALE_QTY*/
+                             ,  DECODE (GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY                        
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #APLY_MTH# || '01'
+                           AND GS.SALE_CHG_DTM     <= #APLY_MTH# || '31'
+                           AND GS.DEL_YN = 'N'
+                           AND ES.MDL_CD   IS NOT NULL
+                           AND GS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = #APLY_MTH#
+                           AND GS.SALE_PLC = AG.AGNT_ID
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                           AND AG.AGNT_ID = #AGNT_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="PROD_CD"><![CDATA[
+                           AND ES.MDL_CD = #PROD_CD#
+        ]]></isNotEmpty><![CDATA[
+                         UNION ALL
+                        /* 미개통상품 : 공기기판매 팬매수 ... */
+                        SELECT
+                               'FREE' AS PROD_CL
+                             , FS.FREE_PROD_SALE_NO                    AS GNRL_SALE_NO
+                             , FS.FREE_PROD_SALE_CHG_SEQ               AS GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , FS.SALE_PLC            AS AGNT_ID
+                             , FP.PROD_CL                              AS PROD_CL_CD
+                             , FP.MDL_CD                               AS MDL_CD
+                             , TO_CHAR (TO_DATE(SUBSTR(FS.SALE_CHG_DTM, 1, 8), 'YYYYMMDD'), 'W') || '주차' AS WEEK_DT
+                             , SUBSTR(FS.SALE_CHG_DTM, 1, 8)               AS SALE_DT
+                             , 'NEQP'                                  AS SALE_CL_CD
+                             , DECODE(FP.PROD_CL, '1', '97', '98')     AS SALE_TYP
+							 ,  DECODE (FS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY
+                             , FS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_FREEPROD_SALE   FS
+                             , PS_MNG.TSAL_N_FREEPROD_PROD   FP
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                         WHERE FS.FREE_PROD_SALE_NO      = FP.FREE_PROD_SALE_NO
+                           AND FS.FREE_PROD_SALE_CHG_SEQ = FP.FREE_PROD_SALE_CHG_SEQ          
+                           AND FS.SALE_CHG_DTM           >= #APLY_MTH# || '01'
+                           AND FS.SALE_CHG_DTM           <= #APLY_MTH# || '31'
+                           AND FS.DEL_YN = 'N'
+                           AND FS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = #APLY_MTH#         
+                           AND FS.SALE_PLC = AG.AGNT_ID
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                           AND AG.AGNT_ID = #AGNT_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="PROD_CD"><![CDATA[
+                           AND FP.MDL_CD = #PROD_CD#
+        ]]></isNotEmpty><![CDATA[
+                      ) A
+    ]]><isEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+        ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD ON(AD.OUT_ORG_DTL_ID = A.SALE_TEAM_ORG_ID
+                                                           AND AD.OUT_ORG_ID = #HDQT_PART_ORG_ID#)
+        ]]></isNotEmpty><![CDATA[
+    ]]></isEmpty><![CDATA[
+    ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD ON(AD.OUT_ORG_DTL_ID = A.SALE_TEAM_ORG_ID)
+                      JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AE ON(AE.OUT_ORG_DTL_ID = AD.SUP_OUT_ORG_DTL_ID
+                                                           AND AE.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)
+    ]]></isNotEmpty><![CDATA[
+                GROUP BY A.WEEK_DT, A.SALE_DT, A.PROD_CL , A.PROD_CL_CD, A.SALE_CL_CD
+               ) A
+         GROUP BY ROLLUP(A.WEEK_DT, A.SALE_DT)
+       ) A
+ ORDER BY GROUP_WEEK_DT DESC ,WEEK_DT,SALE_DT
+) X
+) Y]]>
+	</select>
+	<select id="dSearchAgentRsltPrst" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleprst.db.DSALEPRST001.dSearchAgentRsltPrst 에이전트별실적현황조회 */
+/* IO: 이승훈2,2015-03-03T15:37:07(이승훈2,2015-02-26T14:39:48) */
+SELECT Y.* FROM
+(
+SELECT ROWNUM RN, X.* 
+FROM 
+(
+SELECT W.HDQT_TEAM_ORG_ID
+     , W.HDQT_PART_ORG_ID
+     , W.HDQT_PART_ORG_NM
+     , W.SALE_DEPT_ORG_ID
+     , W.SALE_DEPT_ORG_NM
+     , W.SALE_TEAM_ORG_ID
+     , W.SALE_TEAM_ORG_NM
+     , W.RPSTY_CD
+     , W.RPSTY_NM
+     , W.AGNT_ID
+     , F_MASKING('N', W.AGNT_NM) AS AGNT_NM
+     , W.QTY_TOT
+     , W.QTY_NEW /* 01	010신규 */
+     , W.QTY_KMNP /* 02	KMNP */
+     , W.QTY_LMNP /* 03	LMNP */
+     , W.QTY_EMNP /* 04	기타MNP */
+     , W.QTY_EQP_CHG /* 05	기변 */
+     , W.QTY_ETC /* 06	기타 */
+     , W.QTY_USIM /* USIM */
+     , W.QTY_SMART /* 스마트 디바이스 */
+     , W.QTY_NEQP /* 공기계 */
+  FROM (SELECT A.HDQT_TEAM_ORG_ID
+        /* , (SELECT Z.ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT Z WHERE Z.ORG_ID = A.HDQT_TEAM_ORG_ID) AS HDQT_TEAM_ORG_NM */
+             , A.HDQT_PART_ORG_ID
+             , (SELECT Z.OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT Z WHERE Z.OUT_ORG_ID = A.HDQT_PART_ORG_ID) AS HDQT_PART_ORG_NM
+             , A.SALE_DEPT_ORG_ID
+             , (SELECT Z.OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z WHERE Z.OUT_ORG_DTL_ID = A.SALE_DEPT_ORG_ID) AS SALE_DEPT_ORG_NM
+             , A.SALE_TEAM_ORG_ID
+             , (SELECT Z.OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z WHERE Z.OUT_ORG_DTL_ID = A.SALE_TEAM_ORG_ID) AS SALE_TEAM_ORG_NM
+             , A.RPSTY_CD
+             , (SELECT Z.COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL Z WHERE Z.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND Z.COMM_CD_VAL = A.RPSTY_CD) AS RPSTY_NM
+             , A.AGNT_ID
+             , A.AGNT_NM
+             , A.QTY_TOT
+             , A.QTY_NEW /* 01	010신규 */
+             , A.QTY_KMNP /* 02	KMNP */
+             , A.QTY_LMNP /* 03	LMNP */
+             , A.QTY_EMNP /* 04	기타MNP */
+             , A.QTY_EQP_CHG /* 05	기변 */
+             , A.QTY_ETC /* 06	기타 */
+             , A.QTY_USIM /* USIM */
+             , A.QTY_SMART /* 스마트 디바이스 */
+             , A.QTY_NEQP /* 공기계 */
+          FROM (SELECT
+                       A.HDQT_TEAM_ORG_ID
+                     , A.HDQT_PART_ORG_ID
+                     , A.SALE_DEPT_ORG_ID
+                     , A.SALE_TEAM_ORG_ID
+                     , A.AGNT_ID
+                     , A.AGNT_NM
+                     , A.RPSTY_CD
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) +
+                       SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) +
+                       SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) +
+                       SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) +
+                       SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) +
+                       SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_TOT /* 합계 */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '01' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEW /* 01	010신규 */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '02' THEN A.SALE_QTY ELSE 0 END) AS QTY_KMNP /* 02	KMNP */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '03' THEN A.SALE_QTY ELSE 0 END) AS QTY_LMNP /* 03	LMNP */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '04' THEN A.SALE_QTY ELSE 0 END) AS QTY_EMNP /* 04	기타MNP */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '05' THEN A.SALE_QTY ELSE 0 END) AS QTY_EQP_CHG /* 05	기변 */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '1' AND A.SALE_CL_CD = '06' THEN A.SALE_QTY ELSE 0 END) AS QTY_ETC /* 06	기타 */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '2' THEN A.SALE_QTY ELSE 0 END) AS QTY_USIM /* USIM */
+                     , SUM(CASE WHEN A.PROD_CL = 'PHON' AND A.PROD_CL_CD = '3' THEN A.SALE_QTY ELSE 0 END) AS QTY_SMART /* 스마트 디바이스 */
+                     , SUM(CASE WHEN A.PROD_CL = 'FREE' THEN A.SALE_QTY ELSE 0 END) AS QTY_NEQP /* 공기계 */
+                  FROM (/* 개통상품 : 단말기, U-SIM, 스마트디바이스 ... */
+                        SELECT
+                               'PHON' AS PROD_CL
+                             , GS.GNRL_SALE_NO
+                             , GS.GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AD.OUT_ORG_ID          AS HDQT_PART_ORG_ID /* 본사파트ID */
+                             , AD.SUP_OUT_ORG_DTL_ID  AS SALE_DEPT_ORG_ID /* 영업국ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , GS.SALE_PLC            AS AGNT_ID
+                             , AG.AGNT_NM
+                             , AG.RPSTY               AS RPSTY_CD
+                             , ES.PROD_CL_CD          AS PROD_CL_CD
+                             , ES.MDL_CD              AS MDL_CD
+                             , GS.SALE_DTM            AS SALE_DT
+                             , NVL((SELECT Z.ADD_INFO_03 
+                                      FROM PS_MNG.TBAS_COMM_CD_DTL Z 
+                                     WHERE Z.COMM_CD_ID = 'ZPOL_C_00040' 
+                                       AND Z.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)), '06') AS SALE_CL_CD
+                             , DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)               AS SALE_TYP
+                             /*, DECODE(GS.SALE_CHG_HST_CL ,'01' ,  1, '07' , -1, 0)                              AS SALE_QTY*/
+                             ,  DECODE (GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY                        
+                             , GS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                             , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                             , PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD
+                         WHERE GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                           AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                           AND GS.SALE_CHG_DTM     >= #APLY_MTH# || '01'
+                           AND GS.SALE_CHG_DTM     <= #APLY_MTH# || '31'
+                           AND GS.DEL_YN = 'N'
+                           AND ES.MDL_CD   IS NOT NULL
+                           AND GS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = #APLY_MTH#
+                           AND GS.SALE_PLC = AG.AGNT_ID
+                           AND AG.OUT_ORG_DTL_ID = AD.OUT_ORG_DTL_ID
+        ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                           AND AD.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+                           AND AD.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                           AND AG.AGNT_ID = #AGNT_ID#
+        ]]></isNotEmpty><![CDATA[
+                         UNION ALL
+                        /* 미개통상품 : 공기기판매 팬매수 ... */
+                        SELECT
+                               'FREE' AS PROD_CL
+                             , FS.FREE_PROD_SALE_NO                    AS GNRL_SALE_NO
+                             , FS.FREE_PROD_SALE_CHG_SEQ               AS GNRL_SALE_CHG_SEQ
+                             , OG.SUP_ORG             AS HDQT_TEAM_ORG_ID /* 본사팀ID */
+                             , AD.OUT_ORG_ID          AS HDQT_PART_ORG_ID /* 본사파트ID */
+                             , AD.SUP_OUT_ORG_DTL_ID  AS SALE_DEPT_ORG_ID /* 영업국ID */
+                             , AG.OUT_ORG_DTL_ID      AS SALE_TEAM_ORG_ID /* 영업팀ID */
+                             , FS.SALE_PLC            AS AGNT_ID
+                             , AG.AGNT_NM
+                             , AG.RPSTY               AS RPSTY_CD
+                             , FP.PROD_CL                              AS PROD_CL_CD
+                             , FP.MDL_CD                               AS MDL_CD
+                             , FS.SALE_DTM                             AS SALE_DT
+                             , 'NEQP'                                  AS SALE_CL_CD
+                             , DECODE(FP.PROD_CL, '1', '97', '98')     AS SALE_TYP
+                   ,  DECODE (FS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)  AS SALE_QTY
+                             , FS.SALE_CHG_DTM
+                          FROM PS_MNG.TSAL_N_FREEPROD_SALE   FS
+                             , PS_MNG.TSAL_N_FREEPROD_PROD   FP
+                             , PS_MNG.TBAS_NEW_ORG_MGMT      OG
+                             , PS_MNG.TBAS_OUT_ORG_MBR_MGMT  AG
+                             , PS_MNG.TBAS_OUT_ORG_DTL_MGMT  AD
+                         WHERE FS.FREE_PROD_SALE_NO      = FP.FREE_PROD_SALE_NO
+                           AND FS.FREE_PROD_SALE_CHG_SEQ = FP.FREE_PROD_SALE_CHG_SEQ          
+                           AND FS.SALE_CHG_DTM           >= #APLY_MTH# || '01'
+                           AND FS.SALE_CHG_DTM           <= #APLY_MTH# || '31'
+                           AND FS.DEL_YN = 'N'
+                           AND FS.SALE_ORG = OG.ORG_ID
+                           AND OG.SUP_ORG = #HDQT_TEAM_ORG_ID#
+                           AND AG.CONS_MTH = #APLY_MTH#      
+                           AND FS.SALE_PLC = AG.AGNT_ID
+                           AND AG.OUT_ORG_DTL_ID = AD.OUT_ORG_DTL_ID
+        ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                           AND AD.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+                           AND AD.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                           AND AG.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="AGNT_ID"><![CDATA[
+                           AND AG.AGNT_ID = #AGNT_ID#
+        ]]></isNotEmpty><![CDATA[
+                       ) A
+                 GROUP BY A.HDQT_TEAM_ORG_ID, A.HDQT_PART_ORG_ID, A.SALE_DEPT_ORG_ID, A.SALE_TEAM_ORG_ID, A.AGNT_ID, A.AGNT_NM, A.RPSTY_CD
+               ) A
+       ) W
+ ORDER BY W.QTY_TOT DESC, W.HDQT_PART_ORG_NM, W.SALE_DEPT_ORG_NM, W.SALE_TEAM_ORG_NM, W.AGNT_ID, W.AGNT_NM
+) X
+) Y]]>
+	</select>
+</sqlMap>

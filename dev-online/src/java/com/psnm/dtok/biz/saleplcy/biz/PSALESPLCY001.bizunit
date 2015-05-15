@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSALESPLCY001">
+    <bizUnitName>[PU]영업정책관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SALEPLCY</componentId>
+    <description>영업정책관리PU</description>
+    <method-list>
+        <method id="pDeleteSalesPlcy">
+            <methodName>[PM]영업정책관리삭제</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pDeleteSalesPlcy</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책을 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:27:49" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDetailSalesPlcy">
+            <methodName>[PM]영업정책관리상세</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pDetailSalesPlcy</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리 상세정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T15:43:36" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchPlcyRcvOrgDeptTarget">
+            <methodName>[PM]영업정책수신조직공지대상영업국조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchPlcyRcvOrgDeptTarget</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책수신조직공지대상영업국 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T11:07:00" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveSalesPlcy">
+            <methodName>[PM]영업정책관리저장(등록|수정)</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSaveSalesPlcy</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리 정보를 입력, 수정, 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-20T17:57:23" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalesPlcyContact">
+            <methodName>[PM]영업정책관리접속현황조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchSalesPlcyContact</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리 접속현황을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-05T13:41:51" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalesPlcy">
+            <methodName>[PM]영업정책관리조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchSalesPlcy</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T16:23:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalesPlcyStcDept">
+            <methodName>[PM]영업정책관리통계영업국명조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchSalesPlcyStcDept</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리통계영업국명 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T15:48:43" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalesPlcyStc">
+            <methodName>[PM]영업정책관리통계조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchSalesPlcyStc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책관리 통계를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T11:55:58" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalesPlcyBrws">
+            <methodName>[PM]영업정책조회</methodName>
+            <transactionId>biz.SALEPLCY@PSALESPLCY001_pSearchSalesPlcyBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T10:16:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T16:22:56" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DBLTNBRDAUTHMGMT002">
+	<insert id="dInsertBrdAuthOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertBrdAuthOrg  */
+/* IO: 안종광,2015-01-05T16:50:33(안종광,2015-01-05T16:50:33) */
+INSERT INTO DSM_BLTN_BRD_AUTH_ORG (
+       BLTN_BRD_ID
+     , DSM_HEADQ_CD
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #BLTN_BRD_ID# /*게시판ID*/
+     , #SALE_DEPT_ORG_ID# /*영업국조직ID*/
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteBrdAuthOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dDeleteBrdAuthOrg  */
+/* IO: 안종광,2015-01-05T16:53:09(안종광,2015-01-05T16:53:09) */
+DELETE FROM DSM_BLTN_BRD_AUTH_ORG
+ WHERE BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+ ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+   AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*영업국조직ID*/
+ ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<insert id="dInsertBrdAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertBrdAuth  */
+/* IO: 안종광,2015-01-20T15:08:49(안종광,2015-01-05T17:05:07) */
+INSERT INTO DSM_BLTN_BRD_AUTH (
+       BLTN_BRD_ID
+     , AUTH_GRP_ID
+     , AUTH_TYP_CD
+     , ALL_USER_APLY_YN
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #BLTN_BRD_ID#
+     , #AUTH_GRP_ID#
+     , #AUTH_TYP_CD#
+     , #ALL_USER_APLY_YN#
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteBrdAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dDeleteBrdAuth  */
+/* IO: 안종광,2015-01-05T17:06:42(안종광,2015-01-05T17:05:44) */
+DELETE FROM DSM_BLTN_BRD_AUTH
+ WHERE BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+ ]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+   AND AUTH_GRP_ID = #AUTH_GRP_ID# /*권한그룹ID*/
+ ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<update id="dUpdateBrdAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dUpdateBrdAuth  */
+/* IO: 안종광,2015-01-07T16:07:23(안종광,2015-01-06T13:42:42) */
+MERGE INTO DSM_BLTN_BRD_AUTH ba
+USING (
+        SELECT #BLTN_BRD_ID#      AS BLTN_BRD_ID
+             , #AUTH_GRP_ID#      AS AUTH_GRP_ID
+             , #AUTH_TYP_CD#      AS AUTH_TYP_CD
+             , #ALL_USER_APLY_YN# AS ALL_USER_APLY_YN
+         FROM DUAL
+    ) u
+   ON ( ba.BLTN_BRD_ID = u.BLTN_BRD_ID AND ba.AUTH_GRP_ID = u.AUTH_GRP_ID )
+ WHEN MATCHED THEN
+      UPDATE SET
+             ba.AUTH_TYP_CD      = u.AUTH_TYP_CD
+           , ba.ALL_USER_APLY_YN = u.ALL_USER_APLY_YN
+           , ba.UPD_DTM = SYSDATE
+           , ba.UPDR_ID = #onlineContext.userInfo.loginId#
+ WHEN NOT MATCHED THEN
+      INSERT (
+             BLTN_BRD_ID
+           , AUTH_GRP_ID
+           , AUTH_TYP_CD
+           , ALL_USER_APLY_YN
+           , RGSTR_ID
+           , RGST_DTM
+           , UPDR_ID
+           , UPD_DTM
+      )
+      VALUES (
+             u.BLTN_BRD_ID
+           , u.AUTH_GRP_ID
+           , u.AUTH_TYP_CD
+           , u.ALL_USER_APLY_YN
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+      )]]>
+	</update>
+	<insert id="dInsertBrdAuthUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertBrdAuthUser  */
+/* IO: 안종광,2015-01-07T19:28:08(안종광,2015-01-07T19:28:08) */
+INSERT INTO DSM_BLTN_BRD_AUTH_USER (
+       BLTN_BRD_ID
+     , AUTH_GRP_ID
+     , USER_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #BLTN_BRD_ID# /*게시판ID*/
+     , #AUTH_GRP_ID# /*영업국조직ID*/
+     , #USER_ID# /*사용자ID*/
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteBrdAuthUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dDeleteBrdAuthUser  */
+/* IO: 안종광,2015-03-23T11:29:29(안종광,2015-01-07T19:29:50) */
+DELETE FROM DSM_BLTN_BRD_AUTH_USER
+ WHERE BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+  ]]><isNotEmpty property="AUTH_GRP_ID"><![CDATA[
+   AND AUTH_GRP_ID = #AUTH_GRP_ID# /*영업국조직ID*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="USER_ID"><![CDATA[
+   AND USER_ID = #USER_ID# /*사용자ID*/
+  ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<insert id="dInsertCopiedBrdAuthUser" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertCopiedBrdAuthUser  */
+/* IO: 안종광,2015-03-23T11:40:36(안종광,2015-03-23T11:38:18) */
+INSERT INTO DSM_BLTN_BRD_AUTH_USER (
+       BLTN_BRD_ID
+     , AUTH_GRP_ID
+     , USER_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+SELECT #BLTN_BRD_ID# AS BLTN_BRD_ID /*복사타겟 게시판ID*/
+     , au.AUTH_GRP_ID
+     , au.USER_ID
+     , #onlineContext.userInfo.loginId# AS RGSTR_ID
+     , SYSDATE AS RGST_DTM
+     , #onlineContext.userInfo.loginId# AS UPDR_ID
+     , SYSDATE AS UPD_DTM
+  FROM DSM_BLTN_BRD_AUTH_USER au
+ WHERE BLTN_BRD_ID = #FROM_BLTN_BRD_ID# /*복사소스 게시판ID*/]]>
+	</insert>
+	<insert id="dInsertCopiedBrdAuthOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertCopiedBrdAuthOrg  */
+/* IO: 안종광,2015-03-23T11:40:25(안종광,2015-03-23T11:40:25) */
+INSERT INTO DSM_BLTN_BRD_AUTH_ORG (
+       BLTN_BRD_ID
+     , DSM_HEADQ_CD
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+SELECT #BLTN_BRD_ID# AS BLTN_BRD_ID /*복사타겟 게시판ID*/
+     , ao.DSM_HEADQ_CD
+     , #onlineContext.userInfo.loginId# AS RGSTR_ID
+     , SYSDATE AS RGST_DTM
+     , #onlineContext.userInfo.loginId# AS UPDR_ID
+     , SYSDATE AS UPD_DTM
+  FROM DSM_BLTN_BRD_AUTH_ORG ao
+ WHERE BLTN_BRD_ID = #FROM_BLTN_BRD_ID# /*복사소스 게시판ID*/]]>
+	</insert>
+	<insert id="dInsertCopiedBrdAuth" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDAUTHMGMT002.dInsertCopiedBrdAuth  */
+/* IO: 안종광,2015-03-23T11:42:35(안종광,2015-03-23T11:42:35) */
+INSERT INTO DSM_BLTN_BRD_AUTH (
+       BLTN_BRD_ID
+     , AUTH_GRP_ID
+     , AUTH_TYP_CD
+     , ALL_USER_APLY_YN
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+SELECT #BLTN_BRD_ID# AS BLTN_BRD_ID /*복사타겟 게시판ID*/
+     , ag.AUTH_GRP_ID
+     , ag.AUTH_TYP_CD
+     , ag.ALL_USER_APLY_YN
+     , #onlineContext.userInfo.loginId# AS RGSTR_ID
+     , SYSDATE AS RGST_DTM
+     , #onlineContext.userInfo.loginId# AS UPDR_ID
+     , SYSDATE AS UPD_DTM
+  FROM DSM_BLTN_BRD_AUTH ag
+ WHERE BLTN_BRD_ID = #FROM_BLTN_BRD_ID# /*복사소스 게시판ID*/]]>
+	</insert>
+</sqlMap>

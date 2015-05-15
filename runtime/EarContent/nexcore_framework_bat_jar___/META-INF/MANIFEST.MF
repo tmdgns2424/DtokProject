@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.2
+Created-By: 1.5.0_21-b01 (Sun Microsystems Inc.)
+Specification-Title: Batch Facade
+Specification-Version: 3.7.0-SNAPSHOT
+Specification-Vendor: SK C&C
+Implementation-Title: Batch Facade
+Implementation-Version: 3.7.0-SNAPSHOT
+Implementation-Vendor-Id: nexcore.framework
+Implementation-Vendor: SK C&C
+Build-Jdk: 1.5.0_21
+Build-Time: 2014-10-05 21:04:23,549
+Built-By: SK C&C
+

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMENU001">
+	<select id="dSearchMenuBySup" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMENU001.dSearchMenuBySup  */
+/* IO: 안종광,2015-03-10T14:49:08(admin,2014-11-20T16:57:24) */
+SELECT m.MENU_ID
+     , m.MENU_NM
+     , m.MENU_URL
+     , m.SUP_MENU_ID
+     , (SELECT MENU_NM FROM DSM_MENU WHERE MENU_ID = m.SUP_MENU_ID) AS SUP_MENU_NM
+     , m.BRWS_SEQ
+     , m.MENU_TYP_CD
+     , m.BLTN_BRD_ID
+     , m.AUTH_OBJ_YN
+     , v.AUTH_TYP_CD
+  FROM DSM_MENU m
+       ,( SELECT C.MENU_ID
+                 , MAX(C.AUTH_TYP_CD) AS AUTH_TYP_CD
+              FROM (SELECT USER_ID, DUTY AS DUTY_CD
+                      FROM PS_MNG.TBAS_USER_MGMT
+                     WHERE USER_ID = #USER_ID# /*사용자ID*/
+                     UNION 
+                    SELECT USER_ID, DUTY_CD
+                      FROM DSM_APPROVE
+                     WHERE USER_ID = #USER_ID# /*사용자ID*/
+                   ) A
+                 , DSM_AUTH_GRP_APLY_DUTY B
+                 , DSM_MENU_AUTH C
+             WHERE A.DUTY_CD = B.DUTY_CD
+               AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+             GROUP BY C.MENU_ID
+             ORDER BY C.MENU_ID
+       ) v
+ WHERE m.MENU_ID = v.MENU_ID
+   AND m.USE_YN = 'Y'
+   AND v.AUTH_TYP_CD IN ('R','W')
+   AND 'Y' = (
+            SELECT CASE WHEN m2.MENU_TYP_CD IN ('0','1')
+                        THEN m2.USE_YN
+                        ELSE (SELECT y.USE_YN 
+                                FROM DSM_MENU y
+                               WHERE y.MENU_ID = m2.SUP_MENU_ID ) 
+                   END
+              FROM DSM_MENU m2
+             WHERE m2.MENU_ID = m.SUP_MENU_ID
+       )
+   AND m.SUP_MENU_ID = '0000'
+  ]]><isEmpty property="SUP_MENU_ID"><![CDATA[
+   AND m.SUP_MENU_ID = '0000' /*상위메뉴ID*/
+  ]]></isEmpty><![CDATA[
+  ]]><isNotEmpty property="SUP_MENU_ID"><![CDATA[
+   AND m.SUP_MENU_ID = #SUP_MENU_ID# /*상위메뉴ID*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY m.BRWS_SEQ]]>
+	</select>
+	<select id="dSearchMenuTreeBySup" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMENU001.dSearchMenuTreeBySup  */
+/* IO: 안종광,2015-03-10T14:48:52(안종광,2014-12-01T11:15:42) */
+SELECT m.MENU_ID
+     , m.MENU_NM
+     , m.MENU_URL
+     , m.SUP_MENU_ID
+     , (SELECT MENU_NM FROM DSM_MENU WHERE MENU_ID = m.SUP_MENU_ID) AS SUP_MENU_NM
+     , m.BRWS_SEQ
+     , m.MENU_TYP_CD
+     , m.BLTN_BRD_ID
+     , m.CS_YN
+     , m.RSTRCT_CL
+     , m.AUTH_OBJ_YN
+     , v.AUTH_TYP_CD
+  FROM DSM_MENU m, (
+  
+        SELECT n.MENU_ID, MAX(n.AUTH_TYP_CD) AS AUTH_TYP_CD
+          FROM (
+  			/* ____________________________________________________ */
+            SELECT C.MENU_ID
+                 , MAX(C.AUTH_TYP_CD) AS AUTH_TYP_CD
+              FROM (SELECT USER_ID, DUTY AS DUTY_CD
+                      FROM PS_MNG.TBAS_USER_MGMT
+                     WHERE USER_ID = #USER_ID# /*사용자ID*/
+                     UNION 
+                    SELECT USER_ID, DUTY_CD
+                      FROM DSM_APPROVE
+                     WHERE USER_ID = #USER_ID# /*사용자ID*/
+                   ) A
+                 , DSM_AUTH_GRP_APLY_DUTY B
+                 , DSM_MENU_AUTH C
+             WHERE A.DUTY_CD = B.DUTY_CD
+               AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+             GROUP BY C.MENU_ID
+            UNION /* (아래) 사용자권한메뉴(DSM_USER_MENU_AUTH) 데이터 추가 */
+            SELECT v3.MENU_ID
+                 , NVL( (SELECT AUTH_TYP_CD FROM DSM_USER_MENU_AUTH WHERE MENU_ID = v3.MENU_ID),
+                        (SELECT MAX(AUTH_TYP_CD) FROM DSM_MENU_AUTH 
+                          WHERE MENU_ID = v3.MENU_ID 
+                            AND AUTH_GRP_ID IN (
+                                SELECT ad.AUTH_GRP_ID
+                                  FROM DSM_AUTH_GRP_APLY_DUTY ad
+                                  JOIN DSM_AUTH_GRP a ON (ad.AUTH_GRP_ID = a.AUTH_GRP_ID AND a.USE_YN = 'Y')
+                                 WHERE ad.DUTY_CD = (SELECT F_DSM_USER_DUTY('CD', #USER_ID#) FROM DUAL)
+                            )
+                        ) 
+                   ) AS AUTH_TYP_CD
+              FROM (
+                    SELECT DISTINCT m3.MENU_ID
+                      FROM DSM_MENU m3
+                     START WITH m3.MENU_ID IN (
+                            SELECT um.MENU_ID
+                              FROM DSM_USER_MENU_AUTH um
+                             WHERE um.USER_ID = #USER_ID# /*사용자ID*/
+                               AND um.ADD_EXL_CL = 'A' /*추가메뉴만*/
+                     )
+                     AND m3.USE_YN = 'Y'
+                     CONNECT BY PRIOR m3.SUP_MENU_ID = m3.MENU_ID AND m3.USE_YN = 'Y' AND m3.MENU_ID != '0000'
+            ) v3
+            UNION  /* (아래) 클로버플라자(=AGNT_ID)의 CS여부가 'Y'이면, 메뉴의 'CS여부'가 'Y'인 메뉴 데이터 추가 */
+            SELECT m4.MENU_ID
+                 , (SELECT MAX(AUTH_TYP_CD) FROM DSM_MENU_AUTH WHERE MENU_ID = m4.MENU_ID) AUTH_TYP_CD
+              FROM DSM_MENU m4
+             WHERE m4.CS_YN = 'Y'
+               AND m4.CS_YN = (
+                    SELECT om.CS_YN
+                      FROM PS_MNG.TBAS_USER_MGMT u
+                      LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON ( om.AGNT_ID = u.CPLAZA_ORG_CD AND om.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+                     WHERE u.USER_ID = #USER_ID# /*사용자ID*/
+                   )
+  			/* ____________________________________________________ */
+          ) n
+         GROUP BY n.MENU_ID
+
+       ) v
+ WHERE m.MENU_ID = v.MENU_ID
+   AND m.USE_YN = 'Y'
+   AND v.AUTH_TYP_CD IN ('R','W')
+   AND 'Y' = (
+            SELECT CASE WHEN m2.MENU_TYP_CD IN ('0','1')
+                        THEN m2.USE_YN
+                        ELSE (SELECT y.USE_YN 
+                                FROM DSM_MENU y
+                               WHERE y.MENU_ID = m2.SUP_MENU_ID ) 
+                   END
+              FROM DSM_MENU m2
+             WHERE m2.MENU_ID = m.SUP_MENU_ID
+       )
+   AND m.MENU_ID NOT IN (
+                            SELECT um2.MENU_ID
+                              FROM DSM_USER_MENU_AUTH um2
+                             WHERE um2.USER_ID = #USER_ID# /*사용자ID*/
+                               AND um2.ADD_EXL_CL = 'E' /*제외메뉴*/
+       )
+  ]]><isNotEmpty property="MENU_TYP_CD"><![CDATA[ 
+   AND m.MENU_TYP_CD = #MENU_TYP_CD# /*메뉴유형코드*/ 
+  ]]></isNotEmpty><![CDATA[
+    AND (m.RSTRCT_CL = 'A'
+        OR m.RSTRCT_CL = (SELECT CASE WHEN RSTR_CNT = 0 THEN 'Y' ELSE 'N' END AS RSTRCT_CL
+                          FROM (SELECT COUNT(*) AS RSTR_CNT
+                                  FROM DSM_USE_RSTRCT
+                                 WHERE DOW_CL = TO_CHAR(SYSDATE, 'D')
+                                   AND TO_CHAR(SYSDATE, 'HH24MI') BETWEEN APLY_STA_HM AND APLY_END_HM
+                                   AND APLY_YN = 'Y'
+                                   AND OUT_ORG_ID IN (SELECT OUT_ORG_ID
+                                                        FROM PS_MNG.TBAS_USER_MGMT 
+                                                       WHERE USER_ID = #USER_ID# /*사용자ID*/
+                                                         AND OUT_ORG_ID IS NOT NULL 
+                                                         AND USER_ID NOT IN (SELECT USER_ID
+                                                                               FROM DSM_USE_RSTRCT_EXCEPT
+                                                                              WHERE USER_ID = #USER_ID# /*사용자ID*/)
+                                                       UNION 
+                                                       SELECT B.OUT_ORG_ID
+                                                         FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                                                            , PS_MNG.TBAS_OUT_ORG_DTL_MGMT B
+                                                            , PS_MNG.TBAS_USER_MGMT C
+                                                        WHERE A.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+                                                          AND A.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID
+                                                          AND A.AGNT_ID = C.CPLAZA_ORG_CD 
+                                                          AND C.USER_ID = #USER_ID# /*사용자ID*/
+                                                          AND USER_ID NOT IN (SELECT USER_ID
+                                                                                FROM DSM_USE_RSTRCT_EXCEPT
+                                                                               WHERE USER_ID = #USER_ID# /*사용자ID*/) ) 
+                               ) ) )
+ START WITH m.SUP_MENU_ID = 
+ 			]]><isEmpty property="SUP_MENU_ID"><![CDATA[ '0000' /*최상위메뉴ID*/ ]]></isEmpty><![CDATA[
+ 			]]><isNotEmpty property="SUP_MENU_ID"><![CDATA[ #SUP_MENU_ID# /*상위메뉴ID*/ ]]></isNotEmpty><![CDATA[
+ CONNECT BY PRIOR m.MENU_ID = m.SUP_MENU_ID
+ ORDER SIBLINGS BY m.BRWS_SEQ]]>
+	</select>
+</sqlMap>

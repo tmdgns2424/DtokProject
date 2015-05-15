@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.DATAAUTH">
+    <componentName>[BC]업무-데이터권한관리</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.dataauth</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-01-27T14:26:44" user="이민재 (leeminjae)"/>
+    </history>
+</component>

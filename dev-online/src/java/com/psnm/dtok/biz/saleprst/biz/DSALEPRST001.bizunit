@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSALEPRST001">
+    <bizUnitName>[DU]판매현황</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEPRST</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchProdRsltPrst">
+            <methodName>[DM]상품별실적현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchProdRsltPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>상품별 실적현황 검색을 위하여 관련 테이블(TPR_RETL_SALE)을 조인하여 상품별 실적현황 객체를 map객체로 가져오는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T18:06:54" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentRsltPrst">
+            <methodName>[DM]에이전트별실적현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchAgentRsltPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:21:31" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchCrdPrst">
+            <methodName>[DM]여신현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchCrdPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>DM : 여신현황을 조회한다.</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T10:52:22" user="채수윤 (chesuyun)"/>
+            </history>
+        </method>
+        <method id="dSearchMthRsltPrst">
+            <methodName>[DM]월별실적현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchMthRsltPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:24:11" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchCnsgInvePrst">
+            <methodName>[DM]위탁재고현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchCnsgInvePrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>위탁재고 현황을 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T15:27:47" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchDayRsltPrst">
+            <methodName>[DM]일별실적현황조회</methodName>
+            <transactionId>biz.SALEPRST@DSALEPRST001_dSearchDayRsltPrst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T14:22:56" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-23T09:51:12" user="채수윤 (chesuyun)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DRCVPAPER001">
+	<select id="dSearchRcvPaper" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dSearchRcvPaper  */
+/* IO: 이승훈2,2015-04-23T14:30:07(이승훈2,2015-01-07T14:14:13) */
+SELECT * FROM ( 
+  SELECT ROWNUM RN, TB.* FROM (
+SELECT A.PAPER_ID
+      ,A.USER_ID AS SND_USER_ID
+      ,B.USER_ID AS RCV_USER_ID
+      ,A.TITLE
+      ,DECODE(B.IS_OPEND,'Y','Y','N') AS IS_OPEND
+      ,TO_CHAR(B.RGST_DTM,'YYYY-MM-DD HH24:MI') AS RGST_DT
+      ,(SELECT DECODE(LENGTH(C.USER_NM), 2,REGEXP_REPLACE(C.USER_NM,SUBSTR(C.USER_NM, 2,2), '*'), SUBSTR(C.USER_NM, 0, 1)||REGEXP_REPLACE(SUBSTR(C.USER_NM, 2, LENGTH(C.USER_NM) -2), '[^.]', '*')||SUBSTR(C.USER_NM, LENGTH(C.USER_NM), LENGTH(C.USER_NM))) AS W_MASK_VAL
+        FROM  DUAL) AS USER_NM
+      ,(SELECT DECODE(COUNT(ATCH_MGMT_ID),0,'미첨부','첨부') AS ATCH_FILE_YN
+          FROM DSM_ATCH_FILE_MGMT
+         WHERE ATCH_MGMT_ID = A.PAPER_ID 
+       ) AS ATCH_FILE_YN
+  FROM DSM_SND_PAPER A 
+       INNER JOIN DSM_RCV_PAPER B ON (A.PAPER_ID = B.PAPER_ID)
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.USER_ID)
+ WHERE A.PAPER_ID = B.PAPER_ID
+   AND B.USER_ID = #onlineContext.userInfo.loginId#
+   AND B.IS_RE_DELETE = 'N'
+   AND B.IS_SE_DELETE = 'N'
+    AND B.RGST_DTM >= TO_DATE(#FROM_DT#, 'YYYY-MM-DD')
+	AND B.RGST_DTM < TO_DATE(#TO_DT#, 'YYYY-MM-DD') + 1
+   
+   ]]><isNotEmpty property="PAPER_COND_CD"><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="01"><![CDATA[
+                AND C.USER_NM LIKE '%' || #PAPER_COND_NM# || '%' 
+        ]]></isEqual><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="02"><![CDATA[
+                AND A.TITLE LIKE '%' || #PAPER_COND_NM# || '%'
+        ]]></isEqual><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="03"><![CDATA[
+                AND A.CONTENT LIKE '%' || #PAPER_COND_NM# || '%'
+        ]]></isEqual><![CDATA[
+    ]]></isNotEmpty><![CDATA[
+    ]]><isEmpty property="PAPER_COND_CD"><![CDATA[
+    	]]><isNotEmpty property="PAPER_COND_NM"><![CDATA[
+    		AND ( C.USER_NM LIKE '%' || #PAPER_COND_NM# || '%'
+    		OR A.TITLE LIKE '%' || #PAPER_COND_NM# || '%'
+    		OR A.CONTENT LIKE '%' || #PAPER_COND_NM# || '%' )
+    	]]></isNotEmpty><![CDATA[
+    ]]></isEmpty><![CDATA[
+   
+  ORDER BY B.RGST_DTM DESC 
+	) TB 
+) WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<insert id="dInsertRcvPaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dInsertRcvPaper  */
+/* IO: 이승훈2,2015-03-20T18:19:55(이승훈2,2015-01-07T14:14:38) */
+MERGE INTO DSM_RCV_PAPER
+      USING DUAL
+      ON ( PAPER_ID = #PAPER_ID# AND USER_ID = #RCV_USER_ID# )
+WHEN MATCHED THEN
+      UPDATE SET UPDR_ID = #onlineContext.userInfo.loginId#
+                ,UPD_DTM = SYSDATE
+WHEN NOT MATCHED THEN
+     INSERT( 
+            PAPER_ID
+		   ,USER_ID
+		   ,RE_PAPER_SEQ
+		   ,IS_OPEND
+		   ,IS_RE_DELETE
+		   ,IS_SE_DELETE
+		   ,RGSTR_ID
+		   ,RGST_DTM
+		   ,UPDR_ID
+		   ,UPD_DTM 
+		   )
+	 VALUES
+		   (  
+	  	    #PAPER_ID#
+		   ,#RCV_USER_ID#
+		   ,( SELECT NVL(MAX(RE_PAPER_SEQ),0)+1 FROM DSM_RCV_PAPER WHERE PAPER_ID = #PAPER_ID# )
+		   ,'N'
+		   ,'N'
+		   ,'N'
+		   ,#onlineContext.userInfo.loginId#
+		   ,SYSDATE
+		   ,#onlineContext.userInfo.loginId#
+		   ,SYSDATE 
+			)]]>
+	</insert>
+	<update id="dDeleteRcvPaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dDeleteRcvPaper  */
+/* IO: 이승훈2,2015-01-13T16:33:28(이승훈2,2015-01-07T14:15:04) */
+UPDATE DSM_RCV_PAPER
+  SET  IS_RE_DELETE = 'Y'
+      ,UPDR_ID = #onlineContext.userInfo.loginId#
+      ,UPD_DTM = SYSDATE
+ WHERE PAPER_ID = #PAPER_ID#
+   AND USER_ID = #RCV_USER_ID#]]>
+	</update>
+	<select id="dSearchRcvCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dSearchRcvCount  */
+/* IO: 이승훈2,2015-04-23T14:30:07(이승훈2,2015-01-08T10:25:16) */
+SELECT COUNT(A.PAPER_ID) AS COUNT
+  FROM DSM_SND_PAPER A 
+       INNER JOIN DSM_RCV_PAPER B ON (A.PAPER_ID = B.PAPER_ID)
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.USER_ID)
+ WHERE A.PAPER_ID = B.PAPER_ID
+   AND B.USER_ID = #onlineContext.userInfo.loginId#
+      AND B.IS_RE_DELETE = 'N'
+   AND B.IS_SE_DELETE = 'N'
+       AND B.RGST_DTM >= TO_DATE(#FROM_DT#, 'YYYY-MM-DD')
+	AND B.RGST_DTM < TO_DATE(#TO_DT#, 'YYYY-MM-DD') + 1
+   
+   ]]><isNotEmpty property="PAPER_COND_CD"><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="01"><![CDATA[
+                AND C.USER_NM LIKE '%' || #PAPER_COND_NM# || '%' 
+        ]]></isEqual><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="02"><![CDATA[
+                AND A.TITLE LIKE '%' || #PAPER_COND_NM# || '%'
+        ]]></isEqual><![CDATA[
+        ]]><isEqual property="PAPER_COND_CD" compareValue="03"><![CDATA[
+                AND A.CONTENT LIKE '%' || #PAPER_COND_NM# || '%'
+        ]]></isEqual><![CDATA[
+    ]]></isNotEmpty><![CDATA[
+    ]]><isEmpty property="PAPER_COND_CD"><![CDATA[
+    	]]><isNotEmpty property="PAPER_COND_NM"><![CDATA[
+    		AND ( C.USER_NM LIKE '%' || #PAPER_COND_NM# || '%'
+    		OR A.TITLE LIKE '%' || #PAPER_COND_NM# || '%'
+    		OR A.CONTENT LIKE '%' || #PAPER_COND_NM# || '%' )
+    	]]></isNotEmpty><![CDATA[
+    ]]></isEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchRcvPaperDtl" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dSearchRcvPaperDtl  */
+/* IO: 이승훈2,2015-01-28T17:55:46(이승훈2,2015-01-09T15:14:17) */
+SELECT A.PAPER_ID
+      ,A.TITLE
+      ,A.CONTENT
+      ,TO_CHAR(B.RGST_DTM,'YYYY-MM-DD HH24:MI') AS RGST_DT
+      ,(SELECT DECODE(LENGTH(C.USER_NM), 2,REGEXP_REPLACE(C.USER_NM,SUBSTR(C.USER_NM, 2,2), '*'), SUBSTR(C.USER_NM, 0, 1)||REGEXP_REPLACE(SUBSTR(C.USER_NM, 2, LENGTH(C.USER_NM) -2), '[^.]', '*')||SUBSTR(C.USER_NM, LENGTH(C.USER_NM), LENGTH(C.USER_NM))) AS W_MASK_VAL
+        FROM  DUAL) AS SND_USER_NM
+      ,A.USER_ID AS RCV_USER_ID /*답장 하기위해서 글쓴이의 ID를 가져온다*/
+      ,D.USER_NM AS RCV_USER_NM
+  FROM DSM_SND_PAPER A 
+       INNER JOIN DSM_RCV_PAPER B ON (A.PAPER_ID = B.PAPER_ID)
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.USER_ID)
+       LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (D.USER_ID = B.USER_ID)
+ WHERE A.PAPER_ID = B.PAPER_ID
+   	AND A.PAPER_ID = #PAPER_ID#
+   	AND B.USER_ID = #onlineContext.userInfo.loginId#]]>
+	</select>
+	<update id="dUpdateRcvPaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.paper.db.DRCVPAPER001.dUpdateRcvPaper  */
+/* IO: 이승훈2,2015-01-14T13:39:12(이승훈2,2015-01-14T13:39:12) */
+
+UPDATE DSM_RCV_PAPER
+  SET  IS_OPEND = 'Y'
+      ,UPDR_ID = #onlineContext.userInfo.loginId#
+      ,UPD_DTM = SYSDATE
+ WHERE PAPER_ID = #PAPER_ID#
+   AND USER_ID = #RCV_USER_ID#
+   ]]>
+	</update>
+</sqlMap>

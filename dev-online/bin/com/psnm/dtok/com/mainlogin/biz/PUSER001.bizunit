@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PUSER001">
+    <bizUnitName>[PU]공통회원관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>[PU]공통회원관리</description>
+    <method-list>
+        <method id="pSearchUserId">
+            <methodName>[PM]회원ID조회</methodName>
+            <transactionId>com.MAINLOGIN@PUSER001_pSearchUserId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]회원ID조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:20:55" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pUpdateTempPwd">
+            <methodName>[PM]회원임시비밀번호</methodName>
+            <transactionId>com.MAINLOGIN@PUSER001_pUpdateTempPwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]회원임시비밀번호</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T11:06:44" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-09T15:07:35" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

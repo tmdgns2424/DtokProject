@@ -1,0 +1,112 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Welcome WebCubeM</TITLE>
+<script type="text/javascript">
+function policyStart()
+{
+	try{
+		
+		var arrSetProtect = new Array();
+
+		arrSetProtect[0] = "G";		// CheckSum ("G"값 고정)
+		arrSetProtect[1] = "1";		// VmWare, Terminal 기능 차단(0) / 허용(1)
+		arrSetProtect[2] = "0";		// Print 기능 차단(0) / 허용(1)
+		arrSetProtect[3] = "0";		// SaveAs 기능 차단(0) / 허용(1)
+		arrSetProtect[4] = "0";		// Mouse 기능 차단(0) / 허용(1)
+		arrSetProtect[5] = "0";		// ScreenCapture 기능 차단(0) / 허용(1)
+		arrSetProtect[6] = "0";		// SourceView 기능 차단(0) / 허용(1)
+		arrSetProtect[7] = "0";		// Word Editor 기능 차단(0) / 허용(1)
+		arrSetProtect[8] = "0";		// Mail로 보내기 기능 차단(0) / 허용(1)
+		arrSetProtect[9] = "0";		// ClipBorad(Ctrl+C)기능 차단(0) / 허용 (1)
+		arrSetProtect[10] = "0";	// ClipBorad(Ctrl+V) 기능 차단(0) / 허용 (1)
+		
+		ProtectString = arrSetProtect.join("");	
+	
+		webcubeobj.funcSetProtect(ProtectString);
+		//webcubeobj.funcSetPolicy("#basic#,annceEditForm:v-/schEditForm:v-/bizEditForm:v-/issueEditForm:v-/reg_salePolicyEditForm:v-/custClmDtlForm:cv-/scrbClmDtlForm:cv-/reg_salePlanMthPrst:v-/agentCnslDtlForm:v-/agentEduDtlForm:v-/reg_agentEduDtlForm:v-/agentPrzDtlForm:v-/agentDisplDtlForm:v-/annceDtlForm:v-/schMgmtDtlForm:v-/bizDtlForm:v-/bizDtlForm:v-/head_salePolicyDtlForm:v-/incmpDocEditForm:v-/bltcontEditForm:v-/bltcontBrwsForm:v-");
+		webcubeobj.funcSetPolicy("#basic#,annceMgmtRgst.jsp:v-/mainSchdMgmtRgst.jsp:v-/issueProdMgmtDtl.jsp:v-/salePlcyRgst.jsp:v-/custPgcvDtl.jsp:cv-/scrbClmDtl.jsp:cv-/headSalePlanHeadRgst.jsp:v-/prdFtftPlanDtl.jsp:v-/agentEduRgst.jsp:v-/agentEduDtl.jsp:v-/agentPrzDtl.jsp:v-/agentDscplDtl.jsp:v-/annceMgmtDtl.jsp:v-/mainSchdMgmtDtl.jsp:v-/headPrdFtftPlanDtl.jsp:v-/incmpDocRcvDtl.jsp:v-/bltnBrdRgst.jsp:v-/bltnBrdDtl.jsp:v-/userScrbRgst.jsp:v-/faqMgmtRgst.jsp:v-");
+
+		//document.location.href = "./index.jsp"; //"./Customer.htm";
+		document.location.href = "/index.jsp"; //"./Customer.htm";
+
+	} catch (e){
+		document.getElementById("Execute").style.display = "block";
+		//document.location.href="./ExecuteM.htm";
+	
+	}	
+}
+
+function Onload()
+{
+	var userAgent = navigator.userAgent.toLowerCase();
+	 
+	if (userAgent.match(/iphone|ipod|ios|ipad|android|windows ce|blackberry|symbian|windows phone|webos|opera mini|opera mobi|polaris|iemobile|lgtelecom|nokia|sonyericsson/i) != null || userAgent.match(/lg|samsung/) != null) {
+		document.location.href = "/mobile.jsp";
+	}else if(navigator.userAgent.toLowerCase().indexOf("msie") > -1 || navigator.userAgent.toLowerCase().indexOf("trident") > -1)
+	{
+		//alert('IE');
+		document.location.href="./IEdefault.htm";
+	}
+	else
+	{
+
+		var WebcubeMVersion=""; //WebCubeM DLL의 버전을 담는 변수 선언
+
+		for(var iPos=0; iPos < navigator.mimeTypes.length; iPos++)
+		{
+			//alert(String(navigator.mimeTypes[iPos].type));
+			if(String(navigator.mimeTypes[iPos].type).indexOf("webcubem")>-1) //현재 버전 추출
+			{					
+				WebcubeMVersion = navigator.mimeTypes[iPos].type; //현재 버전을 변수에 저장
+			}
+		}
+		//alert(WebcubeMVersion);
+		//document.getElementById("webcubem").innerHTML="<embed id='webcubeobj' type=" + WebcubeMVersion + " width='0' height='0'>";
+		
+		if(WebcubeMVersion != "") //변수에 내용이 있으면 다음 조건 실행
+		{
+				
+			if (WebcubeMVersion.substring(17) >= "1.0.3.8") //서버 버전과 클라이언트 버전을 비교
+			{
+				//alert(WebcubeMVersion.substring(17));
+				document.getElementById("webcubem").innerHTML="<embed id='webcubeobj' type=" + WebcubeMVersion + " width='0' height='0'>";
+				policyStart();
+			}
+			else 
+			{
+				//alert("Setup");
+				document.location.href="./setupM.htm"; //구버전 에서 최신 버전으로 업데이트
+			}
+			
+		}
+		else
+		{
+			//alert("Setup");
+			document.location.href="./setupM.htm";
+		}
+		
+		
+	}
+}
+
+//테스트용 최종 운영시에는 Onload()로 대체함
+function _onloaded() {
+    var userAgent = navigator.userAgent.toLowerCase();
+
+    if (userAgent.match(/iphone|ipod|ios|ipad|android|windows ce|blackberry|symbian|windows phone|webos|opera mini|opera mobi|polaris|iemobile|lgtelecom|nokia|sonyericsson/i) != null || userAgent.match(/lg|samsung/) != null) {
+        document.location.href = "/mobile.jsp";
+    }
+    else {
+        document.location.href = "/index.jsp";
+    }
+}
+</script>
+</HEAD>
+<BODY onload="Onload();">
+<DIV id="webcubem">
+</DIV>
+
+
+<!--button onclick="test();"></button-->
+</BODY>
+</HTML>

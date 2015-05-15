@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPHONBK001">
+	<select id="dSearchPhonBk" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.bizmgmt.db.DPHONBK001.dSearchPhonBk  */
+/* IO: 이승훈2,2015-04-08T20:17:53(이승훈2,2015-02-11T16:07:14) */
+]]><isNotEqual property="LVL_CD" compareValue="1"><![CDATA[
+WITH DSM_MA AS
+(
+    SELECT AGNT_ID
+         , AGNT_NM
+         , HDQT_TEAM_ORG_ID
+         , HDQT_TEAM_ORG_NM
+         , HDQT_PART_ORG_ID
+         , HDQT_PART_ORG_NM
+         , SALE_DEPT_ORG_ID
+         , SALE_DEPT_ORG_NM
+         , SALE_TEAM_ORG_ID
+         , SALE_TEAM_ORG_NM
+         , RETL_CLASS_CD
+         , RETL_CLASS_NM
+     FROM (SELECT A.AGNT_ID
+                , A.AGNT_NM
+                , (SELECT Y.ORG_ID
+                     FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+                        , PS_MNG.TBAS_OUT_ORG_MGMT Y
+                    WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID
+                      AND Z.OUT_ORG_ID = Y.OUT_ORG_ID) AS HDQT_TEAM_ORG_ID
+                , (SELECT X.ORG_NM
+                     FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+                        , PS_MNG.TBAS_OUT_ORG_MGMT Y
+                        , PS_MNG.TBAS_NEW_ORG_MGMT X
+                    WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID
+                      AND Z.OUT_ORG_ID = Y.OUT_ORG_ID
+                      AND Y.ORG_ID = X.ORG_ID) AS HDQT_TEAM_ORG_NM
+                , B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+                , (SELECT Z.OUT_ORG_NM
+                     FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+                    WHERE Z.OUT_ORG_ID = B.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+                , B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+                , (SELECT Z.OUT_ORG_DTL_NM 
+                     FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+                    WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_NM
+                , A.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+                , B.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+                , A.RPSTY AS RETL_CLASS_CD
+                , C.COMM_CD_VAL_NM AS RETL_CLASS_NM
+             FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+                  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON(B.OUT_ORG_DTL_ID = A.OUT_ORG_DTL_ID)
+                  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL C ON (C.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND C.COMM_CD_VAL = A.RPSTY)
+            WHERE A.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+              AND B.EFF_ORG_YN = 'Y'
+              AND B.DEL_YN = 'N'
+          )
+    WHERE 1=1
+      AND SALE_TEAM_ORG_ID = #SALE_TEAM_ORG_ID#
+)
+SELECT F_MASKING('N',D.AGNT_NM) AS USER_NM
+     , C.DUTY_NM
+     , D.SALE_DEPT_ORG_NM
+     , D.AGNT_ID
+     , D.SALE_TEAM_ORG_NM
+     , D.HDQT_PART_ORG_NM 
+     , D.RETL_CLASS_NM
+     , A.USER_ID
+     , #LVL_CD# AS LVL_CD
+  FROM PS_MNG.TBAS_USER_MGMT A
+       JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+       JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY)
+       JOIN DSM_MA D ON (D.AGNT_ID = NVL(A.CPLAZA_ORG_CD,A.ORG_ID))
+ WHERE A.USER_ST = '1'
+   AND A.EFF_USER_YN = 'Y'
+   AND B.SCRB_ST_CD IN ('02','04','08')
+ ORDER BY D.SALE_DEPT_ORG_NM, D.AGNT_NM, A.USER_NM, C.DUTY_NM
+]]></isNotEqual><![CDATA[
+
+]]><isEqual property="LVL_CD" compareValue="1"><![CDATA[
+SELECT C.DUTY_NM
+     , A.USER_ID
+     , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+     , F_MASKING('N',A.USER_NM) AS USER_NM
+     , (SELECT Z.OUT_ORG_NM
+          FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+         WHERE Z.OUT_ORG_ID = E.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+     , '' AS AGNT_ID
+     , '' AS SALE_TEAM_ORG_NM
+     , N.COMM_CD_VAL_NM AS RETL_CLASS_NM
+     , #LVL_CD# AS LVL_CD
+  FROM PS_MNG.TBAS_USER_MGMT A
+       JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+       JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY)
+       JOIN DSM_APPROVE D ON (D.USER_ID = A.USER_ID AND D.DSM_HEADQ_CD = #SALE_TEAM_ORG_ID#)
+       JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.DSM_HEADQ_CD AND ORG_LVL=#LVL_CD#)
+       JOIN PS_MNG.TBAS_COMM_CD_DTL N ON (N.COMM_CD_ID = 'ZBAS_C_00210' AND N.COMM_CD_VAL = A.RPSTY)
+ WHERE A.USER_ST = '1'
+   AND A.EFF_USER_YN = 'Y'
+   AND B.SCRB_ST_CD IN ('02','04','08')
+ ORDER BY A.USER_NM, C.DUTY_NM
+]]></isEqual><![CDATA[]]>
+	</select>
+	<select id="dSearchSaleTeam" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.bizmgmt.db.DPHONBK001.dSearchSaleTeam  */
+/* IO: 이승훈2,2015-04-08T20:27:35(이승훈2,2015-02-09T13:04:47) */
+SELECT 
+       A1.LVL_CD 
+     , A1.SUP_DSM_ORG_CD
+     , A1.DSM_ORG_CD
+     , A1.DSM_ORG_NM
+     , CASE WHEN (SELECT COUNT(*) FROM DSM_MGMT_HEADQ WHERE DSM_HEADQ_CD = A1.DSM_ORG_CD) > 0 THEN 'Y' ELSE 'N' END AS HEDQ_YN /* 사무국여부 */ 
+  FROM ( 
+        SELECT 0 AS LVL_CD
+             , A.ORG_ID AS DSM_ORG_CD
+             , '' AS SUP_DSM_ORG_CD
+             , A.ORG_NM AS DSM_ORG_NM
+             , 0 AS SORT_SEQ
+          FROM PS_MNG.TBAS_NEW_ORG_MGMT A
+         WHERE A.DEL_YN = 'N'
+           AND A.ORG_ID IN (SELECT Z.ORG_ID
+                              FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+                             WHERE Z.EFF_ORG_YN = 'Y'
+                               AND Z.DEL_YN = 'N'
+]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+								   Z.ORG_ID = #HDQT_TEAM_ORG_ID# 
+]]></isNotEmpty><![CDATA[
+                           )
+
+   		   UNION
+        SELECT TO_NUMBER(A.ORG_LVL) AS LVL_CD
+             , A.OUT_ORG_DTL_ID AS DSM_ORG_CD
+             , (SELECT Z.ORG_ID
+                  FROM PS_MNG.TBAS_OUT_ORG_MGMT Z 
+                 WHERE Z.OUT_ORG_ID = A.OUT_ORG_ID) AS SUP_DSM_ORG_CD
+             , A.OUT_ORG_DTL_NM AS DSM_ORG_NM
+             , A.SORT_SEQ
+          FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+         WHERE A.EFF_ORG_YN = 'Y'
+           AND A.DEL_YN = 'N'
+           AND A.ORG_LVL = 1
+           AND A.OUT_ORG_DTL_ID IN(SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ  WHERE OUT_ORG_ID = #HDQT_PART_ORG_ID#) /* 사무국 */
+   		   UNION
+        SELECT TO_NUMBER(A.ORG_LVL) AS LVL_CD
+             , A.OUT_ORG_DTL_ID AS DSM_ORG_CD
+             , (SELECT Z.ORG_ID
+                  FROM PS_MNG.TBAS_OUT_ORG_MGMT Z 
+                 WHERE Z.OUT_ORG_ID = A.OUT_ORG_ID) AS SUP_DSM_ORG_CD
+             , A.OUT_ORG_DTL_NM AS DSM_ORG_NM
+             , A.SORT_SEQ
+          FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+         WHERE A.EFF_ORG_YN = 'Y'
+           AND A.DEL_YN = 'N'
+           AND A.ORG_LVL = 1
+           AND A.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */
+]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		   A.OUT_ORG_DTL_ID= #SALE_DEPT_ORG_ID#
+]]></isNotEmpty><![CDATA[
+         UNION
+        SELECT TO_NUMBER(A.ORG_LVL) AS LVL_CD
+             , A.OUT_ORG_DTL_ID AS DSM_ORG_CD
+             , A.SUP_OUT_ORG_DTL_ID AS SUP_DSM_ORG_CD
+             , A.OUT_ORG_DTL_NM AS DSM_ORG_NM
+             , A.SORT_SEQ
+          FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+         WHERE A.EFF_ORG_YN = 'Y'
+           AND A.DEL_YN = 'N'
+           AND A.ORG_LVL = 2
+		 ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				A.SUP_OUT_ORG_DTL_ID =  #SALE_DEPT_ORG_ID# 	
+		 ]]></isNotEmpty><![CDATA[
+		 ]]><isEqual prepend="AND" property="onlineContext.userInfo.DUTY" compareValue="16"><![CDATA[  /* 팀장 */
+				A.OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_TEAM_ORG_ID#
+		 ]]></isEqual><![CDATA[
+        ) A1  
+  START WITH A1.LVL_CD = 0
+CONNECT BY PRIOR A1.DSM_ORG_CD = A1.SUP_DSM_ORG_CD
+  ORDER BY A1.LVL_CD, A1.SORT_SEQ, A1.DSM_ORG_CD]]>
+	</select>
+	<select id="dDetailPhonBk" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.bizmgmt.db.DPHONBK001.dDetailPhonBk  */
+/* IO: 이승훈2,2015-04-08T20:19:16(이승훈2,2015-02-12T10:00:18) */
+]]><isNotEqual property="LVL_CD" compareValue="1"><![CDATA[
+WITH DSM_MA AS
+(
+    SELECT A.AGNT_ID
+         , A.AGNT_NM
+         , (SELECT Y.ORG_ID
+              FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+                 , PS_MNG.TBAS_OUT_ORG_MGMT Y
+             WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID
+               AND Z.OUT_ORG_ID = Y.OUT_ORG_ID) AS HDQT_TEAM_ORG_ID
+         , (SELECT X.ORG_NM
+              FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+                 , PS_MNG.TBAS_OUT_ORG_MGMT Y
+                 , PS_MNG.TBAS_NEW_ORG_MGMT X
+             WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID
+               AND Z.OUT_ORG_ID = Y.OUT_ORG_ID
+               AND Y.ORG_ID = X.ORG_ID) AS HDQT_TEAM_ORG_NM
+         , B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+         , (SELECT Z.OUT_ORG_NM
+              FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+             WHERE Z.OUT_ORG_ID = B.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+         , B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+         , (SELECT Z.OUT_ORG_DTL_NM 
+              FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT Z
+             WHERE Z.OUT_ORG_DTL_ID = B.SUP_OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_NM
+         , A.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_CD
+         , B.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+         , A.RPSTY AS RETL_CLASS_CD
+      FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+           JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON(B.OUT_ORG_DTL_ID = A.OUT_ORG_DTL_ID)
+     WHERE A.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+       AND B.EFF_ORG_YN = 'Y'
+       AND B.DEL_YN = 'N'
+]]><isNotEmpty property="AGNT_ID"><![CDATA[
+       AND A.AGNT_ID = #AGNT_ID#
+]]></isNotEmpty><![CDATA[
+)
+SELECT
+       A.USER_ID
+     , F_MASKING('N', A.USER_NM) AS USER_NM
+     , C.DUTY_NM
+     , E.COMM_CD_VAL_NM AS RPSTY_NM
+     , D.HDQT_TEAM_ORG_NM
+     , D.SALE_DEPT_ORG_NM
+     , D.SALE_TEAM_ORG_NM
+     , D.AGNT_NM
+     , D.RETL_CLASS_CD
+     , G.COMM_CD_VAL_NM AS RETL_CLASS_NM
+     , B.PHON_NUM1||'-'||B.PHON_NUM2||'-'||B.PHON_NUM3 AS PHON_NUM
+     , B.MBL_PHON_NUM1||'-'||B.MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3 AS MBL_PHON_NUM
+     , F.ATCH_FILE_ID AS USER_PHOTO
+     , F.FILE_PATH
+     , DECODE(B.EMAIL_ID, NULL, NULL, (B.EMAIL_ID||'@'||B.EMAIL_DMN_NM)) AS EMAIL
+     , B.MAIN_JOB
+     , D.HDQT_PART_ORG_NM
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+  JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY)
+  /* JOIN DSM_MA D ON (D.RETL_ORG_CD = NVL(A.CPLAZA_ORG_CD,A.ORG_CD)) */
+  JOIN DSM_MA D ON (D.AGNT_ID = NVL(A.CPLAZA_ORG_CD,A.ORG_ID))
+  /* LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_POS_CD' AND E.COMM_CD_VAL = A.RPSTY_CD) */
+  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_POS_CD' AND E.COMM_CD_VAL = A.RPSTY)
+  LEFT OUTER JOIN DSM_ATCH_FILE F ON (F.ATCH_FILE_ID = B.PIC_FILE_ID)
+  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL G ON (G.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND G.COMM_CD_VAL = D.RETL_CLASS_CD)
+ WHERE A.USER_ID = #USER_ID#
+]]></isNotEqual><![CDATA[
+]]><isEqual property="LVL_CD" compareValue="1"><![CDATA[
+SELECT
+       A.USER_ID
+     , F_MASKING('N', A.USER_NM) AS USER_NM
+     , C.DUTY_NM
+     , E.COMM_CD_VAL_NM AS RPSTY_NM
+     , (SELECT X.ORG_NM
+          FROM PS_MNG.TBAS_OUT_ORG_MGMT Y
+             , PS_MNG.TBAS_NEW_ORG_MGMT X
+         WHERE Y.OUT_ORG_ID = G.OUT_ORG_ID
+           AND Y.ORG_ID = X.ORG_ID) AS HDQT_TEAM_ORG_NM     
+     , G.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+     , '' AS SALE_TEAM_ORG_NM
+     , A.USER_NM AS AGNT_NM
+     , '' AS RETL_CLASS_CD
+     , N.COMM_CD_VAL_NM AS RETL_CLASS_NM
+     , B.PHON_NUM1||'-'||B.PHON_NUM2||'-'||B.PHON_NUM3 AS PHON_NUM
+     , B.MBL_PHON_NUM1||'-'||B.MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3 AS MBL_PHON_NUM
+     , F.ATCH_FILE_ID AS USER_PHOTO
+     , F.FILE_PATH
+     , DECODE(B.EMAIL_ID, NULL, NULL, (B.EMAIL_ID||'@'||B.EMAIL_DMN_NM)) AS EMAIL
+     , D.JOB_DESC AS MAIN_JOB
+     ,(SELECT Z.OUT_ORG_NM
+							 FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+							WHERE Z.OUT_ORG_ID = G.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+  FROM PS_MNG.TBAS_USER_MGMT A
+  JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+  JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY)
+  JOIN DSM_APPROVE D ON (D.USER_ID = A.USER_ID AND D.DSM_HEADQ_CD IS NOT NULL)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT G ON (G.OUT_ORG_DTL_ID = D.DSM_HEADQ_CD AND G.ORG_LVL='1')
+  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_POS_CD' AND E.COMM_CD_VAL = A.RPSTY)
+  LEFT OUTER JOIN DSM_ATCH_FILE F ON (F.ATCH_FILE_ID = B.PIC_FILE_ID)
+  JOIN PS_MNG.TBAS_COMM_CD_DTL N ON (N.COMM_CD_ID = 'ZBAS_C_00210' AND N.COMM_CD_VAL = A.RPSTY)
+ WHERE A.USER_ID = #USER_ID#
+]]></isEqual><![CDATA[]]>
+	</select>
+	<select id="dSearchPhonBkCondi" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.bizmgmt.db.DPHONBK001.dSearchPhonBkCondi  */
+/* IO: 이승훈2,2015-03-12T18:36:16(이승훈2,2015-02-12T14:59:53) */
+WITH DSM_MA AS
+(
+    SELECT D.ORG_ID AS HDQT_TEAM_ORG_ID
+         , D.ORG_NM AS HDQT_TEAM_ORG_NM
+         , B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+         , (SELECT Z.OUT_ORG_NM
+              FROM PS_MNG.TBAS_OUT_ORG_MGMT Z
+             WHERE Z.OUT_ORG_ID = B.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+         , B.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+         , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE B.SUP_OUT_ORG_DTL_ID = OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_NM
+         , B.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_CD
+         , B.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+         , A.AGNT_ID
+         , A.AGNT_NM
+         , A.RPSTY AS RETL_CLASS_CD
+         , E.COMM_CD_VAL_NM AS RETL_CLASS_NM
+    FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+         JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT B ON (B.OUT_ORG_DTL_ID = A.OUT_ORG_DTL_ID AND A.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+         JOIN PS_MNG.TBAS_OUT_ORG_MGMT C ON (C.OUT_ORG_ID = B.OUT_ORG_ID)
+         JOIN PS_MNG.TBAS_NEW_ORG_MGMT D ON (D.ORG_ID = C.ORG_ID)
+         LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_RETL_CLASS_CD' AND E.COMM_CD_VAL = A.RPSTY)
+   WHERE 1=1
+]]><isEqual prepend="AND" property="onlineContext.userInfo.DUTY" compareValue="14"><![CDATA[  /* 국장*/
+	     B.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+]]></isEqual><![CDATA[
+]]><isEqual prepend="AND" property="onlineContext.userInfo.DUTY" compareValue="16"><![CDATA[  /* 팀장 */
+         B.OUT_ORG_DTL_ID =  #onlineContext.userInfo.SALE_TEAM_ORG_ID#
+]]></isEqual><![CDATA[
+  )
+SELECT X.*
+  FROM ( 
+        SELECT A.USER_ID
+             , F_MASKING('N', A.USER_NM) AS USER_NM
+             , C.DUTY_NM
+             , E.HDQT_PART_ORG_NM
+             , E.SALE_DEPT_ORG_NM
+             , E.SALE_TEAM_ORG_NM
+             , E.AGNT_ID
+             , E.RETL_CLASS_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+               JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+               JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY AND C.USER_TYP IN ('1','2','3'))
+               JOIN DSM_MA E ON (A.CPLAZA_ORG_CD = E.AGNT_ID)
+         WHERE 1=1
+           AND A.USER_ST = '1'  /* 퇴직구분(재잭) */
+           AND A.EFF_USER_YN = 'Y' /* 사용승인여부(승인) */
+           AND A.OUT_USER_TYP IN ('1', '2')
+           AND B.SCRB_ST_CD IN ('02','04','08')
+]]><isEqual property="TYPE" compareValue="TYPE_USER_ID"><![CDATA[
+           AND A.USER_ID LIKE '%'||#TYPE_VALUE#||'%'    
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_AGNT_NM"><![CDATA[
+           AND E.AGNT_NM LIKE '%'||#TYPE_VALUE#||'%' 
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_JOB"><![CDATA[
+           AND B.MAIN_JOB LIKE '%'||#TYPE_VALUE#||'%'           
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_MBL_PHON"><![CDATA[
+           AND B.MBL_PHON_NUM1||B.MBL_PHON_NUM2||B.MBL_PHON_NUM3 LIKE '%'||#TYPE_VALUE#||'%'
+]]></isEqual><![CDATA[
+           
+		 UNION
+        SELECT A.USER_ID
+             , F_MASKING('N', A.USER_NM) AS USER_NM
+             , C.DUTY_NM
+             , E.HDQT_PART_ORG_NM
+             , E.SALE_DEPT_ORG_NM
+             , E.SALE_TEAM_ORG_NM
+             , E.AGNT_ID
+             , E.RETL_CLASS_NM
+          FROM PS_MNG.TBAS_USER_MGMT A
+               JOIN DSM_USER B ON (B.USER_ID = A.USER_ID)
+               JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = A.DUTY AND C.USER_TYP = '4')
+               JOIN DSM_MA E ON (A.CPLAZA_ORG_CD = E.AGNT_ID)
+         WHERE 1=1
+           AND A.USER_ST = '1'  /* 퇴직구분(재잭) */
+           AND A.EFF_USER_YN = 'Y' /* 사용승인여부(승인) */
+           AND A.OUT_USER_TYP IN ('1', '2')
+           AND B.SCRB_ST_CD IN ('02','04','08')
+]]><isEqual property="TYPE" compareValue="TYPE_USER_ID"><![CDATA[
+           AND A.USER_ID LIKE '%'||#TYPE_VALUE#||'%'    
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_AGNT_NM"><![CDATA[
+           AND E.AGNT_NM LIKE '%'||#TYPE_VALUE#||'%' 
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_JOB"><![CDATA[
+           AND B.MAIN_JOB LIKE '%'||#TYPE_VALUE#||'%'           
+]]></isEqual><![CDATA[
+]]><isEqual property="TYPE" compareValue="TYPE_MBL_PHON"><![CDATA[
+           AND B.MBL_PHON_NUM1||B.MBL_PHON_NUM2||B.MBL_PHON_NUM3 LIKE '%'||#TYPE_VALUE#||'%'
+]]></isEqual><![CDATA[
+       ) X
+
+ ORDER BY X.SALE_DEPT_ORG_NM, X.USER_NM, X.RETL_CLASS_NM]]>
+	</select>
+</sqlMap>

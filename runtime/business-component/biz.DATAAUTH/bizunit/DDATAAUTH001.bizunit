@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DDATAAUTH001">
+    <bizUnitName>[DU]데이터권한관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.DATAAUTH</componentId>
+    <description>데이터권한관리 DU</description>
+    <method-list>
+        <method id="dSearchDataAuthPart">
+            <methodName>[DM]데이터권한관리본사파트조회</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dSearchDataAuthPart</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리본사파트 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T15:10:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchDataAuthUser">
+            <methodName>[DM]데이터권한관리사용자조회</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dSearchDataAuthUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리사용자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:33:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dDeleteDataAuth">
+            <methodName>[DM]데이터권한관리삭제</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dDeleteDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:34:19" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dUpdateDataAuth">
+            <methodName>[DM]데이터권한관리수정</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dUpdateDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:34:01" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertDataAuth">
+            <methodName>[DM]데이터권한관리저장</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dInsertDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:33:39" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchDataAuth">
+            <methodName>[DM]데이터권한관리조회</methodName>
+            <transactionId>biz.DATAAUTH@DDATAAUTH001_dSearchDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:32:52" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T14:28:10" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

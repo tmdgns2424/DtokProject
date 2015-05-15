@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FUSER001">
+    <bizUnitName>[FU]공통회원관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>[FU]공통회원관리</description>
+    <method-list>
+        <method id="fSearchUserId">
+            <methodName>[FM]회원ID조회</methodName>
+            <transactionId>com.MAINLOGIN@FUSER001_fSearchUserId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]회원ID조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-09T15:20:30" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fUpdateTempPwd">
+            <methodName>[FM]회원임시비밀번호</methodName>
+            <transactionId>com.MAINLOGIN@FUSER001_fUpdateTempPwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]회원임시비밀번호</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T11:07:31" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-09T15:07:19" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

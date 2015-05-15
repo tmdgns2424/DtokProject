@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAGENTCNTRT001">
+    <bizUnitName>[DU]에이전트계약관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>에이전트 계약관리 DU</description>
+    <method-list>
+        <method id="dUpdateAgentCntrtAppCan">
+            <methodName>[DM]에이전트계약관리 상태수정(승인취소)</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dUpdateAgentCntrtAppCan</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약관리 상태수정(승인취소) DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-03T12:22:40" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCntrtIntCnt">
+            <methodName>[DM]에이전트계약면접현황 건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentCntrtIntCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접현황 건수조회 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-25T15:02:35" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCntrtInt">
+            <methodName>[DM]에이전트계약면접현황 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentCntrtInt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트면접현황 조회 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-25T15:01:55" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dSelectAgentCntrtSmsSend">
+            <methodName>[DM]에이전트계약정보 SMS발송조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSelectAgentCntrtSmsSend</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 SMS발송조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T14:01:24" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSelectAgentCntrtDealCnt">
+            <methodName>[DM]에이전트계약정보 거래처건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSelectAgentCntrtDealCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 거래처건수조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T17:01:15" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCntrtCnt">
+            <methodName>[DM]에이전트계약정보 건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentCntrtCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 건수조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T17:10:11" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dDeleteAgentCntrt">
+            <methodName>[DM]에이전트계약정보 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dDeleteAgentCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 삭제 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T17:55:28" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dDetailAgentCntrt">
+            <methodName>[DM]에이전트계약정보 상세조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dDetailAgentCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 상세조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T17:10:45" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCntrtStCnt">
+            <methodName>[DM]에이전트계약정보 상태별건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentCntrtStCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 상태별건수조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-19T14:27:42" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dUpdateAgentCntrtAgentMap">
+            <methodName>[DM]에이전트계약정보 상태수정(에이전트매핑)</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dUpdateAgentCntrtAgentMap</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 상태수정(에이전트매핑) DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T16:11:50" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dUpdateAgentCntrt">
+            <methodName>[DM]에이전트계약정보 상태수정</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dUpdateAgentCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 상태수정 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T13:13:30" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSelectAgentCntrtStCd">
+            <methodName>[DM]에이전트계약정보 상태조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSelectAgentCntrtStCd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 상태조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-13T17:56:49" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dInsertAgentCntrt">
+            <methodName>[DM]에이전트계약정보 저장</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dInsertAgentCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 저장 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-13T13:25:07" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentCntrt">
+            <methodName>[DM]에이전트계약정보 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentCntrt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-17T17:09:02" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentInfoCnt">
+            <methodName>[DM]에이전트정보 건수조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentInfoCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트정보 건수조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-26T10:21:31" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="dSelectAgentCntrtNoSeq">
+            <methodName>[DM]에이전트계약정보 채번</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSelectAgentCntrtNoSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트계약정보 채번 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T09:29:49" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="dSearchAgentInfo">
+            <methodName>[DM]에이전트정보 조회</methodName>
+            <transactionId>agn.AGNTMGMT@DAGENTCNTRT001_dSearchAgentInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트정보 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-26T09:59:54" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-26T09:57:44" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

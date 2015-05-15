@@ -1,0 +1,33 @@
+<html style='height:100%'>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body style='height:100%'>
+
+<div id = "InstallOZViewer">
+    <object id = "ZTransferX" classid = "CLSID:C7C7225A-9476-47AC-B0B0-FF3B79D55E67" width = "0" height = "0" codebase = "http://10.40.10.134:8050/oz60/ozrviewer/ZTransferX.cab#version=2,2,4,9">
+    <param name = "download.server" value = "http://10.40.10.134/oz60/ozrviewer/">
+    <param name = "download.port" value = "8050">
+    <param name = "download.instruction" value = "ozrviewer.idf">
+    <param name = "install.base" value = "<PROGRAMS>/Forcs">
+    <param name = "install.namespace" value = "wasbo">
+    </object>
+</div>
+
+<div id = "RunOZViewer" style='height:98%'>
+    <object id = "OZReportViewer" classid = "CLSID:0DEF32F8-170F-46f8-B1FF-4BF7443F5F25" width = "100%" height = "100%">
+    <param name = "connection.servlet" value = "http://10.40.10.134:8050/oz60/server">
+    <param name = "connection.fetchtype" value = "concurrent">
+    <param name = "connection.reportname" value = "/sample.ozr">
+    <param name = "connection.pcount" value = "1">
+    <param name = "connection.args1" value = "formparam=">
+    <param name = "odi.odinames" value = "sample">
+	<param name = "odi.sample.pcount" value = "1">
+	<param name = "odi.sample.args1" value = "odipparam=">
+    <param name = "viewer.isframe" value = "false">
+    <param name = "viewer.namespace" value = "wasbo\\ozviewer">
+    </object>
+</div>
+
+</body>
+</html>

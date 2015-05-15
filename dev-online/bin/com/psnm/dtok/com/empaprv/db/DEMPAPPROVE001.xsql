@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DEMPAPPROVE001">
+	<select id="dSearchAprove" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dSearchAprove  */
+/* IO: 안진갑,2015-04-24T14:43:25(이민재,2014-12-23T13:13:57) */
+SELECT X.*, 
+       CASE WHEN X.USER_TYP IN ('1','2') THEN 1
+            WHEN X.USER_TYP IN ('3') THEN 3
+            ELSE 4
+            END AS DUTY,
+       CASE WHEN X.DSM_HEADQ_CD IS NOT NULL THEN 'Y'
+            ELSE 'N'
+            END AS HEADQ_YN
+    FROM(
+        SELECT A.USER_ID
+        	  , E.ORG_ID AS HDQT_TEAM_ORG_ID
+              , E.ORG_NM AS HDQT_TEAM_ORG_NM
+              , D.OUT_ORG_ID AS HDQT_PART_ORG_ID
+              , D.OUT_ORG_NM AS HDQT_PART_ORG_NM
+              , F_MASKING('N',B.USER_NM ) AS USER_NM
+              , A.DUTY_CD
+              , C.DUTY_NM
+              , C.USER_TYP
+              , A.DSM_HEADQ_CD
+              , A.JOB_DESC 
+              , NVL(A.SMS_YN, 'N') AS SMS_YN
+              , A.RGST_DTM
+        FROM DSM_APPROVE A
+		JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.USER_ID )
+		JOIN PS_MNG.TBAS_DUTY_MGMT C ON ( C.DUTY_CD = A.DUTY_CD )
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON ( D.OUT_ORG_ID = B.OUT_ORG_ID )
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON ( E.ORG_ID = D.ORG_ID )
+       	WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+       	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		E.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="W_DUTY_CD"><![CDATA[
+		A.DUTY_CD = #W_DUTY_CD#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="USER_ID"><![CDATA[
+		AND A.USER_ID LIKE '%'||#USER_ID#||'%'      
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="USER_NM"><![CDATA[
+		AND B.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'      
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="W_HEADQ_YN"><![CDATA[
+			]]><isEqual property="W_HEADQ_YN" compareValue="Y"><![CDATA[
+			AND A.DSM_HEADQ_CD IS NOT NULL
+			]]></isEqual><![CDATA[
+			]]><isEqual property="W_HEADQ_YN" compareValue="N"><![CDATA[
+			AND A.DSM_HEADQ_CD IS NULL
+			]]></isEqual><![CDATA[
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="W_SMS_YN"><![CDATA[
+			AND NVL(A.SMS_YN, 'N') = #W_SMS_YN#
+		]]></isNotEmpty><![CDATA[
+        )X
+    ORDER BY TO_NUMBER(DUTY_CD), USER_NM]]>
+	</select>
+	<select id="dSearchAproveUser" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dSearchAproveUser  */
+/* IO: 이민재,2014-12-23T13:36:01(이민재,2014-12-23T13:36:01) */
+	SELECT A.USER_ID
+	  	, F_MASKING('N',A.USER_NM ) AS USER_NM
+	  	, B.DUTY_CD
+	FROM PS_MNG.TBAS_USER_MGMT A
+	JOIN PS_MNG.TBAS_DUTY_MGMT B ON ( A.DUTY = B.DUTY_CD )
+	WHERE A.USER_ID = #USER_ID#
+	   AND A.OUT_ORG_ID IS NOT NULL]]>
+	</select>
+	<insert id="dInsertAprove" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dInsertAprove  */
+/* IO: 이민재,2014-12-23T14:02:14(이민재,2014-12-23T14:02:14) */
+	MERGE INTO DSM_APPROVE
+	USING DUAL
+	ON ( USER_ID = #USER_ID# )
+	WHEN MATCHED THEN
+		UPDATE SET DSM_HEADQ_CD = CASE WHEN #HEADQ_YN# = 'Y' THEN
+		                                                     (SELECT B.DSM_HEADQ_CD
+                                                               FROM PS_MNG.TBAS_USER_MGMT A
+                                                                       JOIN DSM_MGMT_HEADQ B ON(B.OUT_ORG_ID = A.OUT_ORG_ID)
+                                                              WHERE A.USER_ID = #USER_ID#)
+		                                               ELSE NULL 
+		                                        END
+					, DUTY_CD = #DUTY_CD#
+					, JOB_DESC = #JOB_DESC#
+					, SMS_YN   = #SMS_YN#
+					, UPDR_ID = #onlineContext.userInfo.loginId#
+					, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+            	USER_ID
+				]]><isEqual property="HEADQ_YN" compareValue="Y"><![CDATA[
+  				, DSM_HEADQ_CD 
+				]]></isEqual><![CDATA[
+				, DUTY_CD
+  				, JOB_DESC
+  				, SMS_YN
+  				, RGSTR_ID
+  				, RGST_DTM
+  				, UPDR_ID
+  				, UPD_DTM
+		)VALUES(
+				#USER_ID#
+				]]><isEqual property="HEADQ_YN" compareValue="Y"><![CDATA[
+ 				, (SELECT DSM_HEADQ_CD
+                   FROM DSM_MGMT_HEADQ
+                  WHERE OUT_ORG_ID = (SELECT OUT_ORG_ID FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID =#USER_ID#))
+				]]></isEqual><![CDATA[
+				, #DUTY_CD#
+  				, #JOB_DESC#
+  				, #SMS_YN#
+  				, #onlineContext.userInfo.loginId#
+  				, SYSDATE
+  				, #onlineContext.userInfo.loginId#
+  				, SYSDATE
+		)]]>
+	</insert>
+	<delete id="dDeleteAprove" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dDeleteAprove  */
+/* IO: 이민재,2014-12-23T14:08:14(이민재,2014-12-23T14:08:14) */
+	DELETE
+  	FROM DSM_APPROVE
+ 	WHERE USER_ID = #USER_ID#]]>
+	</delete>
+	<delete id="dDeleteAproveHeadq" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dDeleteAproveHeadq  */
+/* IO: 이민재,2014-12-23T14:09:09(이민재,2014-12-23T14:09:09) */
+	DELETE
+  	FROM DSM_CHRGR_HEADQ
+ 	WHERE CHRGR_ID = #USER_ID#
+	]]><isNotEmpty property="DSM_HEADQ_CD"><![CDATA[
+   	AND DSM_HEADQ_CD = #DSM_HEADQ_CD# 
+	]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<select id="dSearchDutyMgmt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dSearchDutyMgmt  */
+/* IO: 이민재,2015-01-20T16:19:28(이민재,2015-01-20T16:19:28) */
+	SELECT DUTY_CD
+  		, DUTY_NM
+  	FROM PS_MNG.TBAS_DUTY_MGMT
+  	WHERE USER_TYP IN ('1','3')
+  	AND USE_YN = 'Y'
+  	AND DEL_YN = 'N'
+  	ORDER BY TO_NUMBER(DUTY_CD)]]>
+	</select>
+	<update id="dInsertDutyChgHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dInsertDutyChgHst 직무이력변경 등록 */
+/* IO: 안진갑,2015-03-09T14:25:15(안진갑,2015-03-09T13:40:41) */
+    INSERT INTO DSM_DUTY_CHG_HST ( 
+          USER_ID
+          , DUTY_CHG_SEQ
+          , DUTY_CD
+          , RGSTR_ID
+          , RGST_DTM
+          , UPDR_ID
+          , UPD_DTM
+          , DEL_YN
+   )VALUES(
+          #USER_ID#
+          ,(SELECT NVL(MAX(DUTY_CHG_SEQ), 0)+1 FROM DSM_DUTY_CHG_HST WHERE USER_ID = #USER_ID#)
+          , #DUTY_CD#
+          , #onlineContext.userInfo.loginId#
+          , SYSDATE
+          , #onlineContext.userInfo.loginId#
+          , SYSDATE
+          , #DEL_YN#
+   )]]>
+	</update>
+	<select id="dSearchHeadqCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.empaprv.db.DEMPAPPROVE001.dSearchHeadqCnt  */
+/* IO: 안진갑,2015-04-24T14:44:38(채수윤,2015-03-20T09:13:01) */
+SELECT COUNT(*) AS CNT
+  FROM DSM_APPROVE A
+       JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.USER_ID )
+       JOIN PS_MNG.TBAS_DUTY_MGMT C ON ( C.DUTY_CD = A.DUTY_CD )
+       LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON ( D.OUT_ORG_ID = B.OUT_ORG_ID )
+       LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON ( E.ORG_ID = D.ORG_ID )
+ WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+   AND E.ORG_ID = #HDQT_TEAM_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+   AND D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+]]></isNotEmpty><![CDATA[
+]]><isEqual property="W_HEADQ_YN" compareValue="Y"><![CDATA[
+   AND A.DSM_HEADQ_CD IS NOT NULL  
+]]></isEqual><![CDATA[
+]]><isEqual property="W_HEADQ_YN" compareValue="N"><![CDATA[
+   AND A.DSM_HEADQ_CD IS NULL  
+]]></isEqual><![CDATA[]]>
+	</select>
+</sqlMap>

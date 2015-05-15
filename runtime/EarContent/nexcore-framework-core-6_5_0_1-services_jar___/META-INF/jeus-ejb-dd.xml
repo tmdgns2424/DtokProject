@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jeus-ejb-dd xmlns="http://www.tmaxsoft.com/xml/ns/jeus">
+    <module-info />
+    <beanlist>
+        <jeus-bean>
+            <ejb-name>nexcore.online.PojoServiceFacade</ejb-name>
+            <export-name>ejb/nexcore/online/PojoServiceFacade</export-name>
+            <local-export-name>ejb/nexcore/online/PojoServiceFacadeLocal</local-export-name>
+        </jeus-bean>
+        <jeus-bean>
+            <ejb-name>nexcore.online.ServiceInit</ejb-name>
+            <export-name>ejb/nexcore/online/ServiceInit</export-name>
+            <local-export-name>ejb/nexcore/online/ServiceInitLocal</local-export-name>
+            <object-management>
+                <bean-pool>
+                    <pool-min>1</pool-min>
+                    <pool-max>1</pool-max>
+                </bean-pool>
+            </object-management>
+        </jeus-bean>
+        <jeus-bean>
+            <ejb-name>nexcore.online.FrontService</ejb-name>
+            <export-name>ejb/nexcore/online/FrontService</export-name>
+            <local-export-name>ejb/nexcore/online/FrontServiceLocal</local-export-name>
+        </jeus-bean>
+    </beanlist>
+</jeus-ejb-dd>

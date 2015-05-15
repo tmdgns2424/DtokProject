@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DPLCYRCVGRP001">
+    <bizUnitName>[DU]영업정책그룹관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.SALEPLCY</componentId>
+    <description>영업정책그룹관리DU</description>
+    <method-list>
+        <method id="dDeletePlcyRcvGrp">
+            <methodName>[DM]영업정책수신그룹삭제</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVGRP001_dDeletePlcyRcvGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책 수신그룹 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T12:58:13" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchPlcyRcvGrpAuthTarget">
+            <methodName>[DM]영업정책수신그룹공지대상권한조회</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVGRP001_dSearchPlcyRcvGrpAuthTarget</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책수신그룹 공지대상권한을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T13:32:23" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchPlcyRcvGrpAuthObjet">
+            <methodName>[DM]영업정책수신그룹공지할권한조회</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVGRP001_dSearchPlcyRcvGrpAuthObjet</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책수신그룹 공지할 권한을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T15:05:26" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dInsertPlcyRcvGrp">
+            <methodName>[DM]영업정책수신그룹저장</methodName>
+            <transactionId>biz.SALEPLCY@DPLCYRCVGRP001_dInsertPlcyRcvGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업정책 수신그룹 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T12:57:32" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-21T12:52:43" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

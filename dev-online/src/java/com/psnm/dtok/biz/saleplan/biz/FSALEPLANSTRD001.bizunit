@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FSALEPLANSTRD001">
+    <bizUnitName>[FU]영업계획기준관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.SALEPLAN</componentId>
+    <description>영업계획기준관리 FU</description>
+    <method-list>
+        <method id="fInsertSalePlanStrdCtt">
+            <methodName>[FM]영업계획기준관리기준제목저장</methodName>
+            <transactionId>biz.SALEPLAN@FSALEPLANSTRD001_fInsertSalePlanStrdCtt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리기준제목 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:54:18" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalePlanStrdCtt">
+            <methodName>[FM]영업계획기준관리기준제목조회</methodName>
+            <transactionId>biz.SALEPLAN@FSALEPLANSTRD001_fSearchSalePlanStrdCtt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리기준제목 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:53:48" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fCopySalePlanStrd">
+            <methodName>[FM]영업계획기준관리복사</methodName>
+            <transactionId>biz.SALEPLAN@FSALEPLANSTRD001_fCopySalePlanStrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리정보를 복사하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T14:12:21" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertSalePlanStrdProd">
+            <methodName>[FM]영업계획기준관리상품유형저장</methodName>
+            <transactionId>biz.SALEPLAN@FSALEPLANSTRD001_fInsertSalePlanStrdProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리상품유형 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:52:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalePlanStrdProd">
+            <methodName>[FM]영업계획기준관리상품유형조회</methodName>
+            <transactionId>biz.SALEPLAN@FSALEPLANSTRD001_fSearchSalePlanStrdProd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리상품유형 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:52:05" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-29T10:38:52" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

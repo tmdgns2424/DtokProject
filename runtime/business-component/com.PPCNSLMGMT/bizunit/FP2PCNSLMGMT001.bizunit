@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FP2PCNSLMGMT001">
+    <bizUnitName>[FU]무엇이든물어보세요</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.PPCNSLMGMT</componentId>
+    <description>무엇이든물어보세요 FU</description>
+    <method-list>
+        <method id="fInsertP2pCnslRejnd">
+            <methodName>[FM]무엇이든물어보세요답글저장</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fInsertP2pCnslRejnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요답글 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T16:48:42" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fDeleteP2pCnsl">
+            <methodName>[FM]무엇이든물어보세요삭제</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fDeleteP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:18:55" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="fDetailP2pCnsl">
+            <methodName>[FM]무엇이든물어보세요상세</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fDetailP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:18:55" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="fUpdateP2pCnsl">
+            <methodName>[FM]무엇이든물어보세요수정</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fUpdateP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:18:55" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="fSearchP2pCnsl">
+            <methodName>[FM]무엇이든물어보세요조회</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fSearchP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:18:55" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+        <method id="fInsertP2pCnsl">
+            <methodName>[FM]무엇이든물어보세요저장</methodName>
+            <transactionId>com.PPCNSLMGMT@FP2PCNSLMGMT001_fInsertP2pCnsl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>무엇이든물어보세요 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T16:18:55" user="이승훈 (leeseunghun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-11T17:47:12" user="이승훈 (leeseunghun)"/>
+    </history>
+</bizUnit>

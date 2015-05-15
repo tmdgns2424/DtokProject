@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTCNSLPLN001">
+	<select id="dSearchAgentCnslPln" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dSearchAgentCnslPln  */
+/* IO: 이민재,2014-12-02T17:36:03(이민재,2014-12-02T17:36:03) */
+	SELECT A.AGENT_CNSL_PLN_NUM
+       		, TO_CHAR( TO_DATE(A.CNSL_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) CNSL_DT
+       		, A.USER_ID
+       		, F_MASKING('N',A.USER_NM) AS USER_NM
+       		, A.CNSL_ST_CD
+			, (SELECT COMM_CD_VAL_NM 
+            	FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_APRV_TYP_CD' 
+             	AND COMM_CD_VAL = A.CNSL_ST_CD ) AS CNSL_ST_NM 
+       		, CASE WHEN A.COMP_CNSL_PLN_NUM IS NULL THEN '미완료' ELSE '완료' END AS CNSL_ACT_CD /* 시행여부 */
+       		, A.HDQT_TEAM_ORG_ID
+  			, A.HDQT_TEAM_ORG_NM
+  			, A.HDQT_PART_ORG_ID
+  			, A.HDQT_PART_ORG_NM
+       		, A.SALE_DEPT_ORG_ID
+       		, A.SALE_DEPT_ORG_NM
+       		, A.SALE_TEAM_ORG_ID  
+			, A.SALE_TEAM_ORG_NM 
+       		, A.AGNT_ID           
+       		, F_MASKING('N',A.AGNT_NM ) AS AGNT_NM 
+       		, A.RPSTY
+       		, (SELECT COMM_CD_VAL_NM 
+            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             	AND COMM_CD_VAL = A.RPSTY ) AS RPSTY_NM /* 직책명 */
+       		, A.CNSLR_CD     
+       		, F_MASKING('N',A.CNSLR_NM ) AS CNSLR_NM    
+       		, A.CNSLR_RPSTY
+       		, (SELECT COMM_CD_VAL_NM 
+            	FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             	AND COMM_CD_VAL = A.CNSLR_RPSTY ) AS CNSLR_RPSTY_NM /* 면담자직책명 */
+       		, A.CNSL_RSN_NM
+       		, A.AGENT_CNSL_MGMT_NUM
+	FROM ( SELECT ROW_NUMBER() OVER (ORDER BY A.CNSL_DT DESC) RN,
+			    A.AGENT_CNSL_PLN_NUM,
+			    A.CNSL_DT,
+			    A.USER_ID,
+			    B.USER_NM,
+			    A.CNSL_ST_CD,
+			    J.ORG_ID AS HDQT_TEAM_ORG_ID,
+			    J.ORG_NM AS HDQT_TEAM_ORG_NM,
+			    I.OUT_ORG_ID AS HDQT_PART_ORG_ID,
+			    I.OUT_ORG_NM AS HDQT_PART_ORG_NM,
+			    H.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID,
+			    H.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM,
+			    G.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID,
+			    G.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM,
+			    E.AGNT_ID AS AGNT_ID ,
+			    E.AGNT_NM AS AGNT_NM,
+			    E.RPSTY AS RPSTY,
+			    F.AGNT_ID AS CNSLR_CD,
+			    C.USER_NM AS CNSLR_NM,
+			    F.RPSTY AS CNSLR_RPSTY,
+			    A.CNSL_RSN_NM,
+			    Z.AGENT_CNSL_PLN_NUM AS COMP_CNSL_PLN_NUM,
+			    Z.AGENT_CNSL_MGMT_NUM
+		  FROM DSM_AGENT_CNSL_PLN A
+		  JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+		  JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.CNSLR_ID)
+		  JOIN PS_MNG.TBAS_DUTY_MGMT D ON (D.DUTY_CD = C.DUTY)
+		  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.AGNT_ID = B.CPLAZA_ORG_CD AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT F ON (F.AGNT_ID = C.CPLAZA_ORG_CD AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT G ON (G.OUT_ORG_DTL_ID = E.OUT_ORG_DTL_ID)
+		  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT H ON (H.OUT_ORG_DTL_ID = G.SUP_OUT_ORG_DTL_ID)
+		  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT I ON (I.OUT_ORG_ID = G.OUT_ORG_ID)
+		  LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT J ON (J.ORG_ID = I.ORG_ID)
+		  LEFT JOIN DSM_AGENT_CNSL Z ON (Z.AGENT_CNSL_PLN_NUM = A.AGENT_CNSL_PLN_NUM)
+          WHERE I.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+          AND A.CNSL_DT BETWEEN #FROM_DT# AND #TO_DT#
+             ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+				J.ORG_ID = #HDQT_TEAM_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+				I.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				H.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				G.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				E.AGNT_ID = #AGNT_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSLR_NM"><![CDATA[
+				C.USER_NM LIKE ('%'||#CNSLR_NM#||'%')
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSL_ST_CD"><![CDATA[
+				A.CNSL_ST_CD = #CNSL_ST_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isEqual prepend="AND" property="SCRN_TYP" compareValue="MNG"><![CDATA[
+				C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+             ]]></isEqual><![CDATA[
+             ]]><isEqual property="SCRN_TYP" compareValue="TM"><![CDATA[
+				AND C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+				AND D.DUTY_CD = '16'
+             ]]></isEqual><![CDATA[
+             ]]><isEqual prepend="AND" property="CNSL_ACT_CD" compareValue="Y"><![CDATA[
+				Z.AGENT_CNSL_PLN_NUM IS NOT NULL
+             ]]></isEqual><![CDATA[
+             ]]><isEqual prepend="AND" property="CNSL_ACT_CD" compareValue="N"><![CDATA[
+				Z.AGENT_CNSL_PLN_NUM IS NULL
+             ]]></isEqual><![CDATA[
+        ) A
+ 	WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchAgentCnslPlnCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dSearchAgentCnslPlnCount  */
+/* IO: 이민재,2014-12-02T17:36:30(이민재,2014-12-02T17:36:30) */
+	SELECT COUNT(*) AS totCnt
+	  FROM ( SELECT *
+				FROM DSM_AGENT_CNSL_PLN A
+				JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+			  	JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.CNSLR_ID)
+			  	JOIN PS_MNG.TBAS_DUTY_MGMT D ON (D.DUTY_CD = C.DUTY)
+			  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.AGNT_ID = B.CPLAZA_ORG_CD AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+			  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT F ON (F.AGNT_ID = C.CPLAZA_ORG_CD AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+			  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT G ON (G.OUT_ORG_DTL_ID = E.OUT_ORG_DTL_ID)
+			  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT H ON (H.OUT_ORG_DTL_ID = G.SUP_OUT_ORG_DTL_ID)
+			  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT I ON (I.OUT_ORG_ID = G.OUT_ORG_ID)
+			  	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT J ON (J.ORG_ID = I.ORG_ID)
+			  	LEFT JOIN DSM_AGENT_CNSL Z ON (Z.AGENT_CNSL_PLN_NUM = A.AGENT_CNSL_PLN_NUM)
+			WHERE I.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+			AND A.CNSL_DT BETWEEN #FROM_DT# AND #TO_DT#
+             ]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+				J.ORG_ID = #HDQT_TEAM_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+				I.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				H.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+				G.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+				E.AGNT_ID = #AGNT_ID#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSLR_NM"><![CDATA[
+				C.USER_NM LIKE ('%'||#CNSLR_NM#||'%')
+             ]]></isNotEmpty><![CDATA[
+             ]]><isNotEmpty prepend="AND" property="CNSL_ST_CD"><![CDATA[
+				A.CNSL_ST_CD = #CNSL_ST_CD#
+             ]]></isNotEmpty><![CDATA[
+             ]]><isEqual prepend="AND" property="SCRN_TYP" compareValue="MNG"><![CDATA[
+				C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+             ]]></isEqual><![CDATA[
+             ]]><isEqual property="SCRN_TYP" compareValue="TM"><![CDATA[
+				AND C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+				AND D.DUTY_CD = '16'
+             ]]></isEqual><![CDATA[
+             ]]><isEqual prepend="AND" property="CNSL_ACT_CD" compareValue="Y"><![CDATA[
+				Z.AGENT_CNSL_PLN_NUM IS NOT NULL
+             ]]></isEqual><![CDATA[
+             ]]><isEqual prepend="AND" property="CNSL_ACT_CD" compareValue="N"><![CDATA[
+				Z.AGENT_CNSL_PLN_NUM IS NULL
+             ]]></isEqual><![CDATA[
+	        ) A
+	 WHERE 1 = 1]]>
+	</select>
+	<insert id="dInsertAgentCnslPln" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dInsertAgentCnslPln  */
+/* IO: 이민재,2014-12-03T15:23:46(이민재,2014-12-03T15:23:46) */
+	INSERT INTO DSM_AGENT_CNSL_PLN (
+	   AGENT_CNSL_PLN_NUM
+	 , USER_ID
+	 , CNSLR_ID
+	 , CNSL_DT
+	 , CNSL_STA_TM
+	 , CNSL_END_TM
+	 , CNSL_RSN_NM
+	 , CNSL_PLC_NM
+	 , CNSL_ST_CD
+	 , RGSTR_ID
+	 , RGST_DTM
+	 , UPDR_ID
+	 , UPD_DTM
+	)
+	SELECT NVL(MAX(TO_NUMBER(AGENT_CNSL_PLN_NUM)), 0 ) + 1
+		 , #USER_ID#
+		 , #CNSLR_ID#
+		 , REPLACE(#CNSL_DT#,'-','')
+		 , #CNSL_STA_TM#
+		 , #CNSL_END_TM#
+		 , #CNSL_RSN_NM#
+		 , #CNSL_PLC_NM#
+		 , '01' /* 신규 */
+		 , #onlineContext.userInfo.loginId#
+		 , SYSDATE
+		 , #onlineContext.userInfo.loginId#
+		 , SYSDATE
+	  FROM DSM_AGENT_CNSL_PLN]]>
+	</insert>
+	<update id="dUpdateAgentCnslPln" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dUpdateAgentCnslPln  */
+/* IO: 이민재,2014-12-03T15:34:33(이민재,2014-12-03T15:34:33) */
+	UPDATE DSM_AGENT_CNSL_PLN SET 
+		   USER_ID     =  #USER_ID#
+		 , CNSLR_ID    =  #CNSLR_ID#
+		 , CNSL_DT     =  REPLACE(#CNSL_DT#,'-','')
+		 , CNSL_STA_TM =  #CNSL_STA_TM#
+		 , CNSL_END_TM =  #CNSL_END_TM#
+		 , CNSL_RSN_NM =  #CNSL_RSN_NM#
+		 , CNSL_PLC_NM =  #CNSL_PLC_NM#
+		 , UPDR_ID     =  #onlineContext.userInfo.loginId#
+		 , UPD_DTM     =  SYSDATE   
+	 WHERE AGENT_CNSL_PLN_NUM = #AGENT_CNSL_PLN_NUM#]]>
+	</update>
+	<select id="dDetailAgentCnslPlnUser" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnUser  */
+/* IO: 이민재,2014-12-03T15:55:52(이민재,2014-12-03T15:55:52) */
+	SELECT A.USER_ID
+		 , F_MASKING('N',A.USER_NM ) AS USER_NM
+		 , H.DUTY_NM
+		 , I.COMM_CD_VAL_NM AS RPSTY_NM
+		 , F.ORG_ID AS HDQT_TEAM_ORG_ID
+		 , F.ORG_NM AS HDQT_TEAM_ORG_NM
+		 , E.OUT_ORG_ID AS HDQT_PART_ORG_ID
+     	 , E.OUT_ORG_NM AS HDQT_PART_ORG_NM
+		 , D.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		 , D.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+		 , C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+		 , C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+		 , B.AGNT_ID AS AGNT_ID
+		 , F_MASKING('N',B.AGNT_NM ) AS AGNT_NM
+	  FROM PS_MNG.TBAS_USER_MGMT A
+	  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD AND B.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+	  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+	  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = C.OUT_ORG_ID)
+	  LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+	  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT H ON (H.DUTY_CD = A.DUTY)
+	  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL I ON (B.RPSTY = I.COMM_CD_VAL AND I.COMM_CD_ID = 'DSM_RETL_CLASS_CD')
+	 WHERE A.USER_ID = #USER_ID#]]>
+	</select>
+	<select id="dDetailAgentCnslPlnCnslr" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnCnslr  */
+/* IO: 이민재,2014-12-03T15:56:12(이민재,2014-12-03T15:56:12) */
+	SELECT A.AGENT_CNSL_PLN_NUM    
+		, TO_CHAR(TO_DATE(A.CNSL_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS CNSL_DT    
+		, SUBSTR(A.CNSL_STA_TM,0,2) AS CNSL_STA_TM
+		, SUBSTR(A.CNSL_STA_TM,3,4) AS CNSL_STA_M
+		, SUBSTR(A.CNSL_END_TM,0,2) AS CNSL_END_TM
+		, SUBSTR(A.CNSL_END_TM,3,4) AS CNSL_END_M
+      	, A.CNSLR_ID            
+		, F_MASKING('N',C.USER_NM ) AS CNSLR_NM            
+		, E.DUTY_NM AS CNSLR_DUTY_NM    
+		, I.COMM_CD_VAL_NM AS CNSLR_RPSTY_NM
+		, A.CNSL_PLC_NM
+		, A.CNSL_RSN_NM
+		, A.CNSL_ST_CD
+	FROM DSM_AGENT_CNSL_PLN A
+	JOIN PS_MNG.TBAS_USER_MGMT C ON (A.CNSLR_ID = C.USER_ID)
+	JOIN PS_MNG.TBAS_DUTY_MGMT E ON (C.DUTY = E.DUTY_CD)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT F ON (C.CPLAZA_ORG_CD = F.AGNT_ID AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL I ON (F.RPSTY = I.COMM_CD_VAL AND I.COMM_CD_ID = 'DSM_RETL_CLASS_CD')
+	WHERE A.AGENT_CNSL_PLN_NUM = #AGENT_CNSL_PLN_NUM#]]>
+	</select>
+	<select id="dDetailAgentCnslPlnMgmt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnMgmt  */
+/* IO: 이민재,2014-12-10T12:34:20(이민재,2014-12-10T12:34:20) */
+	SELECT X.AGENT_CNSL_MGMT_NUM	
+		, TO_CHAR(TO_DATE(X.CNSL_DT), 'YYYY-MM-DD') AS CNSL_DT2	
+		, SUBSTR(X.CNSL_STA_TM,0,2) AS CNSL_STA_TM2
+		, SUBSTR(X.CNSL_STA_TM,3,4) AS CNSL_STA_M2
+		, SUBSTR(X.CNSL_END_TM,0,2) AS CNSL_END_TM2
+		, SUBSTR(X.CNSL_END_TM,3,4) AS CNSL_END_M2		
+		, X.CNSLR_ID			
+		, F_MASKING('N',X.CNSLR_NM ) AS CNSLR_NM			
+		, X.CNSLR_DUTY_NM	
+		, X.CNSL_RSN_CD 
+		, X.CNSLR_RPSTY_NM
+		, X.CNSL_PLC_NM AS CNSL_PLC_NM2
+		, X.CNSL_CTT
+		, X.CNSL_RSN_NM AS CNSL_RSN_NM2
+		, X.CNSL_SUIT_CD
+		, X.CNSL_SUIT_RSN_NM
+		, X.AGENT_CNSL_PLN_NUM
+	FROM (
+	       SELECT A.AGENT_CNSL_MGMT_NUM	
+	            , A.CNSL_DT	
+				, A.CNSL_STA_TM
+				, A.CNSL_END_TM		
+	            , A.CNSLR_ID			
+	            , C.USER_NM AS CNSLR_NM			
+	            , E.DUTY_NM AS CNSLR_DUTY_NM	
+	            , A.CNSL_RSN_CD 
+	            , I.COMM_CD_VAL_NM AS CNSLR_RPSTY_NM
+	            , A.CNSL_PLC_NM
+	            , A.CNSL_CTT
+	            , A.CNSL_RSN_NM
+	     		, A.CNSL_SUIT_CD
+	     		, A.CNSL_SUIT_RSN_NM
+	     		, A.AGENT_CNSL_PLN_NUM
+	         FROM DSM_AGENT_CNSL A
+	         JOIN PS_MNG.TBAS_USER_MGMT C ON (A.CNSLR_ID = C.USER_ID)
+	         JOIN PS_MNG.TBAS_DUTY_MGMT E ON (C.DUTY = E.DUTY_CD)
+	         LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT F ON (C.CPLAZA_ORG_CD = F.AGNT_ID AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	         LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL I ON (F.RPSTY = I.COMM_CD_VAL AND I.COMM_CD_ID = 'DSM_RETL_CLASS_CD')               
+	  WHERE 1=1
+	    AND A.AGENT_CNSL_MGMT_NUM = #AGENT_CNSL_MGMT_NUM#
+	) X]]>
+	</select>
+	<select id="dDetailAgentCnslPlnCnslDlDt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnCnslDlDt  */
+/* IO: 이민재,2014-12-03T18:07:39(이민재,2014-12-03T18:07:39) */
+	SELECT STRD_APLY_VAL AS CNSL_DL_DT 
+	FROM  DSM_WEB_BAS_VAL
+	WHERE DSM_WEB_STRD_CD_VAL=#DSM_WEB_STRD_CD_VAL#
+	AND SYSDATE BETWEEN APLY_STA_DT AND APLY_END_DT]]>
+	</select>
+	<select id="dDetailAgentCnslPlnInputYn" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnInputYn  */
+/* IO: 이민재,2014-12-04T15:42:13(이민재,2014-12-04T15:42:13) */
+	SELECT CASE WHEN COUNT( CASE WHEN #AGENT_CNSL_PLN_NUM# IS NULL THEN 1 /* 수정이 아니라면 무조건 해당 로우를 카운트한다. */
+                         ELSE ( SELECT CASE WHEN /* 수정이고 저장된 면담계획일과 수정하면서 새로 입력된 면담계획일의 연월이 같다면 무시한다. */
+                                                 I.CNSL_DT LIKE SUBSTR(REPLACE(#CNSL_DT#, '-', '') , 1, 6) || '%' THEN NULL
+                                       ELSE /* 수정이고 저장된 면담계획일과 수정하면서 새로 입력된 면담계획일의 연월이 다르다면 카운트한다.. */
+                                            1 
+                                       END
+                                  FROM DSM_AGENT_CNSL_PLN I
+                                 WHERE I.AGENT_CNSL_PLN_NUM = #AGENT_CNSL_PLN_NUM# )
+                         END ) < 2 THEN 'Y' 
+        ELSE 'N' END AS INPUT_YN
+   FROM DSM_AGENT_CNSL_PLN A
+  WHERE A.CNSLR_ID = #CNSLR_ID# /* 로그인사용자 */
+    AND A.USER_ID  = #USER_ID#  /* 면담대상자 */
+    AND A.CNSL_DT LIKE SUBSTR(REPLACE(#CNSL_DT#, '-', '') , 1, 6) || '%']]>
+	</select>
+	<delete id="dDeleteAgentCnslPln" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDeleteAgentCnslPln  */
+/* IO: 이민재,2014-12-04T17:23:37(이민재,2014-12-04T17:23:37) */
+	DELETE FROM DSM_AGENT_CNSL_PLN 
+ 	WHERE AGENT_CNSL_PLN_NUM = #AGENT_CNSL_PLN_NUM#]]>
+	</delete>
+	<select id="dDetailAgentCnslPlnCnslYn" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dDetailAgentCnslPlnCnslYn  */
+/* IO: 이민재,2014-12-04T17:42:34(이민재,2014-12-04T17:42:34) */
+	SELECT CASE WHEN  TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDD')) >= 
+     				   TO_NUMBER(TO_CHAR(TO_DATE(A.CNSL_DT)+(SELECT TO_NUMBER(STRD_APLY_VAL) AS CNSL_DL_DT 
+																FROM  DSM_WEB_BAS_VAL
+																WHERE DSM_WEB_STRD_CD_VAL='05'
+																AND SYSDATE BETWEEN APLY_STA_DT AND APLY_END_DT)
+						,'YYYYMMDD')) THEN 'N'
+                 ELSE 'Y'
+             END AS CNSL_YN
+       FROM DSM_AGENT_CNSL_PLN A
+      WHERE A.USER_ID  = #USER_ID#  /* 면담대상자 */
+        AND A.AGENT_CNSL_PLN_NUM = #AGENT_CNSL_PLN_NUM#]]>
+	</select>
+	<select id="dSearchAgentCnslPlnTotCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntftft.db.DAGENTCNSLPLN001.dSearchAgentCnslPlnTotCount  */
+/* IO: 이민재,2015-03-19T14:32:37(이민재,2015-03-19T14:32:37) */
+	SELECT COUNT(*) AS TOT_CNT 
+      	, NVL(SUM(CASE WHEN Z.AGENT_CNSL_PLN_NUM IS NOT NULL THEN 1 ELSE 0 END),0) AS CNT1
+      	, NVL(SUM(CASE WHEN Z.AGENT_CNSL_PLN_NUM IS NULL THEN 1 ELSE 0 END),0) AS CNT2
+	FROM DSM_AGENT_CNSL_PLN A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+	JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.CNSLR_ID)
+	JOIN PS_MNG.TBAS_DUTY_MGMT D ON (D.DUTY_CD = C.DUTY)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.AGNT_ID = B.CPLAZA_ORG_CD AND E.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT F ON (F.AGNT_ID = C.CPLAZA_ORG_CD AND F.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT G ON (G.OUT_ORG_DTL_ID = E.OUT_ORG_DTL_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT H ON (H.OUT_ORG_DTL_ID = G.SUP_OUT_ORG_DTL_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT I ON (I.OUT_ORG_ID = G.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT J ON (J.ORG_ID = I.ORG_ID)
+	LEFT JOIN DSM_AGENT_CNSL Z ON (Z.AGENT_CNSL_PLN_NUM = A.AGENT_CNSL_PLN_NUM)
+	WHERE I.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+	AND A.CNSL_DT BETWEEN #FROM_DT# AND #TO_DT#
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		J.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		I.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isEqual property="BIZ_REQ" compareValue="HEAD"><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			H.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+	]]></isEqual><![CDATA[
+	]]><isEqual property="BIZ_REQ" compareValue="TEAM"><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			H.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			G.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+	]]></isEqual><![CDATA[
+	]]><isEqual prepend="AND" property="SCRN_TYP" compareValue="MNG"><![CDATA[
+		C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+	]]></isEqual><![CDATA[
+	]]><isEqual property="SCRN_TYP" compareValue="TM"><![CDATA[
+		AND C.DUTY IN (SELECT DUTY_CD FROM PS_MNG.TBAS_DUTY_MGMT WHERE DUTY_TYP='2')
+		AND D.DUTY_CD = '16'
+	]]></isEqual><![CDATA[]]>
+	</select>
+</sqlMap>

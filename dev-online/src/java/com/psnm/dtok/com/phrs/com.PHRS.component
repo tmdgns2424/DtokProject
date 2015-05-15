@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.PHRS">
+    <componentName>[BC]공통-명언관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.phrs</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>명언관리</description>
+    <custom-props/>
+    <history>
+        <created date="2015-01-05T15:09:59" user="이승훈2 (gunyoung)"/>
+    </history>
+</component>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DLINLOG001">
+	<insert id="dInsertLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLINLOG001.dInsertLog  */
+/* IO: 안종광,2014-11-21T16:43:18(안종광,2014-11-21T16:43:18) */
+INSERT INTO DSM_LIN_LOG (
+       USER_ID
+     ]]><isNotEmpty property="IP"><![CDATA[, IP]]></isNotEmpty><![CDATA[
+     , SUCC_YN
+     , LOGIN_DTM
+)
+VALUES (
+       #USER_ID#
+     ]]><isNotEmpty property="IP"><![CDATA[, #IP#]]></isNotEmpty><![CDATA[
+     , #SUCC_YN#
+     , SYSDATE
+)]]>
+	</insert>
+	<update id="dUpdateLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLINLOG001.dUpdateLog  */
+/* IO: 안종광,2014-11-21T16:50:38(안종광,2014-11-21T16:50:38) */
+UPDATE DSM_LIN_LOG SET
+       LOGOUT_DTM = SYSDATE
+ WHERE USER_ID = #USER_ID#
+  ]]><isNotEmpty property="IP"><![CDATA[AND IP = #IP#]]></isNotEmpty><![CDATA[
+   AND LOGOUT_DTM IS NULL
+   AND SUCC_YN = 'Y'
+   AND LOGIN_DTM = (
+            SELECT MAX(LOGIN_DTM) FROM DSM_LIN_LOG 
+             WHERE USER_ID = #USER_ID#
+             ]]><isNotEmpty property="IP"><![CDATA[AND IP = #IP#]]></isNotEmpty><![CDATA[
+              AND LOGOUT_DTM IS NULL
+              AND SUCC_YN = 'Y'
+       )]]>
+	</update>
+</sqlMap>

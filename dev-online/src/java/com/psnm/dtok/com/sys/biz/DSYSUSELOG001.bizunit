@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSYSUSELOG001">
+    <bizUnitName>[DU]시스템사용로그</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.SYS</componentId>
+    <description>[DU]시스템사용로그</description>
+    <method-list>
+        <method id="dInsertSysUseLog">
+            <methodName>[DM]시스템사용로그등록</methodName>
+            <transactionId>com.SYS@DSYSUSELOG001_dInsertSysUseLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]시스템사용로그등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T16:41:05" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-24T16:36:13" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

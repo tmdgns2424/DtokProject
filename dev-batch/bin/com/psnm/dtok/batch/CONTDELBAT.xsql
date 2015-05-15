@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.CONTDELBAT">
+	<select id="dSelectBatchJobSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dSelectBatchJobSeq 배치작업번호채번 */
+/* IO: 채수윤,2015-04-06T12:51:00(채수윤,2015-04-06T12:51:00) */
+SELECT DSM_BATCH_JOB_SEQ.NEXTVAL AS BATCH_JOB_SEQ 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dInsertBatchJobLog 배치작업정보입력 */
+/* IO: 채수윤,2015-04-06T13:23:44(채수윤,2015-04-06T13:19:45) */
+INSERT INTO DSM_BATCH_LOG
+     ( BATCH_JOB_SEQ
+     , JOB_BATCH_NM
+     , JOB_STA_DTM
+     )
+VALUES
+     ( #BATCH_JOB_SEQ#
+     , #JOB_BATCH_NM#
+     , SYSDATE
+     )]]>
+	</insert>
+	<delete id="dDeleteAnnceAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceAtchFile 공지사항첨부파일삭제 */
+/* IO: 채수윤,2015-04-06T13:35:00(채수윤,2015-04-06T13:35:00) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_ANNCE Y
+                                       WHERE Y.DEL_CYCL_DT_CNT != 0
+                                         AND SYSDATE - Y.RGST_DTM > Y.DEL_CYCL_DT_CNT 
+                                         AND Y.ANNCE_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeleteAnnceAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceAtchFileMgmt 공지사항첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-06T13:38:50(채수윤,2015-04-06T13:38:28) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteAnnceRcvOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceRcvOrg 공지사항수신조직삭제 */
+/* IO: 채수윤,2015-04-06T13:41:56(채수윤,2015-04-06T13:41:56) */
+DELETE
+  FROM DSM_ANNCE_RCV_ORG A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.ANNCE_ID)]]>
+	</delete>
+	<delete id="dDeleteAnnceRcvGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceRcvGrp 공지사항수신권한삭제 */
+/* IO: 채수윤,2015-04-06T13:44:03(채수윤,2015-04-06T13:44:03) */
+DELETE
+  FROM DSM_ANNCE_RCV_GRP A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.ANNCE_ID)]]>
+	</delete>
+	<delete id="dDeleteAnnceMndtChk" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceMndtChk 공지사항필수확인삭제 */
+/* IO: 채수윤,2015-04-06T13:46:07(채수윤,2015-04-06T13:46:07) */
+DELETE
+  FROM DSM_ANNCE_MNDT_CHK A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.ANNCE_ID)]]>
+	</delete>
+	<delete id="dDeleteAnnce" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnce 공지사항삭제 */
+/* IO: 채수윤,2015-04-06T13:47:31(채수윤,2015-04-06T13:47:31) */
+DELETE
+  FROM DSM_ANNCE
+ WHERE DEL_CYCL_DT_CNT != 0
+   AND SYSDATE - RGST_DTM > DEL_CYCL_DT_CNT]]>
+	</delete>
+	<update id="dUpdateBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dUpdateBatchJobLog 배치작업정보수정 */
+/* IO: 채수윤,2015-04-06T18:13:44(채수윤,2015-04-06T17:18:35) */
+UPDATE DSM_BATCH_LOG
+   SET JOB_END_DTM = SYSDATE
+     , JOB_SUSS_YN = #JOB_SUSS_YN#
+     , ERR_MSG = #ERR_MSG#
+ WHERE BATCH_JOB_SEQ = #BATCH_JOB_SEQ#]]>
+	</update>
+	<delete id="dDeletePlcyAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyAtchFile 영업정책첨부파일삭제 */
+/* IO: 채수윤,2015-04-06T18:01:21(채수윤,2015-04-06T18:01:21) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_SALES_PLCY Y
+                                       WHERE Y.DEL_CYCL_DT_CNT != 0
+                                         AND SYSDATE - Y.RGST_DTM > Y.DEL_CYCL_DT_CNT 
+                                         AND Y.DSM_SALES_PLCY_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeletePlcyAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyAtchFileMgmt 영업정책첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-06T18:05:59(채수윤,2015-04-06T18:05:59) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SALES_PLCY Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.DSM_SALES_PLCY_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeletePlcyRcvOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyRcvOrg 영업정책수신조직삭제 */
+/* IO: 채수윤,2015-04-06T18:09:05(채수윤,2015-04-06T18:09:05) */
+DELETE
+  FROM DSM_PLCY_RCV_ORG A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SALES_PLCY Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.DSM_SALES_PLCY_ID = A.SALES_PLCY_ID)]]>
+	</delete>
+	<delete id="dDeletePlcyRcvGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyRcvGrp 영업정책수신권한삭제 */
+/* IO: 채수윤,2015-04-06T18:10:22(채수윤,2015-04-06T18:10:22) */
+DELETE
+  FROM DSM_PLCY_RCV_GRP A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SALES_PLCY Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.DSM_SALES_PLCY_ID = A.SALES_PLCY_ID)]]>
+	</delete>
+	<delete id="dDeletePlcy" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcy 영업정책삭제 */
+/* IO: 채수윤,2015-04-06T18:11:47(채수윤,2015-04-06T18:11:22) */
+DELETE
+  FROM DSM_SALES_PLCY
+ WHERE DEL_CYCL_DT_CNT != 0
+   AND SYSDATE - RGST_DTM > DEL_CYCL_DT_CNT]]>
+	</delete>
+	<delete id="dDeleteSchAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchAtchFile 주요일정첨부파일삭제 */
+/* IO: 채수윤,2015-04-06T18:19:26(채수윤,2015-04-06T18:19:26) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_SCHMGMT Y
+                                       WHERE Y.DEL_CYCL_DT_CNT != 0
+                                         AND SYSDATE - Y.RGST_DTM > Y.DEL_CYCL_DT_CNT 
+                                         AND Y.SCH_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeleteSchAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchAtchFileMgmt 주요일정첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-06T18:21:26(채수윤,2015-04-06T18:21:26) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SCHMGMT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.SCH_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteSchRcvOrg" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchRcvOrg 주요일정수신조직삭제 */
+/* IO: 채수윤,2015-04-06T18:22:41(채수윤,2015-04-06T18:22:41) */
+DELETE
+  FROM DSM_SCH_RCV_ORG A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SCHMGMT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.SCH_ID = A.SCH_ID)]]>
+	</delete>
+	<delete id="dDeleteSchRcvGrp" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchRcvGrp 주요일정수신권한삭제 */
+/* IO: 채수윤,2015-04-06T18:23:48(채수윤,2015-04-06T18:23:48) */
+DELETE
+  FROM DSM_SCH_RCV_GRP A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SCHMGMT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.SCH_ID = A.SCH_ID)]]>
+	</delete>
+	<delete id="dDeleteSch" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSch 주요일정삭제 */
+/* IO: 채수윤,2015-04-06T18:24:56(채수윤,2015-04-06T18:24:56) */
+DELETE
+  FROM DSM_SCHMGMT
+ WHERE DEL_CYCL_DT_CNT != 0
+   AND SYSDATE - RGST_DTM > DEL_CYCL_DT_CNT]]>
+	</delete>
+	<delete id="dDeleteAnnceCmnt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceCmnt 공지사항댓글삭제 */
+/* IO: 채수윤,2015-04-06T18:48:44(채수윤,2015-04-06T18:48:44) */
+DELETE
+  FROM DSM_CMNT_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.CMNT_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteAnnceReader" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteAnnceReader 공지사항열람자삭제 */
+/* IO: 채수윤,2015-04-06T18:51:32(채수윤,2015-04-06T18:51:32) */
+DELETE
+  FROM DSM_READR_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_ANNCE Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.ANNCE_ID = A.READ_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeletePlcyCmnt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyCmnt 영업정책댓글삭제 */
+/* IO: 채수윤,2015-04-06T18:54:19(채수윤,2015-04-06T18:54:19) */
+DELETE
+  FROM DSM_CMNT_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SALES_PLCY Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.DSM_SALES_PLCY_ID = A.CMNT_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeletePlcyReader" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeletePlcyReader 영업정책열람자삭제 */
+/* IO: 채수윤,2015-04-06T18:55:17(채수윤,2015-04-06T18:55:17) */
+DELETE
+  FROM DSM_READR_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SALES_PLCY Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.DSM_SALES_PLCY_ID = A.READ_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteSchCmnt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchCmnt 주요일정댓글삭제 */
+/* IO: 채수윤,2015-04-06T18:59:09(채수윤,2015-04-06T18:59:09) */
+DELETE
+  FROM DSM_CMNT_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SCHMGMT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.SCH_ID = A.CMNT_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteSchReader" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteSchReader 주요일정열람자삭제 */
+/* IO: 채수윤,2015-04-06T19:00:23(채수윤,2015-04-06T19:00:23) */
+DELETE
+  FROM DSM_READR_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SCHMGMT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.SCH_ID = A.READ_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteBltAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBltAtchFile 게시글첨부파일삭제 */
+/* IO: 채수윤,2015-04-06T19:06:31(채수윤,2015-04-06T19:06:31) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_BLTCONT Y
+                                       WHERE Y.DEL_CYCL_DT_CNT != 0
+                                         AND SYSDATE - Y.RGST_DTM > Y.DEL_CYCL_DT_CNT 
+                                         AND Y.BLTCONT_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeleteBltAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBltAtchFileMgmt 게시글첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-06T19:07:22(채수윤,2015-04-06T19:07:22) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_BLTCONT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.BLTCONT_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteBltCmnt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBltCmnt 게시글댓글삭제 */
+/* IO: 채수윤,2015-04-06T19:08:52(채수윤,2015-04-06T19:08:52) */
+DELETE
+  FROM DSM_CMNT_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_BLTCONT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.BLTCONT_ID = A.CMNT_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteBltReader" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBltReader 게시글열람자삭제 */
+/* IO: 채수윤,2015-04-06T19:10:15(채수윤,2015-04-06T19:10:15) */
+DELETE
+  FROM DSM_READR_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_BLTCONT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.BLTCONT_ID = A.READ_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteBltAns" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBltAns 게시글답글삭제 */
+/* IO: 채수윤,2015-04-06T19:12:08(채수윤,2015-04-06T19:12:08) */
+DELETE
+  FROM DSM_BLTCONT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_BLTCONT Z
+                WHERE Z.DEL_CYCL_DT_CNT != 0
+                  AND SYSDATE - Z.RGST_DTM > Z.DEL_CYCL_DT_CNT 
+                  AND Z.BLTCONT_ID = A.ORGL_BLTCONT_ID)]]>
+	</delete>
+	<delete id="dDeleteBlt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteBlt 게시글삭제 */
+/* IO: 채수윤,2015-04-08T22:10:55(채수윤,2015-04-06T19:12:36) */
+DELETE
+  FROM DSM_BLTCONT
+ WHERE DEL_CYCL_DT_CNT != 0
+   AND SYSDATE - RGST_DTM > DEL_CYCL_DT_CNT]]>
+	</delete>
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 채수윤,2015-04-08T22:08:22(채수윤,2015-04-08T22:08:22) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 채수윤,2015-04-08T22:08:47(채수윤,2015-04-08T22:08:47) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dInsertSmsTran SMS발송정보입력 */
+/* IO: 채수윤,2015-04-08T22:09:14(채수윤,2015-04-08T22:09:14) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+     , #CONTEXT# /*발송메시지*/
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 채수윤,2015-04-08T22:09:38(채수윤,2015-04-08T22:09:38) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , '01047567552' /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-14T13:52:12(채수윤,2015-04-08T22:10:05) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , '01047567552' /*수신전화번호*/
+     , '0264005567'/*발송전화번호*/
+     , #SND_MSG# /*메시지*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+	<delete id="dDeleteIncmpDocAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteIncmpDocAtchFileMgmt 미비서류접수첨부파일관리삭제 */
+/* IO: 허용,2015-04-17T17:05:06(채수윤,2015-04-08T18:30:47) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_INCMP_DOC Y
+                WHERE Y.PROC_ST_CD = '02'
+                  AND TO_CHAR (Y.RGST_DTM, 'yyyymmdd') <= TO_CHAR (SYSDATE - 1 , 'yyyymmdd')
+                  AND Y.DSM_INCMP_DOC_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteIncmpDocAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.CONTDELBAT.dDeleteIncmpDocAtchFile 미비서류접수첨부파일삭제 */
+/* IO: 허용,2015-04-17T17:05:15(채수윤,2015-04-08T18:30:13) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_INCMP_DOC Y
+                                       WHERE Y.PROC_ST_CD = '02'
+                                         AND TO_CHAR (Y.RGST_DTM, 'yyyymmdd') <= TO_CHAR (SYSDATE - 1 , 'yyyymmdd')
+                                         AND Y.DSM_INCMP_DOC_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+</sqlMap>

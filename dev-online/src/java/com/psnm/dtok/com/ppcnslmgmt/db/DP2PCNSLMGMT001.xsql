@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DP2PCNSLMGMT001">
+	<select id="dSearchP2pCnsl" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.pp2pcnslmgmt001.db.DP2PCNSLMGMT001.dSearchP2pCnsl  */
+/* IO: 이승훈,2014-12-22T14:01:53(이승훈,2014-12-22T14:01:31) */
+	SELECT * FROM 
+		( 
+		SELECT ROWNUM RN, TB.* FROM 
+			(
+			SELECT Z.BLTCONT_ST
+      			, Z.BLTCONT_TYP_CD
+      			, Z.BLTCONT_ID
+      			, LPAD(' ', 2 *(LEVEL-1), ' ') AS LV
+      			, Z.BLTCONT_TITL_NM
+      			, NVL(Z.CMNT_CNT,0) AS CMNT_CNT
+      			, DECODE(Z.ATCH_CNT,0,'N','Y') AS ATCH_YN
+      			, Z.HDQT_TEAM_ORG_ID
+	            , Z.HDQT_TEAM_ORG_NM
+	            , Z.HDQT_PART_ORG_ID
+	            , Z.HDQT_PART_ORG_NM
+	            , Z.SALE_DEPT_ORG_ID
+	            , Z.SALE_DEPT_ORG_NM
+	            , Z.SALE_TEAM_ORG_ID
+	            , Z.SALE_TEAM_ORG_NM
+	            , Z.RGSTR_ID
+      			, F_MASKING('N',Z.RGSTR_NM ) AS RGSTR_NM
+      			, Z.RGSTR_DT
+      			, Z.ORGL_CNT
+  			FROM (
+          		SELECT CASE WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD') THEN 'NW' ELSE '' END AS BLTCONT_ST
+					, A.BLTCONT_TYP_CD
+                 	, A.BLTCONT_ID
+                 	, A.ORGL_BLTCONT_ID
+                 	, A.BLTCONT_TITL_NM
+                 	, ( SELECT COUNT(X.CMNT_MGMT_ID)
+                     	FROM DSM_CMNT_MGMT X
+                    	WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+                 	, ( SELECT COUNT(X.ATCH_MGMT_ID)
+                     	FROM DSM_ATCH_FILE_MGMT X
+                    	WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+                 	, G.ORG_ID AS HDQT_TEAM_ORG_ID
+	                , G.ORG_NM AS HDQT_TEAM_ORG_NM
+	                , F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+	                , F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+	                , E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+	                , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+	                , D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+	                , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+	                , A.RGSTR_ID
+                 	, B.USER_NM AS RGSTR_NM
+                 	, TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGSTR_DT
+                 	, (SELECT COUNT(*) FROM DSM_P2P_CNSL WHERE ORGL_BLTCONT_ID = A.BLTCONT_ID AND DEL_YN = 'N') AS ORGL_CNT
+            	FROM DSM_P2P_CNSL A
+				LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+				LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+		        LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+		        LEFT JOIN DSM_P2P_CNSL H ON (A.ORGL_BLTCONT_ID = H.BLTCONT_ID) /*댓글의 경우 원글*/
+				LEFT JOIN PS_MNG.TBAS_USER_MGMT I ON (I.USER_ID = H.RGSTR_ID)		        
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT J ON (J.AGNT_ID = I.CPLAZA_ORG_CD AND J.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT K ON (K.OUT_ORG_DTL_ID = J.OUT_ORG_DTL_ID)		        
+           		WHERE A.DEL_YN = 'N'
+           		     AND NVL(K.OUT_ORG_ID , E.OUT_ORG_ID) IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+		   		]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+			   		]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+				 		AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+			   		]]></isEqual><![CDATA[
+			   		]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+				 		AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+			   		]]></isEqual><![CDATA[
+			   		]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+				 		AND B.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' 
+			   		]]></isEqual><![CDATA[
+			   		]]><isEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+				 		AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR B.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+			   		]]></isEmpty><![CDATA[
+	       		]]></isNotEmpty><![CDATA[
+           		]]><isEqual property="ALL_YN" compareValue="N"><![CDATA[
+           	     		AND A.BLTCONT_ID IN ( 
+           	     							SELECT BLTCONT_ID
+           	                           		FROM DSM_P2P_CNSL X
+           	                           		WHERE X.BLTCONT_TYP_CD = '0'
+           	                                AND X.DEL_YN = 'N'
+           	                                AND X.RGSTR_ID = #onlineContext.userInfo.loginId#
+           	                           		UNION
+           	                           		SELECT Y.BLTCONT_ID
+           	                           		FROM DSM_P2P_CNSL Y
+           	                           		WHERE Y.BLTCONT_TYP_CD = '1'
+           	                                AND Y.DEL_YN = 'N'
+           	                                AND Y.ORGL_BLTCONT_ID IN ( 
+           	                                						SELECT Z.BLTCONT_ID AS ORGL_BLTCONT_ID
+																	FROM DSM_P2P_CNSL Z
+																	WHERE Z.BLTCONT_TYP_CD = '0'
+																	AND Z.DEL_YN = 'N'
+																	AND Z.RGSTR_ID = #onlineContext.userInfo.loginId# 
+																	)
+           	                         		)
+           		]]></isEqual><![CDATA[
+       		) Z
+			START WITH Z.BLTCONT_TYP_CD = 0
+			CONNECT BY PRIOR Z.BLTCONT_ID = Z.ORGL_BLTCONT_ID
+			ORDER SIBLINGS BY Z.BLTCONT_ID DESC
+		) TB 
+	) WHERE RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchP2pCnslCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.pp2pcnslmgmt001.db.DP2PCNSLMGMT001.dSearchP2pCnslCount  */
+/* IO: 이승훈,2014-12-22T15:39:16(이승훈,2014-12-22T14:58:41) */
+	SELECT COUNT(Z.BLTCONT_ID) AS CNT
+  	FROM (
+		SELECT CASE WHEN TO_CHAR(A.RGST_DTM,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD') THEN 'NW' ELSE '' END AS BLTCONT_ST
+			, A.BLTCONT_TYP_CD
+			, A.BLTCONT_ID
+			, A.ORGL_BLTCONT_ID
+			, A.BLTCONT_TITL_NM
+			, ( SELECT COUNT(X.CMNT_MGMT_ID)
+				FROM DSM_CMNT_MGMT X
+				WHERE A.BLTCONT_ID = X.CMNT_MGMT_ID) AS CMNT_CNT
+			, ( SELECT COUNT(X.ATCH_MGMT_ID)
+				FROM DSM_ATCH_FILE_MGMT X
+				WHERE A.BLTCONT_ID = X.ATCH_MGMT_ID) AS ATCH_CNT
+			, G.ORG_ID AS HDQT_TEAM_ORG_ID
+            , G.ORG_NM AS HDQT_TEAM_ORG_NM
+            , F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+            , F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+            , E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+            , E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+            , D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+            , D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+            , A.RGSTR_ID
+			, B.USER_NM AS RGSTR_NM
+			, TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGSTR_DT
+		FROM DSM_P2P_CNSL A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+        LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+        LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+		        LEFT JOIN DSM_P2P_CNSL H ON (A.ORGL_BLTCONT_ID = H.BLTCONT_ID) /*댓글의 경우 원글*/
+				LEFT JOIN PS_MNG.TBAS_USER_MGMT I ON (I.USER_ID = H.RGSTR_ID)		        
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT J ON (J.AGNT_ID = I.CPLAZA_ORG_CD AND J.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		        LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT K ON (K.OUT_ORG_DTL_ID = J.OUT_ORG_DTL_ID)        
+		WHERE A.DEL_YN = 'N'
+           		     AND NVL(K.OUT_ORG_ID , E.OUT_ORG_ID) IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)		
+		]]><isNotEmpty property="DSM_BLTCONT_BRWS_COND_NM"><![CDATA[
+			]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="01"><![CDATA[
+			AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+			]]></isEqual><![CDATA[
+			]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="02"><![CDATA[
+			AND A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%'
+			]]></isEqual><![CDATA[
+			]]><isEqual property="DSM_BLTCONT_BRWS_COND_CD" compareValue="03"><![CDATA[
+			AND B.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' 
+			]]></isEqual><![CDATA[
+			]]><isEmpty property="DSM_BLTCONT_BRWS_COND_CD"><![CDATA[
+			AND (A.BLTCONT_TITL_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR A.BLTCONT_CTT LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%' OR B.USER_NM LIKE '%' || #DSM_BLTCONT_BRWS_COND_NM# || '%')
+			]]></isEmpty><![CDATA[
+		]]></isNotEmpty><![CDATA[
+		]]><isEqual property="ALL_YN" compareValue="N"><![CDATA[
+			AND A.BLTCONT_ID IN ( 
+								SELECT BLTCONT_ID
+								FROM DSM_P2P_CNSL X
+								WHERE X.BLTCONT_TYP_CD = '0'
+								AND X.DEL_YN = 'N'
+								AND X.RGSTR_ID = #onlineContext.userInfo.loginId#
+								UNION
+								SELECT Y.BLTCONT_ID
+								FROM DSM_P2P_CNSL Y
+								WHERE Y.BLTCONT_TYP_CD = '1'
+								AND Y.DEL_YN = 'N'
+								AND Y.ORGL_BLTCONT_ID IN ( 
+														SELECT Z.BLTCONT_ID AS ORGL_BLTCONT_ID
+														FROM DSM_P2P_CNSL Z
+														WHERE Z.BLTCONT_TYP_CD = '0'
+														AND Z.DEL_YN = 'N'
+														AND Z.RGSTR_ID = #onlineContext.userInfo.loginId# )
+           	                         					)
+		]]></isEqual><![CDATA[
+	) Z
+	START WITH Z.BLTCONT_TYP_CD = 0
+	CONNECT BY PRIOR Z.BLTCONT_ID = Z.ORGL_BLTCONT_ID
+	ORDER SIBLINGS BY Z.BLTCONT_ID DESC]]>
+	</select>
+	<select id="dDetailP2pCnsl" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dDetailP2pCnsl  */
+/* IO: 이민재,2015-01-13T15:25:37(이민재,2015-01-13T15:25:37) */
+	SELECT A.BLTCONT_ID 
+		, A.BLTCONT_TITL_NM
+    	, A.BLTCONT_CTT
+    	, A.RGSTR_ID
+    	, F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+		, E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+		, B.USER_NM  AS RGSTR_NM
+		, TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGSTR_DT
+	FROM DSM_P2P_CNSL A
+	LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+  	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+ 	WHERE A.BLTCONT_ID = #BLTCONT_ID#]]>
+	</select>
+	<select id="dSearchP2pCnslIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dSearchP2pCnslIdSeq  */
+/* IO: 이민재,2015-01-14T15:11:14(이민재,2015-01-14T15:11:14) */
+	SELECT 'P2P' || LPAD(DSM_P2P_CNSL_SEQ.NEXTVAL, 12, '0') AS BLTCONT_ID FROM DUAL]]>
+	</select>
+	<insert id="dInsertP2pCnsl" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dInsertP2pCnsl  */
+/* IO: 이민재,2015-01-13T16:41:44(이민재,2015-01-13T16:41:44) */
+	INSERT INTO DSM_P2P_CNSL 
+		( 
+			BLTCONT_ID
+		, BLTCONT_TYP_CD
+	  	, ORGL_BLTCONT_ID
+	  	, BLTCONT_TITL_NM
+	  	, BLTCONT_CTT
+	  	, DEL_YN
+	  	, DELR_ID
+	  	, DEL_DTM
+	  	, RGSTR_ID
+	  	, RGST_DTM
+	  	, UPDR_ID
+	  	, UPD_DTM 
+		)
+	VALUES
+		( 
+			#BLTCONT_ID#
+		  , '0'
+		  , NULL
+		  , #BLTCONT_TITL_NM#
+		  , #BLTCONT_CTT#
+		  , 'N'
+		  , NULL
+		  , NULL
+		  , #onlineContext.userInfo.loginId#
+		  , SYSDATE
+		  , #onlineContext.userInfo.loginId#
+		  , SYSDATE 
+	)]]>
+	</insert>
+	<update id="dUpdateP2pCnsl" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dUpdateP2pCnsl  */
+/* IO: 이민재,2015-01-13T16:46:08(이민재,2015-01-13T16:46:08) */
+	UPDATE DSM_P2P_CNSL
+	SET BLTCONT_TITL_NM = #BLTCONT_TITL_NM#
+		, BLTCONT_CTT = #BLTCONT_CTT#
+      	, UPDR_ID = #onlineContext.userInfo.loginId#
+      	, UPD_DTM = SYSDATE
+ 	WHERE BLTCONT_ID = #BLTCONT_ID#]]>
+	</update>
+	<update id="dDeleteP2pCnsl" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dDeleteP2pCnsl  */
+/* IO: 이민재,2015-01-14T10:24:44(이민재,2015-01-14T10:24:44) */
+	UPDATE DSM_P2P_CNSL
+  	SET DEL_YN = 'Y'
+	, DELR_ID = #onlineContext.userInfo.loginId#
+    , DEL_DTM = SYSDATE
+    , UPDR_ID = #onlineContext.userInfo.loginId#
+    , UPD_DTM = SYSDATE
+ 	WHERE BLTCONT_ID = #BLTCONT_ID#]]>
+	</update>
+	<insert id="dInsertP2pCnslRejnd" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dInsertP2pCnslRejnd  */
+/* IO: 이민재,2015-01-14T16:44:05(이민재,2015-01-14T16:44:05) */
+	INSERT INTO DSM_P2P_CNSL
+		(  BLTCONT_ID
+  		, BLTCONT_TYP_CD
+  		, ORGL_BLTCONT_ID
+  		, BLTCONT_TITL_NM
+  		, BLTCONT_CTT
+  		, DEL_YN
+  		, DELR_ID
+  		, DEL_DTM
+  		, RGSTR_ID
+  		, RGST_DTM
+  		, UPDR_ID
+  		, UPD_DTM 
+		)
+		VALUES
+		(  #BLTCONT_ID#
+  		, '1'
+  		, #ORGL_BLTCONT_ID# 
+  		, #BLTCONT_TITL_NM#
+  		, #BLTCONT_CTT#
+  		, 'N'
+  		, NULL
+  		, NULL
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE 
+	)]]>
+	</insert>
+	<select id="dSearchP2pCnslSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dSearchP2pCnslSms  */
+/* IO: 이민재,2015-01-23T15:16:08(이민재,2015-01-23T15:16:08) */
+	SELECT A.USER_ID
+		, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+      	, #onlineContext.userInfo.SALE_DEPT_ORG_NM# || ' ' || #onlineContext.userInfo.USER_NM# AS "{0}"
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+    JOIN DSM_SMS_MGMT C ON ( C.USER_ID = A.USER_ID AND C.OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID# AND TRAN_TYP_CD = '45' )]]>
+	</select>
+	<select id="dSearchP2pCnslRejndSms" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.ppcnslmgmt.db.DP2PCNSLMGMT001.dSearchP2pCnslRejndSms  */
+/* IO: 이민재,2015-01-23T16:43:43(이민재,2015-01-23T16:43:43) */
+	SELECT A.USER_ID
+    	, A.MBL_PHON_NUM1||A.MBL_PHON_NUM2||A.MBL_PHON_NUM3 AS RCV_PHN_ID
+  	FROM DSM_USER A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( A.USER_ID = B.USER_ID )
+    WHERE A.USER_ID = #RGSTR_ID#]]>
+	</select>
+</sqlMap>

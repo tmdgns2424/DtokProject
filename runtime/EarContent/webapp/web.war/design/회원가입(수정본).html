@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-popup.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+<body>
+<div id="Wrap">
+
+<!-- title area -->
+<div class="pop_header" ><span class="title"><h2>회원가입</h2></span> <a href="#" class="pop_close" onclick="javascript:self.close();"> <img src="../image/blat_a9.gif" alt="팝업닫기" ></a> 
+  
+  <!--view_table area -->
+    <div class="textAR" >
+        <table class="board02 last" width="100%" >
+        <tr>
+            <td width="17%" rowspan="6" class="first">
+                <img src="../image/dt_m01.gif"><br><br>
+				<button id="btnSave" type="button" data-type="button" data-theme="af-n-btn3" data-authtype="W" data-altname="등록" class="af-button af-n-btn3" data-converted="true"></button>
+            </td>
+            <th class="fontred first" width="17%" scope="col">에이전트코드</th>
+            <td class="tleft" colspan="3">
+                <input type="text"> <br>
+                에이전트코트 6~7자리를 입력 후 ENTER를 누르세요.
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">직무</th>
+            <td class="tleft"  colspan="3">
+                <select id="직무" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">사용자구분</th>
+            <td class="tleft" colspan="3">
+                <select id="사용자구분" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">본사팀</th>
+            <td class="tleft" colspan="3">
+                <select id="본사팀" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">영업국명</th>
+            <td class="tleft" colspan="3">
+                <select id="영업국명" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+            </td>
+        </tr> 
+        <tr>
+            <th width="17%" scope="col" class="first">영업팀명</th>
+            <td class="tleft" colspan="3">
+                <select id="영업팀명" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+			<td rowspan="3" class="first">
+				* 본인 및 파일의 확장자가 </br> jpg,jpeg.gif인 사진 파일만</br> 등록할 수 있습니다.</br>(주민등록증 촬영 및 상태 </br>  불량 사진 등록 시 승인 거절)
+            </td>
+            <th width="17%" scope="col" class="first">에이전트명</th>
+            <td class="tleft" colspan="3">
+                <select id="에이전트명" data-type="select" class="af-select af-default" data-converted="true">
+                    <option>선택</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+			<th width="17%" scope="col" class="first">회원ID</th>
+            <td class="tleft" colspan="3"><input type="text"></td>
+        </tr>
+        <tr>
+
+            <th width="17%" scope="col" class="first">회원명</th>
+            <td class="tleft" colspan="3"><input type="text"></td>
+        </tr>
+        <tr>
+			<td rowspan="13" class="first"></td>
+            <th width="17%" scope="col" class="first">비밀번호</th>
+            <td class="tleft" colspan="3">
+                <input type="text">
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">비밀번호확인</th>
+            <td class="tleft" colspan="3">
+                <input type="text">
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">닉네임</th>
+            <td class="tleft" colspan="3">
+                <input type="text">
+                <button id="btnSave" type="button" data-type="button" data-theme="af-n-btn4" data-authtype="W" data-altname="조회" class="af-button af-n-btn4" data-converted="true"></button>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">FAX 번호</th>
+            <td class="tleft" colspan="3">
+                <input type="text">-<input type="text">-<input type="text">
+                <button id="btnSave" type="button" data-type="button" data-theme="af-n-btn4" data-authtype="W" data-altname="조회" class="af-button af-n-btn4" data-converted="true"></button>
+            </td>
+        </tr>        
+        <tr>
+            <th width="17%" scope="col" class="first">주업무 (JOB)</th>
+            <td class="tleft" colspan="3">
+                <textarea> </textarea>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">현주소(실거주지)</th>
+            <td class="tleft" colspan="3">
+                <input type="text">-<input type="text"> <button id="btnSave" type="button" data-type="button" data-theme="af-n-btn4" data-authtype="W" data-altname="조회" class="af-button af-n-btn4" data-converted="true"></button></br>
+                <input type="text"><br>
+                <input type="text">
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">전화번호</th>
+            <td class="tleft" colspan="3">
+                <input type="text">-<input type="text">-<input type="text">
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">이동전화</th>
+            <td class="tleft" colspan="3">
+                <select>
+                    <option>SKT</option>
+                </select>
+                <input type="text">-<input type="text">-<input type="text">
+            </td>
+        </tr>
+         <tr>
+            <th width="17%" scope="col" class="first">생년월일</th>
+            <td class="tleft">
+                <div data-type="daterange" class="af-daterange af-default" data-converted="true">
+                    <input data-role="startdate" data-image="" data-type="dateinput" class="af-dateinput af-default" maxlength="10" placeholder="yyyy-MM-dd" type="text" data-converted="true">
+                    <div class="af-dateinput-image"></div>
+                </div>
+            </td>
+            <td class="tleft" colspan="2">
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 음력
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 양력
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">결혼유무</th>
+            <td >
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 기혼
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 미혼
+            </td>
+            <th width="17%" scope="col" >
+                결혼기념일
+            </th>
+            <td>
+                <div data-type="daterange" class="af-daterange af-default" data-converted="true">
+                    <input data-role="startdate" data-image="" data-type="dateinput" class="af-dateinput af-default" maxlength="10" placeholder="yyyy-MM-dd" type="text" data-converted="true">
+                    <div class="af-dateinput-image"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">이메일 수신동의</th>
+            <td class="tleft" colspan="3">
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 동의
+                <input type="radio" data-type="radio" data-theme="af-radio" class="spaceL af-radio" data-converted="true"> 미동의
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">이메일 </th>
+            <td class="tleft" colspan="3">
+                <input type="text">@<input type="text">
+                <select>
+                    <option>다음</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th width="17%" scope="col" class="first">메모 </th>
+            <td class="tleft" colspan="3">
+                <textarea></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" class="first">
+            
+            (*)가 있는 항목은 필수입력 입니다.</br> 
+            </br>입력된 정보를 바탕으로 공본사팀항 전달 및 각종 프로모션이 진행되오니 
+            </br>선택 사항을 포함하여 가급적 모든 정보를 정확히 입력해 주시기 바랍니다. 
+            </br>미 입력 시 적용 제외됨) 
+</td>
+        </tr>
+        </table>
+    <p class="floatL2">
+      <input type="button" value="" data-type="button" data-theme="af-btn8">
+      <input type="button" value="" data-type="button" data-theme="af-btn10">
+    </p>
+    
+    </div>
+    
+</div>
+</div>
+</body>
+</html>

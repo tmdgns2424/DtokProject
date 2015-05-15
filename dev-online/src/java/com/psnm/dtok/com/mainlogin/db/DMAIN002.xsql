@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMAIN002">
+	<select id="dSearchAnncePopList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchAnncePopList  */
+/* IO: 안종광,2015-04-23T13:25:28(안종광,2015-01-22T15:58:21) */
+SELECT z.POPUP_YN
+     , z.MNDT_CHK_YN
+     , z.ANNCE_ID
+     , z.ANNCE_TITL_NM
+     , F_DSM_CODE_NM('DSM_RCV_TYP_CD', z.RCV_TYP_CD) AS RCV_TYP_NM
+     , TO_CHAR(z.RGST_DTM, 'MM-DD') AS RGST_MD
+     , (SELECT COUNT(*) FROM DSM_ATCH_FILE_MGMT WHERE ATCH_MGMT_ID = z.ANNCE_ID) AS FILE_CNT
+     , CASE (CASE z.MNDT_CHK_YN
+             WHEN 'Y' THEN
+                 ( SELECT COUNT(*) FROM DSM_ANNCE_MNDT_CHK 
+                    WHERE ANNCE_ID = z.ANNCE_ID
+                      AND USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/)
+             ELSE -1 END)
+       WHEN -1 THEN NULL
+       WHEN 0 THEN 'N'
+       ELSE 'Y' END AS USER_CHK_YN
+  FROM (
+        SELECT X.POPUP_YN
+             , X.MNDT_CHK_YN
+             , X.ANNCE_ID
+             , X.ANNCE_TITL_NM
+             , X.RCV_TYP_CD
+             , X.RGST_DTM
+          FROM (
+                /* ________________________________________ */
+                SELECT A.POPUP_YN
+                     , A.MNDT_CHK_YN
+                     , A.ANNCE_ID
+                     , A.ANNCE_TITL_NM
+                     , A.RGST_DTM
+                     , A.RCV_TYP_CD
+                  FROM DSM_ANNCE A
+                  JOIN (SELECT C.ANNCE_ID
+                          FROM (SELECT A.USER_ID, A.DUTY AS DUTY_CD
+                                   FROM PS_MNG.TBAS_USER_MGMT A
+                                        JOIN DSM_USER B ON(B.USER_ID = A.USER_ID)
+                                  WHERE A.ATTC_CAT NOT IN ('1', '2', '3')
+                                    AND A.USER_ID = #onlineContext.userInfo.loginId#
+                                  UNION 
+                                 SELECT USER_ID, DUTY_CD
+                                   FROM DSM_APPROVE
+                                  WHERE 1=1
+                                    AND USER_ID = #onlineContext.userInfo.loginId#
+                               ) A
+                             , DSM_AUTH_GRP_APLY_DUTY B
+                             , DSM_ANNCE_RCV_GRP C
+                        WHERE A.DUTY_CD = B.DUTY_CD
+                          AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                          AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+                        GROUP BY C.ANNCE_ID
+                  ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+                  JOIN (
+                        SELECT ANNCE_ID
+                          FROM DSM_ANNCE_RCV_ORG
+                         WHERE OUT_ORG_ID IN (
+                                    SELECT OUT_ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT
+                                     WHERE ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+                               )
+                         GROUP BY ANNCE_ID
+                  ) C ON (A.ANNCE_ID = C.ANNCE_ID)
+                  LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                 WHERE A.POPUP_YN = 'Y' 
+                   AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.POPUP_STA_DT AND A.POPUP_END_DT
+                   AND A.ANNCE_ID NOT IN (
+                           SELECT m.ANNCE_ID
+                             FROM DSM_ANNCE_MNDT_CHK m
+                            WHERE m.USER_ID = #onlineContext.userInfo.loginId#
+                      )
+                /* ________________________________________ */
+          ) X
+         ORDER BY X.ANNCE_ID DESC
+  ) z
+ WHERE 1=1]]>
+	</select>
+	<select id="dSearchAnnceMndtList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchAnnceMndtList  */
+/* IO: 채수윤,2015-02-10T16:33:37(안종광,2015-01-22T15:58:21) */
+SELECT z.POPUP_YN
+     , z.MNDT_CHK_YN
+     , z.ANNCE_ID
+     , z.ANNCE_TITL_NM
+     , F_DSM_CODE_NM('DSM_RCV_TYP_CD', z.RCV_TYP_CD) AS RCV_TYP_NM
+     , TO_CHAR(z.RGST_DTM, 'MM-DD') AS RGST_MD
+     , (SELECT COUNT(*) FROM DSM_ATCH_FILE_MGMT WHERE ATCH_MGMT_ID = z.ANNCE_ID) AS FILE_CNT
+     , CASE (CASE z.MNDT_CHK_YN
+             WHEN 'Y' THEN
+                 ( SELECT COUNT(*) FROM DSM_ANNCE_MNDT_CHK 
+                    WHERE ANNCE_ID = z.ANNCE_ID
+                      AND USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/)
+             ELSE -1 END)
+       WHEN -1 THEN NULL
+       WHEN 0 THEN 'N'
+       ELSE 'Y' END AS USER_CHK_YN
+  FROM (
+        SELECT X.POPUP_YN
+             , X.MNDT_CHK_YN
+             , X.ANNCE_ID
+             , X.ANNCE_TITL_NM
+             , X.RCV_TYP_CD
+             , X.RGST_DTM
+          FROM (
+                /* ________________________________________ */
+                SELECT A.POPUP_YN
+                     , A.MNDT_CHK_YN
+                     , A.ANNCE_ID
+                     , A.ANNCE_TITL_NM
+                     , A.RGST_DTM
+                     , A.RCV_TYP_CD
+                  FROM DSM_ANNCE A
+                  JOIN (SELECT C.ANNCE_ID
+                          FROM (SELECT A.USER_ID, A.DUTY AS DUTY_CD
+                                   FROM PS_MNG.TBAS_USER_MGMT A
+                                        JOIN DSM_USER B ON(B.USER_ID = A.USER_ID)
+                                  WHERE A.ATTC_CAT NOT IN ('1', '2', '3')
+                                    AND A.USER_ID = #onlineContext.userInfo.loginId#
+                                  UNION 
+                                 SELECT USER_ID, DUTY_CD
+                                   FROM DSM_APPROVE
+                                  WHERE 1=1
+                                    AND USER_ID = #onlineContext.userInfo.loginId#
+                               ) A
+                             , DSM_AUTH_GRP_APLY_DUTY B
+                             , DSM_ANNCE_RCV_GRP C
+                        WHERE A.DUTY_CD = B.DUTY_CD
+                          AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                          AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+                        GROUP BY C.ANNCE_ID
+                  ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+                  JOIN (
+                        SELECT ANNCE_ID
+                          FROM DSM_ANNCE_RCV_ORG 
+                         WHERE OUT_ORG_ID IN (
+                                    SELECT OUT_ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT
+                                     WHERE ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+                               )
+                         GROUP BY ANNCE_ID
+                  ) C ON (A.ANNCE_ID = C.ANNCE_ID)
+                  LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                 WHERE A.MNDT_CHK_YN = 'Y'
+                   AND A.ANNCE_ID NOT IN (
+                            SELECT ANNCE_ID FROM DSM_ANNCE_MNDT_CHK
+                             WHERE USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/
+                       )
+                /* ________________________________________ */
+          ) X
+         ORDER BY X.ANNCE_ID DESC
+  ) z
+ WHERE 1=1]]>
+	</select>
+	<select id="dSearchAnnceList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchAnnceList  */
+/* IO: 채수윤,2015-03-13T11:38:12(안종광,2015-01-30T10:40:17) */
+SELECT z.POPUP_YN
+     , z.ANNCE_ID
+     , '['||F_DSM_CODE_NM('DSM_RCV_TYP_CD', z.RCV_TYP_CD)||'] '||z.ANNCE_TITL_NM AS ANNCE_TITL_NM
+     , F_DSM_CODE_NM('DSM_RCV_TYP_CD', z.RCV_TYP_CD) AS RCV_TYP_NM
+     , TO_CHAR(z.RGST_DTM, 'MM-DD') AS RGST_MD
+     , (SELECT COUNT(*) FROM DSM_ATCH_FILE_MGMT WHERE ATCH_MGMT_ID = z.ANNCE_ID) AS FILE_CNT
+  FROM (
+        SELECT X.POPUP_YN
+             , X.ANNCE_ID
+             , X.ANNCE_TITL_NM
+             , X.RCV_TYP_CD
+             , X.RGST_DTM
+          FROM (
+                /* ________________________________________ */
+                SELECT A.POPUP_YN
+                     , A.ANNCE_ID
+                     , A.ANNCE_TITL_NM
+                     , A.RGST_DTM
+                     , A.RCV_TYP_CD
+                  FROM DSM_ANNCE A
+                  JOIN (SELECT C.ANNCE_ID
+                          FROM (SELECT A.USER_ID, A.DUTY AS DUTY_CD
+                                   FROM PS_MNG.TBAS_USER_MGMT A
+                                        JOIN DSM_USER B ON(B.USER_ID = A.USER_ID)
+                                  WHERE A.ATTC_CAT NOT IN ('1', '2', '3')
+]]><isNotEmpty property="onlineContext.userInfo.loginId"><![CDATA[
+                                    AND A.USER_ID = #onlineContext.userInfo.loginId#
+                                    AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+]]></isNotEmpty><![CDATA[
+                                  UNION 
+                                 SELECT USER_ID, DUTY_CD
+                                   FROM DSM_APPROVE
+                                  WHERE 1=1
+]]><isNotEmpty property="onlineContext.userInfo.loginId"><![CDATA[
+                                    AND USER_ID = #onlineContext.userInfo.loginId#
+                                    AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+]]></isNotEmpty><![CDATA[                                
+                               ) A
+                             , DSM_AUTH_GRP_APLY_DUTY B
+                             , DSM_ANNCE_RCV_GRP C
+                        WHERE A.DUTY_CD = B.DUTY_CD
+                          AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                        GROUP BY C.ANNCE_ID
+                  ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+                  JOIN (
+                        SELECT ANNCE_ID
+                          FROM DSM_ANNCE_RCV_ORG
+                         WHERE 1=1
+                           AND OUT_ORG_ID IN (
+                               SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH
+                                WHERE USER_ID = #onlineContext.userInfo.loginId#
+                               )
+                         GROUP BY ANNCE_ID
+                  ) C ON (A.ANNCE_ID = C.ANNCE_ID)
+                  LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                 WHERE A.POPUP_YN = 'Y' 
+                   AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.POPUP_STA_DT AND A.POPUP_END_DT
+                UNION /*===========================*/
+                SELECT A.POPUP_YN
+                     , A.ANNCE_ID
+                     , A.ANNCE_TITL_NM
+                     , A.RGST_DTM
+                     , A.RCV_TYP_CD
+                  FROM DSM_ANNCE A
+                  JOIN (SELECT C.ANNCE_ID
+                          FROM (SELECT A.USER_ID, A.DUTY AS DUTY_CD
+                                   FROM PS_MNG.TBAS_USER_MGMT A
+                                        JOIN DSM_USER B ON(B.USER_ID = A.USER_ID)
+                                  WHERE A.ATTC_CAT NOT IN ('1', '2', '3')
+]]><isNotEmpty property="onlineContext.userInfo.loginId"><![CDATA[
+                                    AND A.USER_ID = #onlineContext.userInfo.loginId#
+                                    AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+]]></isNotEmpty><![CDATA[
+                                  UNION 
+                                 SELECT USER_ID, DUTY_CD
+                                   FROM DSM_APPROVE
+                                  WHERE 1=1
+]]><isNotEmpty property="onlineContext.userInfo.loginId"><![CDATA[
+                                    AND USER_ID = #onlineContext.userInfo.loginId#
+                                    AND NOT EXISTS(SELECT 'X' FROM DSM_USER WHERE SCRB_ST_CD = '05' AND USER_ID = #onlineContext.userInfo.loginId#)
+]]></isNotEmpty><![CDATA[                                
+                               ) A
+                             , DSM_AUTH_GRP_APLY_DUTY B
+                             , DSM_ANNCE_RCV_GRP C
+                        WHERE A.DUTY_CD = B.DUTY_CD
+                          AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                        GROUP BY C.ANNCE_ID
+                  ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+                  JOIN (
+                        SELECT ANNCE_ID
+                          FROM DSM_ANNCE_RCV_ORG 
+                         WHERE 1=1
+                           AND OUT_ORG_ID IN (
+                               SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH
+                                WHERE USER_ID = #onlineContext.userInfo.loginId#
+                               )
+                         GROUP BY ANNCE_ID
+                  ) C ON (A.ANNCE_ID = C.ANNCE_ID)
+                  LEFT JOIN PS_MNG.TBAS_USER_MGMT D ON (A.UPDR_ID = D.USER_ID)
+                 WHERE (POPUP_YN = 'N' OR A.POPUP_END_DT < TO_CHAR(SYSDATE,'YYYYMMDD'))
+                /* ________________________________________ */
+          ) X
+         ORDER BY X.POPUP_YN DESC, X.ANNCE_ID DESC
+  ) z
+ WHERE ROWNUM <= 10]]>
+	</select>
+	<select id="dSearchAnnce" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchAnnce  */
+/* IO: 안종광,2015-01-30T10:40:47(안종광,2015-01-30T10:40:47) */
+SELECT A.ANNCE_ID
+     , A.ANNCE_TITL_NM
+     , A.ANNCE_TYP_CD
+     , f_dsm_code_nm('DSM_ANNCE_TYP_CD', A.ANNCE_TYP_CD) AS ANNCE_TYP_NM
+     , RCV_TYP_CD
+     , f_dsm_code_nm('DSM_RCV_TYP_CD', RCV_TYP_CD) AS RCV_TYP_CD_NM
+     , A.POPUP_YN
+     , A.MNDT_CHK_YN
+     , TO_CHAR(TO_DATE(A.POPUP_STA_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_STA_DT
+     , TO_CHAR(TO_DATE(A.POPUP_END_DT,'YYYY-MM-DD'),'YYYY-MM-DD') AS POPUP_END_DT
+     , B.USER_NM AS BLTNR_NM
+     , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS BLTN_DT
+     , A.ANNCE_CTT
+     , CASE (CASE A.MNDT_CHK_YN
+             WHEN 'Y' THEN
+                 ( SELECT COUNT(*) FROM DSM_ANNCE_MNDT_CHK 
+                    WHERE ANNCE_ID = A.ANNCE_ID
+                      AND USER_ID = #onlineContext.userInfo.loginId# )
+             ELSE -1 END)
+       WHEN -1 THEN NULL
+       WHEN 0 THEN 'N'
+       ELSE 'Y' END AS USER_CHK_YN
+  FROM DSM_ANNCE A
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.UPDR_ID = B.USER_ID)
+ WHERE A.ANNCE_ID = #ANNCE_ID# /*공지사항ID*/]]>
+	</select>
+	<select id="dSearchAnncePic" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchAnncePic  */
+/* IO: 안종광,2015-01-30T10:41:10(안종광,2015-01-30T10:41:10) */
+SELECT f.ATCH_FILE_ID, f.FILE_NM, f.FILE_SIZE, f.FILE_GRP_ID, f.FILE_PATH, f.PSC_FILE_NM
+  FROM DSM_WEB_BAS_VAL w
+  JOIN DSM_ATCH_FILE   f ON ( w.STRD_APLY_VAL = f.ATCH_FILE_ID )
+ WHERE w.DSM_WEB_STRD_CD_VAL = '99'
+   AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN w.APLY_STA_DT AND w.APLY_END_DT]]>
+	</select>
+	<select id="dSearchMainad" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN002.dSearchMainad  */
+/* IO: 안종광,2015-03-19T15:33:38(안종광,2015-03-18T09:39:28) */
+SELECT v.*
+     , f.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_SIZE
+     , f.FILE_GRP_ID
+     , f.FILE_PATH
+  FROM (
+        SELECT ROW_NUMBER() OVER( ORDER BY a.AD_END_DT DESC, a.AD_STA_DT DESC, a.MAIN_AD_ID DESC ) AS RN
+             , a.MAIN_AD_ID
+             , a.MAIN_AD_NM
+             , a.ORG_ID
+             , a.ORG_NM
+             , a.AD_STA_DT
+             , a.AD_END_DT
+             , a.AD_FILE_ID
+             , a.LINK_URL
+          FROM DSM_MAINAD a
+         WHERE TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN a.AD_STA_DT AND a.AD_END_DT
+           AND ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+         ORDER BY a.AD_END_DT DESC, a.AD_STA_DT DESC, a.MAIN_AD_ID DESC
+  ) v
+  LEFT JOIN DSM_ATCH_FILE f ON ( f.ATCH_FILE_ID = v.AD_FILE_ID )
+/* WHERE v.RN <= 3 */]]>
+	</select>
+</sqlMap>

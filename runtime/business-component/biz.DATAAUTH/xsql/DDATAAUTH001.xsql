@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DDATAAUTH001">
+	<select id="dSearchDataAuth" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dSearchDataAuth  */
+/* IO: 이민재,2015-01-27T14:30:56(이민재,2015-01-27T14:30:56) */
+	SELECT A.USER_ID
+		, F_MASKING('N',C.USER_NM ) AS USER_NM
+		, A.AUTH_SEQ
+		, A.OUT_ORG_ID
+		, F.OUT_ORG_NM
+		, TO_CHAR( TO_DATE(A.AUTH_STA_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) AS AUTH_STA_DT
+		, TO_CHAR( TO_DATE(A.AUTH_END_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) AS AUTH_END_DT
+		, C.NEW_ORG_ID AS HDQT_TEAM_ORG_ID
+		, E.ORG_NM AS HDQT_TEAM_ORG_NM
+		, C.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, D.OUT_ORG_NM AS HDQT_PART_ORG_NM
+	FROM DSM_DATA_USE_AUTH A
+	JOIN DSM_APPROVE B ON (B.USER_ID = A.USER_ID)
+	JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = B.USER_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON (D.OUT_ORG_ID = C.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON (E.ORG_ID = C.NEW_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = A.OUT_ORG_ID)
+	WHERE 1=1
+	]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+		C.USER_NM LIKE '%'||#USER_NM#||'%'
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		E.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	ORDER BY USER_ID, AUTH_SEQ DESC]]>
+	</select>
+	<select id="dSearchDataAuthUser" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dSearchDataAuthUser  */
+/* IO: 이민재,2015-01-27T14:31:31(이민재,2015-01-27T14:31:31) */
+	SELECT A.USER_ID
+	  	, F_MASKING('N',B.USER_NM ) AS USER_NM
+      	, B.NEW_ORG_ID AS HDQT_TEAM_ORG_ID
+      	, D.ORG_NM AS HDQT_TEAM_ORG_NM
+      	, B.OUT_ORG_ID AS HDQT_PART_ORG_ID
+      	, C.OUT_ORG_NM AS HDQT_PART_ORG_NM
+	FROM DSM_APPROVE A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON (A.USER_ID = B.USER_ID)
+  	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT C ON (C.OUT_ORG_ID = B.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT D ON (D.ORG_ID = B.NEW_ORG_ID)
+	WHERE B.USER_NM LIKE '%'||#USER_NM#||'%']]>
+	</select>
+	<insert id="dInsertDataAuth" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dInsertDataAuth  */
+/* IO: 이민재,2015-01-27T14:31:45(이민재,2015-01-27T14:31:45) */
+	INSERT INTO DSM_DATA_USE_AUTH
+  	(
+    	USER_ID
+		, AUTH_SEQ
+		, OUT_ORG_ID
+		, AUTH_STA_DT
+		, AUTH_END_DT
+		, RGSTR_ID
+		, RGST_DTM
+		, UPDR_ID
+		, UPD_DTM
+  	)
+  	VALUES
+  	(
+    	#USER_ID#
+    	, (SELECT NVL(MAX(AUTH_SEQ),0) + 1 AS AUTH_SEQ FROM DSM_DATA_USE_AUTH WHERE USER_ID = #USER_ID#)
+    	, #OUT_ORG_ID#
+    	, #AUTH_STA_DT#
+    	, #AUTH_END_DT#
+    	, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  	)]]>
+	</insert>
+	<update id="dUpdateDataAuth" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dUpdateDataAuth  */
+/* IO: 이민재,2015-01-27T14:32:01(이민재,2015-01-27T14:32:01) */
+	UPDATE DSM_DATA_USE_AUTH
+	SET AUTH_STA_DT  = #AUTH_STA_DT#
+		, AUTH_END_DT  = #AUTH_END_DT#
+		, OUT_ORG_ID = #OUT_ORG_ID#
+		, UPDR_ID = #onlineContext.userInfo.loginId#
+		, UPD_DTM = SYSDATE
+	WHERE USER_ID = #USER_ID#
+	AND AUTH_SEQ = #AUTH_SEQ#]]>
+	</update>
+	<delete id="dDeleteDataAuth" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dDeleteDataAuth  */
+/* IO: 이민재,2015-01-27T14:32:19(이민재,2015-01-27T14:32:19) */
+	DELETE
+  	FROM DSM_DATA_USE_AUTH
+ 	WHERE USER_ID = #USER_ID#
+ 	AND AUTH_SEQ = #AUTH_SEQ#]]>
+	</delete>
+	<select id="dSearchDataAuthPart" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.dataauth.db.DDATAAUTH001.dSearchDataAuthPart  */
+/* IO: 이민재,2015-01-27T15:09:16(이민재,2015-01-27T15:09:16) */
+	SELECT OUT_ORG_ID
+     	, OUT_ORG_NM
+  	FROM PS_MNG.TBAS_OUT_ORG_MGMT
+ 	WHERE EFF_ORG_YN = 'Y'
+   	AND DEL_YN = 'N']]>
+	</select>
+</sqlMap>

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DAGENTEDUT001">
+	<select id="dSearchAgentEdu" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentEdu  */
+/* IO: 이민재,2014-11-24T17:39:44(이민재,2014-11-24T17:39:44) */
+	WITH STU_COUNT AS
+	(
+		SELECT DISTINCT A.AGENT_EDUT_MGMT_NUM
+		FROM DSM_AGENT_EDU A
+	    LEFT OUTER JOIN DSM_AGENT_EDU_ATNDR B ON (B.AGENT_EDUT_MGMT_NUM = A.AGENT_EDUT_MGMT_NUM)
+		LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = B.USER_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON (D.AGNT_ID = C.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM'))
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON (G.OUT_ORG_ID = E.OUT_ORG_ID)
+	    LEFT OUTER JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON (H.ORG_ID = G.ORG_ID)
+		WHERE A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			H.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			D.AGNT_ID = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_CD"><![CDATA[
+			D.AGNT_ID = #AGNT_CD#
+		]]></isNotEmpty><![CDATA[
+	)
+	SELECT Z.*
+	  FROM (
+			SELECT ROWNUM RN
+				 , X.*
+			  FROM (
+					SELECT ROW_NUMBER() OVER (ORDER BY A.RGST_DTM DESC) AS ROWCNT 
+						 , A.AGENT_EDUT_MGMT_NUM
+						 , TO_CHAR(TO_DATE(A.EDU_DT), 'YYYY-MM-DD') AS EDU_DT
+						 , A.EDU_NM
+						 , A.EDUT_OWNR_NM
+						 , A.LECTR_NM
+						 , NVL(COUNT(B.USER_ID), '0') AS STU_MA_COUNT
+						 , A.RGSTR_ID
+						 , F_MASKING('N',C.USER_NM ) AS RGSTR_NM
+						 , TO_CHAR(TO_DATE(A.RGST_DTM),'YYYY-MM-DD') AS RGST_DTM
+						 , A.OUT_ORG_ID
+						 , (SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE OUT_ORG_ID = A.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+					  FROM DSM_AGENT_EDU A
+					  JOIN PS_MNG.TBAS_USER_MGMT C ON (A.RGSTR_ID = C.USER_ID)
+					  LEFT JOIN DSM_AGENT_EDU_ATNDR B ON (A.AGENT_EDUT_MGMT_NUM = B.AGENT_EDUT_MGMT_NUM)
+					 WHERE A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+					 AND A.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+					 GROUP BY A.AGENT_EDUT_MGMT_NUM, A.EDU_DT, A.EDU_NM, A.EDUT_OWNR_NM, A.LECTR_NM, A.RGSTR_ID, C.USER_NM, A.RGST_DTM, A.OUT_ORG_ID
+			 ) X
+			 JOIN STU_COUNT Y ON (X.AGENT_EDUT_MGMT_NUM = Y.AGENT_EDUT_MGMT_NUM)
+	  ) Z
+	 WHERE Z.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#
+	 ORDER BY Z.RGST_DTM DESC]]>
+	</select>
+	<select id="dSearchAgentEduCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentCnslPlnCount  */
+/* IO: 이민재,2014-11-24T17:56:37(이민재,2014-11-24T17:56:37) */
+	WITH STU_COUNT AS
+	(
+		SELECT DISTINCT A.AGENT_EDUT_MGMT_NUM
+		FROM DSM_AGENT_EDU A
+	    LEFT OUTER JOIN DSM_AGENT_EDU_ATNDR B ON (B.AGENT_EDUT_MGMT_NUM = A.AGENT_EDUT_MGMT_NUM)
+		LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = B.USER_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON (D.AGNT_ID = C.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM'))
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID)
+		LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON (G.OUT_ORG_ID = E.OUT_ORG_ID)
+	    LEFT OUTER JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON (H.ORG_ID = G.ORG_ID)
+		WHERE A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			H.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			D.AGNT_ID = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_CD"><![CDATA[
+			D.AGNT_ID = #AGNT_CD#
+		]]></isNotEmpty><![CDATA[
+	)
+	SELECT COUNT(*) AS totCnt
+	  FROM (
+			SELECT ROWNUM RN
+				 , X.*
+			  FROM (
+					SELECT A.AGENT_EDUT_MGMT_NUM
+						 , TO_CHAR(TO_DATE(A.EDU_DT), 'YYYY-MM-DD') AS EDU_DT
+						 , A.EDU_NM
+						 , A.EDUT_OWNR_NM
+						 , A.LECTR_NM
+						 , NVL(COUNT(B.USER_ID), '0') AS STU_MA_COUNT
+						 , A.RGSTR_ID
+						 , F_MASKING('N',C.USER_NM ) AS RGSTR_NM
+						 , TO_CHAR(TO_DATE(A.RGST_DTM),'YYYY-MM-DD') AS RGST_DTM
+						 , A.OUT_ORG_ID
+						 , (SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE OUT_ORG_ID = A.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+					  FROM DSM_AGENT_EDU A
+					  JOIN PS_MNG.TBAS_USER_MGMT C ON (A.RGSTR_ID = C.USER_ID)
+					  LEFT JOIN DSM_AGENT_EDU_ATNDR B ON (A.AGENT_EDUT_MGMT_NUM = B.AGENT_EDUT_MGMT_NUM)
+					  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON (C.CPLAZA_ORG_CD = D.AGNT_ID AND D.CONS_MTH = TO_CHAR(TO_DATE(#TO_DT#), 'YYYYMM'))
+		  			  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (D.OUT_ORG_DTL_ID = F.OUT_ORG_DTL_ID)
+					 WHERE A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+					 AND A.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+					 GROUP BY A.AGENT_EDUT_MGMT_NUM, A.EDU_DT, A.EDU_NM, A.EDUT_OWNR_NM, A.LECTR_NM, A.RGSTR_ID, C.USER_NM, A.RGST_DTM, A.OUT_ORG_ID
+			 ) X
+			 JOIN STU_COUNT Y ON (X.AGENT_EDUT_MGMT_NUM = Y.AGENT_EDUT_MGMT_NUM)
+	  ) Z]]>
+	</select>
+	<select id="dDetailAgentEdu" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dDetailAgentEdu  */
+/* IO: 이민재,2014-12-15T11:03:06(이민재,2014-12-15T11:03:06) */
+	SELECT A.AGENT_EDUT_MGMT_NUM
+		, TO_CHAR(TO_DATE(A.EDU_DT),'YYYY-MM-DD') AS EDU_DT
+		, SUBSTR(A.EDU_STA_HM,0,2) AS EDU_STA_H
+    	, SUBSTR(A.EDU_STA_HM,3,4) AS EDU_STA_M
+    	, SUBSTR(A.EDU_END_HM,0,2) AS EDU_END_H
+    	, SUBSTR(A.EDU_END_HM,3,4) AS EDU_END_M
+		, A.EDU_NM
+		, A.EDUT_OWNR_NM
+		, A.LECTR_NM
+		, A.RGSTR_ID
+		, F_MASKING('N',B.USER_NM ) AS RGSTR_NM
+		, TO_CHAR(TO_DATE(A.RGST_DTM),'YYYY-MM-DD') AS RGST_DTM
+		, A.EDU_PLC_NM
+		, A.EDU_CTT
+		, A.OUT_ORG_ID
+		, (SELECT OUT_ORG_NM FROM PS_MNG.TBAS_OUT_ORG_MGMT WHERE OUT_ORG_ID = A.OUT_ORG_ID) AS HDQT_PART_ORG_NM
+	FROM DSM_AGENT_EDU A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)
+	WHERE A.AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#]]>
+	</select>
+	<select id="dDetailAgentEduAtndr" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dDetailAgentEduAtndr  */
+/* IO: 이민재,2014-12-15T11:11:59(이민재,2014-12-15T11:11:59) */
+	SELECT A.USER_ID
+		, G.ORG_ID AS HDQT_TEAM_ORG_ID 				/*본사팀ID */
+		, G.ORG_NM AS HDQT_TEAM_ORG_NM 
+		, F.OUT_ORG_ID AS HDQT_PART_ORG_ID 			/*본사파트ID*/
+		, F.OUT_ORG_NM AS HDQT_PART_ORG_NM 
+		, E.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID 	/*영업국ID*/
+		, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+		, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID 		/*영업팀ID*/
+		, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+		, C.AGNT_ID AS AGNT_ID
+		, F_MASKING('N',C.AGNT_NM ) AS AGNT_NM
+		, C.RPSTY AS RPSTY
+		, (SELECT COMM_CD_VAL_NM 
+            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             	AND COMM_CD_VAL = C.RPSTY ) AS RPSTY_NM /* 직책명 */
+		, A.EDU_MANN_CD
+		, (SELECT COMM_CD_VAL_NM 
+            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_EDU_MANN_CD' 
+             	AND COMM_CD_VAL = A.EDU_MANN_CD ) AS EDU_MANN_CD_NM
+		, A.EVAL_RSLT_CD
+		, (SELECT COMM_CD_VAL_NM 
+            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_EDU_MANN_CD' 
+             	AND COMM_CD_VAL = A.EVAL_RSLT_CD ) AS EVAL_RSLT_CD_NM
+		, A.MEMO
+	FROM DSM_AGENT_EDU_ATNDR A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = D.OUT_ORG_ID)
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+	JOIN PS_MNG.TBAS_DUTY_MGMT H ON (H.DUTY_CD = B.DUTY)
+	WHERE A.AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#
+	]]><isEqual prepend="AND" property="onlineContext.userInfo.DUTY" compareValue="14"><![CDATA[
+		E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+	]]></isEqual><![CDATA[
+	]]><isEqual property="onlineContext.userInfo.ATTC_CAT" compareValue="4"><![CDATA[
+		AND E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+		AND D.OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_TEAM_ORG_ID#
+	]]></isEqual><![CDATA[]]>
+	</select>
+	<select id="dSearchAgentEduAtndr" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentEduAtndr  */
+/* IO: 이민재,2014-12-16T15:13:59(이민재,2014-12-16T15:13:59) */
+	SELECT S.USER_ID
+		, S.HDQT_TEAM_ORG_ID /*본사팀ID */
+   		, S.HDQT_TEAM_ORG_NM 
+   		, S.HDQT_PART_ORG_ID /*본사파트ID*/
+   		, S.HDQT_PART_ORG_NM 
+   		, S.SALE_DEPT_ORG_ID /*영업국ID*/
+   		, S.SALE_DEPT_ORG_NM 
+   		, S.SALE_TEAM_ORG_ID /*영업팀ID*/
+   		, S.SALE_TEAM_ORG_NM
+	 	, S.AGNT_ID
+	 	, S.RPSTY
+	 	, S.RPSTY_NM
+	 	, F_MASKING('N',S.AGNT_NM ) AS AGNT_NM
+	 	, S.EDU_MANN_CD
+	 	, S.EVAL_RSLT_CD
+	 	, S.MEMO
+	 	, ( DECODE(S.USER_ID, NULL, 0, 1) + DECODE(S.EDU_MANN_CD, NULL, 0, 1) + DECODE(S.EVAL_RSLT_CD, NULL, 0, 1) + CASE WHEN LENGTHB(S.MEMO)>999 THEN 0 ELSE 1 END ) AS USE_YN
+	 	, DECODE((DECODE(S.USER_ID, NULL, 0, 1) + DECODE(S.EDU_MANN_CD, NULL, 0, 1) + DECODE(S.EVAL_RSLT_CD, NULL, 0, 1) + CASE WHEN LENGTHB(S.MEMO)>999 THEN 0 ELSE 1 END), 4, '사용가능', '코드가 잘 못 입력되었습니다.') AS MESSAGE
+	FROM (
+		SELECT A.USER_ID
+			, F.ORG_ID AS HDQT_TEAM_ORG_ID 				/* 본사팀ID */
+   			, F.ORG_NM AS HDQT_TEAM_ORG_NM 
+   			, E.OUT_ORG_ID AS HDQT_PART_ORG_ID 			/* 본사파트ID */
+   			, E.OUT_ORG_NM AS HDQT_PART_ORG_NM 
+   			, D.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID 	/* 영업국ID */
+   			, D.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+   			, C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID 		/* 영업팀ID */
+   			, C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+			, NVL(B.AGNT_ID, #AGNT_ID#) AS AGNT_ID
+			, B.RPSTY
+			, (SELECT COMM_CD_VAL_NM 
+            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+           		WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+             	AND COMM_CD_VAL = B.RPSTY ) AS RPSTY_NM /* 직책명 */
+			, B.AGNT_NM
+			, DECODE(#EDU_MANN_CD#,NULL,'N',(SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_EDU_MANN_CD' AND COMM_CD_VAL=#EDU_MANN_CD#)) AS EDU_MANN_CD
+			, DECODE(#EVAL_RSLT_CD#,NULL,'N',(SELECT COMM_CD_VAL FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_EDU_MANN_CD' AND COMM_CD_VAL=#EVAL_RSLT_CD#)) AS EVAL_RSLT_CD
+			, #MEMO# AS MEMO
+		FROM PS_MNG.TBAS_USER_MGMT A 
+		JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT B ON (B.AGNT_ID = A.CPLAZA_ORG_CD)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = B.OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = C.OUT_ORG_ID)
+		JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+		JOIN PS_MNG.TBAS_DUTY_MGMT G ON (G.DUTY_CD = A.DUTY)
+		]]><isNotEmpty property="AGENT_EDUT_MGMT_NUM"><![CDATA[
+		LEFT JOIN DSM_AGENT_EDU_ATNDR H ON (H.USER_ID = A.USER_ID AND H.AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#)
+		]]></isNotEmpty><![CDATA[
+		WHERE A.ATTC_CAT = '4'
+		/*   AND A.USER_TYP = '4' */
+		AND B.CONS_MTH = (
+						SELECT X.YYYYMM
+						FROM (SELECT A.AGNT_ID
+									, MAX(A.CONS_MTH) AS YYYYMM
+								FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT A
+								WHERE A.CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM')
+								GROUP BY A.AGNT_ID
+								) X
+						WHERE X.AGNT_ID = B.AGNT_ID
+							)
+		AND B.AGNT_ID = #AGNT_ID#
+		]]><isNotEmpty property="AGENT_EDUT_MGMT_NUM"><![CDATA[
+		AND H.USER_ID IS NULL
+		]]></isNotEmpty><![CDATA[
+	) S]]>
+	</select>
+	<insert id="dInsertAgentEdu" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dInsertAgentEdu  */
+/* IO: 이민재,2014-12-17T10:51:10(이민재,2014-12-17T10:51:10) */
+	MERGE INTO DSM_AGENT_EDU
+	USING DUAL
+	ON ( AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM# )
+	WHEN MATCHED THEN
+		UPDATE SET EDUT_OWNR_NM = #EDUT_OWNR_NM#
+					, EDU_NM = #EDU_NM#
+					, LECTR_NM = #LECTR_NM#
+					, EDU_DT = REPLACE(#EDU_DT#,'-','')
+					, EDU_STA_HM = #EDU_STA_HM#
+					, EDU_END_HM = #EDU_END_HM#
+					, EDU_PLC_NM = #EDU_PLC_NM#
+					, EDU_CTT = #EDU_CTT#
+					, UPDR_ID = #onlineContext.userInfo.loginId#
+					, UPD_DTM = SYSDATE
+					, OUT_ORG_ID = #OUT_ORG_ID#
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+            	AGENT_EDUT_MGMT_NUM
+				, EDUT_OWNR_NM
+				, EDU_NM
+				, LECTR_NM
+				, EDU_DT
+				, EDU_STA_HM
+				, EDU_END_HM
+				, EDU_PLC_NM
+				, EDU_CTT
+				, RGSTR_ID
+				, RGST_DTM
+				, UPDR_ID
+				, UPD_DTM
+				, OUT_ORG_ID
+		)VALUES(
+				#AGENT_EDUT_MGMT_NUM#
+				, #EDUT_OWNR_NM#
+				, #EDU_NM#
+				, #LECTR_NM#
+				, REPLACE(#EDU_DT#,'-','')
+				, #EDU_STA_HM#
+				, #EDU_END_HM#
+				, #EDU_PLC_NM#
+				, #EDU_CTT#
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+				, #OUT_ORG_ID#
+		)]]>
+	</insert>
+	<insert id="dInsertAgentEduAtndr" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dInsertAgentEduAtndr  */
+/* IO: 이민재,2014-12-17T11:02:00(이민재,2014-12-17T11:02:00) */
+	MERGE INTO DSM_AGENT_EDU_ATNDR
+	USING DUAL
+	ON ( AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM# AND USER_ID = #USER_ID# )
+	WHEN MATCHED THEN
+		UPDATE SET EDU_MANN_CD = #EDU_MANN_CD#
+	 			, EVAL_RSLT_CD = #EVAL_RSLT_CD#
+	 			, MEMO = #MEMO#
+	 			, UPDR_ID = #onlineContext.userInfo.loginId#
+	 			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+            	AGENT_EDUT_MGMT_NUM
+				, USER_ID
+				, EDU_MANN_CD
+				, EVAL_RSLT_CD
+				, MEMO
+				, RGSTR_ID
+				, RGST_DTM
+				, UPDR_ID
+				, UPD_DTM
+		)VALUES(
+				#AGENT_EDUT_MGMT_NUM#
+				, #USER_ID#
+				, #EDU_MANN_CD#
+				, #EVAL_RSLT_CD#
+				, #MEMO#
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+				, #onlineContext.userInfo.loginId#
+				, SYSDATE
+		)]]>
+	</insert>
+	<delete id="dDeleteAgentEduAtndr" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dDeleteAgentEduAtndr  */
+/* IO: 이민재,2014-12-17T11:13:57(이민재,2014-12-17T11:13:57) */
+	DELETE FROM DSM_AGENT_EDU_ATNDR
+	WHERE AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#
+	AND USER_ID = #USER_ID#]]>
+	</delete>
+	<delete id="dDeleteAgentEdu" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dDeleteAgentEdu  */
+/* IO: 이민재,2014-12-17T11:37:41(이민재,2014-12-17T11:37:41) */
+	DELETE FROM DSM_AGENT_EDU
+ 	WHERE AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#]]>
+	</delete>
+	<delete id="dDeleteAgentEduAtndrAll" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dDeleteAgentEduAtndrAll  */
+/* IO: 이민재,2014-12-17T11:37:52(이민재,2014-12-17T11:37:52) */
+	DELETE FROM DSM_AGENT_EDU_ATNDR
+ 	WHERE AGENT_EDUT_MGMT_NUM = #AGENT_EDUT_MGMT_NUM#]]>
+	</delete>
+	<select id="dSearchAgentEduIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentEduIdSeq  */
+/* IO: 이민재,2014-12-17T13:05:13(이민재,2014-12-17T13:05:13) */
+  	SELECT 'EDU' || LPAD(DSM_AGENT_EDU_SEQ.NEXTVAL, 12, '0') AS AGENT_EDUT_MGMT_NUM FROM DUAL]]>
+	</select>
+	<select id="dSearchAgentEduPrst" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentEduPrst  */
+/* IO: 이민재,2014-12-26T10:30:58(이민재,2014-12-26T10:30:58) */
+	SELECT A.* 
+	FROM (
+		SELECT ROW_NUMBER() OVER (ORDER BY A.AGENT_EDUT_MGMT_NUM DESC) RN 
+		    , A.AGENT_EDUT_MGMT_NUM
+			, TO_CHAR(TO_DATE(A.EDU_DT),'YYYY-MM-DD') AS EDU_DT
+			, A.EDU_STA_HM
+			, A.EDU_END_HM
+			, A.EDU_NM
+			, A.EDUT_OWNR_NM 
+	    	, B.USER_ID
+			, H.ORG_ID AS HDQT_TEAM_ORG_ID 				/* 본사팀ID */
+			, H.ORG_NM AS HDQT_TEAM_ORG_NM 
+			, G.OUT_ORG_ID AS HDQT_PART_ORG_ID 			/* 본사파트ID */
+			, G.OUT_ORG_NM AS HDQT_PART_ORG_NM 
+			, F.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID 	/* 영업국ID */
+			, F.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+			, E.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID 		/* 영업팀ID */
+			, E.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+			, D.AGNT_ID AS AGNT_ID
+			, F_MASKING('N',D.AGNT_NM ) AS AGNT_NM
+			, D.RPSTY AS RPSTY
+			, (SELECT COMM_CD_VAL_NM 
+	            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+	           		WHERE COMM_CD_ID='DSM_RETL_CLASS_CD' 
+	             	AND COMM_CD_VAL = D.RPSTY ) AS RPSTY_NM /* 직책명 */
+			, B.EDU_MANN_CD
+			, (SELECT COMM_CD_VAL_NM 
+	            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+	           		WHERE COMM_CD_ID='DSM_EDU_MANN_CD' 
+	             	AND COMM_CD_VAL = B.EDU_MANN_CD ) AS EDU_MANN_CD_NM
+			, B.EVAL_RSLT_CD
+			, (SELECT COMM_CD_VAL_NM 
+	            		FROM PS_MNG.TBAS_COMM_CD_DTL 
+	           		WHERE COMM_CD_ID='DSM_EDU_MANN_CD' 
+	             	AND COMM_CD_VAL = B.EVAL_RSLT_CD ) AS EVAL_RSLT_CD_NM
+			, B.MEMO
+		FROM DSM_AGENT_EDU A 
+	  	JOIN DSM_AGENT_EDU_ATNDR B ON (B.AGENT_EDUT_MGMT_NUM = A.AGENT_EDUT_MGMT_NUM)
+		JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = B.USER_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON (D.AGNT_ID = C.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON (G.OUT_ORG_ID = F.OUT_ORG_ID)
+		JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON (H.ORG_ID = G.ORG_ID)
+		JOIN PS_MNG.TBAS_DUTY_MGMT I ON (I.DUTY_CD = C.DUTY)
+		WHERE A.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+		AND A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			H.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+			D.AGNT_ID = #AGNT_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="AGNT_CD"><![CDATA[
+			D.AGNT_ID = #AGNT_CD#
+		]]></isNotEmpty><![CDATA[
+	) A
+	WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchAgentEduPrstCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.agntedu.db.DAGENTEDUT001.dSearchAgentEduPrstCount  */
+/* IO: 이민재,2014-12-26T10:36:06(이민재,2014-12-26T10:36:06) */
+	SELECT COUNT(*) AS totCnt
+	FROM DSM_AGENT_EDU A 
+  	JOIN DSM_AGENT_EDU_ATNDR B ON (B.AGENT_EDUT_MGMT_NUM = A.AGENT_EDUT_MGMT_NUM)
+	JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = B.USER_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON (D.AGNT_ID = C.CPLAZA_ORG_CD AND D.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (F.OUT_ORG_DTL_ID = E.SUP_OUT_ORG_DTL_ID)
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON (G.OUT_ORG_ID = F.OUT_ORG_ID)
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT H ON (H.ORG_ID = G.ORG_ID)
+	JOIN PS_MNG.TBAS_DUTY_MGMT I ON (I.DUTY_CD = C.DUTY)
+	WHERE A.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+	AND A.EDU_DT BETWEEN #FROM_DT# AND #TO_DT#
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		H.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		G.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		F.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+		E.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="AGNT_ID"><![CDATA[
+		D.AGNT_ID = #AGNT_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="AGNT_CD"><![CDATA[
+		D.AGNT_ID = #AGNT_CD#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSMS002">
+    <bizUnitName>[DU]SMS백오피스</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[DU]SMS백오피스</description>
+    <method-list>
+        <method id="dSearchMsgDtm">
+            <methodName>[DM]SMS거래시각조회</methodName>
+            <transactionId>com.SHARE@DSMS002_dSearchMsgDtm</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS거래시각조회(Single)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T17:34:18" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchBoSmsCount">
+            <methodName>[DM]SMS발송(BO)건수조회</methodName>
+            <transactionId>com.SHARE@DSMS002_dSearchBoSmsCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS발송(BO)건수조회 - 발신년월, 발신번호조건</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-04T10:49:29" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertSysMsgSnd">
+            <methodName>[DM]SMS발송정보등록</methodName>
+            <transactionId>com.SHARE@DSMS002_dInsertSysMsgSnd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS발송정보등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T17:53:29" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertSysMsgSndHst">
+            <methodName>[DM]SMS발송정보이력등록</methodName>
+            <transactionId>com.SHARE@DSMS002_dInsertSysMsgSndHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS발송정보이력등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T17:53:50" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dInsertPsnmsmsQueue">
+            <methodName>[DM]SMS큐등록</methodName>
+            <transactionId>com.SHARE@DSMS002_dInsertPsnmsmsQueue</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]SMS큐등록 : PSNMSMS.TBO_SUBMIT_QUEUE</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T16:31:55" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-13T16:29:32" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

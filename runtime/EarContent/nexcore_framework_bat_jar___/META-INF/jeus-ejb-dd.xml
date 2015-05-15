@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?> 
+<jeus-ejb-dd xmlns="http://www.tmaxsoft.com/xml/ns/jeus" version="6.0">
+    <module-info />
+    <beanlist>
+        <jeus-bean>
+            <ejb-name>nexcore.batch.BatchFacade</ejb-name>
+            <export-name>ejb/nexcore/batch/BatchFacade</export-name>
+            <local-export-name>ejb/nexcore/batch/BatchFacadeLocal</local-export-name>
+        </jeus-bean>
+    </beanlist>
+</jeus-ejb-dd>

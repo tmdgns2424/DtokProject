@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFILE">
+	<select id="dSearchFile" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dSearchFile  */
+/* IO: admin,2014-11-12T20:43:47(admin,2014-11-12T20:43:47) */
+SELECT f.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_SIZE
+     , f.FILE_GRP_ID
+     , f.FILE_PATH
+     , f.PSC_FILE_NM
+     , f.ORDER_NO
+     , f.RGSTR_ID
+     , f.RGST_DTM
+     , f.UPDR_ID
+     , f.UPD_DTM
+     , (CASE WHEN f.FILE_SIZE < (1024*1024) THEN
+                 (CASE WHEN ROUND(f.FILE_SIZE/1024, 2) < 1 THEN 
+                            '0'||ROUND(f.FILE_SIZE/1024, 2)||'Kb'
+                       ELSE ROUND(f.FILE_SIZE/1024, 2)||'Kb' END)
+       ELSE (CASE WHEN ROUND((f.FILE_SIZE/1024)/1024, 2) < 1 THEN 
+                       '0'||ROUND((f.FILE_SIZE/1024)/1024, 2)||'Mb'
+                  ELSE ROUND((f.FILE_SIZE/1024)/1024, 2)||'Mb' END)
+       END) AS FILE_SIZE_TXT
+  FROM DSM_ATCH_FILE f
+ WHERE f.ATCH_FILE_ID = #ATCH_FILE_ID#]]>
+	</select>
+	<insert id="dInsertFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dInsertFile  */
+/* IO: 안종광,2014-12-09T14:42:07(admin,2014-11-12T20:51:22) */
+INSERT INTO DSM_ATCH_FILE(
+      ATCH_FILE_ID
+    , FILE_NM
+    , FILE_SIZE
+    , FILE_GRP_ID
+    , FILE_PATH
+    ]]><isNotEmpty property="PSC_FILE_NM"><![CDATA[, PSC_FILE_NM]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="ORDER_NO"><![CDATA[, ORDER_NO]]></isNotEmpty><![CDATA[
+    , RGSTR_ID
+    , RGST_DTM
+    , UPDR_ID
+    , UPD_DTM
+)
+VALUES (
+      #ATCH_FILE_ID#
+    , #FILE_NM#
+    , #FILE_SIZE#
+    , #FILE_GRP_ID#
+    , #FILE_PATH#
+    ]]><isNotEmpty property="PSC_FILE_NM"><![CDATA[, #PSC_FILE_NM#]]></isNotEmpty><![CDATA[
+    ]]><isNotEmpty property="ORDER_NO"><![CDATA[, #ORDER_NO#]]></isNotEmpty><![CDATA[
+    , #onlineContext.userInfo.loginId# /*로그인사용자ID*/
+    , SYSDATE
+    , #onlineContext.userInfo.loginId# /*로그인사용자ID*/
+    , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dDeleteFile  */
+/* IO: 안진갑,2015-03-12T17:56:17(admin,2014-11-12T20:52:32) */
+DELETE FROM DSM_ATCH_FILE
+ WHERE ATCH_FILE_ID = #ATCH_FILE_ID#]]>
+	</delete>
+	<select id="dSearchFileMapping" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dSearchFileMapping  */
+/* IO: 안종광,2014-12-09T13:22:18(admin,2014-11-13T09:53:54) */
+SELECT m.$CONTENT_TABLE_PK1_ID$ /*컨텐츠ID*/
+     , m.ATCH_SEQ
+     , m.ATCH_FILE_ID
+     , f.FILE_NM
+	 , f.FILE_GRP_ID /*파일그룹ID=업무구분ID*/
+     , f.FILE_PATH /*저장파일경로*/
+     , f.FILE_SIZE
+     , (CASE WHEN f.FILE_SIZE < (1024*1024) THEN
+                  (CASE WHEN ROUND(f.FILE_SIZE/1024, 2) < 1 THEN 
+                             '0'||ROUND(f.FILE_SIZE/1024, 2)||'Kb'
+                        ELSE ROUND(f.FILE_SIZE/1024, 2)||'Kb' END)
+        ELSE (CASE WHEN ROUND((f.FILE_SIZE/1024)/1024, 2) < 1 THEN 
+                        '0'||ROUND((f.FILE_SIZE/1024)/1024, 2)||'Mb'
+                   ELSE ROUND((f.FILE_SIZE/1024)/1024, 2)||'Mb' END)
+        END) AS FILE_SIZE_TXT
+  FROM $CONTENT_TABLE_ID$ m /*파일매핑테이블*/
+  JOIN DSM_ATCH_FILE f 
+    ON ( m.ATCH_FILE_ID = f.ATCH_FILE_ID )
+ WHERE m.$CONTENT_TABLE_PK1_ID$ = #CONTENT_TABLE_PK1_ID_VAL# /*컨텐츠ID*/
+ ORDER BY m.ATCH_SEQ]]>
+	</select>
+	<insert id="dInsertFileMapping" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dInsertFileMapping  */
+/* IO: 안종광,2014-12-09T14:42:28(admin,2014-11-13T09:58:12) */
+INSERT INTO $CONTENT_TABLE_ID$ (
+       $CONTENT_TABLE_PK1_ID$
+     , ATCH_SEQ
+     , ATCH_FILE_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+) 
+SELECT #CONTENT_TABLE_PK1_ID_VAL#
+     , NVL(MAX(ATCH_SEQ),0) + 1
+     , #ATCH_FILE_ID#
+     , #onlineContext.userInfo.loginId# /*로그인사용자ID*/
+     , SYSDATE
+     , #onlineContext.userInfo.loginId# /*로그인사용자ID*/
+     , SYSDATE
+  FROM $CONTENT_TABLE_ID$ /*컨텐트테이블*/
+ WHERE $CONTENT_TABLE_PK1_ID$ = #CONTENT_TABLE_PK1_ID_VAL# /*컨텐츠ID*/]]>
+	</insert>
+	<delete id="dDeleteFileMapping" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DFILE.dDeleteFileMapping  */
+/* IO: 안종광,2014-12-09T13:13:51(admin,2014-11-13T10:05:11) */
+DELETE FROM $CONTENT_TABLE_ID$ /*컨텐트테이블*/
+ WHERE $CONTENT_TABLE_PK1_ID$ = #CONTENT_TABLE_PK1_ID_VAL# /*컨텐츠ID*/
+]]><isNotEmpty prepend="" property="ATCH_SEQ"><![CDATA[
+   AND ATCH_SEQ = #ATCH_SEQ# /*첨부순번*/
+]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

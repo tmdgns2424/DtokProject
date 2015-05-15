@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.USERINFO">
+    <componentName>[BC]공통-회원정보관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.userinfo</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>회원정보관리</description>
+    <custom-props/>
+    <history>
+        <created date="2014-12-03T17:56:02" user="한상곤 (hansanggon)"/>
+    </history>
+</component>

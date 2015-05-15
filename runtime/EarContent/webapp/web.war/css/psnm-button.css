@@ -1,0 +1,80 @@
+@charset "utf-8";
+/* CSS Document */
+
+	.af-button.iOS_Theme {
+	color:#fff;
+	text-shadow:-1px -1px 1px #215989;
+	border-color:#037bb7 #037cb8 #027bb8 #017bb7;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	background-color:#3b9be3;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#3B9BE3), to(#2872be));
+	background-image: -webkit-linear-gradient(top, #3B9BE3, #2872be);
+	background-image:    -moz-linear-gradient(top, #3B9BE3, #2872be);
+	background-image:      -o-linear-gradient(top, #3B9BE3, #2872be);
+	background-image:         linear-gradient(to bottom, #3B9BE3, #2872be);
+}
+.af-button.iOS_Theme.af-pressed {
+	border-color:#006699 #0072AB #2B88C9 #2B88C9;
+	background-color:#3b9be3;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#2872be), to(#3B9BE3));
+	background-image: -webkit-linear-gradient(top, #2872be, #3B9BE3);
+	background-image:    -moz-linear-gradient(top, #2872be, #3B9BE3);
+	background-image:      -o-linear-gradient(top, #2872be, #3B9BE3);
+	background-image:         linear-gradient(to bottom, #2872be, #3B9BE3);
+}
+.af-button.iOS_Theme.af-hover {
+	background-color:#3690d7;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#3690D7), to(#1F5C9B));
+	background-image: -webkit-linear-gradient(top, #3690D7, #1F5C9B);
+	background-image:    -moz-linear-gradient(top, #3690D7, #1F5C9B);
+	background-image:      -o-linear-gradient(top, #3690D7, #1F5C9B);
+	background-image:         linear-gradient(to bottom, #3690D7, #1F5C9B);
+}
+.af-textinput.iOS_Theme {
+	-webkit-border-radius:8px;
+	background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(212, 212, 212)), color-stop(10%, rgb(255, 255, 255)), color-stop(90%, rgb(255, 255, 255)));
+	-webkit-box-shadow: 0px 0 7px 1px rgb(212,212,212) inset;
+	box-shadow: 0px 0 7px 1px rgb(212,212,212) inset;
+}
+.af-textinput.iOS_Theme.af-hover {
+	color: #161616;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0 7px 1px #3690d7 inset;
+	box-shadow: 0px 0 7px 1px #3690d7 inset;
+}
+.af-textinput.iOS_Theme:focus {
+	color: #161616;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0 7px 1px #3b9be3 inset;
+	box-shadow: 0px 0 7px 1px #3b9be3 inset;
+}
+/* Android Style */
+	.af-button.Android_Theme {
+	color:#fff;
+	background: #5b5b5b;
+	font-weight: bold;
+	font-size: 12px;
+	appearance:none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-khtml-appearance:none;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+}
+.af-button.Android_Theme.af-pressed {
+	background: #42bee1;
+}
+.af-button.Android_Theme.af-hover {
+	background: #42beba;
+}
+.af-textinput.Android_Theme {
+	border:0;
+	border-bottom: 2px solid #5b5b5b;
+}
+.af-textinput.Android_Theme.af-hover {
+	border-bottom: 2px solid #42beba;
+}
+.af-textinput.Android_Theme:focus {
+	border-bottom: 2px solid #42bee1;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-popup.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+<body>
+<div id="Wrap">
+
+<!-- title area -->
+<div class="pop_header" ><span class="title">MA 지원</span> <a href="#" class="pop_close" onclick="javascript:self.close();"> <img src="../image/blat_a9.gif" alt="팝업닫기" ></a> 
+  
+  <!--view_table area -->
+  <div class="textAR">
+	<ul class="txt-type1">
+		<li>MA지원관련 상담을 원하시면 지원상담요청 버튼을, 기존 요청에 대한 진행사항 확인을 원하시면 진행현황 버튼을 클릭해 주세요. </li>
+		<li>지원서 작성은 영업국 사전 협의 후 진행해 주세요.</li>
+		<li>영업국 사전 협의 없이 MA모집 공고를 보고 지원하신 경우, MA지원상담 절차를 먼저 진행해 주세요.  </li>
+	</ul>
+    <div class="floatL2 b-line">
+		<button id="btnNew" data-type="button" data-theme="af-btn2" data-authtype="W" class="af-button af-n-btn6" data-converted="true"></button>
+		<button id="btnNew" data-type="button" data-theme="af-btn2" data-authtype="W" class="af-button af-n-btn7" data-converted="true"></button>
+		<button id="btnNew" data-type="button" data-theme="af-btn2" data-authtype="W" class="af-button af-n-btn8" data-converted="true"></button>
+    </div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>진행현황</b> 
+        <!--우측 버튼
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+        -->
+    </div>
+	<div id="searchDiv" class="textAR">
+		<table id="searchTable" class="board02" style="width:92%;">
+			<colgroup>
+				<col style="width:15%">
+				<col style="width:30%">
+				<col style="width:15%">
+				<col style="width:*">
+			</colgroup>
+            <tbody>
+			<tr>
+                <th height="40" scope="col" class="fontred">상담 요청자명 </th>
+                <td class="tleft">
+					<input id="textId" data-type="textinput"/>
+                </td>
+                <th class="fontred">비밀번호</th>
+                <td class="tleft">
+                    <input id="textId" data-type="textinput"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="fontred">연락처 </th>
+                <td class="tleft" colspan="3">
+                    <select id="selectId" data-type="select" >
+						<option value="">010</option>
+					</select> - 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+					- 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+                </td>
+            </tr>
+            </tbody>
+		</table>
+		<div class="ab_pos5">
+			<button id="btnSearch" data-type="button" data-theme="af-psnm" data-authtype="R" class="af-button af-psnm" data-converted="true"></button><!-- 조회버튼 -->
+		</div>
+    </div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b> MA 지원상담 목록</b> 
+        <!--우측 버튼
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+        -->
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

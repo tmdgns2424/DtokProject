@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DLOGIN001">
+	<select id="dSearchLogin" parameterClass="map" resultClass="hmap" fetchSize="1" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dSearchLogin  */
+/* IO: 안종광,2015-04-08T14:04:22(안종광,2014-11-26T20:14:58) */
+SELECT x.USER_ID
+     , x.DUTY_USER_TYP
+     , x.MBR_RPSTY
+     , x.SALE_TEAM_ORG_ID
+     , x.SALE_DEPT_ORG_ID
+     , x.HDQT_PART_ORG_ID
+     , x.HDQT_TEAM_ORG_ID
+     , x.CS_YN /* 에이전트 국장업무대행여부 */
+     , x.DSM_CTRL_RSN_CD
+     , y.COMM_CD_VAL_NM AS STOP_RSN_NM /* DSM통제사유 */
+     , y.ADD_INFO_05 AS STOP_YN /* D-tok정지여부 */
+     , F_DSM_USER_DUTY('CD', x.USER_ID) AS DUTY
+     , F_DSM_USER_DUTY('NM', x.USER_ID) AS DUTY_NM
+     , v.U_KEY_ID
+     , v.USER_CD
+     , v.USER_NM AS USER_NAME /*사용자명원본*/
+     , F_MASKING('N', v.USER_NM) AS USER_NM
+     , v.PWD
+     , v.WPHON
+     , v.USER_GRP
+     , v.ORG_ID
+     , v.ORG_AREA
+     , v.PWD_END_DT
+     , v.POS_AGENCY
+     , v.ATTC_CAT
+     , v.HAPPY_SMS1
+     , v.HAPPY_SMS2
+     , v.HAPPY_SMS3
+     , v.ACC_SMS1
+     , v.ACC_SMS2
+     , v.BIZ_JM_NUM
+     , v.REAL_BIZ_YN
+     , v.PORTAL_USER_ID
+     , v.MST_MBL_PHONE
+     , v.EMAIL_RECV_CL
+     , v.P_FLAG
+     , DECODE(v.NEW_ORG_ID, 'O00000', 'AC1140', v.NEW_ORG_ID) AS NEW_ORG_ID /* T-Key 적용 시 해제 */
+     , v.USER_TYP
+     , v.RPSTY
+     , v.OUT_USER_TYP
+     , v.CPLAZA_ORG_CD
+     , v.TRSP_DEALCO_CD
+     , v.LOGIN_FAIL_CNT
+     , v.LAST_LOGIN_DT
+     , CASE WHEN v.ATTC_CAT IN ('1', '2', '3') THEN NVL(v.OUT_ORG_ID, '01') ELSE v.OUT_ORG_ID END AS OUT_ORG_ID
+     , CASE WHEN z.USER_ID IS NULL THEN 'N' ELSE 'Y' END AS DSMUSER_YN /*DSM사용자여부*/
+     , z.NICK_NM
+     , z.PIC_FILE_ID
+     , z.REAL_BIZ_DT /*실명인증일자*/
+     , z.MBL_PHON_NUM1
+     , z.MBL_PHON_NUM2
+     , z.MBL_PHON_NUM3
+     , z.MBL_PHON_NUM1 || z.MBL_PHON_NUM2 || z.MBL_PHON_NUM3 AS MBL_PHON /*휴대전화번호*/
+     , z.MBL_PHON_NUM1 || z.MBL_PHON_NUM2 || z.MBL_PHON_NUM3 AS MBL_PHON_NUM /*휴대전화번호*/
+     , z.EMAIL_ID
+     , z.EMAIL_DMN_CD
+     , z.EMAIL_DMN_NM
+     , FLOOR(SYSDATE - TO_DATE(z.REAL_BIZ_DT, 'RRRRMMDD')) AS DAYS_REAL_BIZ_DT /*실명인증후흐른일수*/
+     , F_DSM_CODE_NM('DSM_RETL_CLASS_CD', x.MBR_RPSTY) AS RPSTY_NM /*직책명*/
+     , PKG_ORGS.F_DSM_ORG_NM('AGNT', v.CPLAZA_ORG_CD) AS SALE_AGNT_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('SALE_TEAM', x.SALE_TEAM_ORG_ID) AS SALE_TEAM_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('SALE_DEPT', x.SALE_DEPT_ORG_ID) AS SALE_DEPT_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('HDQT_PART', x.HDQT_PART_ORG_ID) AS HDQT_PART_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('HDQT_TEAM', x.HDQT_TEAM_ORG_ID) AS HDQT_TEAM_ORG_NM
+     , TO_CHAR(SYSDATE, 'YYYYMMDD') AS CURR_YMD /*현재일자*/
+     , TO_CHAR(SYSDATE, 'HH24MISS') AS CURR_HMS /*현재시각*/
+     , (
+            SELECT COUNT(PAPER_ID) AS RCV_PAPER_CNT
+              FROM DSM_RCV_PAPER
+             WHERE USER_ID = x.USER_ID
+               AND IS_RE_DELETE = 'N'
+               AND IS_SE_DELETE = 'N'
+               AND IS_OPEND = 'N'
+       ) AS RCV_PAPER_CNT /*받은쪽지개수*/
+     , r.USE_RSTRCT_APLY_STA_HM
+     , r.USE_RSTRCT_APLY_END_HM
+  FROM PS_MNG.TBAS_USER_MGMT v
+  JOIN (
+  /* ____________________________________________________________________________ */
+        SELECT u.USER_ID
+             , d.DUTY_NM
+             , d.USER_TYP AS DUTY_USER_TYP
+             , mm.RPSTY   AS MBR_RPSTY /*직책코드*/
+             , dm.OUT_ORG_DTL_ID     AS SALE_TEAM_ORG_ID /* 영업팀 조직ID */
+             , dm.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /* 영업국 조직ID */
+             , oo.OUT_ORG_ID         AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+             , oo.ORG_ID             AS HDQT_TEAM_ORG_ID /* 본사팀 조직ID */
+             , mm.CS_YN
+             , PS_MNG.FACC_GET_TR_CTRL ( mm.AGNT_ID, 'DSM' , NULL) AS DSM_CTRL_RSN_CD
+          FROM PS_MNG.TBAS_USER_MGMT u
+               JOIN PS_MNG.TBAS_DUTY_MGMT        d ON ( u.DUTY = d.DUTY_CD AND 'Y' = d.USE_YN AND d.DUTY_TYP = '2' )
+               JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT mm ON ( mm.AGNT_ID = u.CPLAZA_ORG_CD AND mm.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+               JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT dm ON ( dm.OUT_ORG_DTL_ID = mm.OUT_ORG_DTL_ID )
+               JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = dm.OUT_ORG_ID )
+         WHERE u.USER_ID     = #USER_ID# /*사용자ID*/
+           AND u.DEL_YN     != 'Y'
+           AND u.USER_ST     = '1' /*재직*/
+           AND u.EFF_USER_YN = 'Y' /*사용승인*/
+           AND u.OUT_USER_TYP IN ( '1', '2' )
+           AND (d.USER_TYP = '4' OR d.DUTY_CD = '14')
+           AND EXISTS ( SELECT 'X'
+                     FROM DSM_USER s
+                    WHERE s.USER_ID = u.USER_ID
+                      AND s.SCRB_ST_CD = '02'/*가입승인*/
+              ) 
+        UNION
+        SELECT u.USER_ID
+             , d.DUTY_NM
+             , d.USER_TYP AS DUTY_USER_TYP
+             , mm.RPSTY   AS MBR_RPSTY /*직책코드*/
+             , '' AS SALE_TEAM_ORG_ID /* 영업팀 조직ID */
+             , '' AS SALE_DEPT_ORG_ID /* 영업국 조직ID */
+             , u.OUT_ORG_ID AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+             , u.NEW_ORG_ID AS HDQT_TEAM_ORG_ID /* 본사팀 조직ID */
+             , mm.CS_YN
+             , '' AS DSM_CTRL_RSN_CD
+          FROM PS_MNG.TBAS_USER_MGMT u
+                    JOIN PS_MNG.TBAS_DUTY_MGMT        d ON ( u.DUTY = d.DUTY_CD AND 'Y' = d.USE_YN AND d.DUTY_TYP = '2' )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT mm ON ( mm.AGNT_ID = u.CPLAZA_ORG_CD AND mm.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT dm ON ( dm.OUT_ORG_DTL_ID = mm.OUT_ORG_DTL_ID )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = dm.OUT_ORG_ID )
+         WHERE u.USER_ID     = #USER_ID# /*사용자ID*/
+           AND u.DEL_YN     != 'Y'
+           AND u.USER_ST     = '1' /* 재직 */
+           AND u.EFF_USER_YN = 'Y' /* 사용승인 */
+           AND u.ATTC_CAT IN ('1','2','3','4')
+           AND ( u.USER_ID IN ('91204841','91204842','91204843','91204844','91204845') OR
+                 u.USER_ID IN (SELECT USER_ID FROM DSM_APPROVE) ) /*승인된사용자ID*/
+  /* _____________________________________________________________________________ */
+  ) x ON (v.USER_ID = x.USER_ID )
+  LEFT JOIN DSM_USER z ON ( z.USER_ID = x.USER_ID )
+  LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL y ON(y.COMM_CD_ID = 'DSM_CTRL_RSN_CD' AND y.COMM_CD_VAL = x.DSM_CTRL_RSN_CD)
+  LEFT OUTER JOIN ( /*외부조직ID로 사용제한 시각 조회*/
+    SELECT OUT_ORG_ID
+         , MIN(APLY_STA_HM) AS USE_RSTRCT_APLY_STA_HM
+         , MAX(APLY_END_HM) AS USE_RSTRCT_APLY_END_HM
+      FROM DSM_USE_RSTRCT
+     WHERE DOW_CL = TO_CHAR(SYSDATE, 'D')
+       AND APLY_YN = 'Y'
+       AND OUT_ORG_ID = ( SELECT OUT_ORG_ID FROM PS_MNG.TBAS_USER_MGMT WHERE USER_ID = #USER_ID# /*사용자ID*/ )
+       AND TO_CHAR(SYSDATE, 'HH24MI') BETWEEN APLY_STA_HM AND APLY_END_HM
+       AND NOT EXISTS ( SELECT 1 FROM DSM_USE_RSTRCT_EXCEPT WHERE USER_ID = #USER_ID# /*사용자ID*/ )
+       AND ROWNUM = 1
+     GROUP BY OUT_ORG_ID
+  ) r ON ( r.OUT_ORG_ID = x.HDQT_PART_ORG_ID )]]>
+	</select>
+	<update id="dUpdateFailCnt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dUpdateFailCnt  */
+/* IO: admin,2014-11-20T14:44:17(admin,2014-11-20T14:05:31) */
+UPDATE PS_MNG.TBAS_USER_MGMT
+   SET MOD_DTM = TO_CHAR(SYSDATE, 'RRRRMMDDHH24MISS')
+     , MOD_USER_ID = #USER_ID#
+     , LOGIN_FAIL_CNT = 
+
+ ]]><isEqual property="LOGIN_FAIL_YN" compareValue="Y"><![CDATA[
+                        (SELECT NVL(LOGIN_FAIL_CNT,0)+1 
+   						   FROM PS_MNG.TBAS_USER_MGMT
+   						  WHERE USER_ID = #USER_ID#)
+ ]]></isEqual><![CDATA[
+ ]]><isEqual property="LOGIN_FAIL_YN" compareValue="N"><![CDATA[
+                        0
+     , LAST_LOGIN_DT = TO_CHAR(SYSDATE, 'RRRRMMDD')
+ ]]></isEqual><![CDATA[
+
+ WHERE USER_ID = #USER_ID# /*사용자ID*/
+ AND  ATTC_CAT = '4']]>
+	</update>
+	<update id="dUpdatePwd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dUpdatePwd  */
+/* IO: 안종광,2015-04-24T15:20:50(안종광,2014-12-19T10:58:52) */
+UPDATE PS_MNG.TBAS_USER_MGMT
+   SET PWD = #NEW_PWD#
+     , LOGIN_FAIL_CNT = 0
+     , PWD_END_DT = TO_CHAR(ADD_MONTHS(SYSDATE, 3),'YYYYMMDD')
+     , MOD_USER_ID = #onlineContext.userInfo.loginId#
+     , MOD_DTM = SYSDATE
+ WHERE USER_ID = #USER_ID# /*사용자ID*/
+   AND PWD = #OLD_PWD#
+   /*AND ATTC_CAT = '4'*/ /*외부사용자*/
+   /*AND OUT_USER_TYP = '1'*/ /*MA로제한*/]]>
+	</update>
+	<update id="dUpdatePwdInit" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dUpdatePwdInit  */
+/* IO: 안종광,2014-12-19T11:01:14(안종광,2014-12-19T11:01:14) */
+UPDATE PS_MNG.TBAS_USER_MGMT
+   SET PWD = #PWD#,
+   	 , PWD_END_DT = TO_CHAR(ADD_MONTHS(SYSDATE, 3),'YYYYMMDD')
+   	 , LOGIN_FAIL_CNT = 0
+ WHERE USER_ID  = #USER_ID#
+   AND ATTC_CAT = '4' /*외부사용자*/
+   AND OUT_USER_TYP = '1' /*MA로제한*/]]>
+	</update>
+	<select id="dSearchUserAuthGrpByDuty" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dSearchUserAuthGrpByDuty  */
+/* IO: 안종광,2015-01-15T14:26:05(안종광,2015-01-15T14:06:06) */
+SELECT ad.AUTH_GRP_ID, a.AUTH_GRP_NM, a.AUTH_TYP_ID, a.AUTH_TYP_NM, ad.DUTY_CD
+  FROM DSM_AUTH_GRP_APLY_DUTY ad
+  JOIN DSM_AUTH_GRP a ON (ad.AUTH_GRP_ID = a.AUTH_GRP_ID AND a.USE_YN = 'Y')
+ WHERE ad.DUTY_CD = (SELECT F_DSM_USER_DUTY('CD', #USER_ID#) FROM DUAL) /*직무코드*/
+ ORDER BY a.AUTH_PRTY]]>
+	</select>
+	<select id="dSearchUserDataAuthOrg" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dSearchUserDataAuthOrg  */
+/* IO: 안종광,2015-01-15T15:05:28(안종광,2015-01-15T15:03:26) */
+SELECT v.HDQT_TEAM_ORG_ID, v.HDQT_TEAM_ORG_NM, v.HDQT_PART_ORG_ID, v.HDQT_PART_ORG_NM
+  FROM (
+      ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+        SELECT #HDQT_PART_ORG_ID# AS HDQT_PART_ORG_ID
+             , #HDQT_PART_ORG_NM# AS HDQT_PART_ORG_NM
+             , #HDQT_TEAM_ORG_ID# AS HDQT_TEAM_ORG_ID
+             , #HDQT_TEAM_ORG_NM# AS HDQT_TEAM_ORG_NM
+         FROM DUAL
+        UNION 
+      ]]></isNotEmpty><![CDATA[
+        SELECT d.OUT_ORG_ID AS HDQT_PART_ORG_ID
+             , o.OUT_ORG_NM AS HDQT_PART_ORG_NM
+             , o.ORG_ID     AS HDQT_TEAM_ORG_ID
+             , n.ORG_NM     AS HDQT_TEAM_ORG_NM
+          FROM DSM_DATA_USE_AUTH d
+          JOIN PS_MNG.TBAS_OUT_ORG_MGMT o ON (d.OUT_ORG_ID = o.OUT_ORG_ID)
+          JOIN PS_MNG.TBAS_NEW_ORG_MGMT n ON (o.ORG_ID = n.ORG_ID)
+         WHERE d.USER_ID = #USER_ID# /*회원ID*/
+           AND TO_CHAR(SYSDATE, 'RRRRMMDD') >= d.AUTH_STA_DT
+           AND d.AUTH_END_DT >= TO_CHAR(SYSDATE, 'RRRRMMDD')
+  ) v
+ ORDER BY v.HDQT_TEAM_ORG_ID, v.HDQT_PART_ORG_ID]]>
+	</select>
+	<select id="dSearchRecentLoginLog" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dSearchRecentLoginLog  */
+/* IO: 이승훈2,2015-05-14T11:28:01(안종광,2015-04-22T17:32:46) */
+SELECT USER_ID, IP, SUCC_YN, LOGIN_DTM, LOGOUT_DTM
+  FROM DSM_LIN_LOG
+ WHERE USER_ID = #USER_ID#
+   AND SUCC_YN = 'Y'
+   AND LOGIN_DTM > SYSDATE - 30/1440 
+   AND LOGOUT_DTM IS NULL
+   ORDER BY LOGIN_DTM DESC]]>
+	</select>
+	<select id="dSearchIsRecentPwd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dSearchIsRecentPwd 비밀번호 동일여부 */
+/* IO: 안진갑,2015-05-04T10:08:13(안진갑,2015-05-04T10:05:12) */
+SELECT COUNT(1) AS CNT
+  FROM (
+          SELECT /*+ index_desc(DSM_PWD_CHG_HST PK_DSM_PWD_HST)*/
+                 PWD
+            FROM DSM_PWD_CHG_HST
+           WHERE USER_ID = #USER_ID# 
+             AND ROWNUM <= 3
+        )
+  WHERE PWD = #NEW_PWD#]]>
+	</select>
+	<insert id="dInsertPwdChgHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dInsertPwdChgHst 비밀번호 이력등록 */
+/* IO: 안진갑,2015-05-04T10:09:53(안진갑,2015-05-04T10:09:16) */
+INSERT INTO DSM_PWD_CHG_HST ( USER_ID, 
+                               HST_SEQ, 
+                               PWD, 
+                               RGSTR_ID, 
+                               RGST_DTM )                               
+SELECT #USER_ID#
+       , (SELECT NVL(MAX(HST_SEQ), 0)+1 FROM DSM_PWD_CHG_HST WHERE USER_ID = #USER_ID#)    
+       , #NEW_PWD#
+       , #onlineContext.userInfo.loginId#
+       , SYSDATE
+  FROM DUAL]]>
+	</insert>
+	<update id="dUpdateLogout" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DLOGIN001.dUpdateLogout  */
+/* IO: 이승훈2,2015-05-12T11:25:48(이승훈2,2015-05-12T10:58:07) */
+UPDATE DSM_LIN_LOG g SET
+       g.LOGOUT_DTM = SYSDATE
+ WHERE g.LOGOUT_DTM IS NULL
+   AND g.SUCC_YN = 'Y'
+   AND g.USER_ID = #USER_ID# /*입력*/]]>
+	</update>
+</sqlMap>

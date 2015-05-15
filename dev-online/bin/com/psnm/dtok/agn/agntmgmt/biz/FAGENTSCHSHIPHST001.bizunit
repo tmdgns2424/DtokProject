@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FAGENTSCHSHIPHST001">
+    <bizUnitName>[FU]에이전트학력정보</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>agn.AGNTMGMT</componentId>
+    <description>에이전트학력정보 FU</description>
+    <method-list>
+        <method id="fDeleteAgentSchshipHst">
+            <methodName>[FM]에이전트학력정보 삭제</methodName>
+            <transactionId>agn.AGNTMGMT@FAGENTSCHSHIPHST001_fDeleteAgentSchshipHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트학력정보 삭제 FM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-02T17:57:57" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="fInsertAgentSchshipHst">
+            <methodName>[FM]에이전트학력정보 저장</methodName>
+            <transactionId>agn.AGNTMGMT@FAGENTSCHSHIPHST001_fInsertAgentSchshipHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트학력정보 저장 FM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T11:01:47" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+        <method id="fSearchAgentSchshipHst">
+            <methodName>[FM]에이전트학력정보 조회</methodName>
+            <transactionId>agn.AGNTMGMT@FAGENTSCHSHIPHST001_fSearchAgentSchshipHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트학력정보 조회 FM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-16T11:00:46" user="김보선 (kimbosun)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-16T10:59:13" user="김보선 (kimbosun)"/>
+    </history>
+</bizUnit>

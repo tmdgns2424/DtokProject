@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="../css/psnm-popup.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-grid.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-alopex-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/psnm-button.css">
+<script type="text/javascript" src="../script/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="../script/alopex-ui.js"></script>
+<script type="text/javascript" src="../script/alopex-grid.js"></script>
+<script type="text/javascript" src="../script/app/common/common.js"></script>
+<script type="text/javascript" src="../script/app/view.js"></script>
+<body>
+<div id="Wrap">
+
+<!-- title area -->
+<div class="pop_header" ><span class="title">MA 지원</span> <a href="#" class="pop_close" onclick="javascript:self.close();"> <img src="../image/blat_a9.gif" alt="팝업닫기" ></a> 
+  
+  <!--view_table area -->
+  <div class="textAR">
+	<ul class="txt-type1">
+		<li>MA지원관련 상담을 원하시면 지원상담요청 버튼을, 기존 요청에 대한 진행사항 확인을 원하시면 진행현황 버튼을 클릭해 주세요. </li>
+		<li>지원서 작성은 영업국 사전 협의 후 진행해 주세요.</li>
+		<li>영업국 사전 협의 없이 MA모집 공고를 보고 지원하신 경우, MA지원상담 절차를 먼저 진행해 주세요.  </li>
+	</ul>
+    <div class="floatL2 b-line">
+		<button id="btnNew" data-type="button" data-theme="af-n-btn6" data-authtype="W" class="af-button af-n-btn6" data-converted="true"></button>
+		<button id="btnNew" data-type="button" data-theme="af-n-btn8" data-authtype="W" class="af-button af-n-btn8" data-converted="true"></button>
+		<button id="btnNew" data-type="button" data-theme="af-n-btn11" data-authtype="W" class="af-button af-n-btn11" data-converted="true"></button>
+    </div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>지원서작성_인적 사항(필수)</b> 
+        <!--우측 버튼
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+        -->
+    </div>
+	<div class="info1">수집된 정보는 본인 확인 및 지원 심사 결과 통보에 이용하며, 필수정보 미제공시 계약이 이뤄지지 않습니다.</div>
+	<div id="searchDiv" class="textAR">
+		<table id="searchTable" class="board02">
+			<colgroup>
+				<col style="width:18%">
+				<col style="width:10%">
+				<col style="width:30%">
+				<col style="width:10%">
+				<col style="width:*">
+			</colgroup>
+            <tbody>
+			<tr>
+				<td rowspan="5">
+					<img src="../image/dt_m01.gif" width="114" height="154">
+					<br><br>
+					<button id="btnSave" type="button" data-type="button" data-theme="af-n-btn3" data-authtype="W" data-altname="등록" class="af-button af-n-btn3" data-converted="true"></button>
+				</td>
+                <th height="40" scope="col" class="fontred">성명(한글)</th>
+                <td class="tleft">
+					<input id="textId" data-type="textinput" />
+                </td>
+				<th height="40" scope="col" class="fontred">성명(한자)</th>
+                <td class="tleft">
+					<input id="textId" data-type="textinput" />
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col" class="fontred">생년월일</th>
+                <td class="tleft">
+					<input id="POPUP_STA_DT" name="POPUP_STA_DT" data-type="dateinput" data-bind="value:POPUP_STA_DT" data-image="" class="af-dateinput af-default" maxlength="10" placeholder="yyyy-MM-dd" type="text" data-converted="true"><div class="af-dateinput-image"></div>
+					<input id="radio1"  type = "radio" data-type="radio" name="radioGroup" value = "value1" checked="checked"/>
+					음력
+					<input id="radio2"  type = "radio" data-type = "radio" name="radioGroup" value = "value2" />
+					양력
+                </td>
+				<th height="40" scope="col" class="fontred">결혼유무</th>
+                <td class="tleft">
+					<input id="radio1"  type = "radio" data-type="radio" name="radioGroup" value = "value1" checked="checked"/>
+					기혼
+					<input id="radio2"  type = "radio" data-type = "radio" name="radioGroup" value = "value2" />
+					미혼
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col" class="fontred">자택전화</th>
+                <td class="tleft">
+					<select id="selectId" data-type="select" >
+						<option value="">02</option>
+					</select> - 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+					- 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+                </td>
+				<th height="40" scope="col" class="fontred">이동전화</th>
+                <td class="tleft">
+					<select id="selectId" data-type="select" >
+						<option value="">010</option>
+					</select> - 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+					- 
+					<input id="textId" data-type="textinput" style="width:50px;" />
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col" class="fontred">현주소</th>
+                <td class="tleft" colspan="3">
+					<input id="textId" data-type="textinput" style="width:10%" /> - <input id="textId" data-type="textinput" style="width:10%" /> <button id="btnSave" type="button" data-type="button" data-theme="af-n-btn4" data-authtype="W" data-altname="조회" class="af-button af-n-btn4" data-converted="true"></button><br>
+					<input id="textId" data-type="textinput" style="width:90%" /><br>
+					<input id="textId" data-type="textinput" style="width:90%" />
+					
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col" class="fontred">이메일</th>
+                <td class="tleft" colspan="3">
+					<input id="textId" data-type="textinput" /> 
+					@
+					<input id="textId" data-type="textinput" />
+					<select id="selectId" data-type="select" >
+						<option value="">-</option>
+					</select> 
+                </td>
+            </tr>
+            </tbody>
+		</table>
+    </div>
+	<div class="info_txt_bottom">
+		<ul class="info1">
+			<li>본인 및 파일의 확장자가 jpg,jpeg.gif인 사진 파일만 등록할 수 있습니다.(주민등록증 촬영 및 상태 불량 사진 등록 시 승인 거절) </li>
+			<li>수집된 정보[학력사항/경력사항/자기소개/판매계획]는 지원자 자격 심사에 이용하며, 선택 정보수집 및 이용에 동의하지 않을 권리가 있으나, 미 동의 시 심사에 불리하게 작용할 수 있습니다.</li>
+		</ul>
+	</div>
+	<div class="t-center mgt30">
+		<strong style="font-size:18px;">개인정보 수집 및 이용에 대해 동의 하십니까?</strong><br><br>
+		<input id="radio1"  type = "radio" data-type="radio" name="radioGroup" value = "value1" checked="checked"/>
+		동의
+		<input id="radio2"  type = "radio" data-type = "radio" name="radioGroup" value = "value2" />
+		미동의
+	</div>
+	
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>학력사항</b> 
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+    </div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>경력사항</b> 
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+    </div>
+	
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>자기소개(성격 및 경력 중심)-<span class="fontred">200자 이상 입력 필수</span></b></div>
+    <textarea data-type="textarea" rows="6" cols="40"></textarea>
+	<div class="t-right mgt10">(0/200)</div>
+	
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>월 별 판매계획</b></div>
+	
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>판매계획(목표 공략 시장 및 판매전략)-<span class="fontred">300자 이상 입력 필수</span></b></div>
+    <textarea data-type="textarea" rows="6" cols="40"></textarea>
+	<div class="tit_type1_box mgt10">
+		<div class="info1 f-left">수집된 정보[기타사항]는 지원자의 영업 및 직무적성능력 판단을 위한 참고자료로 이용하며, 개인정보수집 및 이용에 동의하지 않을 권리가 있으나, 미 동의 시 심사에 불리하게 작용할 수 있습니다.</div>
+		<div class="t-right f-right">(0/300)</div>
+	</div>
+	<div class="t-center mgt30">
+		<strong style="font-size:18px;">개인정보 수집 및 이용에 대해 동의 하십니까?</strong><br><br>
+		<input id="radio1"  type = "radio" data-type="radio" name="radioGroup" value = "value1" checked="checked"/>
+		동의
+		<input id="radio2"  type = "radio" data-type = "radio" name="radioGroup" value = "value2" />
+		미동의
+	</div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>기타사항(선택)</b></div>
+	<div id="searchDiv" class="textAR">
+		<table id="searchTable" class="board02">
+			<colgroup>
+				<col style="width:10%">
+				<col style="width:23%">
+				<col style="width:10%">
+				<col style="width:23%">
+				<col style="width:10%">
+				<col style="width:*">
+			</colgroup>
+            <tbody>
+			<tr>
+                <th height="40" scope="col">생활신조</th>
+                <td class="tleft" colspan="5">
+					<input id="textId" data-type="textinput" />
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col">취미/특기</th>
+                <td class="tleft">
+					<input id="textId" data-type="textinput" />
+                </td>
+                <th>신장</th>
+                <td class="tleft">
+                    <input id="textId" data-type="textinput" /> CM
+                </td>
+				<th>체중</th>
+                <td class="tleft">
+                    <input id="textId" data-type="textinput" /> KG
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col">주 활동지역</th>
+                <td class="tleft">
+					<input id="textId" data-type="textinput" />
+                </td>
+                <th>판매형태</th>
+                <td class="tleft" colspan="3">
+					<select id="selectId" data-type="select" >
+						<option value="">-</option>
+					</select> 
+                    <input id="textId" data-type="textinput" />
+                </td>
+            </tr>
+			<tr>
+                <th height="40" scope="col">활동지인 이름</th>
+                <td class="tleft" colspan="5">
+					<input id="textId" data-type="textinput" />
+                </td>
+            </tr>
+            </tbody>
+		</table>
+    </div>
+	<div class="info_txt_bottom">
+		<ul class="info3">
+			<li>활동지인 이름은 DSM 內에 활동하고 있는 지인 이름을 복수로 입력하시면 됩니다.</li>
+		</ul>
+	</div>
+	<div class="floatL4"> <img src="../image/blat_a7.gif"> <b>희망부서 (생략 가능 하며,이 경우 회사가 임의적으로 배치합니다.)</b> 
+        <!--우측 버튼
+        <div class="ab_pos1">
+            <button id="btnInit" data-type="button" data-theme="af-btn16"></button>
+            <button id="btnInit" data-type="button" data-theme="af-btn28"></button>
+        </div>
+        -->
+    </div>
+	<div id="searchDiv" class="textAR">
+		<table id="searchTable" class="board02">
+			<colgroup>
+				<col style="width:15%">
+				<col style="width:30%">
+				<col style="width:15%">
+				<col style="width:*">
+			</colgroup>
+            <tbody>
+			<tr>
+                <th height="40" scope="col">배치를 희망하는  영업조직이 있습니까?</th>
+                <td class="tleft">
+					<input id="radio1"  type = "radio" data-type="radio" name="radioGroup" value = "value1" checked="checked"/>
+					예
+					<input id="radio2"  type = "radio" data-type = "radio" name="radioGroup" value = "value2" />
+					아니요
+                </td>
+                <th>희망지역명</th>
+                <td class="tleft">
+                    <select id="selectId" data-type="select" >
+						<option value="">-</option>
+					</select>
+                </td>
+            </tr>
+            <tr>
+                <th height="40" scope="col">영업국명</th>
+                <td class="tleft">
+					<select id="selectId" data-type="select" >
+						<option value="">-</option>
+					</select>
+                </td>
+                <th>영업팀명</th>
+                <td class="tleft">
+                    <input id="textId" data-type="textinput" />
+                </td>
+            </tr>
+            </tbody>
+		</table>
+    </div>
+	<div class="info_txt_bottom">
+		<ul class="info2">
+			<li>(개인정보 취급위탁 고지) 수집된 개인정보 일체는 정보전산 처리 및 유지/관리를 위해 ㈜SK C&C에 취급 위탁하여 안전하게 관리합니다.</li>
+			<li>(개인정보 파기) 수집된 개인정보는 계약 시 계약 종료 후 2년간 보관하며, 미 계약 시 개인 통보 후 지체 없이 파기합니다.</li>
+		</ul>
+	</div>
+	<div class="floatL2">
+      <input type="button" value="" data-type="button" data-theme="af-n-btn9">
+      <input type="button" value="" data-type="button" data-theme="af-n-btn10">
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

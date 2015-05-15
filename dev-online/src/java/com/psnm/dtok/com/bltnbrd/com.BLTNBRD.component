@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.BLTNBRD">
+    <componentName>[BC]공통-게시판관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.bltnbrd</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>게시판관리 컴포넌트</description>
+    <custom-props/>
+    <history>
+        <created date="2014-12-26T13:24:03" user="안종광 (rhkd)"/>
+    </history>
+</component>

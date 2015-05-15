@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<STYLE type=text/css>.text {
+	FONT-FAMILY: "돋움";  FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+</STYLE>
+</head>
+
+<BODY aLink=#2822C8 leftMargin=0 topMargin=0 bgColor=#ffffff text=#000000 vLink=#2822C8 link=#2822C8 marginheight="0" marginwidth="0">
+
+<DIV align=center>
+<TABLE border=1 bordercolor=#6083C3 cellspacing=0 width=100% align=left>
+  <TR height=30 bgcolor=#6083C3>
+	<TD colspan=2 align=left>
+		<font color=#FFFFFF face=돋움><B>
+		보안 프로그램 설치 도움말
+		</B></font>
+	</TD>
+  </TR>
+  <TR>
+	<TD>
+		<img src="./img/help_text1.png" width="600" height="230" ><BR>
+		
+		<script language="javascript">
+
+						var clintInfoObj = window.clientInformation;
+						var browser = clintInfoObj.platform;
+						//alert(navigator.appVersion);
+						if((clintInfoObj.appVersion.toLowerCase().indexOf("x64") < 0) &&(clintInfoObj.appVersion.toLowerCase().indexOf("wow64") < 0))
+						{
+						//alert('32비트OS에 32비트Borwser');
+						document.write("<a href='./components/WebCubeSetup.exe'><img src='./img/help_text2.png' width='600' height='30' border='0' style='cursor:hand;'></a>");
+						}
+						else
+						{
+							if(browser.toLowerCase() != "win64") 
+							{
+							//alert('64비트OS에 32비트Borwser');
+							document.write("<a href='./components/WebCubeSetupwow.exe'><img src='./img/help_text2.png' width='600' height='30' border='0' style='cursor:hand;'></a>");
+							}
+							else
+							{
+							//alert('64비트OS에 64비트Borwser');
+							document.write("<a href='./components/WebCubeSetup64.exe'><img src='./img/help_text2.png' width='600' height='30' border='0' style='cursor:hand;'></a>");
+							}
+						}
+
+					</script>
+		<BR>
+		<img src="./img/help_text3.png" width="600" height="60" ><BR>
+	</TD>
+   </TR>
+</TABLE>
+</DIV>
+</BODY>
+</HTML>

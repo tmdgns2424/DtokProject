@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCUSTPGCVHST001">
+	<insert id="dInsertCustPgcvHst" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.custpgcv.db.DCUSTPGCVHST001.dInsertCustPgcvHst 고객민원접수 추가 */
+/* IO: 안진갑,2015-02-12T17:16:04(안진갑,2015-02-12T16:21:36) */
+INSERT INTO DSM_CUST_PGCV_HST
+(
+	  RCV_MGMT_NUM
+	, RERCV_SEQ
+	, RERCV_DT
+	, RERCV_ID
+	, RERCV_CTT
+	, FNSH_DT
+	, FNSH_TM
+	, FNSH_MM
+	, FNSH_OPR_ID
+	, SELLER_PEN_AMT
+	, TEAM_LDR_PEN_AMT
+	, DRTR_PEN_AMT
+	, FNSH_MEMO
+	, FNSH_CTT
+	, FNSH_RGSTR_ID
+	, FNSH_RGST_DTM
+    , AGNT_ID
+    , CUST_NM
+    , SVC_NUM
+    , SALE_DT
+	, RGSTR_ID
+	, RGST_DTM
+	, UPDR_ID
+	, UPD_DTM    
+)
+VALUES
+(
+	  #RCV_MGMT_NUM#
+	, (SELECT NVL(MAX(RERCV_SEQ)+1, 1) FROM DSM_CUST_PGCV_HST WHERE RCV_MGMT_NUM = #RCV_MGMT_NUM#)
+	, TO_CHAR(SYSDATE, 'YYYYMMDD')
+	, #onlineContext.userInfo.loginId#
+	, #RERCV_CTT#
+	, #FNSH_DT#
+	, #FNSH_TM#
+	, #FNSH_MM#
+	, #FNSH_OPR_ID#
+	, #SELLER_PEN_AMT#
+	, #TEAM_LDR_PEN_AMT#
+	, #DRTR_PEN_AMT#
+	, #FNSH_MEMO#
+	, #FNSH_CTT#
+	, #FNSH_RGSTR_ID#
+	, TO_DATE(#FNSH_RGST_DTM#, 'YYYY-MM-DD HH24:MI')
+	, #AGNT_ID#
+	, #CUST_NM#
+	, #SVC_NUM#
+	, SUBSTRB(#SALE_DTM#,1,8)
+	, #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE	
+)]]>
+	</insert>
+</sqlMap>

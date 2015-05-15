@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="P001">
+    <bizUnitName>샘플조회</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>xyz.XYZ</componentId>
+    <description/>
+    <method-list>
+        <method id="p00102">
+            <methodName>DB조회</methodName>
+            <transactionId>xyz.XYZ@P001_p00102</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="p00103">
+            <methodName>JSON테스트</methodName>
+            <transactionId>xyz.XYZ@P001_p00103</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="p00101">
+            <methodName>헬로우월드</methodName>
+            <transactionId>xyz.XYZ@P001_p00101</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-04T10:20:57" user="admin (admin)"/>
+    </history>
+</bizUnit>

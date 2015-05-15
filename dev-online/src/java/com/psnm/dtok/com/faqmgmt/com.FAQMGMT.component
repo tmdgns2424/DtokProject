@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.FAQMGMT">
+    <componentName>[BC]공통-FAQ관리</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.faqmgmt</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>[BC]공통-FAQ관리</description>
+    <custom-props/>
+    <history>
+        <created date="2014-12-11T15:46:33" user="이승훈 (leeseunghun)"/>
+    </history>
+</component>

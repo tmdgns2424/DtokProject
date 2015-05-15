@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.FRSTSALEDTBAT">
+	<select id="dSelectBatchJobSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectBatchJobSeq 배치작업번호채번 */
+/* IO: 채수윤,2015-04-08T20:02:09(채수윤,2015-04-08T20:02:09) */
+SELECT DSM_BATCH_JOB_SEQ.NEXTVAL AS BATCH_JOB_SEQ 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertBatchJobLog 배치작업정보입력 */
+/* IO: 채수윤,2015-04-08T20:02:48(채수윤,2015-04-08T20:02:48) */
+INSERT INTO DSM_BATCH_LOG
+     ( BATCH_JOB_SEQ
+     , JOB_BATCH_NM
+     , JOB_STA_DTM
+     )
+VALUES
+     ( #BATCH_JOB_SEQ#
+     , #JOB_BATCH_NM#
+     , SYSDATE
+     )]]>
+	</insert>
+	<update id="dUpdateBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dUpdateBatchJobLog 배치작업정보수정 */
+/* IO: 채수윤,2015-04-08T20:03:20(채수윤,2015-04-08T20:03:20) */
+UPDATE DSM_BATCH_LOG
+   SET JOB_END_DTM = SYSDATE
+     , JOB_SUSS_YN = #JOB_SUSS_YN#
+     , ERR_MSG = #ERR_MSG#
+ WHERE BATCH_JOB_SEQ = #BATCH_JOB_SEQ#]]>
+	</update>
+	<update id="dUpdateFrstSaltDt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dUpdateFrstSaltDt 최초매출일자수정 */
+/* IO: 채수윤,2015-04-08T21:27:51(채수윤,2015-04-08T20:05:19) */
+MERGE INTO DSM_USER X
+    USING
+        ( SELECT *
+            FROM (
+                  WITH TRGT_USER AS
+                  ( 
+                      SELECT A.USER_ID
+                           , G.ORG_ID AS SALE_ORG
+                           , G.OUT_ORG_ID AS ORG_CD
+                           , B.CPLAZA_ORG_CD
+                           , TO_CHAR(E.SCRB_APRV_DTM, 'YYYYMMDD') AS SCRB_DT
+                        FROM DSM_USER A
+                        LEFT OUTER JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+                        LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = B.CPLAZA_ORG_CD AND C.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM'))
+                        LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT F ON (F.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+                        LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT G ON (G.OUT_ORG_ID = F.OUT_ORG_ID)
+                        LEFT OUTER JOIN PS_MNG.TBAS_DUTY_MGMT D ON (D.DUTY_CD = B.DUTY)
+                        LEFT OUTER JOIN DSM_USER_SCRB_REQ E ON (E.USER_ID = A.USER_ID)
+                       WHERE A.SCRB_ST_CD IN ('02', '05')
+                         AND A.SALE_OCCR_DT IS NULL
+                         AND NVL(A.SALE_OCCR_YN, 'N') = 'N'
+                         AND B.ATTC_CAT = '4'
+                         AND B.OUT_USER_TYP = '1'
+                         AND B.EFF_USER_YN = 'Y'
+                         AND C.CONS_MTH = (SELECT MAX(X.CONS_MTH)
+                                             FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT X
+                                             WHERE X.AGNT_ID = C.AGNT_ID)
+                         AND D.DUTY_TYP = '2'
+                  )
+                  , FRST_SALE AS
+                  (
+                      SELECT A.CPLAZA_ORG_CD
+                           , SUBSTR(MIN(B.SALE_DTM), 1, 8) AS SALE_DT
+                        FROM TRGT_USER A
+                           , PS_MNG.TSAL_N_GENERAL_SALE B
+                       WHERE A.SALE_ORG = B.SALE_ORG
+                         AND B.SALE_CHNL_CD = 'DSM'
+                         AND A.CPLAZA_ORG_CD = B.SALE_PLC
+                         AND SUBSTR(B.SALE_DTM, 1, 8) >= A.SCRB_DT
+                         AND B.SVC_MGMT_LAST_YN = 'Y' 
+                         AND B.SALE_CHG_HST_CL NOT IN ('07', '08') /* 판매취소, 판매삭제 */
+                         AND B.DEL_YN = 'N'
+                       GROUP BY A.CPLAZA_ORG_CD
+                  )
+                  SELECT A.USER_ID
+                       , MIN(B.SALE_DT) AS SALE_OCCR_DT
+                    FROM TRGT_USER A
+                       , FRST_SALE B
+                   WHERE A.CPLAZA_ORG_CD = B.CPLAZA_ORG_CD
+                   GROUP BY A.USER_ID
+                 )
+        ) Y
+       ON
+        ( Y.USER_ID = X.USER_ID
+        )
+     WHEN MATCHED THEN
+          UPDATE 
+             SET X.SALE_OCCR_DT = Y.SALE_OCCR_DT
+           WHERE X.SCRB_ST_CD IN ('02', '05')
+             AND NVL(X.SALE_OCCR_YN, 'N') = 'N']]>
+	</update>
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 채수윤,2015-04-08T20:25:36(채수윤,2015-04-08T20:12:11) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertSmsTran SMS발송정보입력 */
+/* IO: 채수윤,2015-04-08T21:31:31(채수윤,2015-04-08T20:15:28) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+     , #CONTEXT# /*발송메시지*/
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 채수윤,2015-04-08T20:26:56(채수윤,2015-04-08T20:26:56) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 채수윤,2015-04-08T20:29:27(채수윤,2015-04-08T20:29:27) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , '01047567552' /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.FRSTSALEDTBAT.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-14T13:51:56(채수윤,2015-04-08T20:31:09) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , '01047567552' /*수신전화번호*/
+     , '0264005567'/*발송전화번호*/
+     , #SND_MSG# /*메시지*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+</sqlMap>

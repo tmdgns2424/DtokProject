@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DMISC">
+    <bizUnitName>[DU]기타관리</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>[DU]기타관리</description>
+    <method-list>
+        <method id="dMergeReadrMgmt">
+            <methodName>[DM]열람자등록|갱신</methodName>
+            <transactionId>com.SHARE@DMISC_dMergeReadrMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]열람자등록|갱신</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-14T11:20:01" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchWeekDayInfo">
+            <methodName>[DM]주간날짜정보조회</methodName>
+            <transactionId>com.SHARE@DMISC_dSearchWeekDayInfo</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[DM]주간날짜정보조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T16:30:45" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-14T11:09:38" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

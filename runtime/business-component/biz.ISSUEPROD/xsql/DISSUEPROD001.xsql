@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DISSUEPROD001">
+	<select id="dSearchIssue" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUEPROD001.dSearchIssue  */
+/* IO: 이승훈2,2015-04-15T13:50:42(이승훈2,2015-03-10T18:02:02) */
+SELECT *
+  FROM (
+		SELECT ROWNUM rn, ALL_LIST.* 
+		  FROM ( 
+				SELECT A.ISS_ID
+				       ,A.ISS_TYP_CD
+					   ,A.ISS_TITL_NM
+					   ,DECODE(A.APLY_YM,NULL,'',SUBSTR(A.APLY_YM,1,4)||'-'||SUBSTR(A.APLY_YM,5,6)) AS APLY_YM /* 적용년월 */
+					   ,F_MASKING('N',F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM
+					   ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM
+			           ,(SELECT COUNT(Y.READ_MGMT_ID)
+     			 		   FROM DSM_READR_MGMT Y
+      			          WHERE A.ISS_ID = Y.READ_MGMT_ID) AS READ_CNT /* 조회수 */
+      			       ,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+         				   FROM DSM_ATCH_FILE_MGMT X
+                          WHERE A.ISS_ID = X.ATCH_MGMT_ID) AS ATCH_YN 
+	      		  FROM DSM_ISSUE A
+	      		 WHERE 1=1
+]]><isNotEmpty property="SEARCH_NM"><![CDATA[
+         		 	   AND A.ISS_TITL_NM LIKE '%'||#SEARCH_NM#||'%'
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="FROM_DT"><![CDATA[
+         		       AND A.APLY_YM >= #FROM_DT#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="TO_DT"><![CDATA[
+         		       AND A.APLY_YM <= #TO_DT#
+]]></isNotEmpty><![CDATA[
+         		 ORDER BY A.RGST_DTM DESC
+          	   ) ALL_LIST
+	   )
+ WHERE rn BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchIssueCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUEPROD001.dSearchIssueCnt  */
+/* IO: 이승훈2,2015-03-12T17:20:51(이승훈2,2015-01-08T09:53:46) */
+SELECT COUNT(1) AS COUNT     
+  FROM (   
+		SELECT ROW_NUMBER() OVER(ORDER BY A.RGST_DTM DESC) AS RN 
+			   ,A.ISS_ID
+			   ,A.ISS_TITL_NM
+			   ,A.RGST_DTM
+			   ,A.APLY_YM
+			   ,F_MASKING('N', F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM   
+		  FROM DSM_ISSUE A
+		 WHERE 1=1
+]]><isNotEmpty property="SEARCH_NM"><![CDATA[
+         	   AND A.ISS_TITL_NM LIKE '%'||#SEARCH_NM#||'%' 
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="FROM_DT"><![CDATA[
+         		       AND A.APLY_YM >= #FROM_DT#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="TO_DT"><![CDATA[
+         		       AND A.APLY_YM <= #TO_DT#
+]]></isNotEmpty><![CDATA[  
+		) X]]>
+	</select>
+	<select id="dDetailIssue" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUEPROD001.dDetailIssue  */
+/* IO: 이승훈2,2015-04-15T13:49:02(이승훈2,2015-01-08T15:35:03) */
+SELECT A.ISS_CTT
+	   ,A.ISS_TITL_NM      
+	   ,TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM    
+	   ,F_MASKING('N', F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM
+	   ,A.ISS_ID
+	   ,DECODE(A.APLY_YM,NULL,'',SUBSTR(A.APLY_YM,1,4)||'-'||SUBSTR(A.APLY_YM,5,6)) AS APLY_YM  /* 적용년월 */  
+  FROM DSM_ISSUE A
+ WHERE A.ISS_ID=#ISS_ID#]]>
+	</select>
+	<insert id="dInsertIssue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUE001.dInsertIssue  */
+/* IO: 이승훈2,2015-01-29T14:05:47(이승훈2,2015-01-09T11:30:02) */
+MERGE INTO DSM_ISSUE
+	 USING DUAL ON ( ISS_ID = #ISS_ID# )
+ WHEN MATCHED THEN
+	UPDATE SET ISS_TITL_NM = #ISS_TITL_NM#
+			   ,ISS_CTT = #ISS_CTT#
+			   ,UPDR_ID = #onlineContext.userInfo.loginId#
+			   ,UPD_DTM = SYSDATE
+			   ,APLY_YM = REPLACE(#APLY_YM#,'-','')
+ WHEN NOT MATCHED THEN
+	INSERT (
+				ISS_ID
+ 				,ISS_TITL_NM
+ 				,ISS_TYP_CD
+  				,ISS_CTT
+				,RGSTR_ID
+				,RGST_DTM
+				,UPDR_ID
+				,UPD_DTM 
+				,APLY_YM
+		   )
+	VALUES (
+				#ISS_ID#
+				,#ISS_TITL_NM#
+				,#ISS_TYP_CD#
+				,#ISS_CTT#
+				,#onlineContext.userInfo.loginId#
+				,SYSDATE
+				,#onlineContext.userInfo.loginId#
+				,SYSDATE 
+				,REPLACE(#APLY_YM#,'-','')
+  		   )]]>
+	</insert>
+	<select id="dSearchIssueSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUE001.dSearchIssueSeq  */
+/* IO: 이승훈2,2015-01-14T15:13:29(이승훈2,2015-01-09T12:28:41) */
+SELECT 'ISS' || LPAD(DSM_ISS_SEQ.NEXTVAL, 12, '0') AS ISS_ID 
+  FROM DUAL]]>
+	</select>
+	<delete id="dDeleteIssue" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUE001.dDeleteIssue  */
+/* IO: 이승훈2,2015-01-09T15:31:46(이승훈2,2015-01-09T15:31:46) */
+DELETE FROM DSM_ISSUE
+ WHERE ISS_ID = #ISS_ID#]]>
+	</delete>
+	<insert id="dInsertIssueReadr" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.issueprod.db.DISSUE001.dInsertIssueReadr  */
+/* IO: 이승훈2,2015-01-13T10:31:14(이승훈2,2015-01-12T14:51:26) */
+MERGE  INTO DSM_ISSUE_READR 
+	  USING DUAL ON ( 
+	  					ISS_ID = #ISS_ID# 
+	  					AND READR_ID = #onlineContext.userInfo.loginId#
+	  				)
+ WHEN MATCHED THEN
+	UPDATE SET UPD_DTM = SYSDATE
+ WHEN NOT MATCHED THEN
+	INSERT (
+				ISS_ID
+				,READR_ID
+				,RGST_DTM
+				,UPD_DTM
+		   )
+	VALUES (
+				#ISS_ID#
+				,#onlineContext.userInfo.loginId#
+				,SYSDATE
+				,SYSDATE
+		   )]]>
+	</insert>
+</sqlMap>

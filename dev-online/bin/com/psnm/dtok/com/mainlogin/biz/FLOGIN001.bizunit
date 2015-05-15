@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FLOGIN001">
+    <bizUnitName>[FU]로그인처리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.MAINLOGIN</componentId>
+    <description>로그인 로그아웃 처리 FU</description>
+    <method-list>
+        <method id="fLogout">
+            <methodName>[FM]로그아웃</methodName>
+            <transactionId>com.MAINLOGIN@FLOGIN001_fLogout</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>로그아웃 처리</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-21T16:32:12" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchLogin">
+            <methodName>[FM]로그인</methodName>
+            <transactionId>com.MAINLOGIN@FLOGIN001_fSearchLogin</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>사용자ID로 사용자정보 조회하여 로그인 처리함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-19T15:29:23" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="fUpdatePwd">
+            <methodName>[FM]비밀번호변경</methodName>
+            <transactionId>com.MAINLOGIN@FLOGIN001_fUpdatePwd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>비밀번호변경</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-19T11:37:21" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchMenuTree">
+            <methodName>[FM]하위메뉴TREE조회</methodName>
+            <transactionId>com.MAINLOGIN@FLOGIN001_fSearchMenuTree</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 메뉴의 하위 메뉴 TREE 목록을 조회함</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-01T11:19:43" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-19T15:09:41" user="admin (admin)"/>
+    </history>
+</bizUnit>

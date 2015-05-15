@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMAINAD001">
+	<select id="dSearchMainAd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dSearchMainAd  */
+/* IO: 이승훈2,2015-04-02T10:30:49(이승훈2,2015-03-16T13:42:24) */
+SELECT *
+  FROM (
+		SELECT ROWNUM rn, ALL_LIST.* 
+		  FROM ( 
+				SELECT A.MAIN_AD_ID
+				       ,A.MAIN_AD_NM
+               ,A.ORG_ID
+               ,A.ORG_NM
+               ,A.AD_FILE_ID
+               ,A.LINK_URL
+					   ,F_MASKING('N',F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM
+					   ,TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS RGST_DTM
+      			       ,(SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+         				   FROM DSM_ATCH_FILE_MGMT X
+                          WHERE A.MAIN_AD_ID = X.ATCH_MGMT_ID) AS ATCH_YN 
+                          
+              ,DECODE(A.AD_STA_DT,NULL,'',SUBSTR(A.AD_STA_DT,1,4)||'-'||SUBSTR(A.AD_STA_DT,5,2)||'-'||SUBSTR(A.AD_STA_DT,7,2)) AS AD_STA_DT /* 적용년월 */
+              ,DECODE(A.AD_END_DT,NULL,'',SUBSTR(A.AD_END_DT,1,4)||'-'||SUBSTR(A.AD_END_DT,5,2)||'-'||SUBSTR(A.AD_END_DT,7,2)) AS AD_END_DT /* 적용년월 */
+	
+	    		 FROM DSM_MAINAD A
+	      		 WHERE 1=1
+]]><isNotEmpty property="SEARCH_NM"><![CDATA[
+         		 	   AND A.MAIN_AD_NM LIKE '%'||#SEARCH_NM#||'%'
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+  AND A.ORG_ID = #HDQT_TEAM_ORG_ID# 
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="FROM_DT"><![CDATA[
+         		       AND A.AD_END_DT >= #FROM_DT#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="TO_DT"><![CDATA[
+         		       AND A.AD_STA_DT <= #TO_DT#
+]]></isNotEmpty><![CDATA[
+         		 ORDER BY A.UPD_DTM DESC
+          	   ) ALL_LIST
+	   )
+ WHERE rn BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchMainAdCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dSearchMainAdCnt  */
+/* IO: 이승훈2,2015-03-17T16:14:20(이승훈2,2015-03-16T13:51:40) */
+SELECT COUNT(1) AS COUNT     
+  FROM (   
+		SELECT ROW_NUMBER() OVER(ORDER BY A.RGST_DTM DESC) AS RN 
+			   ,A.MAIN_AD_ID
+			   ,A.MAIN_AD_NM
+			   ,A.RGST_DTM
+			   ,F_MASKING('N', F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM   
+    		   ,DECODE(A.AD_STA_DT,NULL,'',SUBSTR(A.AD_STA_DT,1,4)||'-'||SUBSTR(A.AD_STA_DT,5,2)||'-'||SUBSTR(A.AD_STA_DT,7,2)) AS AD_STA_DT /* 적용년월 */
+               ,DECODE(A.AD_END_DT,NULL,'',SUBSTR(A.AD_END_DT,1,4)||'-'||SUBSTR(A.AD_END_DT,5,2)||'-'||SUBSTR(A.AD_END_DT,7,2)) AS AD_END_DT /* 적용년월 */
+	
+	      FROM DSM_MAINAD A
+		 WHERE 1=1
+]]><isNotEmpty property="SEARCH_NM"><![CDATA[
+         	   AND A.MAIN_AD_NM LIKE '%'||#SEARCH_NM#||'%' 
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="FROM_DT"><![CDATA[
+         		       AND A.AD_END_DT >= #FROM_DT#
+]]></isNotEmpty><![CDATA[
+]]><isNotEmpty property="TO_DT"><![CDATA[
+         		       AND A.AD_STA_DT <= #TO_DT#
+]]></isNotEmpty><![CDATA[  
+		) X]]>
+	</select>
+	<insert id="dInsertMainAd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dInsertMainAd  */
+/* IO: 이승훈2,2015-04-02T10:50:11(이승훈2,2015-03-16T15:41:58) */
+MERGE INTO DSM_MAINAD
+	 USING DUAL ON ( MAIN_AD_ID = #MAIN_AD_ID# )
+ WHEN MATCHED THEN
+	UPDATE SET MAIN_AD_NM = #MAIN_AD_NM#
+		 ,ORG_ID        = #HDQT_TEAM_ORG_ID#
+         ,ORG_NM        = (SELECT ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = #HDQT_TEAM_ORG_ID#)
+         ,AD_STA_DT     = #AD_STA_DT#
+         ,AD_END_DT     = #AD_END_DT#
+         ,AD_FILE_ID    = #ATCH_FILE_ID#
+         ,LINK_URL      = #LINK_URL#
+         ,UPDR_ID = #onlineContext.userInfo.loginId#
+			   ,UPD_DTM = SYSDATE
+ WHEN NOT MATCHED THEN
+	INSERT (
+				MAIN_AD_ID
+ 				,MAIN_AD_NM
+ 				,ORG_ID
+  				,ORG_NM
+				,AD_STA_DT
+				,AD_END_DT
+				,AD_FILE_ID
+				,LINK_URL 
+				,RGSTR_ID
+        ,RGST_DTM
+        ,UPDR_ID
+        ,UPD_DTM
+		   )
+	VALUES (
+				#MAIN_AD_ID#
+				,#MAIN_AD_NM#
+				,#HDQT_TEAM_ORG_ID#
+				,(SELECT ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = #HDQT_TEAM_ORG_ID#)
+        ,#AD_STA_DT#
+        ,#AD_END_DT#
+        ,#ATCH_FILE_ID#
+        ,#LINK_URL#
+				,#onlineContext.userInfo.loginId#
+				,SYSDATE
+				,#onlineContext.userInfo.loginId#
+				,SYSDATE 
+)]]>
+	</insert>
+	<select id="dSearchMainAdSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dSearchMainAdSeq  */
+/* IO: 이승훈2,2015-03-17T15:34:34(이승훈2,2015-03-16T16:40:29) */
+SELECT 'MAD' || LPAD(DSM_MAINAD_SEQ.NEXTVAL, 12, '0') AS MAIN_AD
+  FROM DUAL]]>
+	</select>
+	<select id="dSearchMainAdDtl" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dSearchMainAdDtl  */
+/* IO: 이승훈2,2015-04-02T11:07:14(이승훈2,2015-03-17T17:11:55) */
+SELECT  
+ A.MAIN_AD_ID
+, A.MAIN_AD_NM
+, DECODE(A.AD_STA_DT,NULL,'',SUBSTR(A.AD_STA_DT,1,4)||'-'||SUBSTR(A.AD_STA_DT,5,2)||'-'||SUBSTR(A.AD_STA_DT,7,2)) AS AD_STA_DT /* 적용년월 */
+, DECODE(A.AD_END_DT,NULL,'',SUBSTR(A.AD_END_DT,1,4)||'-'||SUBSTR(A.AD_END_DT,5,2)||'-'||SUBSTR(A.AD_END_DT,7,2)) AS AD_END_DT /* 적용년월 */
+, A.AD_FILE_ID
+, A.LINK_URL
+, A.ORG_ID AS HDQT_TEAM_ORG_ID
+, B.FILE_PATH
+, F_MASKING('N',F_DSM_GET_USER_NM(A.RGSTR_ID)) AS RGSTR_NM
+, TO_CHAR(A.RGST_DTM,'YYYY-MM-DD') AS RGST_DTM    
+ FROM DSM_MAINAD A
+ LEFT JOIN DSM_ATCH_FILE B ON(A.AD_FILE_ID = B.ATCH_FILE_ID)
+ WHERE A.MAIN_AD_ID = #MAIN_AD_ID#]]>
+	</select>
+	<delete id="dDeleteMainAd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainad.db.DMAINAD001.dDeleteMainAd  */
+/* IO: 이승훈2,2015-03-17T17:58:22(이승훈2,2015-03-17T17:57:33) */
+DELETE FROM DSM_MAINAD 
+WHERE MAIN_AD_ID=#MAIN_AD_ID#]]>
+	</delete>
+</sqlMap>

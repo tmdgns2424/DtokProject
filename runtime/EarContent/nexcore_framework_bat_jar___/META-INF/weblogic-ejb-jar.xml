@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE weblogic-ejb-jar PUBLIC "-//BEA Systems, Inc.//DTD WebLogic 8.1.0 EJB//EN" "http://www.bea.com/servers/wls810/dtd/weblogic-ejb-jar.dtd">
+
+<weblogic-ejb-jar>
+
+    <weblogic-enterprise-bean>
+        <ejb-name>nexcore.batch.BatchFacade</ejb-name>
+        <stateless-session-descriptor>
+            <pool>
+                <max-beans-in-free-pool>1000</max-beans-in-free-pool>
+                <initial-beans-in-free-pool>20</initial-beans-in-free-pool>
+            </pool>
+        </stateless-session-descriptor>
+        <enable-call-by-reference>true</enable-call-by-reference>
+        <jndi-name>ejb/nexcore/batch/BatchFacade</jndi-name>
+        <local-jndi-name>ejb/nexcore/batch/BatchFacadeLocal</local-jndi-name>
+    </weblogic-enterprise-bean>
+
+</weblogic-ejb-jar>

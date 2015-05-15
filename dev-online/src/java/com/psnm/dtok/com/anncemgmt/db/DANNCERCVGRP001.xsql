@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DANNCERCVGRP001">
+	<select id="dSearchAnnceRcvGrpTarget" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVGRP001.dSearchAnnceRcvGrpTarget  */
+/* IO: 이민재,2015-01-08T15:03:54(이민재,2015-01-08T15:03:21) */
+	SELECT A.AUTH_GRP_ID
+		, A.AUTH_GRP_NM
+       	, A.AUTH_GRP_DESC
+  	FROM DSM_AUTH_GRP A
+ 	WHERE A.AUTH_GRP_ID NOT IN ( 	SELECT X.AUTH_GRP_ID
+									FROM DSM_ANNCE_RCV_GRP X
+                              		WHERE A.AUTH_GRP_ID = X.AUTH_GRP_ID
+                                	AND X.ANNCE_ID = #ANNCE_ID#
+                                	UNION
+									SELECT A.AUTH_GRP_ID
+                               		FROM DSM_AUTH_GRP A
+                              		WHERE A.AUTH_GRP_ID = '99'
+                            	) 
+	AND A.USE_YN = 'Y'
+ 	ORDER BY A.AUTH_PRTY]]>
+	</select>
+	<select id="dSearchAnnceRcvGrpObject" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVGRP001.dSearchAnnceRcvGrpObject  */
+/* IO: 이민재,2015-01-08T15:04:20(이민재,2015-01-08T15:04:17) */
+	SELECT X.*
+	FROM (
+		SELECT A.AUTH_GRP_ID
+			, B.AUTH_GRP_NM
+			, B.AUTH_GRP_DESC
+		FROM DSM_ANNCE_RCV_GRP A
+  		JOIN DSM_AUTH_GRP B ON (A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+ 		WHERE A.ANNCE_ID = #ANNCE_ID#
+ 		UNION 
+ 		SELECT A.AUTH_GRP_ID
+       		, A.AUTH_GRP_NM
+       		, A.AUTH_GRP_DESC
+  		FROM DSM_AUTH_GRP A
+       	LEFT JOIN DSM_ANNCE_RCV_GRP B ON (A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+ 		WHERE A.AUTH_GRP_ID = '99'
+		) X
+ 	ORDER BY X.AUTH_GRP_ID]]>
+	</select>
+	<insert id="dInsertAnnceRcvGrp" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVGRP001.dInsertAnnceRcvGrp  */
+/* IO: 이민재,2015-01-08T15:04:53(이민재,2015-01-08T15:04:53) */
+	INSERT INTO DSM_ANNCE_RCV_GRP
+		(  ANNCE_ID
+		, AUTH_GRP_ID
+  		, RGSTR_ID
+  		, RGST_DTM
+  		, UPDR_ID
+  		, UPD_DTM )
+		VALUES
+		(  #ANNCE_ID#
+  		, #AUTH_GRP_ID#
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE )]]>
+	</insert>
+	<delete id="dDeleteAnnceRcvGrp" ><![CDATA[/* Biz: com.psnm.dtok.com.anncemgmt.db.DANNCERCVGRP001.dDeleteAnnceRcvGrp  */
+/* IO: 이민재,2015-01-08T15:05:11(이민재,2015-01-08T15:05:11) */
+	DELETE FROM DSM_ANNCE_RCV_GRP WHERE ANNCE_ID = #ANNCE_ID#]]>
+	</delete>
+</sqlMap>

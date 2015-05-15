@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCHRGRHEADQ001">
+	<select id="dSearchChrgrHeadq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEAD001.dSearchChrgrHeadq  */
+/* IO: 이민재,2014-12-30T18:00:15(이민재,2014-12-30T18:00:15) */
+	SELECT A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+  	FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+  	JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON ( B.OUT_ORG_ID = A.OUT_ORG_ID )
+    JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON ( C.ORG_ID = B.ORG_ID )
+ 	WHERE A.ORG_LVL = '1'
+   	AND A.EFF_ORG_YN = 'Y'
+/*   	AND A.OUT_ORG_DTL_ID <> '01090000' /* DSM 특판 제외 */
+   	AND A.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */
+   	AND B.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) 
+   	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+   		B.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+   	]]></isNotEmpty><![CDATA[
+   	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+   		C.ORG_ID = #HDQT_TEAM_ORG_ID#
+   	]]></isNotEmpty><![CDATA[
+ 	ORDER BY A.OUT_ORG_DTL_ID]]>
+	</select>
+	<select id="dSearchChrgrHeadqUser" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEAD001.dSearchChrgrHeadqUser  */
+/* IO: 이민재,2014-12-30T18:00:40(이민재,2014-12-30T18:00:40) */
+	SELECT A.CHRGR_ID AS USER_ID
+		, F_MASKING('N', B.USER_NM) AS USER_NM
+		, A.DSM_HEADQ_CD
+		, A.SMS_YN
+		, C.DUTY_CD
+		, C.DUTY_NM
+		, A.DSM_AUTH_TYPE
+		, A.DSM_CHRGR_ROLE_CL_CD
+		, D.JOB_DESC
+		, E.PRT_SEQ
+  	FROM DSM_CHRGR_HEADQ A
+  	JOIN PS_MNG.TBAS_USER_MGMT B ON ( B.USER_ID = A.CHRGR_ID )
+	JOIN PS_MNG.TBAS_DUTY_MGMT C ON ( C.DUTY_CD = B.DUTY )    
+	JOIN DSM_APPROVE D ON ( D.USER_ID = A.CHRGR_ID )
+	LEFT OUTER JOIN PS_MNG.TBAS_COMM_CD_DTL E ON (E.COMM_CD_ID = 'DSM_CHRGR_ROLE_CL_CD' AND E.COMM_CD_VAL = A.DSM_CHRGR_ROLE_CL_CD)                               
+ 	WHERE A.DSM_HEADQ_CD = #DSM_HEADQ_CD#
+ 	ORDER BY E.PRT_SEQ, A.CHRGR_ID]]>
+	</select>
+	<select id="dSearchChrgrHeadqApprove" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEADQ001.dSearchChrgrHeadqApprove  */
+/* IO: 이민재,2015-01-02T17:26:27(이민재,2015-01-02T17:26:27) */
+	SELECT A.USER_ID
+		, F_MASKING('N',B.USER_NM) AS USER_NM
+		, C.DUTY_CD
+		, C.DUTY_NM
+        , D.ORG_ID AS HDQT_TEAM_ORG_ID
+        , E.ORG_NM AS HDQT_TEAM_ORG_NM
+		, D.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, D.OUT_ORG_NM AS HDQT_PART_ORG_NM                                  
+		, A.JOB_DESC
+		, 'Y' AS SMS_YN  
+	FROM DSM_APPROVE A
+	JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.USER_ID)
+	JOIN PS_MNG.TBAS_DUTY_MGMT C ON (C.DUTY_CD = B.DUTY)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON (D.OUT_ORG_ID = B.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON (E.ORG_ID = D.ORG_ID)
+ 	WHERE 1=1
+ 	]]><isNotEmpty prepend="AND" property="USER_ID"><![CDATA[
+		A.USER_ID LIKE '%'||#USER_ID#||'%'      
+  	]]></isNotEmpty><![CDATA[
+  	]]><isNotEmpty prepend="AND" property="USER_NM"><![CDATA[
+		B.USER_NM LIKE '%'||#USER_NM#||'%'      
+  	]]></isNotEmpty><![CDATA[           
+  	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		NOT EXISTS (SELECT 'X'
+                     FROM DSM_CHRGR_HEADQ X
+                    WHERE X.CHRGR_ID = A.USER_ID
+                      AND X.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#) 
+  	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<insert id="dInsertChrgrHeadq" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEADQ001.dInsertChrgrHeadq  */
+/* IO: 이민재,2015-01-05T10:36:37(이민재,2015-01-05T10:36:37) */
+	INSERT INTO DSM_CHRGR_HEADQ
+	(
+	DSM_HEADQ_CD
+  	, CHRGR_ID
+  	, DSM_AUTH_TYPE
+  	, SMS_YN
+  	, USE_YN
+  	, DSM_CHRGR_ROLE_CL_CD
+  	, RGSTR_ID
+  	, RGST_DTM
+  	, UPDR_ID
+  	, UPD_DTM
+	)
+	VALUES
+	(
+   	#DSM_HEADQ_CD#
+  	, #CHRGR_ID#
+  	, '01'   
+  	, #SMS_YN#
+  	, 'Y'
+  	, #DSM_CHRGR_ROLE_CL_CD#
+  	, #onlineContext.userInfo.loginId#
+  	, SYSDATE
+  	, #onlineContext.userInfo.loginId#
+  	, SYSDATE
+	)]]>
+	</insert>
+	<update id="dUpdateChrgrHeadq" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEADQ001.dUpdateChrgrHeadq  */
+/* IO: 이민재,2015-01-05T10:36:55(이민재,2015-01-05T10:36:55) */
+	UPDATE DSM_CHRGR_HEADQ
+   	SET SMS_YN = #SMS_YN#
+   		, DSM_CHRGR_ROLE_CL_CD = #DSM_CHRGR_ROLE_CL_CD#
+		, UPDR_ID = #onlineContext.userInfo.loginId#
+		, UPD_DTM = SYSDATE 
+ 	WHERE DSM_HEADQ_CD = #DSM_HEADQ_CD#
+   	AND CHRGR_ID = #USER_ID#]]>
+	</update>
+	<delete id="dDeleteChrgrHeadq" ><![CDATA[/* Biz: com.psnm.dtok.biz.headchrgr.db.DCHRGRHEADQ001.dDeleteChrgrHeadq  */
+/* IO: 이민재,2015-01-05T10:37:11(이민재,2015-01-05T10:37:11) */
+	DELETE
+  	FROM DSM_CHRGR_HEADQ
+ 	WHERE CHRGR_ID = #USER_ID#
+	]]><isNotEmpty prepend="AND" property="DSM_HEADQ_CD"><![CDATA[
+  		DSM_HEADQ_CD = #DSM_HEADQ_CD# 
+	]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

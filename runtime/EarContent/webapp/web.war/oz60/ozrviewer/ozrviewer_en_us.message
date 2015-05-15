@@ -1,0 +1,19 @@
+;Message file for OZ Report Viewer
+ozrviewer = OZ Report Binary DLL Install..
+ozrviewerocx = OZ Report OCX Install..
+ozrresource = OZ Report Resource Install..
+ozrresource_ko_kr = OZ Report Korean Resource Install..
+ozrresource_en_us = OZ Report English Resource Install..
+ozrresource_ja_jp = OZ Report Japanese Resource Install..
+ozrresource_zh_cn = OZ Report Chinese Resource Install..
+ozrresource_zh_tw = OZ Report Taiwanese Resource Install..
+ozrresource_ru_ru = OZ Report Russian Resource Install..
+ozrxlswriter = XLS Export DLL Install..
+ozjpdf417 = PDF417 Export DLL Install..
+ozpdfwriter = PDF Export DLL Install..
+ozppt = PPT Export DLL Install..
+ozrviewer_win98 = OZ Report Binary DLL for Windows 98 Install..
+ozsystem = OZ Common System DLL Install..
+ozgdiplus = gdiplus.dll Install..
+ozrhelp = OZ Report Viewer User's Help Install..
+ozauser = OZ USL Client DLL Install..

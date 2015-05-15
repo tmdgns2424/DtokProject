@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSYSUSELOG001">
+	<insert id="dInsertSysUseLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.sys.db.DSYSUSELOG001.dInsertSysUseLog  */
+/* IO: 안종광,2015-02-27T09:56:09(안종광,2015-02-24T16:40:31) */
+INSERT INTO DSM_SYS_USE_LOG (
+       USE_YM
+     , USER_ID
+     , MENU_ID
+     , USE_DTM
+     , IP
+     , RGST_DTM
+)
+VALUES (
+       TO_CHAR(SYSDATE, 'RRRRMM')
+     , #onlineContext.userInfo.loginId# /*세션사용자ID*/
+     , #MENU_ID# /*메뉴ID*/
+     , SYSTIMESTAMP
+     , #onlineContext.userInfo.ip#
+     , SYSDATE
+)]]>
+	</insert>
+</sqlMap>

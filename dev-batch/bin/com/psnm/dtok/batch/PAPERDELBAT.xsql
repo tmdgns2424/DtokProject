@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.psnm.dtok.batch.PAPERDELBAT">
+	<delete id="dDeleteRcvAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteRcvAtchFile 받은쪽지함첨부파일삭제 */
+/* IO: 채수윤,2015-04-07T17:27:05(채수윤,2015-04-07T17:27:05) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_RCV_PAPER Y
+                                       WHERE SYSDATE - RGST_DTM > 30
+                                         AND Y.PAPER_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeleteRcvAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteRcvAtchFileMgmt 받은쪽지함첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-07T17:28:21(채수윤,2015-04-07T17:28:21) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_RCV_PAPER Z
+                WHERE SYSDATE - RGST_DTM > 30
+                  AND Z.PAPER_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteRcvPaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteRcvPaper 받은쪽지함삭제 */
+/* IO: 채수윤,2015-04-07T17:33:31(채수윤,2015-04-07T17:33:31) */
+DELETE
+  FROM DSM_RCV_PAPER
+ WHERE SYSDATE - RGST_DTM > 30]]>
+	</delete>
+	<delete id="dDeleteSndAtchFile" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteSndAtchFile 보낸편지함첨부파일삭제 */
+/* IO: 채수윤,2015-04-07T17:35:50(채수윤,2015-04-07T17:35:50) */
+DELETE
+  FROM DSM_ATCH_FILE A
+WHERE ATCH_FILE_ID IN (SELECT Z.ATCH_FILE_ID
+                         FROM DSM_ATCH_FILE_MGMT Z
+                        WHERE EXISTS (SELECT 'X'
+                                        FROM DSM_SND_PAPER Y
+                                       WHERE SYSDATE - RGST_DTM > 30
+                                         AND Y.PAPER_ID = Z.ATCH_MGMT_ID))]]>
+	</delete>
+	<delete id="dDeleteSndAtchFileMgmt" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteSndAtchFileMgmt 보낸편지함첨부파일관리삭제 */
+/* IO: 채수윤,2015-04-07T17:36:38(채수윤,2015-04-07T17:36:38) */
+DELETE
+  FROM DSM_ATCH_FILE_MGMT A
+ WHERE EXISTS (SELECT 'X'
+                 FROM DSM_SND_PAPER Z
+                WHERE SYSDATE - RGST_DTM > 30
+                  AND Z.PAPER_ID = A.ATCH_MGMT_ID)]]>
+	</delete>
+	<delete id="dDeleteSndPaper" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dDeleteSndPaper 보낸편지함삭제 */
+/* IO: 채수윤,2015-04-08T21:54:12(채수윤,2015-04-07T17:37:12) */
+DELETE
+  FROM DSM_SND_PAPER
+ WHERE SYSDATE - RGST_DTM > 30]]>
+	</delete>
+	<select id="dSelectBatchJobSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dSelectBatchJobSeq 배치작업번호채번 */
+/* IO: 채수윤,2015-04-07T17:39:21(채수윤,2015-04-07T17:39:21) */
+SELECT DSM_BATCH_JOB_SEQ.NEXTVAL AS BATCH_JOB_SEQ 
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dInsertBatchJobLog 배치작업정보입력 */
+/* IO: 채수윤,2015-04-07T17:39:52(채수윤,2015-04-07T17:39:52) */
+INSERT INTO DSM_BATCH_LOG
+     ( BATCH_JOB_SEQ
+     , JOB_BATCH_NM
+     , JOB_STA_DTM
+     )
+VALUES
+     ( #BATCH_JOB_SEQ#
+     , #JOB_BATCH_NM#
+     , SYSDATE
+     )]]>
+	</insert>
+	<update id="dUpdateBatchJobLog" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dUpdateBatchJobLog 배치작업정보수정 */
+/* IO: 채수윤,2015-04-07T17:40:20(채수윤,2015-04-07T17:40:20) */
+UPDATE DSM_BATCH_LOG
+   SET JOB_END_DTM = SYSDATE
+     , JOB_SUSS_YN = #JOB_SUSS_YN#
+     , ERR_MSG = #ERR_MSG#
+ WHERE BATCH_JOB_SEQ = #BATCH_JOB_SEQ#]]>
+	</update>
+	<select id="dSelectSmsTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dSelectSmsTranSeq SMS전송차수채번 */
+/* IO: 채수윤,2015-04-08T21:51:15(채수윤,2015-04-08T21:51:15) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<select id="dSelectSmsCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dSelectSmsCmpMsgSeq SMS텔링크고유ID채번 */
+/* IO: 채수윤,2015-04-08T21:51:44(채수윤,2015-04-08T21:51:44) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dInsertSmsTran SMS발송정보입력 */
+/* IO: 채수윤,2015-04-08T21:52:17(채수윤,2015-04-08T21:52:17) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+     )
+VALUES
+     (
+       TO_CHAR(SYSDATE , 'YYYYMMDD') /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , ''
+     , '91204841' /*발신자ID*/
+     , '0264005567' /*발신번호*/
+     , #CONTEXT# /*발송메시지*/
+     , 'N'
+     , '1'
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '0'
+     , ''
+     )]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dInsertSmsTranDtl SMS발송정보상세입력 */
+/* IO: 채수윤,2015-04-08T21:52:47(채수윤,2015-04-08T21:52:47) */
+INSERT 
+  INTO PS_MNG.TADM_SMS_TRAN_DTL 
+     (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+     )
+VALUES
+     ( 
+       TO_CHAR(SYSDATE , 'YYYYMMDD')  /*등록일자*/
+     , #TRAN_CNT#/*SMS전송차수*/
+     , '1' /*순번*/
+     , ''
+     , '01047567552' /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*등록자ID*/
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')
+     , '91204841' /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+     )]]>
+	</insert>
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.batch.PAPERDELBAT.dInsertTelinkSms SMS텔링크전송입력 */
+/* IO: 허용,2015-04-14T13:51:29(채수윤,2015-04-08T21:53:15) */
+INSERT 
+  INTO PS_MNG.TELINK_SMS 
+     (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+     )
+VALUES 
+     (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , TO_CHAR(SYSDATE , 'YYYYMMDDHHMMSS')/*발송일시*/
+     , '0264005567'/*발송전화번호*/
+     , '01047567552' /*수신전화번호*/
+     , '0264005567'/*발송전화번호*/
+     , #SND_MSG# /*메시지*/
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+     )]]>
+	</insert>
+</sqlMap>

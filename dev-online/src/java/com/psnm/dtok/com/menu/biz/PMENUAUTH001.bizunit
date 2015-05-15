@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PMENUAUTH001">
+    <bizUnitName>[PU]메뉴권한관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MENU</componentId>
+    <description>메뉴권한관리</description>
+    <method-list>
+        <method id="pSaveMenuAuth">
+            <methodName>[PM]메뉴권한저장</methodName>
+            <transactionId>com.MENU@PMENUAUTH001_pSaveMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한저장(등록, 삭제)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:11:16" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenuAuth">
+            <methodName>[PM]메뉴권한조회</methodName>
+            <transactionId>com.MENU@PMENUAUTH001_pSearchMenuAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴권한조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-12T10:10:46" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-12T10:09:26" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

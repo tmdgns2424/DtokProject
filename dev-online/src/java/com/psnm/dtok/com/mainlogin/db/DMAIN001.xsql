@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMAIN001">
+	<select id="dSearchSchList" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchSchList  */
+/* IO: 안종광,2015-03-13T14:03:41(안종광,2014-12-18T16:09:22) */
+SELECT x.*
+  FROM (
+        SELECT RANK() OVER (ORDER BY A.SCH_DT, A.SCH_ID) RN 
+             , A.SCH_ID
+             , A.SCH_TYP_CD
+             , A.SCH_TITL_NM
+             , CASE WHEN A.SCH_STA_DT IS NULL THEN TO_CHAR(TO_DATE(A.SCH_DT),'MM-DD(dy)')
+                    WHEN A.SCH_STA_DT = A.SCH_DT THEN TO_CHAR(TO_DATE(A.SCH_DT),'MM-DD(dy)')
+                    ELSE TO_CHAR(TO_DATE(A.SCH_STA_DT),'MM-DD(dy)')||'~'||TO_CHAR(TO_DATE(A.SCH_DT),'DD(dy)')
+               END AS SCH_DT
+          FROM DSM_SCHMGMT A
+          JOIN (SELECT distinct C.SCH_ID
+                  FROM (SELECT DUTY AS DUTY_CD
+                           FROM PS_MNG.TBAS_USER_MGMT
+                          WHERE USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/
+                          UNION 
+                         SELECT DUTY_CD
+                           FROM DSM_APPROVE
+                          WHERE USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/
+                       ) A
+                     , DSM_AUTH_GRP_APLY_DUTY B
+                     , DSM_SCH_RCV_GRP C
+                WHERE A.DUTY_CD = B.DUTY_CD
+                  AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+          ) B ON (A.SCH_ID = B.SCH_ID)
+          JOIN (
+                    SELECT SCH_ID
+                      FROM DSM_SCH_RCV_ORG
+                     WHERE 1=1
+                       AND OUT_ORG_ID IN (
+                               SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH
+                                WHERE USER_ID = #onlineContext.userInfo.loginId#
+                           )
+                     GROUP BY SCH_ID
+          ) C ON (A.SCH_ID = C.SCH_ID)
+         WHERE A.SCH_DT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+         ORDER BY A.SCH_DT 
+  ) x
+ WHERE RN <= 10]]>
+	</select>
+	<select id="dSearchRcvPaperCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchRcvPaperCount  */
+/* IO: 안종광,2014-12-19T14:42:50(안종광,2014-12-19T14:37:34) */
+SELECT COUNT(r.PAPER_ID) AS RCV_PAPER_CNT
+     , #onlineContext.userInfo.loginId# AS SERVER_USER_ID
+  FROM DSM_RCV_PAPER r
+ WHERE r.USER_ID = #onlineContext.userInfo.loginId#
+   AND r.IS_RE_DELETE = 'N'
+   AND r.IS_SE_DELETE = 'N'
+   AND r.IS_OPEND = 'N']]>
+	</select>
+	<select id="dSearchPhrs" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchPhrs  */
+/* IO: 안종광,2014-12-19T16:27:02(안종광,2014-12-19T16:27:02) */
+SELECT NUM
+     , PHRS
+     , ATHR
+  FROM DSM_PHRS
+ WHERE NUM = EXTRACT(MONTH FROM SYSDATE)]]>
+	</select>
+	<select id="dSearchUserYn" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchUserYn  */
+/* IO: 안종광,2015-04-24T15:43:01(안종광,2014-12-23T13:02:42) */
+SELECT u.USER_ID
+     , CASE WHEN d.DUTY_CD = '14' OR c.ADD_INFO_01 = 'C' THEN DECODE(NVL(u.CPLAZA_ORG_CD,''),'','N','Y') ELSE 'Y' END AS CPLAZA_YN
+     , CASE WHEN c.ADD_INFO_01 IN ('A','B') THEN DECODE(NVL(du.USER_ID,''),'','N','Y') ELSE 'Y' END AS DSMUSER_YN
+     , DECODE(du.TEL_CO_CD,'','N','Y') AS CERT_YN
+     , CASE
+       WHEN u.ATTC_CAT = '1' OR u.ATTC_CAT = '2' OR u.ATTC_CAT = '3' THEN ''
+       ELSE du.REAL_BIZ_DT
+       END AS REAL_BIZ_DT /*실명인증일자*/
+     , CASE
+       WHEN u.ATTC_CAT = '1' OR u.ATTC_CAT = '2' OR u.ATTC_CAT = '3' THEN 0
+       ELSE FLOOR(SYSDATE - TO_DATE(du.REAL_BIZ_DT, 'RRRRMMDD'))
+       END AS DAYS_REAL_BIZ_DT /*실명인증후흐른일수*/
+     , CASE
+       WHEN u.ATTC_CAT = '1' OR u.ATTC_CAT = '2' OR u.ATTC_CAT = '3' THEN 'N'
+       ELSE 
+            CASE 
+            WHEN u.PWD_END_DT IS NULL THEN 'Y'
+            WHEN SYSDATE > TO_DATE(u.PWD_END_DT, 'YYYYMMDD') THEN 'Y'
+            ELSE 'N'
+            END
+       END AS NEED_TO_CHANGE_PWD /*비밀번호필수변경여부*/
+     , (
+          SELECT DECODE(COUNT(A.ANNCE_ID),0,'N','Y') AS ANNCE_CNT_YN
+            FROM DSM_ANNCE A
+            JOIN (SELECT C.ANNCE_ID
+                    FROM (SELECT DUTY AS DUTY_CD
+                             FROM PS_MNG.TBAS_USER_MGMT
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                            UNION 
+                           SELECT DUTY_CD
+                             FROM DSM_APPROVE
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                         ) A
+                       , DSM_AUTH_GRP_APLY_DUTY B
+                       , DSM_ANNCE_RCV_GRP C
+                  WHERE A.DUTY_CD = B.DUTY_CD
+                    AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                  GROUP BY C.ANNCE_ID
+                 ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+            JOIN (SELECT ANNCE_ID
+                    FROM DSM_ANNCE_RCV_ORG
+                   WHERE OUT_ORG_ID IN (
+                             SELECT OUT_ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT
+                              WHERE ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+                         )
+                   GROUP BY ANNCE_ID
+                 ) C ON (C.ANNCE_ID = A.ANNCE_ID)
+           WHERE A.POPUP_YN = 'Y'
+             AND TO_CHAR(SYSDATE,'YYYYMMDD') BETWEEN A.POPUP_STA_DT AND A.POPUP_END_DT
+             AND A.ANNCE_ID NOT IN (
+                     SELECT m.ANNCE_ID
+                       FROM DSM_ANNCE_MNDT_CHK m
+                      WHERE m.USER_ID = #onlineContext.userInfo.loginId#
+                 )
+          ) AS ANNCE_POP_YN /*팝업할 공지 존재 여부*/
+     , (
+          SELECT COUNT(A.ANNCE_ID)
+            FROM DSM_ANNCE A
+            JOIN (SELECT C.ANNCE_ID
+                    FROM (SELECT DUTY AS DUTY_CD
+                             FROM PS_MNG.TBAS_USER_MGMT
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                            UNION 
+                           SELECT DUTY_CD
+                             FROM DSM_APPROVE
+                            WHERE USER_ID = #onlineContext.userInfo.loginId#
+                         ) A
+                       , DSM_AUTH_GRP_APLY_DUTY B
+                       , DSM_ANNCE_RCV_GRP C
+                  WHERE A.DUTY_CD = B.DUTY_CD
+                    AND B.AUTH_GRP_ID = C.AUTH_GRP_ID
+                  GROUP BY C.ANNCE_ID
+                 ) B ON (A.ANNCE_ID = B.ANNCE_ID)
+            JOIN (SELECT ANNCE_ID
+                    FROM DSM_ANNCE_RCV_ORG
+                   WHERE OUT_ORG_ID IN (
+                             SELECT OUT_ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT
+                              WHERE ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+                         )
+                   GROUP BY ANNCE_ID
+                 ) C ON (C.ANNCE_ID = A.ANNCE_ID)
+           WHERE A.MNDT_CHK_YN = 'Y' /*필수확인*/
+             AND A.ANNCE_ID NOT IN ( SELECT k.ANNCE_ID
+                                       FROM DSM_ANNCE_MNDT_CHK k
+                                      WHERE k.USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/ )
+          ) AS ANNCE_MNDT_CNT /*필수확인해야할 공지개수*/
+  FROM PS_MNG.TBAS_USER_MGMT u
+  LEFT JOIN DSM_USER du ON (u.USER_ID = du.USER_ID)
+  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT d ON  (d.DUTY_CD = u.DUTY)
+  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL c ON (c.COMM_CD_ID='USER_TYP' AND c.COMM_CD_VAL = d.USER_TYP)
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON (om.AGNT_ID = u.CPLAZA_ORG_CD AND om.CONS_MTH=TO_CHAR(SYSDATE, 'YYYYMM'))
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT od ON (od.OUT_ORG_DTL_ID = om.OUT_ORG_DTL_ID)
+ WHERE u.USER_ID = #onlineContext.userInfo.loginId# /*사용자ID*/]]>
+	</select>
+	<select id="dSearchWhoBorn" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchWhoBorn  */
+/* IO: 안종광,2015-03-17T09:52:51(안종광,2015-01-19T16:08:57) */
+SELECT w.*
+     , F_MASKING('N', w.USER_NM) AS USER_NM_M
+     , TO_CHAR(TO_DATE(w.BIRTH_DT,'YYYYMMDD'), 'MM-DD') AS BIRTH_DAY
+     , TO_CHAR(TO_DATE(TO_CHAR(SYSDATE,'YYYY')||SUBSTR(w.BIRTH_DT,5), 'YYYYMMDD'), 'DY') AS WEEK_DY
+     , F_DSM_CODE_NM('DSM_RETL_CLASS_CD', w.RPSTY) AS RPSTY_NM /*직책명*/
+     , F_DSM_USER_DUTY('CD', w.USER_ID) AS DUTY
+     , F_DSM_USER_DUTY('NM', w.USER_ID) AS DUTY_NM
+     , f.FILE_NM
+     , f.FILE_SIZE
+     , f.FILE_GRP_ID
+     , f.FILE_PATH
+  FROM (
+    SELECT v.*
+     FROM (
+        SELECT t.USER_ID, t.USER_NM
+             , d.NICK_NM, d.BIRTH_DT, d.BIRTH_LUNAR_YN, d.PIC_FILE_ID
+             , ABS(TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD')) - TO_DATE(TO_CHAR(SYSDATE,'YYYY')||SUBSTR(d.BIRTH_DT, 5, 4), 'YYYYMMDD')) AS DAY_OFFSET
+             , mm.AGNT_ID            AS SALE_AGNT_ORG_ID /* 에이전트 조직ID */
+             , mm.AGNT_NM            AS SALE_AGNT_ORG_NM /* 에이전트 조직명 */
+             , mm.RPSTY                                  /* 직책코드 */
+             , dm.OUT_ORG_DTL_ID     AS SALE_TEAM_ORG_ID /* 영업팀 조직ID */
+             , dm.OUT_ORG_DTL_NM     AS SALE_TEAM_ORG_NM /* 영업팀 조직명 */
+             , dm.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /* 영업국 조직ID */
+             , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT WHERE OUT_ORG_DTL_ID = dm.SUP_OUT_ORG_DTL_ID) AS SALE_DEPT_ORG_NM /* 영업국 조직명 */
+             , oo.OUT_ORG_ID         AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+             , oo.OUT_ORG_NM         AS HDQT_PART_ORG_NM /* 본사파트 조직명 */
+             , oo.ORG_ID             AS HDQT_TEAM_ORG_ID /* 본사팀 조직ID */
+             , (SELECT ORG_NM FROM PS_MNG.TBAS_NEW_ORG_MGMT WHERE ORG_ID = oo.ORG_ID) AS HDQT_TEAM_ORG_NM /* 본사팀 조직명 */
+          FROM DSM_USER d
+          JOIN PS_MNG.TBAS_USER_MGMT t ON ( d.USER_ID = t.USER_ID AND t.DEL_YN != 'Y'
+                                                                  AND t.USER_ST = '1' /* 재직 */
+                                                                  AND t.EFF_USER_YN = 'Y' /* 사용승인 */ )
+          JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT mm ON ( mm.AGNT_ID = t.CPLAZA_ORG_CD AND mm.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+          JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT dm ON ( dm.OUT_ORG_DTL_ID = mm.OUT_ORG_DTL_ID )
+          JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = dm.OUT_ORG_ID )
+         WHERE 1=1
+           AND d.BIRTH_DT IS NOT NULL
+           AND d.BIRTH_LUNAR_YN = 'N'
+
+           AND ( /* 금주 생일자 조회(월~일) : 기본조건 */
+                (d.BIRTH_LUNAR_YN, SUBSTR(d.BIRTH_DT, 5)) IN (
+                    ]]><iterate property="SOLAR_DAYS" conjunction=","><![CDATA[('N',#SOLAR_DAYS[]#)]]></iterate><![CDATA[
+                )
+              ]]><isNotEmpty property="LUNAR_DAYS"><![CDATA[
+                OR
+                (d.BIRTH_LUNAR_YN, SUBSTR(d.BIRTH_DT, 5)) IN (
+                    ]]><iterate property="LUNAR_DAYS" conjunction=","><![CDATA[('Y',#LUNAR_DAYS[]#)]]></iterate><![CDATA[
+                )
+              ]]></isNotEmpty><![CDATA[
+           )
+
+		  ]]><isNotEmpty property="THE_SOLAR_MD"><![CDATA[
+           AND ( /* 지정일자 조건(팝업시 오늘 | 내일) */
+                ( d.BIRTH_LUNAR_YN = 'N' AND SUBSTR(d.BIRTH_DT, 5) = #THE_SOLAR_MD# ) /*양력*/
+              ]]><isNotEmpty property="THE_LUNAR_MD"><![CDATA[
+                OR
+                ( d.BIRTH_LUNAR_YN = 'Y' AND SUBSTR(d.BIRTH_DT, 5) = #THE_LUNAR_MD# ) /*음력*/
+              ]]></isNotEmpty><![CDATA[               
+           )
+          ]]></isNotEmpty><![CDATA[
+
+          ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="Y"><![CDATA[
+           AND dm.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /*영업국제한*/
+          ]]></isEqual><![CDATA[
+          ]]><isEqual property="IS_BOUNDED_BY_DEPT" compareValue="N"><![CDATA[
+           AND dm.OUT_ORG_ID IN (
+                  SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH /*DATA권한*/
+                   WHERE USER_ID = #onlineContext.userInfo.loginId# /*(세션)사용자ID*/
+               )
+          ]]></isEqual><![CDATA[
+          ]]><isEqual property="IS_BOUNDED_BY_TEAM" compareValue="Y"><![CDATA[
+           AND dm.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀제한*/
+          ]]></isEqual><![CDATA[
+           AND 'Y' = (CASE WHEN #onlineContext.userInfo.ATTC_CAT# = '3' THEN 'N' ELSE 'Y' END) /* 도급직이면 조회 안함 */
+    ) v
+    ORDER BY SUBSTR(v.BIRTH_DT, 5), v.DAY_OFFSET ASC, v.NICK_NM DESC, v.BIRTH_DT DESC
+  ) w
+  LEFT OUTER JOIN DSM_ATCH_FILE f ON ( w.PIC_FILE_ID = f.ATCH_FILE_ID )
+ WHERE 50>=ROWNUM]]>
+	</select>
+	<select id="dSearchMrtgExpir" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchMrtgExpir  */
+/* IO: 안종광,2015-04-02T13:17:06(안종광,2015-01-30T11:30:18) */
+SELECT e.DEAL_CO_CD AS AGNT_ID
+     , e.EXPIR_DT
+     , CEIL(TO_DATE(e.EXPIR_DT) - SYSDATE) AS DAYS_BEFORE
+     , h.MRTG_EXPIR_DT
+     , h.MRTG_EXPIR_RE_CNTRCT_YN
+     , h.SMS_SND_YN
+     , (
+          SELECT count(*) from PS_MNG.TBAS_DEAL_CO_CRD_MGMT
+           WHERE DEL_YN = 'N'
+             AND DEAL_CO_CD = f.DEAL_CO_CD
+             AND EXPIR_DT > f.MAX_EXPIR_DT
+      ) AS OVER_EXPIR_DT_CNT /*현재담보만료일자이후의 데이터건수*/
+  FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT e
+  JOIN (
+        SELECT d.DEAL_CO_CD, d.SER_NUM, d.HST_SEQ
+             , MAX(d.EXPIR_DT) AS MAX_EXPIR_DT /*가장늦은만료일*/
+          FROM PS_MNG.TBAS_DEAL_CO_CRD_MGMT d
+          JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON ( om.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') AND om.DEL_YN = 'N' )
+         WHERE d.DEAL_CO_CD = #onlineContext.userInfo.CPLAZA_ORG_CD# /*에이전트ID=(세션)클로버플라자코드*/
+           AND d.DEL_YN = 'N'
+           AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN d.SET_DT AND d.EXPIR_DT
+           AND d.EXPIR_DT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+         GROUP BY d.DEAL_CO_CD, d.SER_NUM, d.HST_SEQ
+  ) f ON ( e.DEAL_CO_CD = f.DEAL_CO_CD AND e.SER_NUM = f.SER_NUM AND e.HST_SEQ = f.HST_SEQ AND e.EXPIR_DT = f.MAX_EXPIR_DT )
+  LEFT JOIN DSM_MRTG_EXPIR_HST h ON ( e.DEAL_CO_CD = h.AGNT_ID )
+ WHERE e.DEL_YN = 'N' /*불필요하지만명시적으로*/
+   AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN e.SET_DT AND e.EXPIR_DT /*불필요하지만명시적으로*/]]>
+	</select>
+	<update id="dMergeMrtgExpir" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dMergeMrtgExpir  */
+/* IO: 안종광,2015-02-09T10:49:55(안종광,2015-02-09T10:49:55) */
+MERGE INTO DSM_MRTG_EXPIR_HST h
+USING (
+        SELECT #AGNT_ID#                 AS AGNT_ID /*에이전트ID*/
+             , #MRTG_EXPIR_DT#           AS MRTG_EXPIR_DT /*담보만료일자*/
+             , #MRTG_EXPIR_RE_CNTRCT_YN# AS MRTG_EXPIR_RE_CNTRCT_YN /*담보만료재계약여부*/
+             , #SMS_SND_YN#              AS SMS_SND_YN /*SMS발송여부*/
+         FROM DUAL
+    ) u
+   ON ( h.AGNT_ID = u.AGNT_ID AND h.MRTG_EXPIR_DT = u.MRTG_EXPIR_DT )
+ WHEN MATCHED THEN
+      UPDATE SET
+             h.MRTG_EXPIR_RE_CNTRCT_YN = u.MRTG_EXPIR_RE_CNTRCT_YN
+           , h.SMS_SND_YN = u.SMS_SND_YN
+           , h.UPD_DTM = SYSDATE
+           , h.UPDR_ID = #onlineContext.userInfo.loginId#
+ WHEN NOT MATCHED THEN
+      INSERT (
+             AGNT_ID
+           , MRTG_EXPIR_DT
+           , MRTG_EXPIR_RE_CNTRCT_YN
+           , SMS_SND_YN
+           , RGSTR_ID
+           , RGST_DTM
+           , UPDR_ID
+           , UPD_DTM
+      )
+      VALUES (
+             u.AGNT_ID
+           , u.MRTG_EXPIR_DT
+           , u.MRTG_EXPIR_RE_CNTRCT_YN
+           , u.SMS_SND_YN
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+           , #onlineContext.userInfo.loginId#
+           , SYSDATE
+      )]]>
+	</update>
+	<update id="dUpdateNameCheck" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dUpdateNameCheck  */
+/* IO: 안종광,2015-02-10T13:22:46(안종광,2015-02-10T13:18:44) */
+UPDATE DSM_USER SET
+       UPDR_ID = #onlineContext.userInfo.loginId#
+     , UPD_DTM = SYSDATE
+     , REAL_BIZ_DT = TO_CHAR(SYSDATE, 'RRRRMMDD')
+ WHERE USER_ID = #onlineContext.userInfo.loginId# /*로그인사용자ID*/]]>
+	</update>
+	<select id="dSearchUserScrbReqCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchUserScrbReqCnt  */
+/* IO: 안종광,2015-03-16T10:52:03(안종광,2015-02-23T11:36:50) */
+SELECT COUNT(*) AS USER_SCRB_REQ_CNT /*회원가입요청건수*/
+  FROM DSM_USER_SCRB_REQ q
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT om ON ( om.AGNT_ID = q.CPLAZA_ORG_CD )
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT od ON ( od.OUT_ORG_DTL_ID = om.OUT_ORG_DTL_ID )
+  LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT     o  ON ( o.OUT_ORG_ID = od.OUT_ORG_ID )
+  LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT     n  ON ( n.ORG_ID = o.ORG_ID )
+ WHERE q.SCRB_ST_CD = '01' /*가입요청*/
+ ]]><isNotEmpty property="FROM_DT"><![CDATA[
+   AND SCRB_REQ_DTM BETWEEN TO_DATE(#FROM_DT#, 'YYYY-MM-DD') AND TO_DATE(#TO_DT#, 'YYYY-MM-DD') + 1
+ ]]></isNotEmpty><![CDATA[
+   AND om.CONS_MTH = (                             
+                       SELECT MAX(CONS_MTH) AS YYYYMM 
+                         FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT
+                        WHERE CONS_MTH <= TO_CHAR(SYSDATE, 'YYYYMM') 
+                          AND AGNT_ID = om.AGNT_ID
+                       )
+   AND o.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#) /*데이터권한조건*/]]>
+	</select>
+	<select id="dSearchAgentCntrtCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchAgentCntrtCnt  */
+/* IO: 안종광,2015-03-18T15:52:58(안종광,2015-02-23T11:40:52) */
+SELECT COUNT(*) AS AGENT_CNTRT_CNT /*에이전트계약요청건수*/
+  FROM DSM_AGENT_CNTRT A
+       LEFT JOIN (SELECT B2.CNTRT_MGMT_NUM, B1.USER_ID, B1.USER_NM 
+                    FROM PS_MNG.TBAS_USER_MGMT B1, 
+                         DSM_AGENT_INT_HST B2
+                   WHERE B1.USER_ID = B2.INTR_ID
+                     AND B1.ATTC_CAT = '1'
+                 ) C ON (A.CNTRT_MGMT_NUM = C.CNTRT_MGMT_NUM)
+ WHERE 1=1
+ ]]><isNotEmpty property="CNTRT_ST_CD"><![CDATA[
+   AND A.CNTRT_ST_CD = #CNTRT_ST_CD# /*계약상태코드[DSM_CNTRT_ST_CD] (입력)*/
+ ]]></isNotEmpty><![CDATA[
+ ]]><isEmpty property="CNTRT_ST_CD"><![CDATA[
+   AND A.CNTRT_ST_CD = '1' /*계약상태코드[DSM_CNTRT_ST_CD]=요청*/
+ ]]></isEmpty><![CDATA[
+ ]]><isNotEmpty property="FROM_DT"><![CDATA[
+   AND A.RGST_DTM BETWEEN TO_DATE(#FROM_DT#, 'YYYY-MM-DD') AND TO_DATE(#TO_DT#, 'YYYY-MM-DD') + 1
+ ]]></isNotEmpty><![CDATA[
+
+ ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+   AND A.APP_OUT_ORG_ID = #HDQT_PART_ORG_ID# /*지정본사파트*/
+ ]]></isNotEmpty><![CDATA[
+ ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+   AND A.APP_DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# /*지정영업국*/
+ ]]></isNotEmpty><![CDATA[
+ ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+   AND A.APP_DSM_TEAM_CD = #SALE_TEAM_ORG_ID# /*지정영업팀*/
+ ]]></isNotEmpty><![CDATA[
+
+ ]]><isEqual property="onlineContext.userInfo.DUTY" compareValue="14"><![CDATA[
+   AND A.CNTRT_ST_CD <> '1'
+   AND A.APP_DSM_HEADQ_CD = #onlineContext.userInfo.SALE_DEPT_ORG_ID#
+ ]]></isEqual><![CDATA[
+ ]]><isEqual property="onlineContext.userInfo.DUTY" compareValue="16"><![CDATA[
+   AND A.CNTRT_ST_CD <> '1'
+   AND A.REQ_OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+ ]]></isEqual><![CDATA[
+ ]]><isEqual property="onlineContext.userInfo.DUTY" compareValue="19"><![CDATA[
+   AND A.CNTRT_ST_CD <> '1'
+   AND A.REQ_OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+ ]]></isEqual><![CDATA[
+ ]]><isEqual property="onlineContext.userInfo.DUTY" compareValue="20"><![CDATA[
+   AND A.CNTRT_ST_CD <> '1'
+   AND A.REQ_OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID#
+ ]]></isEqual><![CDATA[]]>
+	</select>
+	<select id="dSearchPaperPhrsPicFile" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchPaperPhrsPicFile  */
+/* IO: 안종광,2015-02-24T15:10:45(안종광,2015-02-24T15:10:45) */
+SELECT x.USER_ID
+     , x.RCV_PAPER_CNT /*받은쪽지개수*/
+     , u.PIC_FILE_ID /*이미지파일ID*/
+     , f.ATCH_FILE_ID
+     , f.FILE_NM
+     , f.FILE_SIZE
+     , f.FILE_GRP_ID
+     , f.FILE_PATH /*파일저장경로*/
+     , ( SELECT PHRS FROM DSM_PHRS WHERE NUM = EXTRACT(MONTH FROM SYSDATE) ) AS PHRS /*명언*/
+     , ( SELECT ATHR FROM DSM_PHRS WHERE NUM = EXTRACT(MONTH FROM SYSDATE) ) AS ATHR
+  FROM (
+        SELECT #onlineContext.userInfo.loginId# AS USER_ID
+             , COUNT(r.PAPER_ID) AS RCV_PAPER_CNT
+          FROM DSM_RCV_PAPER r
+         WHERE r.USER_ID = #onlineContext.userInfo.loginId# /*세션사용자ID*/
+           AND r.IS_RE_DELETE = 'N'
+           AND r.IS_SE_DELETE = 'N'
+           AND r.IS_OPEND = 'N'
+  ) x 
+  JOIN DSM_USER u ON ( u.USER_ID = x.USER_ID )
+  LEFT JOIN DSM_ATCH_FILE f ON ( u.PIC_FILE_ID = f.ATCH_FILE_ID )]]>
+	</select>
+	<select id="dSearchDfaxCnt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.mainlogin.db.DMAIN001.dSearchDfaxCnt  */
+/* IO: 안종광,2015-03-10T18:16:58(안종광,2015-03-10T18:16:58) */
+SELECT COUNT(*) AS DFAX_CNT /*DFAX건수*/
+  FROM PS_MNG.TSAL_N_FAX                       A
+  LEFT JOIN PS_MNG.TBAS_USER_MGMT              B ON ( B.USER_ID = A.FAX_OPR_ID )
+  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON ( C.AGNT_ID = A.AGENT_CD AND C.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM') )
+  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON ( D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID )
+  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON ( E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID )
+  LEFT OUTER JOIN PS_MNG.TBAS_OUT_ORG_MGMT     F ON ( F.OUT_ORG_ID = D.OUT_ORG_ID )
+  LEFT OUTER JOIN PS_MNG.TBAS_NEW_ORG_MGMT     G ON ( G.ORG_ID = F.ORG_ID )
+  LEFT OUTER JOIN DSM_BIZ_APRV                 H ON ( H.FAX_RCV_NO = A.FAX_RCV_NO )
+  LEFT OUTER JOIN DSM_BIZ_APRV_SUSP            I ON ( I.DSM_HEADQ_CD = E.SUP_OUT_ORG_DTL_ID AND 
+                                                      TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN I.SUSP_STA_DT AND I.SUSP_END_DT )
+ WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+   AND A.FAX_RECEIVE_DTM BETWEEN TO_CHAR(SYSDATE,'YYYYMMDD')||'000000' AND TO_CHAR(SYSDATE,'YYYYMMDD')||'235959'
+   AND H.BIZ_APRV_OP_ST_CD = #BIZ_APRV_OP_ST_CD#
+   AND G.ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*본사팀ID*/
+ ]]><isEqual property="BIZ_APRV_OP_ST_CD" compareValue="01"><![CDATA[
+   AND F.OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID# /*본사파트ID*/
+   AND E.SUP_OUT_ORG_DTL_ID = #onlineContext.userInfo.SALE_DEPT_ORG_ID# /*영업국ID*/
+ ]]></isEqual><![CDATA[]]>
+	</select>
+</sqlMap>

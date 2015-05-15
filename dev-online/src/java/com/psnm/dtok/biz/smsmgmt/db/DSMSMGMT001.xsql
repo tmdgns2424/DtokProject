@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSMSMGMT001">
+	<select id="dSearchSmsMgmt" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchSmsMgmt SMS관리 조회 */
+/* IO: 이승훈2,2015-04-14T16:58:07(이승훈2,2015-04-14T16:56:13) */
+SELECT * 
+FROM (
+    SELECT
+         DISTINCT F_MASKING('N',T1.USER_ID)AS USER_ID
+         , T1.TRAN_TYP_NM
+         , T1.ORG_NM
+         , T1.OUT_ORG_NM
+         , T1.TRAN_TYP_CD 
+         , T1.DUTY_NM
+         , F_MASKING('N',T1.USER_NM)AS USER_NM
+    		 , T1.USER_ID AS H_USER_ID
+         , T1.MENU_NM
+         , T1.TRAN_MSG 
+      FROM (  
+            SELECT T.*
+              FROM (
+                    SELECT F.MENU_NM
+                         , B.USER_ID
+                         , C.TRAN_MSG
+                         , C.TRAN_TYP_CD
+                         , C.TRAN_TYP_NM
+                         , B.OUT_ORG_ID
+                         , D.OUT_ORG_NM
+                         , D.ORG_ID 
+                         , G.ORG_NM
+                         , E.USER_NM
+                         , I.DUTY_CD
+                         , H.DUTY_NM
+                      FROM ( SELECT COMM_CD_VAL
+                                  , COMM_CD_VAL_NM 
+                               FROM PS_MNG.TBAS_COMM_CD_DTL 
+                              WHERE COMM_CD_ID='DSM_STRD_CL_VAL_CD' 
+                                AND ADD_INFO_01 = 'SMS'   
+                            )A
+                            INNER JOIN DSM_SMS_MGMT              B ON ( A.COMM_CD_VAL  = B.TRAN_TYP_CD )
+                            INNER JOIN DSM_SMS_BAS_VAL           C ON ( B.TRAN_TYP_CD  = C.TRAN_TYP_CD )
+                            INNER JOIN PS_MNG.TBAS_OUT_ORG_MGMT  D ON ( B.OUT_ORG_ID   = D.OUT_ORG_ID  )
+                            INNER JOIN PS_MNG.TBAS_USER_MGMT     E ON ( B.USER_ID      = E.USER_ID     )
+                            INNER JOIN DSM_MENU                  F ON ( C.TRAN_MENU_ID = F.MENU_ID     )
+                            INNER JOIN PS_MNG.TBAS_NEW_ORG_MGMT  G ON ( D.ORG_ID   = G.ORG_ID          )
+                            INNER JOIN DSM_APPROVE               I ON ( E.USER_ID  = I.USER_ID         )
+                   INNER JOIN PS_MNG.TBAS_DUTY_MGMT              H ON ( I.DUTY_CD = H.DUTY_CD)
+                   )T  
+          )T1
+    WHERE 1=1
+        ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+            AND T1.ORG_ID = #HDQT_TEAM_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+            AND T1.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="STRD_CL_VAL_CD"><![CDATA[
+            AND T1.TRAN_TYP_CD = #STRD_CL_VAL_CD#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="DUTY_TYP_DT"><![CDATA[
+            AND T1.DUTY_CD = #DUTY_TYP_DT#
+        ]]></isNotEmpty><![CDATA[
+        ]]><isNotEmpty property="USER_NM"><![CDATA[
+            AND T1.USER_NM LIKE '%'||REPLACE(#USER_NM#,' ','')||'%'
+        ]]></isNotEmpty><![CDATA[
+    ORDER BY ORG_ID ASC
+)]]>
+	</select>
+	<select id="dSearchMsgGrp" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchMsgGrp 메세지 구분 조회 */
+/* IO: 이승훈2,2015-02-23T09:03:04(이승훈2,2015-02-12T13:11:23) */
+SELECT COMM_CD_VAL, COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL
+WHERE COMM_CD_ID='DSM_STRD_CL_VAL_CD' AND ADD_INFO_01 = 'SMS']]>
+	</select>
+	<select id="dSearchHPart" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchHPart 본사파트 조회 */
+/* IO: 이승훈2,2015-03-03T16:03:04(이승훈2,2015-03-03T16:03:04) */
+SELECT OUT_ORG_ID AS HDQT_PART_ORG_ID, OUT_ORG_NM AS HDQT_PART_ORG_NM
+    FROM PS_MNG.TBAS_OUT_ORG_MGMT
+    WHERE EFF_ORG_YN = 'Y'
+    AND DEL_YN = 'N'
+    ]]><isNotEmpty property="HDQT_TEAM_CD"><![CDATA[
+        AND ORG_ID = #HDQT_TEAM_CD# /*본사팀조직ID*/
+    ]]></isNotEmpty><![CDATA[
+ORDER BY SORT_SEQ, OUT_ORG_ID]]>
+	</select>
+	<insert id="dInsertSmsSnd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dInsertSmsSnd SMS수신자 추가 */
+/* IO: 이승훈2,2015-04-27T18:08:58(이승훈2,2015-03-03T16:04:03) */
+INSERT INTO DSM_SMS_MGMT( 
+        USER_ID
+        , OUT_ORG_ID
+        , TRAN_TYP_CD
+        , REP_PHON_NUM
+        , RGSTR_ID
+        , RGST_DTM
+        , UPDR_ID
+        , UPD_DTM
+    )VALUES(
+    #AGNT_ID#
+    , #HDQT_PART_CD#
+    , #STRD_CL_VAL_ID#
+    , (SELECT COMM_CD_VAL_NM FROM PS_MNG.TBAS_COMM_CD_DTL WHERE COMM_CD_ID = 'DSM_REP_PHON_NUM' AND ADD_INFO_01 = #HDQT_PART_CD#)
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    , #onlineContext.userInfo.loginId#
+    , SYSDATE
+    )]]>
+	</insert>
+	<delete id="dDeleteSmsSnd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dDeleteSmsSnd SMS수신자 삭제 */
+/* IO: 이승훈2,2015-02-23T17:37:41(이승훈2,2015-02-23T17:31:42) */
+DELETE FROM DSM_SMS_MGMT
+ WHERE USER_ID = #H_USER_ID#
+   AND TRAN_TYP_CD = #TRAN_TYP_CD#]]>
+	</delete>
+	<select id="dSearchHTeam" parameterClass="map" resultClass="hmap" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchHTeam 본사팀조회 */
+/* IO: 이승훈2,2015-03-05T09:25:14(이승훈2,2015-03-03T16:02:32) */
+SELECT o.ORG_ID AS HDQT_TEAM_ORG_ID
+    , '(' || o.ORG_ID || ') '|| o.ORG_NM AS HDQT_TEAM_ORG_NM
+    FROM PS_MNG.TBAS_NEW_ORG_MGMT o
+    WHERE o.DEL_YN = 'N'
+    AND o.ORG_ID IN ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT where DEL_YN = 'N' and EFF_ORG_YN = 'Y' )
+ORDER BY HDQT_TEAM_ORG_ID]]>
+	</select>
+	<select id="dSearchDuty" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchDuty 직무 조회 */
+/* IO: 이승훈2,2015-02-26T16:11:37(이승훈2,2015-02-26T16:11:37) */
+ 
+ SELECT DUTY_CD, DUTY_NM, USER_TYP FROM PS_MNG.TBAS_DUTY_MGMT
+ WHERE USER_TYP = #DUTY_TYP_ID#
+ AND USE_YN ='Y'
+ ORDER BY DUTY_CD ASC
+ ]]>
+	</select>
+	<select id="dSearchUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchUser 회원정보 조회 */
+/* IO: 채수윤,2015-04-01T14:05:48(이승훈2,2015-02-27T12:59:21) */
+SELECT	F_MASKING('N', T2.USER_ID) AS USER_ID2
+		, T2.*
+  FROM (
+		SELECT  COUNT(1) OVER() AS COUNT, T1.* 
+		  FROM (
+				SELECT A.USER_ID                   
+				       , A.USER_NM                                      AS USER_NM
+				       , A.ATTC_CAT
+				       , B.MBL_PHON_NUM1
+               		   , B.MBL_PHON_NUM2
+               		   , B.MBL_PHON_NUM3
+               		   , DECODE(B.MBL_PHON_NUM1,NULL,'',B.MBL_PHON_NUM1||'-'||MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3) AS PHON_NUM
+                       , A.DUTY                                         AS DUTY_CD
+                       , C.DUTY_NM				      
+               		   , F.OUT_ORG_NM                                   AS HDQT_PART_ORG_NM
+					   , J.OUT_ORG_DTL_NM                             AS SALE_DEPT_ORG_NM         
+	                   , I.OUT_ORG_DTL_NM                               AS SALE_TEAM_ORG_NM
+               		   , E.COMM_CD_VAL_NM AS SCRB_ST_NM
+					   , B.SCRB_ST_CD
+					   , L.COMM_CD_VAL_NM AS USER_ST_NM                              
+
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                     ON ( A.USER_ID = B.USER_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD  AND D.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM'))
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( I.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT J ON ( J.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT F     ON ( F.OUT_ORG_ID = I.OUT_ORG_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT H     ON ( H.ORG_ID = F.ORG_ID )
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C   ON ( A.DUTY = C.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL L ON ( L.COMM_CD_VAL = A.USER_ST AND L.COMM_CD_ID = 'USER_ST') 				  
+
+				 WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+
+				    AND A.EFF_USER_YN = 'Y'
+				    AND A.USER_ST = '1' 
+           			AND B.SCRB_ST_CD = '02'
+           			AND B.SMS_RCV_AGREE_YN='Y'
+				  ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+					 AND  H.ORG_ID = #HDQT_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+					 AND  F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+					 AND  J.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+				  ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+					 AND  I.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="1"><![CDATA[
+                    AND C.USER_TYP IN ('1', '2') /* 임직원, 계약직 */
+                  ]]></isEqual><![CDATA[
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="3"><![CDATA[
+                    AND C.USER_TYP = #DUTY_TYP_ID#
+                  ]]></isEqual><![CDATA[
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="4"><![CDATA[
+                    AND C.USER_TYP = #DUTY_TYP_ID#
+          		  ]]></isEqual><![CDATA[  
+        	 	  ]]><isNotEmpty prepend="AND" property="DUTY_TYP_DT"><![CDATA[
+					    C.DUTY_CD = #DUTY_TYP_DT#
+				  ]]></isNotEmpty><![CDATA[     
+        	 	  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					    A.USER_NM LIKE '%'||#AGNT_NM#||'%'
+				  ]]></isNotEmpty><![CDATA[     
+				UNION
+				SELECT A.USER_ID                        
+				       , A.USER_NM                                      AS USER_NM
+				       , A.ATTC_CAT
+				       , B.MBL_PHON_NUM1
+               		   , B.MBL_PHON_NUM2
+               		   , B.MBL_PHON_NUM3
+               		   , DECODE(B.MBL_PHON_NUM1,NULL,'',B.MBL_PHON_NUM1||'-'||MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3) AS PHON_NUM
+               		   , A.DUTY                                         AS DUTY_CD
+				       , G.DUTY_NM
+					   , D.OUT_ORG_NM                                   AS HDQT_PART_ORG_NM
+					   , (SELECT OUT_ORG_DTL_NM FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT K
+					      WHERE K.OUT_ORG_DTL_ID =     E.DSM_HEADQ_CD   )   AS SALE_DEPT_ORG_NM					   
+					   , ''                              AS SALE_TEAM_ORG_NM
+					   , H.COMM_CD_VAL_NM AS SCRB_ST_NM
+					   , B.SCRB_ST_CD
+					   , I.COMM_CD_VAL_NM AS USER_ST_NM				   
+				  FROM PS_MNG.TBAS_USER_MGMT A
+				  JOIN DSM_USER B                      ON ( B.USER_ID = A.USER_ID )
+				  JOIN PS_MNG.TBAS_NEW_ORG_MGMT C      ON ( C.ORG_ID = A.NEW_ORG_ID )
+				  JOIN PS_MNG.TBAS_OUT_ORG_MGMT D      ON ( D.OUT_ORG_ID = A.OUT_ORG_ID )
+				  JOIN DSM_APPROVE E                   ON ( E.USER_ID = A.USER_ID AND NVL(E.SMS_YN, 'N') = 'Y')
+				  LEFT JOIN PS_MNG.TBAS_DUTY_MGMT G    ON ( G.DUTY_CD = E.DUTY_CD )
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL H  ON ( H.COMM_CD_VAL = B.SCRB_ST_CD AND H.COMM_CD_ID = 'DSM_SCRB_ST_CD')			  				  
+ 				  LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL I  ON ( I.COMM_CD_VAL = A.USER_ST AND I.COMM_CD_ID = 'USER_ST')				  				   				  
+  
+				 WHERE D.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = #onlineContext.userInfo.loginId#)
+				 
+				   AND A.EFF_USER_YN = 'Y'
+           		   AND B.SCRB_ST_CD = '02'
+          	       AND A.USER_ST = '1' 
+          	        
+				  ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+					AND   D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[  
+				  ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+					 AND  E.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#
+				  ]]></isNotEmpty><![CDATA[				  
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="1"><![CDATA[
+                    AND G.USER_TYP IN ('1', '2') /* 임직원, 계약직 */
+                  ]]></isEqual><![CDATA[
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="3"><![CDATA[
+                    AND G.USER_TYP = #DUTY_TYP_ID#
+                  ]]></isEqual><![CDATA[
+                  ]]><isEqual property="DUTY_TYP_ID" compareValue="4"><![CDATA[
+                    AND G.USER_TYP = #DUTY_TYP_ID#
+          		  ]]></isEqual><![CDATA[
+       	 		  ]]><isNotEmpty prepend="AND" property="DUTY_TYP_DT"><![CDATA[
+					    E.DUTY_CD = #DUTY_TYP_DT#
+				  ]]></isNotEmpty><![CDATA[     
+				  ]]><isEmpty prepend="AND" property="DSM_TYP_CD2"><![CDATA[
+					     E.DSM_HEADQ_CD IS NOT NULL
+				  ]]></isEmpty><![CDATA[ 				    
+				  ]]><isEmpty prepend="AND" property="DSM_TYP_CD1"><![CDATA[
+             			E.DSM_HEADQ_CD IS NULL
+				  ]]></isEmpty><![CDATA[
+        	 	  ]]><isNotEmpty prepend="AND" property="AGNT_NM"><![CDATA[
+					    A.USER_NM LIKE '%'||#AGNT_NM#||'%'
+				  ]]></isNotEmpty><![CDATA[     
+				) T1 
+				ORDER BY T1.SALE_DEPT_ORG_NM ASC , T1.DUTY_CD ASC
+		) T2]]>
+	</select>
+	<select id="dSearchDeptUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchDeptUser 영업국 회원정보 조회 */
+/* IO: 이승훈2,2015-03-04T10:52:28(이승훈2,2015-03-03T16:01:16) */
+SELECT  F_MASKING('N', T2.USER_ID) AS USER_ID2
+        , T2.*
+    FROM (
+        SELECT  COUNT(1) OVER() AS COUNT, T1.* 
+            FROM (
+                  SELECT DISTINCT A.USER_ID                 
+                    , A.USER_NM                                      AS USER_NM
+                    , A.ATTC_CAT
+                    , B.MBL_PHON_NUM1
+                    , B.MBL_PHON_NUM2
+                    , B.MBL_PHON_NUM3
+                    , DECODE(B.MBL_PHON_NUM1,NULL,'',B.MBL_PHON_NUM1||'-'||MBL_PHON_NUM2||'-'||B.MBL_PHON_NUM3) AS PHON_NUM
+                    , A.DUTY                                         AS DUTY_CD
+                    , C.DUTY_NM   
+                    , F.OUT_ORG_NM                                 AS HDQT_PART_ORG_NM
+                    , J.OUT_ORG_DTL_NM                             AS SALE_DEPT_ORG_NM  
+                    , J.OUT_ORG_DTL_ID                             AS SALE_DEPT_ORG_ID
+                    , I.OUT_ORG_DTL_ID                             AS SALE_TEAM_ORG_ID
+                    , I.OUT_ORG_DTL_NM                             AS SALE_TEAM_ORG_NM       
+                    , E.COMM_CD_VAL_NM AS SCRB_ST_NM
+                    , B.SCRB_ST_CD
+                    , L.COMM_CD_VAL_NM AS USER_ST_NM                              
+
+                    FROM PS_MNG.TBAS_USER_MGMT A
+                    JOIN DSM_USER B                     ON ( A.USER_ID = B.USER_ID )
+                    JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT D ON ( D.AGNT_ID = A.CPLAZA_ORG_CD  AND D.CONS_MTH = TO_CHAR(SYSDATE,'YYYYMM'))
+                    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT I ON ( I.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID )
+                    JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT J ON ( J.OUT_ORG_DTL_ID = I.SUP_OUT_ORG_DTL_ID )
+                    JOIN PS_MNG.TBAS_OUT_ORG_MGMT F     ON ( F.OUT_ORG_ID = I.OUT_ORG_ID )
+                    JOIN PS_MNG.TBAS_NEW_ORG_MGMT H     ON ( H.ORG_ID = F.ORG_ID )
+                    LEFT JOIN PS_MNG.TBAS_DUTY_MGMT C   ON ( A.DUTY = C.DUTY_CD )
+                    LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL E ON ( E.COMM_CD_VAL = B.SCRB_ST_CD AND E.COMM_CD_ID = 'DSM_SCRB_ST_CD')
+                    LEFT JOIN PS_MNG.TBAS_COMM_CD_DTL L ON ( L.COMM_CD_VAL = A.USER_ST AND L.COMM_CD_ID = 'USER_ST') 				  
+
+                    WHERE F.OUT_ORG_ID IN (SELECT OUT_ORG_ID FROM VW_DATA_USE_AUTH WHERE USER_ID = 'D1476300')
+
+                    AND A.EFF_USER_YN = 'Y'
+                    AND B.SCRB_ST_CD = '02'
+                    AND A.USER_ST = '1' 
+                    AND B.TEL_CO_CD ='SKT'
+                    ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+                        AND  H.ORG_ID = #HDQT_TEAM_ORG_ID#
+                    ]]></isNotEmpty><![CDATA[
+                    ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                        AND  F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+                    ]]></isNotEmpty><![CDATA[  
+
+					]]><isEqual property="DSM_TYP_ID" compareValue="4"><![CDATA[
+                    AND C.DUTY_CD BETWEEN 14 AND 20
+                    ]]></isEqual><![CDATA[ 
+                    ]]><isNotEqual property="DSM_TYP_ID" compareValue="4"><![CDATA[
+                    AND C.DUTY_CD IN ]]><iterate property="DSM_TYP_ID" open="(" close=")" conjunction=","><![CDATA[ #DSM_TYP_ID[]# ]]></iterate><![CDATA[ 
+                    ]]></isNotEqual><![CDATA[ 
+                    
+                ) T1 
+                WHERE 1=1
+                    ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+                        AND  SALE_DEPT_ORG_ID = #SALE_DEPT_ORG_ID#
+                    ]]></isNotEmpty><![CDATA[
+                    ]]><isNotEmpty property="SALE_TEAM_ORG_ID"><![CDATA[
+                        AND  SALE_TEAM_ORG_ID = #SALE_TEAM_ORG_ID#
+                    ]]></isNotEmpty><![CDATA[
+            ORDER BY T1.SALE_DEPT_ORG_NM ASC , T1.DUTY_CD ASC,T1.SALE_TEAM_ORG_NM ASC 
+        ) T2]]>
+	</select>
+	<select id="dSearchMsgCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchMsgCount 메세지건수 조회 */
+/* IO: 이승훈2,2015-03-04T15:34:46(이승훈2,2015-03-04T14:51:06) */
+SELECT STRD_APLY_VAL FROM DSM_WEB_BAS_VAL A
+WHERE SYSDATE BETWEEN A.APLY_STA_DT AND A.APLY_END_DT
+    ]]><isNotEmpty property="DSM_WEB_STRD_CD_VAL"><![CDATA[
+	    AND  A.DSM_WEB_STRD_CD_VAL = #DSM_WEB_STRD_CD_VAL#
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchDutySMgtm" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.smsmgmt.db.DSMSMGMT001.dSearchDutySMgtm SMS관리 직무조회 */
+/* IO: 이승훈2,2015-04-14T16:47:14(이승훈2,2015-04-14T16:47:14) */
+SELECT DUTY_CD, DUTY_NM FROM PS_MNG.TBAS_DUTY_MGMT
+  WHERE USE_YN='Y'
+  AND DEL_YN= 'N'
+  AND USER_TYP IN( '1' , '3')
+ORDER BY LPAD(DUTY_CD, 2, '0') ASC  ]]>
+	</select>
+</sqlMap>

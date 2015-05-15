@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PMENU001">
+    <bizUnitName>[PU]메뉴관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MENU</componentId>
+    <description>메뉴관리 PU</description>
+    <method-list>
+        <method id="pSaveMenu">
+            <methodName>[PM]메뉴저장</methodName>
+            <transactionId>com.MENU@PMENU001_pSaveMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴정보를 저장(등록,수정,삭제)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-11T15:11:11" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenuByPk">
+            <methodName>[PM]메뉴조회(1건)</methodName>
+            <transactionId>com.MENU@PMENU001_pSearchMenuByPk</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]메뉴조회(1건)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-12T10:36:19" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenuBySup">
+            <methodName>[PM]메뉴조회(상위조건)</methodName>
+            <transactionId>com.MENU@PMENU001_pSearchMenuBySup</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>상위메뉴ID 조건으로 바로 하위 메뉴 목록을 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-10T18:23:18" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenu">
+            <methodName>[PM]메뉴조회</methodName>
+            <transactionId>com.MENU@PMENU001_pSearchMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>메뉴조회(TREE)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-09T17:56:10" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchMenuPop">
+            <methodName>[PM]메뉴찾기(팝업)</methodName>
+            <transactionId>com.MENU@PMENU001_pSearchMenuPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[PM]메뉴찾기(팝업)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T15:21:14" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-09T17:55:24" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

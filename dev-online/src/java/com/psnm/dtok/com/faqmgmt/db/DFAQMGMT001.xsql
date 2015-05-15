@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFAQMGMT001">
+	<select id="dSearchFaq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dSearchFaq  */
+/* IO: 이승훈,2014-12-19T14:59:42(이승훈,2014-12-12T10:25:34) */
+	SELECT * 
+	FROM 
+		(
+		SELECT ROWNUM rn
+			, ALL_LIST.* 
+		FROM 
+			(
+			SELECT A.FAQ_ID
+				, A.FAQ_TYP_CD
+				, ( SELECT F_DSM_CODE_NM('DSM_FAQ_TYP_CD', A.FAQ_TYP_CD) FROM DUAL ) AS FAQ_TYP_NM
+				, A.FAQ_TITL_NM
+				, (SELECT DECODE(COUNT(X.ATCH_MGMT_ID),0,'N','Y') 
+					FROM DSM_ATCH_FILE_MGMT X
+			  		WHERE A.FAQ_ID = X.ATCH_MGMT_ID
+			 	) AS ATCH_YN
+				, F_MASKING('N',B.USER_NM ) AS RGSTR_NM
+				, TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS RGSTR_DT
+				, (SELECT NVL(COUNT(I.READ_MGMT_ID) , 0)
+			  		FROM DSM_READR_MGMT I
+			  		WHERE I.READ_MGMT_ID = TO_CHAR (A.FAQ_ID)
+			 	) AS VIEW_CNT
+			FROM DSM_FAQ A
+			LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)
+			WHERE 1=1
+			]]><isNotEmpty prepend="AND" property="FAQ_TYP_CD"><![CDATA[
+				A.FAQ_TYP_CD = #FAQ_TYP_CD#
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty property="FAQ_CTT"><![CDATA[
+              AND (A.FAQ_CTT LIKE '%'||#FAQ_CTT#||'%'
+              OR A.FAQ_TITL_NM LIKE '%'||#FAQ_CTT#||'%')
+			]]></isNotEmpty><![CDATA[
+			]]><isNotEmpty property="RGSTR_NM"><![CDATA[
+			  AND B.USER_NM LIKE '%'||#RGSTR_NM#||'%'
+			]]></isNotEmpty><![CDATA[
+			ORDER BY A.FAQ_ID DESC
+		) ALL_LIST
+	)
+	WHERE rn BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchFaqCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dSearchFaqCount  */
+/* IO: 이승훈,2014-12-12T11:30:54(이승훈,2014-12-12T11:23:51) */
+	SELECT COUNT(1) AS CNT
+	FROM 
+		(
+		SELECT *
+		FROM DSM_FAQ A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (A.RGSTR_ID = B.USER_ID)
+		WHERE 1=1
+		]]><isNotEmpty prepend="AND" property="FAQ_TYP_CD"><![CDATA[
+			A.FAQ_TYP_CD = #FAQ_TYP_CD#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="FAQ_CTT"><![CDATA[
+             AND (A.FAQ_CTT LIKE '%'||#FAQ_CTT#||'%'
+             OR A.FAQ_TITL_NM LIKE '%'||#FAQ_CTT#||'%')
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty property="RGSTR_NM"><![CDATA[
+		  AND B.USER_NM LIKE '%'||#RGSTR_NM#||'%'
+		]]></isNotEmpty><![CDATA[
+	)]]>
+	</select>
+	<select id="dSearchFaqRgstrNm" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dSearchFaqRgstrNm  */
+/* IO: 이승훈,2014-12-12T17:21:53(이승훈,2014-12-12T17:18:34) */
+	SELECT USER_NM AS RGSTR_NM
+	FROM PS_MNG.TBAS_USER_MGMT
+	WHERE USER_ID IN (SELECT RGSTR_ID FROM DSM_FAQ GROUP BY RGSTR_ID)]]>
+	</select>
+	<select id="dDetailFaq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dDetailFaq  */
+/* IO: 이승훈,2014-12-16T15:36:06(이승훈,2014-12-15T17:41:27) */
+	SELECT A.FAQ_ID
+		, A.FAQ_TITL_NM
+       	, A.FAQ_TYP_CD
+       	, ( SELECT F_DSM_CODE_NM('DSM_FAQ_TYP_CD', A.FAQ_TYP_CD) FROM DUAL ) AS FAQ_TYP_NM
+       	, F_DSM_WRITER_NM(A.RGSTR_ID, 'board') AS RGSTR_NM
+       	, TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS RGSTR_DT
+       	, A.FAQ_CTT
+	FROM DSM_FAQ A
+	WHERE A.FAQ_ID = #FAQ_ID#]]>
+	</select>
+	<select id="dSearchFaqIdSeq" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dSearchFaqIdSeq  */
+/* IO: 이승훈,2014-12-17T10:56:31(이승훈,2014-12-17T10:56:24) */
+	SELECT 'FAQ' || LPAD(DSM_FAQ_SEQ.NEXTVAL, 12, '0') AS FAQ_ID FROM DUAL]]>
+	</select>
+	<insert id="dInsertFaq" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dInsertFaq  */
+/* IO: 이승훈,2014-12-17T11:06:28(이승훈,2014-12-17T11:00:19) */
+	INSERT INTO DSM_FAQ
+	( 
+		FAQ_ID
+		, FAQ_TYP_CD
+ 	 	, FAQ_TITL_NM
+ 	 	, FAQ_CTT
+ 	 	, RGSTR_ID
+ 	 	, RGST_DTM
+ 	 	, UPDR_ID
+ 	 	, UPD_DTM 
+ 	)
+	VALUES
+	( 
+		#FAQ_ID#
+ 	 	, #FAQ_TYP_CD#
+ 	 	, #FAQ_TITL_NM#
+ 	 	, #FAQ_CTT#
+ 	 	, #onlineContext.userInfo.loginId#
+  	 	, SYSDATE
+  	 	, #onlineContext.userInfo.loginId#
+ 	 	, SYSDATE 
+ 	)]]>
+	</insert>
+	<update id="dUpdateFaq" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dUpdateFaq  */
+/* IO: 이승훈,2014-12-17T11:05:26(이승훈,2014-12-17T11:01:00) */
+	UPDATE DSM_FAQ SET
+   	FAQ_TYP_CD         = #FAQ_TYP_CD#
+  , FAQ_TITL_NM        = #FAQ_TITL_NM#
+  , FAQ_CTT            = #FAQ_CTT#
+  , UPDR_ID            = #onlineContext.userInfo.loginId#
+  , UPD_DTM            = SYSDATE
+	WHERE FAQ_ID       = #FAQ_ID#]]>
+	</update>
+	<delete id="dDeleteFaq" ><![CDATA[/* Biz: com.psnm.dtok.com.faqmgmt.db.DFAQMGMT001.dDeleteFaq  */
+/* IO: 이승훈,2014-12-17T17:26:18(이승훈,2014-12-17T17:25:46) */
+	DELETE FROM DSM_FAQ
+ 	WHERE FAQ_ID = #FAQ_ID#]]>
+	</delete>
+</sqlMap>

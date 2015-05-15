@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCODE">
+	<select id="dSearchCodes" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchCodes  */
+/* IO: 안종광,2015-02-12T15:59:03(admin,2014-11-14T11:36:03) */
+SELECT c.COMM_CD_ID
+     , c.COMM_CD_VAL
+     , c.COMM_CD_VAL_NM
+     , c.COMM_CD_VAL_DESC
+     , c.PRT_SEQ
+     , c.EFF_STA_DT
+     , c.EFF_END_DT
+     , c.SUB_COMM_CD_ID
+     , c.RGST_CL
+     , c.ADD_INFO_01
+     , c.ADD_INFO_02
+     , c.ADD_INFO_03
+     , c.ADD_INFO_04
+     , c.ADD_INFO_05
+     , c.ADD_INFO_06
+     , c.ADD_INFO_07
+     , c.ADD_INFO_08
+     , c.ADD_INFO_09
+     , c.ADD_INFO_10
+  FROM PS_MNG.TBAS_COMM_CD_DTL c
+ WHERE c.COMM_CD_ID = #COMM_CD_ID# /*코드그룹*/
+   AND c.DEL_YN != 'Y'
+   ]]><isNotEmpty property="ADD_INFO_01"><![CDATA[AND c.ADD_INFO_01 = #ADD_INFO_01# ]]></isNotEmpty><![CDATA[
+   ]]><isNotEmpty property="ADD_INFO_02"><![CDATA[AND c.ADD_INFO_02 = #ADD_INFO_02# ]]></isNotEmpty><![CDATA[
+ ORDER BY c.COMM_CD_ID ASC, c.PRT_SEQ ASC]]>
+	</select>
+	<select id="dSearchDuty" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchDuty  */
+/* IO: 안진갑,2015-04-08T14:07:10(admin,2014-11-18T16:31:20) */
+SELECT d.DUTY_CD
+     , d.MGMT_USER_GRP
+     , d.SALE_USER_GRP
+     , d.DUTY_NM
+     , d.DUTY_CL
+     , d.USE_YN
+     , d.DEL_YN
+     , d.UPD_CNT
+     , d.DUTY_TYP
+     , d.USER_TYP
+  FROM PS_MNG.TBAS_DUTY_MGMT d
+ WHERE d.USE_YN = 'Y'
+   AND d.DEL_YN = 'N'
+  ]]><isNotEmpty property="DUTY_CL"><![CDATA[
+   AND d.DUTY_CL = #DUTY_CL# /*직무구분*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="DUTY_TYP"><![CDATA[
+   AND d.DUTY_TYP = #DUTY_TYP# /*직무타입*/
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="USER_TYP"><![CDATA[
+   AND d.USER_TYP = #USER_TYP# /*사용자유형*/ 
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY TO_NUMBER(d.DUTY_CD) ASC]]>
+	</select>
+	<select id="dSearchHdqtTeamOrgId" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchHdqtTeamOrgId  */
+/* IO: 채수윤,2015-02-25T11:09:48(이민재,2014-11-25T15:34:41) */
+]]><isNotEmpty property="AUTH_ORGS"><![CDATA[
+SELECT o.ORG_ID AS HDQT_TEAM_ORG_ID
+     , '(' || o.ORG_ID || ') '|| o.ORG_NM AS HDQT_TEAM_ORG_NM
+  FROM PS_MNG.TBAS_NEW_ORG_MGMT o
+ WHERE o.DEL_YN = 'N'
+   AND o.ORG_ID IN ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT where DEL_YN = 'N' and EFF_ORG_YN = 'Y' )
+   AND o.ORG_ID IN ( SELECT ORG_ID 
+                       FROM PS_MNG.TBAS_OUT_ORG_MGMT 
+                      WHERE DEL_YN = 'N' 
+                        AND EFF_ORG_YN = 'Y'
+                        AND OUT_ORG_ID IN (SELECT OUT_ORG_ID 
+                                             FROM VW_DATA_USE_AUTH 
+                                            WHERE USER_ID = #onlineContext.userInfo.USER_ID#))  /*권한이있는 본사팀조직ID*/
+UNION /* _____________ */
+]]></isNotEmpty><![CDATA[
+
+SELECT o.ORG_ID AS HDQT_TEAM_ORG_ID
+     , '(' || o.ORG_ID || ') '|| o.ORG_NM AS HDQT_TEAM_ORG_NM
+  FROM PS_MNG.TBAS_NEW_ORG_MGMT o
+ WHERE o.DEL_YN = 'N'
+   AND o.ORG_ID IN ( SELECT ORG_ID FROM PS_MNG.TBAS_OUT_ORG_MGMT where DEL_YN = 'N' and EFF_ORG_YN = 'Y' )
+   AND o.ORG_ID = #onlineContext.userInfo.HDQT_TEAM_ORG_ID# /*(세션)사용자 소속 본사팀조직ID*/
+ORDER BY HDQT_TEAM_ORG_ID]]>
+	</select>
+	<select id="dSearchHdqtPartOrgId" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchHdqtPartOrgId  */
+/* IO: 채수윤,2015-02-25T11:11:03(이민재,2014-11-26T10:57:11) */
+SELECT OUT_ORG_ID AS HDQT_PART_ORG_ID
+     , OUT_ORG_NM AS HDQT_PART_ORG_NM
+  FROM PS_MNG.TBAS_OUT_ORG_MGMT
+ WHERE EFF_ORG_YN = 'Y'
+   AND DEL_YN = 'N'
+ ]]><isNotEmpty property="HDQT_TEAM_ORG_ID"><![CDATA[
+   AND ORG_ID = #HDQT_TEAM_ORG_ID# /*본사팀조직ID*/
+ ]]></isNotEmpty><![CDATA[
+ ]]><isNotEmpty property="AUTH_OUT_ORGS"><![CDATA[
+   AND OUT_ORG_ID IN (SELECT OUT_ORG_ID 
+                        FROM PS_MNG.TBAS_OUT_ORG_MGMT 
+                       WHERE DEL_YN = 'N' 
+                         AND EFF_ORG_YN = 'Y'
+                         AND OUT_ORG_ID IN (SELECT OUT_ORG_ID 
+                                              FROM VW_DATA_USE_AUTH 
+                                             WHERE USER_ID = #onlineContext.userInfo.USER_ID#)) /*권한이있는 본사파트조직ID */
+ ]]></isNotEmpty><![CDATA[
+ ]]><isEmpty property="AUTH_OUT_ORGS"><![CDATA[
+   AND OUT_ORG_ID = #onlineContext.userInfo.HDQT_PART_ORG_ID# /*(세션)사용자 소속 본사파트조직ID로 제한*/
+ ]]></isEmpty><![CDATA[
+ ORDER BY SORT_SEQ, OUT_ORG_ID]]>
+	</select>
+	<select id="dSearchSaleDeptOrgId" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchSaleDeptOrgId  */
+/* IO: 채수윤,2015-04-20T13:31:45(이민재,2014-11-26T11:00:04) */
+/* 영업국 조직목록 조회 */
+SELECT A.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+     , '(' || A.OUT_ORG_DTL_ID || ') '|| A.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM 
+  FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT A
+  JOIN PS_MNG.TBAS_OUT_ORG_MGMT B ON (B.OUT_ORG_ID = A.OUT_ORG_ID AND B.EFF_ORG_YN = 'Y' AND B.DEL_YN = 'N')
+  JOIN PS_MNG.TBAS_NEW_ORG_MGMT C ON (C.ORG_ID = B.ORG_ID AND C.DEL_YN = 'N')
+/* WHERE A.OUT_ORG_DTL_ID NOT IN ('01090000') /* DSM 특판 제외 */
+ WHERE A.ORG_LVL = '1'
+
+  ]]><isEmpty property="dtokall"><![CDATA[
+   AND A.DTOK_EFF_ORG_YN = 'Y' /*DTOK사용영업국조건(2015-01)*/
+  ]]></isEmpty><![CDATA[
+
+  ]]><isNotEmpty property="dtokall"><![CDATA[
+   AND (A.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */
+        OR A.OUT_ORG_DTL_ID IN (SELECT DSM_HEADQ_CD FROM DSM_MGMT_HEADQ  
+                                 WHERE 1=1
+                             ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+                                   AND OUT_ORG_ID = #HDQT_PART_ORG_ID#
+                             ]]></isNotEmpty><![CDATA[
+                             ]]><isNotEmpty property="S_HDQT_PART_ORG_ID"><![CDATA[
+                                   AND OUT_ORG_ID = #S_HDQT_PART_ORG_ID#
+                             ]]></isNotEmpty><![CDATA[
+                               )) 
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="HDQT_PART_ORG_ID"><![CDATA[
+   AND B.OUT_ORG_ID = #HDQT_PART_ORG_ID# /* (입력)본사파트 조직ID */
+  ]]></isNotEmpty><![CDATA[
+
+  ]]><isNotEmpty property="S_HDQT_TEAM_ORG_ID"><![CDATA[
+   AND C.ORG_ID = #S_HDQT_TEAM_ORG_ID# /* (세션)본사팀 조직ID */
+  ]]></isNotEmpty><![CDATA[
+  ]]><isNotEmpty property="S_HDQT_PART_ORG_ID"><![CDATA[
+   AND B.OUT_ORG_ID = #S_HDQT_PART_ORG_ID# /* (세션)본사파트 조직ID */
+  ]]></isNotEmpty><![CDATA[
+
+  ]]><isEqual property="S_DUTY" compareValue="14"><![CDATA[
+   AND B.OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID# /* (세션)직무=14 */
+  ]]></isEqual><![CDATA[
+  ]]><isEqual property="S_DUTY_USER_TYP" compareValue="4"><![CDATA[
+   AND B.OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID# /* (세션)직무.사용자타입=4 */
+  ]]></isEqual><![CDATA[
+ ORDER BY A.SORT_SEQ, A.OUT_ORG_DTL_ID]]>
+	</select>
+	<select id="dSearchSaleTeamOrgId" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchSaleTeamOrgId  */
+/* IO: 안종광,2015-02-16T15:45:57(이민재,2014-11-26T11:17:53) */
+/*영업팀 목록 조회*/
+SELECT C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+     , '(' || C.OUT_ORG_DTL_ID || ') '|| C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+  FROM PS_MNG.TBAS_OUT_ORG_MGMT A
+  JOIN PS_MNG.TBAS_NEW_ORG_MGMT     B ON (A.ORG_ID = B.ORG_ID)
+  JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (A.OUT_ORG_ID = C.OUT_ORG_ID)
+ WHERE A.EFF_ORG_YN = 'Y'
+   AND C.ORG_LVL = '2'
+   AND B.DEL_YN = 'N'
+   AND C.DEL_YN = 'N'
+  ]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+   AND C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /* (입력)영업국ID */
+  ]]></isNotEmpty><![CDATA[
+
+]]><isEqual prepend="AND" property="S_DUTY_USER_TYP" compareValue="1"><![CDATA[
+	]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /* (입력)영업국ID */
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="S_SALE_DEPT_ORG_ID"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID# /* (세션)영업국ID */
+	]]></isNotEmpty><![CDATA[
+]]></isEqual><![CDATA[
+]]><isEqual prepend="AND" property="S_DUTY_USER_TYP" compareValue="2"><![CDATA[
+	]]><isNotEmpty property="SALE_DEPT_ORG_ID"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID# /* (입력)영업국ID */
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty property="S_SALE_DEPT_ORG_ID"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID# /* (세션)영업국ID */
+	]]></isNotEmpty><![CDATA[
+]]></isEqual><![CDATA[
+]]><isEqual prepend="AND" property="S_DUTY" compareValue="14"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID# /* (세션)직무=14 */
+]]></isEqual><![CDATA[
+]]><isEqual prepend="AND" property="S_DUTY_USER_TYP" compareValue="4"><![CDATA[
+	   C.SUP_OUT_ORG_DTL_ID = #S_SALE_DEPT_ORG_ID#
+   AND C.OUT_ORG_DTL_ID = #S_SALE_TEAM_ORG_ID# /* (세션)직무.사용자타입=4 */
+]]></isEqual><![CDATA[
+ ORDER BY C.SORT_SEQ, C.OUT_ORG_DTL_ID]]>
+	</select>
+	<select id="dSearchSaleAgntOrgId" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DCODE.dSearchSaleAgntOrgId  */
+/* IO: 안종광,2014-12-18T20:07:21(안종광,2014-12-18T19:29:40) */
+SELECT om.AGNT_ID AS SALE_AGNT_ORG_ID
+     , '(' || om.AGNT_ID ||') ' || om.AGNT_NM AS SALE_AGNT_ORG_NM
+  FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT om
+ WHERE om.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM')
+   AND om.DEL_YN = 'N'
+   AND om.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID# /*영업팀(조직ID)*/
+ ORDER BY om.AGNT_NM]]>
+	</select>
+</sqlMap>

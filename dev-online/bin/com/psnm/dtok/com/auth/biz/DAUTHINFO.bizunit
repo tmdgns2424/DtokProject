@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DAUTHINFO">
+    <bizUnitName>[DU]권한그룹조회</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>com.AUTH</componentId>
+    <description>권한그룹과 관련된 각종 조회 처리 클래스</description>
+    <method-list>
+        <method id="dSearchAuthMenu">
+            <methodName>[DM]권한그룹메뉴조회TREE</methodName>
+            <transactionId>com.AUTH@DAUTHINFO_dSearchAuthMenu</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 권한그룹의 메뉴 목록조회(TREE)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T16:51:04" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAuthUser">
+            <methodName>[DM]권한그룹사용자목록P</methodName>
+            <transactionId>com.AUTH@DAUTHINFO_dSearchAuthUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹의 사용자 목록조회(P페이징)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T16:52:56" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchAuthUserCount">
+            <methodName>[DM]권한그룹사용자총수</methodName>
+            <transactionId>com.AUTH@DAUTHINFO_dSearchAuthUserCount</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹의 사용자 총수 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T16:52:21" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-24T15:43:41" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

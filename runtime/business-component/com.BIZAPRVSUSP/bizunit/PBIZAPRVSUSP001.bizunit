@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PBIZAPRVSUSP001">
+    <bizUnitName>[PU]업무승인일시정지관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.BIZAPRVSUSP</componentId>
+    <description>업무승인일시정지관리 PU</description>
+    <method-list>
+        <method id="pDeleteBizAprvSusp">
+            <methodName>[PM]업무승인일시정지관리삭제</methodName>
+            <transactionId>com.BIZAPRVSUSP@PBIZAPRVSUSP001_pDeleteBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T15:02:49" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveBizAprvSusp">
+            <methodName>[PM]업무승인일시정지관리저장(등록|수정)</methodName>
+            <transactionId>com.BIZAPRVSUSP@PBIZAPRVSUSP001_pSaveBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T15:02:25" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchBizAprvSusp">
+            <methodName>[PM]업무승인일시정지관리조회</methodName>
+            <transactionId>com.BIZAPRVSUSP@PBIZAPRVSUSP001_pSearchBizAprvSusp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>업무승인일시정지관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-26T15:01:22" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-26T14:04:08" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

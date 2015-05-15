@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FINCMPDOC001">
+    <bizUnitName>[FU]미비서류접수</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.INCMPDOC</componentId>
+    <description>미비서류접수 관련 업무 Function Unit</description>
+    <method-list>
+        <method id="fDetailIncmpDoc">
+            <methodName>[FM]미비서류접수정보상세조회</methodName>
+            <transactionId>biz.INCMPDOC@FINCMPDOC001_fDetailIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 정보 상세조회 FM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T14:27:34" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="fSaveIncmpDoc">
+            <methodName>[FM]미비서류접수정보저장(추가|수정)</methodName>
+            <transactionId>biz.INCMPDOC@FINCMPDOC001_fSaveIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:29:23" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="fSearchIncmpDoc">
+            <methodName>[FM]미비서류접수정보조회</methodName>
+            <transactionId>biz.INCMPDOC@FINCMPDOC001_fSearchIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:27:32" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="fSaveIncmpDocResult">
+            <methodName>[FM]미비서류접수처리결과저장</methodName>
+            <transactionId>biz.INCMPDOC@FINCMPDOC001_fSaveIncmpDocResult</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수처리결과저장 FM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T15:28:50" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-22T14:09:00" user="김지홍 (kimjihong)"/>
+    </history>
+</bizUnit>

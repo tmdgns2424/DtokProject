@@ -1,0 +1,178 @@
+[IDF]
+version=6000,2014,1030,100
+formatversion=1,0,0,1
+checkrootversion=false
+stoponerror=false
+msgonerror=false
+AssureAll=false
+messagefile=ozrviewer.message
+
+;copy executables & mandatory files
+[ozrviewer]
+entryversion=6000,2014,1030,100
+file=ozrviewer.zip
+compress=zip
+destdir=<THIS>/ozviewer
+AutoRunEnable=true
+AutoRunExtension=ozd
+AutoRunFileName=ozcviewer.exe
+entry=OZExportForVista.dll
+clsid={10FEAD82-05C2-4F9F-9D3B-C15D809F746D}
+command=registerserver
+
+;register ocx
+[ozrviewerocx]
+entryversion=6000,2014,1030,100
+file=ozrviewerocx.zip
+entry=ozcuviewer.ocx
+compress=zip
+destdir=<THIS>/ozviewer
+clsid={0DEF32F8-170F-46F8-B1FF-4BF7443F5F25}
+command=registerserver
+
+;copy resource files
+[ozrresource]
+entryversion=6000,2014,1030,100
+file=ozrresource.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy resource files
+[ozrresource_ko_kr]
+entryversion=6000,2014,1030,100
+file=ozrresource_ko_kr.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy resource files
+[ozrresource_en_us]
+entryversion=6000,2014,1030,100
+file=ozrresource_en_us.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy resource files
+[ozrresource_ja_jp]
+entryversion=6000,2014,1030,100
+file=ozrresource_ja_jp.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy resource files
+[ozrresource_zh_cn]
+entryversion=6000,2014,1030,100
+file=ozrresource_zh_cn.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy resource files
+[ozrresource_zh_tw]
+entryversion=6000,2014,1030,100
+file=ozrresource_zh_tw.zip
+compress=zip
+destdir=<THIS>/ozviewer/res
+
+;copy dll files for excel export
+[ozrxlswriter]
+entryversion=6000,2014,1030,100
+file=ozxlswriter.zip
+compress=zip
+destDir=<THIS>/ozviewer
+
+;copy dll files for excel export
+[ozrxlsxwriter]
+entryVersion=6000,2014,1030,100
+file=ozxlsxwriter.zip
+compress=zip
+destDir=<THIS>/ozviewer
+
+;copy DLLs for ozjpdf417 export
+[ozjpdf417]
+entryversion=6000,2014,1030,100
+file=ozjpdf417.zip
+compress=zip
+destdir=<THIS>/ozviewer
+
+;copy DLLs for PDF export
+[ozpdfwriter]
+entryversion=6000,2014,1030,100
+file=ozpdfwriter.zip
+compress=zip
+destdir=<THIS>/ozviewer
+
+;copy DLLs for PPT export
+[ozppt]
+entryversion=6000,2014,1030,100
+file=ozppt.zip
+compress=zip
+destdir=<THIS>/ozviewer
+
+;copy windows 98 files
+[ozrviewer_win98]
+entryversion=6000,2014,1030,100
+file=ozrviewer_win98.zip
+compress=zip
+destdir=<THIS>/ozviewer
+destOS=win98
+
+;copy system files
+[ozsystem]
+entryversion=6000,2014,1030,100
+file=ozsystem.zip
+compress=zip
+comparefile=unicows.dll
+compareoption=exist
+destdir=<IE>,<THIS>/ozviewer
+destOS=win98
+
+[ozgdiplus]
+entryversion=6000,2014,1030,100
+file=ozgdiplus.zip
+compress=zip
+comparefile=gdiplus.dll
+compareoption=exist
+destdir=<SYSTEM>
+destOS=-win2k
+
+;copy help files
+[ozrhelp_conf]
+entryversion=6000,2014,1030,100
+file=ozrhelp_conf.zip
+compress=zip
+destdir=<THIS>/ozviewer/help
+
+;copy help files
+[ozrhelp_ko_kr]
+entryversion=6000,2014,1030,100
+file=ozrhelp_ko_kr.zip
+compress=zip
+destdir=<THIS>/ozviewer/help
+
+;copy help files
+[ozrhelp_en_us]
+entryversion=6000,2014,1030,100
+file=ozrhelp_en_us.zip
+compress=zip
+destdir=<THIS>/ozviewer/help
+
+;copy help files
+[ozrhelp_ja_jp]
+entryversion=6000,2014,1030,100
+file=ozrhelp_ja_jp.zip
+compress=zip
+destdir=<THIS>/ozviewer/help
+
+;copy help files
+[ozrhelp_zh_cn]
+entryversion=6000,2014,1030,100
+file=ozrhelp_zh_cn.zip
+compress=zip
+destdir=<THIS>/ozviewer/help
+
+;copy user files
+[ozruser]
+entryversion=6000,2014,1030,100
+file=ozruser.zip
+compress=zip
+destdir=<THIS>/ozviewer
+

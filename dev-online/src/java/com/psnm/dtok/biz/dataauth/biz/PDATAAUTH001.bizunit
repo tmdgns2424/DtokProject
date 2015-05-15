@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PDATAAUTH001">
+    <bizUnitName>[PU]데이터권한관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.DATAAUTH</componentId>
+    <description>데이터권한관리 PU</description>
+    <method-list>
+        <method id="pSearchDataAuthPart">
+            <methodName>[PM]데이터권한관리본사파트조회</methodName>
+            <transactionId>biz.DATAAUTH@PDATAAUTH001_pSearchDataAuthPart</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리본사파트 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T15:14:22" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchDataAuthUser">
+            <methodName>[PM]데이터권한관리사용자조회</methodName>
+            <transactionId>biz.DATAAUTH@PDATAAUTH001_pSearchDataAuthUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리사용자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:37:37" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pDeleteDataAuth">
+            <methodName>[PM]데이터권한관리삭제</methodName>
+            <transactionId>biz.DATAAUTH@PDATAAUTH001_pDeleteDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:38:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveDataAuth">
+            <methodName>[PM]데이터권한관리저장(등록|수정)</methodName>
+            <transactionId>biz.DATAAUTH@PDATAAUTH001_pSaveDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 등록,수정 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:38:23" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchDataAuth">
+            <methodName>[PM]데이터권한관리조회</methodName>
+            <transactionId>biz.DATAAUTH@PDATAAUTH001_pSearchDataAuth</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>데이터권한관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-27T14:37:12" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-27T14:27:32" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

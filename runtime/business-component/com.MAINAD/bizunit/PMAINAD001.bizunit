@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PMAINAD001">
+    <bizUnitName>[PU]메인광고관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.MAINAD</componentId>
+    <description/>
+    <method-list>
+        <method id="pDeleteMainAd">
+            <methodName>[PM]메인광고 삭제</methodName>
+            <transactionId>com.MAINAD@PMAINAD001_pDeleteMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T17:52:34" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchMainAdDtl">
+            <methodName>[PM]메인광고 상세조회</methodName>
+            <transactionId>com.MAINAD@PMAINAD001_pSearchMainAdDtl</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-17T16:42:29" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSaveMainAd">
+            <methodName>[PM]메인광고 저장</methodName>
+            <transactionId>com.MAINAD@PMAINAD001_pSaveMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T14:54:34" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="pSearchMainAd">
+            <methodName>[PM]메인정보 조회</methodName>
+            <transactionId>com.MAINAD@PMAINAD001_pSearchMainAd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-16T13:32:54" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-03-16T13:31:21" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

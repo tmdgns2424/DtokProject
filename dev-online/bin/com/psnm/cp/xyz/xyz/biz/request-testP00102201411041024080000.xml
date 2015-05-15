@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<transaction>
+		<id>xyz.XYZ@P001_p00102</id>
+	</transaction>
+	<attributes>
+		<utest>true</utest>
+	</attributes>
+	<dataSet>
+		<fields />
+	</dataSet>
+</request>
+

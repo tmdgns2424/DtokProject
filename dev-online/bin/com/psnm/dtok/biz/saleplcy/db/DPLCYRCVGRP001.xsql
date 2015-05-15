@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DPLCYRCVGRP001">
+	<insert id="dInsertPlcyRcvGrp" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVGRP001.dInsertPlcyRcvGrp  */
+/* IO: 이민재,2014-11-21T13:07:22(이민재,2014-11-21T13:07:22) */
+	INSERT INTO DSM_PLCY_RCV_GRP
+	(  SALES_PLCY_ID
+	  ,AUTH_GRP_ID
+	  ,RGSTR_ID
+	  ,RGST_DTM
+	  ,UPDR_ID
+	  ,UPD_DTM )
+	VALUES
+	(  #SALES_PLCY_ID#
+	  ,#AUTH_GRP_ID#
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE
+	  ,#onlineContext.userInfo.loginId#
+	  ,SYSDATE )]]>
+	</insert>
+	<delete id="dDeletePlcyRcvGrp" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVGRP001.dDeletePlcyRcvGrp  */
+/* IO: 이민재,2014-11-21T13:07:41(이민재,2014-11-21T13:07:41) */
+	DELETE FROM DSM_PLCY_RCV_GRP
+ 	WHERE SALES_PLCY_ID = #DSM_SALES_PLCY_ID#]]>
+	</delete>
+	<select id="dSearchPlcyRcvGrpAuthTarget" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVGRP001.dSearchPlcyRcvGrpAuthTarget  */
+/* IO: 이민재,2014-11-21T13:33:21(이민재,2014-11-21T13:33:21) */
+	SELECT
+	        A.AUTH_GRP_ID
+	       ,A.AUTH_GRP_NM
+	       ,A.AUTH_GRP_DESC
+	  FROM DSM_AUTH_GRP A
+	 WHERE A.AUTH_GRP_ID NOT IN (SELECT X.AUTH_GRP_ID
+	                               FROM DSM_PLCY_RCV_GRP X
+	                              WHERE A.AUTH_GRP_ID = X.AUTH_GRP_ID
+	                                AND X.SALES_PLCY_ID = #DSM_SALES_PLCY_ID#
+	                                UNION
+	                             SELECT A.AUTH_GRP_ID
+	                               FROM DSM_AUTH_GRP A
+	                              WHERE A.AUTH_GRP_ID = '99'
+	                            ) 
+	AND A.USE_YN='Y'
+	 ORDER BY A.AUTH_PRTY]]>
+	</select>
+	<select id="dSearchPlcyRcvGrpAuthObjet" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplcy.db.DPLCYRCVGRP001.dSearchPlcyRcvGrpAuthObjet  */
+/* IO: 이민재,2014-11-21T15:03:25(이민재,2014-11-21T15:03:25) */
+	SELECT X.*
+	  FROM (
+	SELECT
+	        A.AUTH_GRP_ID
+	       ,B.AUTH_GRP_NM
+	       ,B.AUTH_GRP_DESC
+	  FROM DSM_PLCY_RCV_GRP A
+	  JOIN DSM_AUTH_GRP B ON (A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+	 WHERE A.SALES_PLCY_ID = #DSM_SALES_PLCY_ID#
+	 UNION 
+	 SELECT
+	        A.AUTH_GRP_ID
+	       ,A.AUTH_GRP_NM
+	       ,A.AUTH_GRP_DESC
+	  FROM DSM_AUTH_GRP A
+	       LEFT JOIN DSM_PLCY_RCV_GRP B ON (A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+	 WHERE A.AUTH_GRP_ID = '99'
+	) X
+	 ORDER BY X.AUTH_GRP_ID]]>
+	</select>
+</sqlMap>

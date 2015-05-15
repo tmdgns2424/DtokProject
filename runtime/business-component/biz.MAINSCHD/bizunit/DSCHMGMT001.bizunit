@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DSCHMGMT001">
+    <bizUnitName>[DU]주요일정관리</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.MAINSCHD</componentId>
+    <description/>
+    <method-list>
+        <method id="dSearchSchMgmtBrws">
+            <methodName>[DM]주요일정 조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T16:56:54" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dUpdateSchMgmt">
+            <methodName>[DM]주요일정관리수정</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dUpdateSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정을 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T18:02:47" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dInsertSchMgmt">
+            <methodName>[DM]주요일정관리추가</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dInsertSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정을 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T18:01:56" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtSeq">
+            <methodName>[DM]주요일정관리ID 시퀀스 채변</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정관리ID 시퀀스 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T17:47:05" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDeleteSchMgmt">
+            <methodName>[DM]주요일정관리삭제</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dDeleteSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정을 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T10:18:59" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dDetailSchMgmt">
+            <methodName>[DM]주요일정관리상세</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dDetailSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 상세 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T10:03:32" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtCnt">
+            <methodName>[DM]주요일정관리조회건수</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 건수를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T13:01:45" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmt">
+            <methodName>[DM]주요일정관리조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 검색을 위하여 관련 테이블(DSM_SCHMGMT, DSM_SCH_READR_MGMT)을 조인하여 주요일정 객체를 map객체로 가져오는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T11:39:33" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtBrwsCalHDay">
+            <methodName>[DM]주요일정관리휴일조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtBrwsCalHDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정관리휴일 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T10:14:40" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtBrwsCalData">
+            <methodName>[DM]주요일정달력정보조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtBrwsCalData</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T14:02:58" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtBrwsCnt">
+            <methodName>[DM]주요일정조회건수</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtBrwsCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 조회 한 건수 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T17:07:17" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtBrwsCal">
+            <methodName>[DM]주요일정조회달력</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtBrwsCal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 달력을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-19T18:17:41" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchPopSchMgmtBrwsCnt">
+            <methodName>[DM]주요일정팝업상세건수</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchPopSchMgmtBrwsCnt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 팝업의 상세 건수를 조회 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T09:29:23" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchPopSchMgmtBrws">
+            <methodName>[DM]주요일정팝업상세조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchPopSchMgmtBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정을 팝업에 상세 조회를 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T09:22:22" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="dSearchSchMgmtAuthGrp">
+            <methodName>[DM]주요일정관리권한그룹조회</methodName>
+            <transactionId>biz.MAINSCHD@DSCHMGMT001_dSearchSchMgmtAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-17T10:37:13" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-13T11:38:57" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMTHSALESPLAN001">
+	<select id="dSearchHeadSalePlan" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchHeadSalePlan  */
+/* IO: 이민재,2015-02-16T11:31:47(이민재,2015-02-16T11:31:47) */
+	SELECT A.*
+	FROM (
+		SELECT ROW_NUMBER() OVER (ORDER BY X.SALES_YM , X.ORG_LVL , X.HDQT_TEAM_ORG_ID , X.HDQT_PART_ORG_ID , X.SALE_DEPT_ORG_ID , X.SALE_TEAM_ORG_ID) RN
+    		, X.SALES_YM 
+    		, X.ORG_LVL
+    		, X.ORG_LVL_NM
+    		, X.HDQT_TEAM_ORG_ID
+   			, X.HDQT_TEAM_ORG_NM
+			, X.HDQT_PART_ORG_ID
+			, X.HDQT_PART_ORG_NM
+			, X.SALE_DEPT_ORG_ID
+			, X.SALE_DEPT_ORG_NM
+			, X.SALE_TEAM_ORG_ID
+			, X.SALE_TEAM_ORG_NM
+		    , X.RGSTR_NM
+		    , TO_CHAR(X.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM
+		FROM (
+			]]><isNotEmpty property="HEADQ_YN"><![CDATA[
+			SELECT A.SALES_YM 
+				, '1' AS ORG_LVL
+    			, '영업국' AS ORG_LVL_NM
+    			, E.ORG_ID AS HDQT_TEAM_ORG_ID
+    			, E.ORG_NM AS HDQT_TEAM_ORG_NM
+				, D.OUT_ORG_ID AS HDQT_PART_ORG_ID
+				, D.OUT_ORG_NM AS HDQT_PART_ORG_NM
+				, C.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+				, C.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+				, '' AS SALE_TEAM_ORG_ID
+				, '' AS SALE_TEAM_ORG_NM
+			    , B.USER_NM AS RGSTR_NM
+			    , A.RGST_DTM
+			FROM DSM_TRGT_HEADQ A
+			LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+			LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_HEADQ_CD)
+			LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON (D.OUT_ORG_ID = C.OUT_ORG_ID)
+			LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON (E.ORG_ID = D.ORG_ID)
+			WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+			UNION
+			]]></isNotEmpty><![CDATA[
+			SELECT A.SALES_YM 
+				, '2' AS ORG_LVL
+    			, '영업팀' AS ORG_LVL_NM
+    			, F.ORG_ID AS HDQT_TEAM_ORG_ID
+    			, F.ORG_NM AS HDQT_TEAM_ORG_NM
+				, E.OUT_ORG_ID AS HDQT_PART_ORG_ID
+				, E.OUT_ORG_NM AS HDQT_PART_ORG_NM
+				, D.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+				, D.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+				, C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+				, C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+			    , B.USER_NM AS RGSTR_NM
+			    , A.RGST_DTM
+			FROM DSM_TRGT_TEAM A
+			LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+			LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_TEAM_CD)
+    		LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D  ON (D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+			LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = D.OUT_ORG_ID)
+			LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+			WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+		) X
+		WHERE 1=1
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			X.HDQT_TEAM_ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			X.HDQT_PART_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+			X.SALE_DEPT_ORG_ID = #SALE_DEPT_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			X.SALE_TEAM_ORG_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="ORG_LVL"><![CDATA[
+			X.ORG_LVL = #ORG_LVL#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="RGSTR_NM"><![CDATA[
+			X.RGSTR_NM LIKE '%'||#RGSTR_NM#||'%'
+		]]></isNotEmpty><![CDATA[
+	) A
+	WHERE A.RN BETWEEN (#page#-1)*#page_size#+1 AND #page#*#page_size#]]>
+	</select>
+	<select id="dSearchHeadSalePlanCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchHeadSalePlanCount  */
+/* IO: 이민재,2015-02-16T11:47:51(이민재,2015-02-16T11:47:51) */
+	SELECT COUNT(*) AS totCnt
+	FROM (
+		]]><isNotEmpty property="HEADQ_YN"><![CDATA[
+		SELECT A.SALES_YM 
+			, '1' AS ORG_LVL
+   			, '영업국' AS ORG_LVL_NM
+   			, E.ORG_ID AS HDQT_TEAM_ORG_ID
+   			, E.ORG_NM AS HDQT_TEAM_ORG_NM
+			, D.OUT_ORG_ID AS HDQT_PART_ORG_ID
+			, D.OUT_ORG_NM AS HDQT_PART_ORG_NM
+			, C.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+			, C.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+			, '' AS SALE_TEAM_ORG_ID
+			, '' AS SALE_TEAM_ORG_NM
+		    , B.USER_NM AS RGSTR_NM
+		    , A.RGST_DTM
+		FROM DSM_TRGT_HEADQ A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_HEADQ_CD)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON (D.OUT_ORG_ID = C.OUT_ORG_ID)
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON (E.ORG_ID = D.ORG_ID)
+		WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+		UNION
+		]]></isNotEmpty><![CDATA[
+		SELECT A.SALES_YM 
+			, '2' AS ORG_LVL
+   			, '영업팀' AS ORG_LVL_NM
+   			, F.ORG_ID AS HDQT_TEAM_ORG_ID
+   			, F.ORG_NM AS HDQT_TEAM_ORG_NM
+			, E.OUT_ORG_ID AS HDQT_PART_ORG_ID
+			, E.OUT_ORG_NM AS HDQT_PART_ORG_NM
+			, D.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+			, D.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+			, C.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+			, C.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+		    , B.USER_NM AS RGSTR_NM
+		    , A.RGST_DTM
+		FROM DSM_TRGT_TEAM A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_TEAM_CD)
+    	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D  ON (D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = D.OUT_ORG_ID)
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+		WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+	) X
+	WHERE 1=1
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		X.HDQT_TEAM_ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		X.HDQT_PART_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+		X.SALE_DEPT_ORG_ID = #SALE_DEPT_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="SALE_TEAM_ORG_ID"><![CDATA[
+			X.SALE_TEAM_ORG_ID = #SALE_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="ORG_LVL"><![CDATA[
+		X.ORG_LVL = #ORG_LVL#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="RGSTR_NM"><![CDATA[
+		X.RGSTR_NM LIKE '%'||#RGSTR_NM#||'%'
+	]]></isNotEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchMthExecTrgt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthExecTrgt  */
+/* IO: 채수윤,2015-04-03T10:32:10(이민재,2015-02-11T11:16:53) */
+SELECT A.UNIT_TYP_CD
+     , (SELECT COMM_CD_VAL_NM 
+          FROM PS_MNG.TBAS_COMM_CD_DTL 
+         WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+           AND COMM_CD_VAL = A.UNIT_TYP_CD ) AS UNIT_TYP_NM
+     , NVL(C.MTH_PLAN_QTY,0) AS MTH_PLAN_QTY
+     , NVL(B.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY_DSM
+     , NVL(C.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY
+     /*, CASE WHEN A.UNIT_TYP_CD = '10' THEN NVL(C.RL_SELL_QTY,NVL(D.SALE_QTY, 0)) ELSE NVL(C.RL_SELL_QTY,0) END RL_SELL_QTY*/
+     ,0 AS  RL_SELL_QTY     
+  FROM DSM_TRGT_STRD_PROD A
+       JOIN DSM_TRGT_EXEC_TRGT B ON (B.SALES_YM = A.SALES_YM AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND B.UNIT_TYP_CD = A.UNIT_TYP_CD )
+       JOIN DSM_TRGT_HEADQ_DTL C ON (C.SALES_YM = A.SALES_YM AND C.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND C.UNIT_TYP_CD = A.UNIT_TYP_CD)
+       JOIN ( /*단말기판매수량*/
+             SELECT SUM(DECODE(GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)) AS SALE_QTY /* ZSAL_C_00110 : 01=판매, 02=기기변경, 12=판매처변경, 13=약정변경, 07=판매취소 */
+               FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                  , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                  , PS_MNG.TBAS_COMM_CD_DTL       SC
+              WHERE GS.SALE_CHG_DTM     >= TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM') || '01'
+                AND GS.SALE_CHG_DTM     <= TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM') || '31'
+                AND GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                AND GS.DEL_YN     = 'N'
+                AND ES.MDL_CD     IS NOT NULL
+                AND ES.PROD_CL_CD = '1' /*폰*/
+                AND SC.COMM_CD_ID = 'ZPOL_C_00040'
+                AND SC.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)
+                AND SC.ADD_INFO_01 IN ('S10100', 'S10200', 'S20100', 'S20200') /* S10100=일반신규, S10200=MNP, S20100=보상기변, S20200=일반기변 */
+                AND EXISTS (SELECT 'X'
+                              FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT Z
+                                 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT Y
+                                 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT X 
+                             WHERE Z.CONS_MTH = #SALES_YM#
+                               AND Z.OUT_ORG_DTL_ID = Y.OUT_ORG_DTL_ID
+                               AND Y.SUP_OUT_ORG_DTL_ID = X.OUT_ORG_DTL_ID
+                               AND X.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+                               AND X.DTOK_EFF_ORG_YN = 'Y' /* D-TOK사용여부 */
+                               AND Z.AGNT_ID = GS.SALE_PLC
+                           )
+                 AND 1=2 /*임시로 막음*/
+       ) D ON(1=1)
+ WHERE A.SALES_YM = TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM')
+ ORDER BY A.SORT_SEQ]]>
+	</select>
+	<select id="dSearchMthExecTrgtQty" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthExecTrgtQty  */
+/* IO: 이민재,2015-02-11T11:24:44(이민재,2015-02-11T11:24:44) */
+	SELECT X.TOTAL 
+		, X.SORT_SEQ
+		, X.UNIT_TYP_CD
+		, X.UNIT_TYP_NM
+		, NVL(SUM(X.MTH_PLAN_QTY),0) AS MTH_PLAN_QTY
+		, NVL(X.EXEC_TRGT_QTY1,0) AS EXEC_TRGT_QTY_DSM
+		, NVL(SUM(X.EXEC_TRGT_QTY2),0) AS EXEC_TRGT_QTY
+	FROM (
+		SELECT '합계' AS TOTAL 
+			, A.SORT_SEQ
+			, A.UNIT_TYP_CD
+			, ( SELECT COMM_CD_VAL_NM 
+				FROM PS_MNG.TBAS_COMM_CD_DTL 
+				WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+				AND COMM_CD_VAL = A.UNIT_TYP_CD ) AS UNIT_TYP_NM
+			, C.MTH_PLAN_QTY
+     		, B.EXEC_TRGT_QTY AS EXEC_TRGT_QTY1
+     		, C.EXEC_TRGT_QTY AS EXEC_TRGT_QTY2
+ 		FROM DSM_TRGT_STRD_PROD A
+		LEFT JOIN DSM_TRGT_EXEC_TRGT B  ON (B.SALES_YM = A.SALES_YM AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND B.UNIT_TYP_CD = A.UNIT_TYP_CD )
+		LEFT JOIN DSM_TRGT_HEADQ_TEAM_DTL C ON (C.SALES_YM = A.SALES_YM AND C.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND C.UNIT_TYP_CD = A.UNIT_TYP_CD )
+ 		WHERE A.SALES_YM = #SALES_YM#
+	) X
+	GROUP BY X.TOTAL, X.SORT_SEQ, X.UNIT_TYP_CD, X.UNIT_TYP_NM, X.EXEC_TRGT_QTY1
+ 	ORDER BY X.SORT_SEQ]]>
+	</select>
+	<select id="dSearchMthStrdCtt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthStrdCtt  */
+/* IO: 이민재,2015-02-11T11:20:55(이민재,2015-02-11T11:20:55) */
+	SELECT A.STRD_MGMT_SEQ 
+		, A.STRT_TITLE_NM
+		, A.STRD_CL
+    	, B.SALES_PLAN_CTT
+	FROM DSM_TRGT_STRD_CTT A
+	]]><isEqual property="HEADQ_YN" compareValue="Y"><![CDATA[
+  	LEFT JOIN DSM_TRGT_HEADQ_PLAN B ON (B.SALES_YM = A.SALES_YM AND B.STRD_MGMT_SEQ = A.STRD_MGMT_SEQ AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#)
+  	]]></isEqual><![CDATA[
+  	]]><isEqual property="HEADQ_YN" compareValue="N"><![CDATA[
+  	LEFT JOIN DSM_TRGT_TEAM_PLAN B ON (B.SALES_YM = A.SALES_YM AND B.STRD_MGMT_SEQ = A.STRD_MGMT_SEQ AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND B.DSM_TEAM_CD = #SALE_TEAM_ORG_ID#)
+  	]]></isEqual><![CDATA[
+	WHERE A.SALES_YM = #SALES_YM#
+	AND A.ORG_LVL = #ORG_LVL#
+	AND A.STRD_CL = #STRD_CL#]]>
+	</select>
+	<select id="dSearchMthTrgtTeam" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthTrgtTeam  */
+/* IO: 채수윤,2015-04-03T16:08:19(이민재,2015-02-11T17:08:44) */
+SELECT G.ORG_ID AS HDQT_TEAM_ORG_ID
+		, G.ORG_NM AS HDQT_TEAM_ORG_NM
+		, F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+		, F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+		, E.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+		, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+		, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+		, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+		, A.USER_NM AS TEAM_LDR_NM
+		, H.UNIT_TYP_CD
+		, ( SELECT COMM_CD_VAL_NM 
+			FROM PS_MNG.TBAS_COMM_CD_DTL 
+			WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+			AND COMM_CD_VAL = H.UNIT_TYP_CD ) AS UNIT_TYP_NM
+		, NVL(J.MTH_PLAN_QTY,0) AS MTH_PLAN_QTY
+		, NVL(J.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY
+        , CASE WHEN I.ACTV_PRSN_CNT IS NULL THEN 
+                    NVL((SELECT SUM(Z.ACTV_PRSN_CNT)
+                           FROM DSM_TRGT_TEAM Z
+                          WHERE Z.SALES_YM = H.SALES_YM
+                            AND Z.DSM_HEADQ_CD = E.OUT_ORG_DTL_ID
+                            AND Z.DSM_TEAM_CD = D.OUT_ORG_DTL_ID), 0)
+               ELSE I.ACTV_PRSN_CNT
+          END AS ACTV_PRSN_CNT
+		, (SELECT COUNT(*) FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT WHERE OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND CONS_MTH = C.CONS_MTH) AS PRSN_CNT
+	FROM PS_MNG.TBAS_USER_MGMT A 
+	JOIN PS_MNG.TBAS_DUTY_MGMT B ON (B.DUTY_CD = A.DUTY)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH =  #SALES_YM#)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+	LEFT JOIN DSM_TRGT_STRD_PROD H ON (1=1 AND SALES_YM = #SALES_YM# )
+  	LEFT JOIN DSM_TRGT_HEADQ_TEAM I ON (I.DSM_HEADQ_CD = E.OUT_ORG_DTL_ID AND I.DSM_TEAM_CD = D.OUT_ORG_DTL_ID AND I.SALES_YM = H.SALES_YM)
+	LEFT JOIN DSM_TRGT_HEADQ_TEAM_DTL J ON (J.DSM_HEADQ_CD = E.OUT_ORG_DTL_ID AND J.DSM_TEAM_CD = D.OUT_ORG_DTL_ID AND J.UNIT_TYP_CD = H.UNIT_TYP_CD AND J.SALES_YM = H.SALES_YM)
+	WHERE A.DUTY IN ('14', '16') /* 국장 + 팀장 */
+	AND A.ATTC_CAT = '4'
+	AND A.USER_TYP = '4'
+	AND E.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+	ORDER BY D.OUT_ORG_DTL_ID, H.SORT_SEQ]]>
+	</select>
+	<insert id="dInsertMthDsmTrgtHeadq" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtHeadq  */
+/* IO: 이민재,2015-02-12T15:16:47(이민재,2015-02-12T15:16:47) */
+	MERGE INTO DSM_TRGT_HEADQ
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID#)
+	WHEN MATCHED THEN
+		UPDATE SET UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+        	, #SALE_DEPT_ORG_ID#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertMthDsmTrgtHeadqDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtHeadqDtl  */
+/* IO: 이민재,2015-02-12T15:17:15(이민재,2015-02-12T15:17:15) */
+	MERGE INTO DSM_TRGT_HEADQ_DTL
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND UNIT_TYP_CD = #UNIT_TYP_CD#)
+	WHEN MATCHED THEN
+		UPDATE SET MTH_PLAN_QTY = #MTH_PLAN_QTY#
+            , EXEC_TRGT_QTY = #EXEC_TRGT_QTY#
+            , RL_SELL_QTY = #RL_SELL_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , UNIT_TYP_CD
+            , MTH_PLAN_QTY
+            , EXEC_TRGT_QTY
+            , RL_SELL_QTY
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #UNIT_TYP_CD#
+            , #MTH_PLAN_QTY#
+            , #EXEC_TRGT_QTY#
+            , #RL_SELL_QTY#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<update id="dUpdateMthDsmTrgtHeadqDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dUpdateMthDsmTrgtHeadqDtl  */
+/* IO: 이민재,2015-02-13T11:29:09(이민재,2015-02-13T11:29:09) */
+	UPDATE DSM_TRGT_HEADQ_DTL SET RL_SELL_QTY = #RL_SELL_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+	WHERE SALES_YM = #SALES_YM# 
+	AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# 
+	AND UNIT_TYP_CD = #UNIT_TYP_CD#]]>
+	</update>
+	<insert id="dInsertMthDsmTrgtHeadqTeam" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtHeadqTeam  */
+/* IO: 이민재,2015-02-12T15:17:35(이민재,2015-02-12T15:17:35) */
+	MERGE INTO DSM_TRGT_HEADQ_TEAM
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID#)
+	WHEN MATCHED THEN
+		UPDATE SET TEAM_LDR_NM = #TEAM_LDR_NM#
+            , ACTV_PRSN_CNT = #ACTV_PRSN_CNT#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , TEAM_LDR_NM
+            , ACTV_PRSN_CNT
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #SALE_TEAM_ORG_ID#
+            , #TEAM_LDR_NM#
+            , #ACTV_PRSN_CNT#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertMthDsmTrgtHeadqTeamDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtHeadqTeamDtl  */
+/* IO: 이민재,2015-02-12T15:17:53(이민재,2015-02-12T15:17:53) */
+	MERGE INTO DSM_TRGT_HEADQ_TEAM_DTL
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND UNIT_TYP_CD = #UNIT_TYP_CD#)
+	WHEN MATCHED THEN
+		UPDATE SET MTH_PLAN_QTY = #MTH_PLAN_QTY#
+            , EXEC_TRGT_QTY = #EXEC_TRGT_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , UNIT_TYP_CD
+            , MTH_PLAN_QTY
+            , EXEC_TRGT_QTY
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #SALE_TEAM_ORG_ID#
+            , #UNIT_TYP_CD#
+            , #MTH_PLAN_QTY#
+            , #EXEC_TRGT_QTY#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertMthDsmTrgtHeadqPlan" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtHeadqPlan  */
+/* IO: 이민재,2015-02-12T15:18:07(이민재,2015-02-12T15:18:07) */
+	MERGE INTO DSM_TRGT_HEADQ_PLAN
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND STRD_MGMT_SEQ = #STRD_MGMT_SEQ#)
+	WHEN MATCHED THEN
+		UPDATE SET SALES_PLAN_CTT = #SALES_PLAN_CTT#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , STRD_MGMT_SEQ
+            , SALES_PLAN_CTT
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #STRD_MGMT_SEQ#
+            , #SALES_PLAN_CTT#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<select id="dSearchSalePlanCnslDlDt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchSalePlanCnslDlDt  */
+/* IO: 이민재,2015-02-16T15:28:24(이민재,2015-02-16T15:28:24) */
+	SELECT STRD_APLY_VAL AS CNSL_DL_DT 
+  	FROM  DSM_WEB_BAS_VAL
+ 	WHERE DSM_WEB_STRD_CD_VAL IN (#AGENT_CNSL_PLN_NUM1#,#AGENT_CNSL_PLN_NUM2#)
+   	AND SYSDATE BETWEEN APLY_STA_DT AND APLY_END_DT
+   	ORDER BY DSM_WEB_STRD_CD_VAL ASC]]>
+	</select>
+	<select id="dSearchMthExecTrgtTeam" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthExecTrgtTeam  */
+/* IO: 채수윤,2015-04-03T10:47:05(이민재,2015-02-23T13:21:00) */
+SELECT A.UNIT_TYP_CD
+     , ( SELECT COMM_CD_VAL_NM 
+           FROM PS_MNG.TBAS_COMM_CD_DTL 
+          WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+            AND COMM_CD_VAL = A.UNIT_TYP_CD ) AS UNIT_TYP_NM
+     , NVL(C.MTH_PLAN_QTY,0) AS MTH_PLAN_QTY
+     , NVL(B.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY_DSM
+     , NVL(C.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY
+     /*, CASE WHEN A.UNIT_TYP_CD = '10' THEN NVL(C.RL_SELL_QTY,NVL(D.SALE_QTY, 0)) ELSE NVL(C.RL_SELL_QTY,0) END RL_SELL_QTY*/
+     ,0 AS  RL_SELL_QTY 
+  FROM DSM_TRGT_STRD_PROD A
+       JOIN DSM_TRGT_HEADQ_DTL B ON (B.SALES_YM = A.SALES_YM AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND B.UNIT_TYP_CD = A.UNIT_TYP_CD)
+       JOIN DSM_TRGT_TEAM_DTL C ON (C.SALES_YM = A.SALES_YM AND C.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND C.DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND C.UNIT_TYP_CD = A.UNIT_TYP_CD)
+       JOIN ( /*단말기판매수량*/
+             SELECT SUM(DECODE(GS.SALE_ST_CD , 'SS01', 1 ,'SS02', -1)) AS SALE_QTY /* ZSAL_C_00110 : 01=판매, 02=기기변경, 12=판매처변경, 13=약정변경, 07=판매취소 */
+               FROM PS_MNG.TSAL_N_GENERAL_SALE    GS
+                  , PS_MNG.TSAL_N_EQUIPMENT_SALE  ES
+                  , PS_MNG.TBAS_COMM_CD_DTL       SC
+              WHERE GS.SALE_CHG_DTM     >= TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM') || '01'
+                AND GS.SALE_CHG_DTM     <=  TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM') || '31'
+                AND GS.GNRL_SALE_NO      = ES.GNRL_SALE_NO
+                AND GS.GNRL_SALE_CHG_SEQ = ES.GNRL_SALE_CHG_SEQ
+                AND GS.DEL_YN     = 'N'
+                AND ES.MDL_CD     IS NOT NULL
+                AND ES.PROD_CL_CD = '1' /*폰*/
+                AND SC.COMM_CD_ID = 'ZPOL_C_00040'
+                AND SC.COMM_CD_VAL = DECODE(GS.SALE_DTL_TYP,'S10301','S30301',GS.SALE_DTL_TYP)
+                AND SC.ADD_INFO_01 IN ('S10100', 'S10200', 'S20100', 'S20200') /* S10100=일반신규, S10200=MNP, S20100=보상기변, S20200=일반기변 */
+                AND EXISTS (SELECT 'X'
+                              FROM PS_MNG.TBAS_OUT_ORG_MBR_MGMT Z
+                                 , PS_MNG.TBAS_OUT_ORG_DTL_MGMT Y
+                             WHERE Z.CONS_MTH = #SALES_YM#
+                               AND Z.OUT_ORG_DTL_ID = Y.OUT_ORG_DTL_ID
+                               AND Y.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+                               AND Z.AGNT_ID = GS.SALE_PLC
+                           )
+                 AND 1=2 /*임시로막음*/
+       ) D ON(1=1)
+ WHERE A.SALES_YM = TO_CHAR(ADD_MONTHS(TO_DATE(#SALES_YM#, 'YYYYMM'), -1), 'YYYYMM')
+ ORDER BY A.SORT_SEQ]]>
+	</select>
+	<select id="dSearchMthExecTrgtQtyTeam" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthExecTrgtQtyTeam  */
+/* IO: 이민재,2015-02-23T13:56:35(이민재,2015-02-23T13:56:35) */
+	SELECT X.TOTAL 
+		, X.SORT_SEQ
+		, X.UNIT_TYP_CD
+		, X.UNIT_TYP_NM
+		, NVL(SUM(X.MTH_PLAN_QTY),0) AS MTH_PLAN_QTY
+		, NVL(SUM(X.EXEC_TRGT_QTY1),0) AS EXEC_TRGT_QTY_DSM
+		, NVL(SUM(X.EXEC_TRGT_QTY2),0) AS EXEC_TRGT_QTY
+	FROM (
+		SELECT '합계' AS TOTAL 
+			, A.SORT_SEQ
+			, A.UNIT_TYP_CD
+			, ( SELECT COMM_CD_VAL_NM 
+				FROM PS_MNG.TBAS_COMM_CD_DTL 
+				WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+				AND COMM_CD_VAL = A.UNIT_TYP_CD ) AS UNIT_TYP_NM
+			, C.MTH_PLAN_QTY
+     		, B.EXEC_TRGT_QTY AS EXEC_TRGT_QTY1
+     		, C.EXEC_TRGT_QTY AS EXEC_TRGT_QTY2
+ 		FROM DSM_TRGT_STRD_PROD A
+		LEFT JOIN DSM_TRGT_HEADQ_TEAM_DTL B ON (B.SALES_YM = A.SALES_YM AND B.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND B.UNIT_TYP_CD = A.UNIT_TYP_CD )
+    LEFT JOIN DSM_TRGT_TEAM_AGNT_DTL C ON (C.SALES_YM = A.SALES_YM AND C.DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND C.DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND C.UNIT_TYP_CD = A.UNIT_TYP_CD )
+ 		WHERE A.SALES_YM = #SALES_YM#
+	) X
+	GROUP BY X.TOTAL, X.SORT_SEQ, X.UNIT_TYP_CD, X.UNIT_TYP_NM
+ 	ORDER BY X.SORT_SEQ]]>
+	</select>
+	<select id="dSearchMthTrgtTeamAgnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthTrgtTeamAgnt  */
+/* IO: 이민재,2015-02-23T16:23:14(이민재,2015-02-23T16:23:14) */
+	SELECT A.HDQT_TEAM_ORG_ID
+		, A.HDQT_TEAM_ORG_NM
+		, A.HDQT_PART_ORG_ID
+		, A.HDQT_PART_ORG_NM
+		, A.SALE_DEPT_ORG_ID
+		, A.SALE_DEPT_ORG_NM
+		, A.SALE_TEAM_ORG_ID
+		, A.SALE_TEAM_ORG_NM
+		, A.USER_ID
+    	, A.USER_NM AS TEAM_LDR_NM
+    	, B.AGNT_ID
+    	, B.USER_NM AS AGNT_NM
+    	, B.SORT_SEQ
+    	, B.UNIT_TYP_CD
+    	, ( SELECT COMM_CD_VAL_NM 
+			FROM PS_MNG.TBAS_COMM_CD_DTL 
+			WHERE COMM_CD_ID='DSM_FAX_UNIT_TYP_CD' 
+			AND COMM_CD_VAL = B.UNIT_TYP_CD ) AS UNIT_TYP_NM
+    	, NVL(B.MTH_PLAN_QTY,0) AS MTH_PLAN_QTY
+    	, NVL(B.EXEC_TRGT_QTY,0) AS EXEC_TRGT_QTY
+ 	FROM (
+ 		SELECT G.ORG_ID AS HDQT_TEAM_ORG_ID
+			, G.ORG_NM AS HDQT_TEAM_ORG_NM
+			, F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+			, F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+			, E.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+			, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+			, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+			, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+			, A.USER_ID
+		    , A.USER_NM
+		    , C.AGNT_ID
+  		FROM PS_MNG.TBAS_USER_MGMT A 
+		JOIN PS_MNG.TBAS_DUTY_MGMT B ON (B.DUTY_CD = A.DUTY)
+		JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH = #SALES_YM#)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+		JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+  		WHERE E.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+  		AND A.DUTY IN ('14', '16') /* 영업국장, 영업팀장 */ 
+  		AND A.ATTC_CAT = '4'
+  		AND A.USER_TYP = '4'
+	) A,
+	(
+		SELECT G.ORG_ID AS HDQT_TEAM_ORG_ID
+			, G.ORG_NM AS HDQT_TEAM_ORG_NM
+			, F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+			, F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+			, E.OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID
+			, E.OUT_ORG_DTL_NM AS SALE_DEPT_ORG_NM
+			, D.OUT_ORG_DTL_ID AS SALE_TEAM_ORG_ID
+			, D.OUT_ORG_DTL_NM AS SALE_TEAM_ORG_NM
+		    , A.USER_NM
+		    , C.AGNT_ID
+		    , H.UNIT_TYP_CD
+		    , H.SORT_SEQ
+		    , I.MTH_PLAN_QTY
+		    , I.EXEC_TRGT_QTY
+		FROM PS_MNG.TBAS_USER_MGMT A 
+		JOIN PS_MNG.TBAS_DUTY_MGMT B ON (B.DUTY_CD = A.DUTY)
+		JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH = #SALES_YM# AND C.RPSTY IN ('01', '02')) /* MA, S-MA로 제한 */
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID)
+		JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+		JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+		LEFT JOIN DSM_TRGT_STRD_PROD H ON (1=1 AND SALES_YM = #SALES_YM# )
+  		LEFT JOIN DSM_TRGT_TEAM_AGNT_DTL I ON (I.DSM_HEADQ_CD = E.OUT_ORG_DTL_ID AND I.DSM_TEAM_CD = D.OUT_ORG_DTL_ID AND I.AGNT_ID = C.AGNT_ID AND I.UNIT_TYP_CD = H.UNIT_TYP_CD AND I.SALES_YM = H.SALES_YM)
+  		WHERE E.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+  		AND D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#
+  		AND A.ATTC_CAT = '4'
+  		AND A.USER_TYP = '4'
+	) B
+	WHERE A.SALE_TEAM_ORG_ID = B.SALE_TEAM_ORG_ID
+	ORDER BY A.SALE_TEAM_ORG_ID, B.USER_NM, B.AGNT_ID, B.SORT_SEQ]]>
+	</select>
+	<select id="dSearchMthTrgtTeamAgntPrsnCnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchMthTrgtTeamAgntPrsnCnt  */
+/* IO: 이민재,2015-02-23T17:46:49(이민재,2015-02-23T17:46:49) */
+	SELECT COUNT(*) AS PRSN_CNT
+		, NVL(H.ACTV_PRSN_CNT,0) AS ACTV_PRSN_CNT
+		, NVL(H.INCP_PLAN_PRSN_CNT,0) AS INCP_PLAN_PRSN_CNT
+	FROM PS_MNG.TBAS_USER_MGMT A 
+	JOIN PS_MNG.TBAS_DUTY_MGMT B ON (B.DUTY_CD = A.DUTY)
+	JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT C ON (C.AGNT_ID = A.CPLAZA_ORG_CD AND C.CONS_MTH = #SALES_YM#)
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = C.OUT_ORG_DTL_ID AND D.OUT_ORG_DTL_ID = #SALE_TEAM_ORG_ID#)
+	JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = D.SUP_OUT_ORG_DTL_ID AND E.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#)
+	JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+	JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+  	LEFT JOIN DSM_TRGT_TEAM H ON (H.DSM_HEADQ_CD = E.OUT_ORG_DTL_ID AND H.DSM_TEAM_CD = D.OUT_ORG_DTL_ID AND SALES_YM = #SALES_YM#)
+  	WHERE A.ATTC_CAT = '4'
+  	AND A.USER_TYP = '4'
+	GROUP BY H.ACTV_PRSN_CNT, H.INCP_PLAN_PRSN_CNT]]>
+	</select>
+	<insert id="dInsertMthDsmTrgtTeam" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtTeam  */
+/* IO: 이민재,2015-02-24T10:11:11(이민재,2015-02-24T10:11:11) */
+	MERGE INTO DSM_TRGT_TEAM
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID#)
+	WHEN MATCHED THEN
+		UPDATE SET ACTV_PRSN_CNT = #ACTV_PRSN_CNT#
+				, INCP_PLAN_PRSN_CNT = #INCP_PLAN_PRSN_CNT#
+				, UPDR_ID = #onlineContext.userInfo.loginId#
+				, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , ACTV_PRSN_CNT
+            , INCP_PLAN_PRSN_CNT
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+        	, #SALE_DEPT_ORG_ID#
+        	, #SALE_TEAM_ORG_ID#
+            , #ACTV_PRSN_CNT#
+            , #INCP_PLAN_PRSN_CNT#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<update id="dUpdateMthDsmTrgtTeamDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dUpdateMthDsmTrgtTeamDtl  */
+/* IO: 이민재,2015-02-24T09:41:46(이민재,2015-02-24T09:41:46) */
+	UPDATE DSM_TRGT_TEAM_DTL SET RL_SELL_QTY = #RL_SELL_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+	WHERE SALES_YM = #SALES_YM# 
+	AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# 
+	AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# 
+	AND UNIT_TYP_CD = #UNIT_TYP_CD#]]>
+	</update>
+	<insert id="dInsertMthDsmTrgtTeamDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtTeamDtl  */
+/* IO: 이민재,2015-02-24T09:46:07(이민재,2015-02-24T09:46:07) */
+	MERGE INTO DSM_TRGT_TEAM_DTL
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND UNIT_TYP_CD = #UNIT_TYP_CD#)
+	WHEN MATCHED THEN
+		UPDATE SET MTH_PLAN_QTY = #MTH_PLAN_QTY#
+            , EXEC_TRGT_QTY = #EXEC_TRGT_QTY#
+            , RL_SELL_QTY = #RL_SELL_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , UNIT_TYP_CD
+            , MTH_PLAN_QTY
+            , EXEC_TRGT_QTY
+            , RL_SELL_QTY
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #SALE_TEAM_ORG_ID#
+            , #UNIT_TYP_CD#
+            , #MTH_PLAN_QTY#
+            , #EXEC_TRGT_QTY#
+            , #RL_SELL_QTY#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertMthDsmTrgtTeamAgntDtl" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtTeamAgntDtl  */
+/* IO: 이민재,2015-02-24T10:19:25(이민재,2015-02-24T10:16:21) */
+MERGE INTO DSM_TRGT_TEAM_AGNT_DTL
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND AGNT_ID = #AGNT_ID# AND UNIT_TYP_CD = #UNIT_TYP_CD#)
+	WHEN MATCHED THEN
+		UPDATE SET MTH_PLAN_QTY = #MTH_PLAN_QTY#
+            , EXEC_TRGT_QTY = #EXEC_TRGT_QTY#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , AGNT_ID
+            , UNIT_TYP_CD
+            , MTH_PLAN_QTY
+            , EXEC_TRGT_QTY
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #SALE_TEAM_ORG_ID#
+            , #AGNT_ID#
+            , #UNIT_TYP_CD#
+            , #MTH_PLAN_QTY#
+            , #EXEC_TRGT_QTY#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<insert id="dInsertMthDsmTrgtTeamPlan" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dInsertMthDsmTrgtTeamPlan  */
+/* IO: 이민재,2015-02-24T10:27:45(이민재,2015-02-24T10:27:45) */
+	MERGE INTO DSM_TRGT_TEAM_PLAN
+	USING DUAL
+	ON ( SALES_YM = #SALES_YM# AND DSM_HEADQ_CD = #SALE_DEPT_ORG_ID# AND DSM_TEAM_CD = #SALE_TEAM_ORG_ID# AND STRD_MGMT_SEQ = #STRD_MGMT_SEQ#)
+	WHEN MATCHED THEN
+		UPDATE SET SALES_PLAN_CTT = #SALES_PLAN_CTT#
+          	, UPDR_ID = #onlineContext.userInfo.loginId#
+			, UPD_DTM = SYSDATE
+		WHEN NOT MATCHED THEN
+     	INSERT( 
+			SALES_YM
+            , DSM_HEADQ_CD
+            , DSM_TEAM_CD
+            , STRD_MGMT_SEQ
+            , SALES_PLAN_CTT
+            , RGSTR_ID
+            , RGST_DTM
+            , UPDR_ID
+            , UPD_DTM
+		)VALUES(
+            #SALES_YM#
+            , #SALE_DEPT_ORG_ID#
+            , #SALE_TEAM_ORG_ID#
+            , #STRD_MGMT_SEQ#
+            , #SALES_PLAN_CTT#
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+			, #onlineContext.userInfo.loginId#
+			, SYSDATE
+		)]]>
+	</insert>
+	<select id="dSearchHeadSalePlanTotCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.saleplan.db.DMTHSALESPLAN001.dSearchHeadSalePlanTotCount  */
+/* IO: 이민재,2015-03-19T14:13:24(이민재,2015-03-19T14:13:24) */
+	SELECT A.CNT AS CNT1
+  		, B.CNT AS CNT2
+	FROM (
+		SELECT COUNT(*) AS CNT
+		FROM DSM_TRGT_HEADQ A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_HEADQ_CD)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT D ON (D.OUT_ORG_ID = C.OUT_ORG_ID)
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT E ON (E.ORG_ID = D.ORG_ID)
+		WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			E.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			D.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isEqual property="BIZ_REQ" compareValue="HEAD"><![CDATA[
+			]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				C.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+		]]></isEqual><![CDATA[
+		
+    ) A,
+	(
+		SELECT COUNT(*) AS CNT
+		FROM DSM_TRGT_TEAM A
+		LEFT JOIN PS_MNG.TBAS_USER_MGMT B ON (B.USER_ID = A.RGSTR_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT C ON (C.OUT_ORG_DTL_ID = A.DSM_TEAM_CD)
+    	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D  ON (D.OUT_ORG_DTL_ID = C.SUP_OUT_ORG_DTL_ID)
+		LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = D.OUT_ORG_ID)
+		LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+		WHERE A.SALES_YM BETWEEN #FROM_YM# AND #TO_YM#
+		]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+			F.ORG_ID = #HDQT_TEAM_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+			E.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+		]]></isNotEmpty><![CDATA[
+		]]><isEqual property="BIZ_REQ" compareValue="HEAD"><![CDATA[
+			]]><isNotEmpty prepend="AND" property="SALE_DEPT_ORG_ID"><![CDATA[
+				D.OUT_ORG_DTL_ID = #SALE_DEPT_ORG_ID#
+			]]></isNotEmpty><![CDATA[
+		]]></isEqual><![CDATA[
+    ) B]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DSMS001">
+	<insert id="dInsertTelinkSms" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dInsertTelinkSms  */
+/* IO: 안종광,2015-01-14T19:37:04(안종광,2015-01-12T18:30:07) */
+INSERT INTO PS_MNG.TELINK_SMS (
+       CMP_MSG_ID
+     , CMP_USR_ID
+     , ODR_FG
+     , SMS_GB
+     , USED_CD
+     , MSG_GB
+     , WRT_DTTM
+     , SND_DTTM
+     , SND_PHN_ID
+     , RCV_PHN_ID
+     , CALLBACK
+     , SND_MSG
+     , CMP_SND_DTTM
+     , CMP_RCV_DTTM
+     , REG_SND_DTTM
+     , REG_RCV_DTTM
+     , EXPIRE_VAL
+     , SMS_ST
+     , RSLT_VAL
+     , RSRVD_ID
+     , RSRVD_WD
+)
+VALUES (
+       #CMP_MSG_ID# /*메시지ID*/
+     , '0000'
+     , '2'
+     , '1'
+     , '00'
+     , 'A'
+     , ''
+     , (SELECT #SND_DT#||#SND_TM# FROM DUAL) /*발송일시*/
+     , #SND_PHN_ID# /*발송전화번호*/
+     , #RCV_PHN_ID# /*수신전화번호*/
+     , #SND_PHN_ID# /*발송전화번호*/
+     , #SND_MSG# /*메시지*/ 
+     , ''
+     , ''
+     , ''
+     , ''
+     , 0
+     , '0'
+     , 99
+     , 'DTOK'
+     , ''
+)]]>
+	</insert>
+	<select id="dSearchNextCmpMsgSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS.dSearchNextCmpMsgSeq  */
+/* IO: 안종광,2015-01-12T19:45:17(안종광,2015-01-12T19:45:17) */
+SELECT PS_MNG.SADM_SMS_CMP_MSG_SEQ.NEXTVAL AS CMP_MSG_ID FROM DUAL]]>
+	</select>
+	<select id="dSearchNextTranSeq" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dSearchNextTranSeq  */
+/* IO: 안종광,2015-01-14T19:16:55(안종광,2015-01-12T19:46:11) */
+SELECT PS_MNG.SADM_SMS_TRAN_SEQ.NEXTVAL AS TRAN_CNT
+  FROM DUAL]]>
+	</select>
+	<insert id="dInsertSmsTran" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dInsertSmsTran  */
+/* IO: 안종광,2015-03-04T10:12:17(안종광,2015-01-12T19:53:06) */
+INSERT INTO PS_MNG.TADM_SMS_TRAN (
+       TRAN_DT
+     , TRAN_CNT
+     , TITLE
+     , TRAN_USER_ID
+     , RTN_TEL_NO
+     , CONTEXT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , MSG_SER_NUM
+     , SMS_JOB_CL
+)
+VALUES(
+       #SND_DT# /*등록일자*/
+     , #TRAN_CNT# /*SMS전송차수*/
+     , ''
+     , #onlineContext.userInfo.loginId# /*발신자ID*/
+     , #SND_PHN_ID# /*발신번호*/
+     , #SND_MSG# /*발송메시지*/
+     , 'N'
+     , '1'
+     , (SELECT #SND_DT#||#SND_TM# FROM DUAL)
+     , #onlineContext.userInfo.loginId# /*등록자ID*/
+     , (SELECT #SND_DT#||#SND_TM# FROM DUAL)
+     , #onlineContext.userInfo.loginId# /*수정자ID*/
+     , '0'
+     , ''
+)]]>
+	</insert>
+	<insert id="dInsertSmsTranDtl" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dInsertSmsTranDtl  */
+/* IO: 안종광,2015-03-04T10:10:49(안종광,2015-01-12T19:57:11) */
+INSERT INTO PS_MNG.TADM_SMS_TRAN_DTL (
+       TRAN_DT
+     , TRAN_CNT
+     , SEQ
+     , NAME
+     , TEL_NO
+     , ADDR_CAT
+     , DEL_YN
+     , UPD_CNT
+     , INS_DTM
+     , INS_USER_ID
+     , MOD_DTM
+     , MOD_USER_ID
+     , SKT_YN
+     , CMP_MSG_ID
+)
+VALUES( 
+       #SND_DT# /*등록일자*/
+     , #TRAN_CNT# /*SMS전송차수*/
+     , #SEQ# /*순번*/
+     , ''
+     , #RCV_PHN_ID# /*수신번호*/
+     , '' 
+     , 'N'
+     , 1
+     , (SELECT #SND_DT#||#SND_TM# FROM DUAL)
+     , #onlineContext.userInfo.loginId# /*등록자ID*/
+     , (SELECT #SND_DT#||#SND_TM# FROM DUAL)
+     , #onlineContext.userInfo.loginId# /*수정자ID*/
+     , '' 
+     , #CMP_MSG_ID# /*텔링크고유ID*/
+)]]>
+	</insert>
+	<select id="dSearchSmsInfoByUser" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dSearchSmsInfoByUser  */
+/* IO: 안종광,2015-03-05T16:51:48(안종광,2015-01-14T17:24:47) */
+]]><isNotEmpty property="USER_ID"><![CDATA[
+SELECT u.USER_ID
+     , u.SMS_RCV_YN
+     , u.TEL_CO_CD
+     , (SELECT F_DSM_SMS_SENDNUM(#USER_ID#) FROM DUAL) AS SND_PHN_ID
+    ]]><isNotEmpty property="RCV_PHN_ID"><![CDATA[
+     , #RCV_PHN_ID# AS RCV_PHN_ID /*입력된 수신전화번호*/
+    ]]></isNotEmpty><![CDATA[
+    ]]><isEmpty property="RCV_PHN_ID"><![CDATA[
+     , u.MBL_PHON_NUM1 || u.MBL_PHON_NUM2 || u.MBL_PHON_NUM3 AS RCV_PHN_ID /*사용자 휴대전화번호*/
+    ]]></isEmpty><![CDATA[
+     , (
+          SELECT s.TRAN_MSG AS SND_MSG
+            FROM DSM_SMS_BAS_VAL S
+           WHERE s.TRAN_MENU_ID = #TRAN_MENU_ID# /*발송메뉴ID*/
+             AND s.TRAN_TYP_CD = #TRAN_TYP_CD# /*발송유형코드[DSM_TRAN_TYP_CD]*/
+     ) AS SND_MSG /*SMS메시지원형*/
+     , TO_CHAR(SYSDATE, 'YYYYMMDD') AS SND_DT /*발송일자 */
+     , TO_CHAR(SYSDATE, 'HH24MISS') AS SND_TM /*발송시각 */
+ FROM DSM_USER u
+WHERE u.USER_ID = #USER_ID# /*사용자ID*/
+]]></isNotEmpty><![CDATA[
+]]><isEmpty property="USER_ID"><![CDATA[
+SELECT #RCV_PHN_ID# AS USER_ID
+     , 'Y'          AS SMS_RCV_YN
+     , ''           AS TEL_CO_CD
+     , F_DSM_CODE_NM('DSM_REP_PHON_NUM', '01') AS SND_PHN_ID
+     , #RCV_PHN_ID# AS RCV_PHN_ID /*입력된 수신전화번호*/
+     , (
+          SELECT s.TRAN_MSG AS SND_MSG
+            FROM DSM_SMS_BAS_VAL S
+           WHERE s.TRAN_MENU_ID = #TRAN_MENU_ID# /*발송메뉴ID*/
+             AND s.TRAN_TYP_CD  = #TRAN_TYP_CD#  /*발송유형코드[DSM_TRAN_TYP_CD]*/
+     ) AS SND_MSG /*SMS메시지원형*/
+     , TO_CHAR(SYSDATE, 'YYYYMMDD') AS SND_DT /*발송일자 */
+     , TO_CHAR(SYSDATE, 'HH24MISS') AS SND_TM /*발송시각 */
+ FROM DUAL
+]]></isEmpty><![CDATA[]]>
+	</select>
+	<select id="dSearchChrgrOpAbsn" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dSearchChrgrOpAbsn  */
+/* IO: 안종광,2015-01-21T14:22:57(안종광,2015-01-21T14:19:26) */
+SELECT COUNT(*) AS IS_ABSN
+  FROM DSM_CHRGR_OP_ABSN
+ WHERE TO_CHAR(SYSDATE, 'RRRRMMDD') >= OP_ABSN_STA_DT
+   AND TO_CHAR(SYSDATE, 'RRRRMMDD') <= OP_ABSN_END_DT
+   AND CHRGR_ID = #USER_ID# /*수신자ID*/]]>
+	</select>
+	<select id="dSearchSmsCount" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.share.db.DSMS001.dSearchSmsCount  */
+/* IO: 안종광,2015-03-06T13:55:58(안종광,2015-03-04T09:44:56) */
+SELECT COUNT(*) AS CNT /*TKEY SMS 전송건수*/
+  FROM PS_MNG.TADM_SMS_TRAN_DTL d
+ WHERE d.TRAN_DT LIKE #SND_DT# || '%' /*전송년월(등록년월)*/
+   AND d.INS_USER_ID = #onlineContext.userInfo.loginId# /*발신자ID*/]]>
+	</select>
+</sqlMap>

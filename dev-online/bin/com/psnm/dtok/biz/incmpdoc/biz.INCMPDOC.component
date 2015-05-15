@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.INCMPDOC">
+    <componentName>[BC]업무-미비서류접수</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.incmpdoc</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>미비서류접수 정보를 조회/입력/수정/삭제 하는 BC</description>
+    <custom-props/>
+    <history>
+        <created date="2015-01-22T14:03:28" user="김지홍 (kimjihong)"/>
+    </history>
+</component>

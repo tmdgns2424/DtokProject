@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* 팝업 */
+*{margin:0px;padding:0px;}
+body,table{font-family:"맑은고딕",Malgun Gothic,"나눔고딕",Nanum Gothic,'돋움',dotum,AppleGothic,sans-serif;font-size:12px;color:#666666; line-height:18px;font-weight:normal;padding:0px;margin:0px;letter-spacing:-0.25px;}
+hr{display:none}
+dl,dt,dd,ul,ol,li{list-style:none;margin: 0;padding: 0px;}
+img,fieldset,button{border:0;}
+img,button,label,select,textarea{vertical-align:middle}
+
+a{color:#666;text-decoration:none;/*color:#e2632e;text-decoration:underline;*/}
+a:hover,
+a.on,
+a.active,
+a:focus {color:#666;text-decoration:underline;}
+
+#wrap{position:relative; width: 100%;}
+.pop_title {position:relative;}
+.pop_header{/*max-height:600px;*/margin:15px;padding-right:10px;overflow-y:hidden !important;overflow-x:hidden;}
+.pop_header .title{width:100%; height:27px; border-bottom:solid 2px #000000; margin-bottom:20px;  font-size:15px; letter-spacing:-0.25px; display:block; font-weight:bold; font-family:"맑은고딕",Malgun Gothic,"나눔고딕",Nanum Gothic,'돋움'}
+.pop_close {right:0px;top: 0px;position: absolute;}
+
+/* 게시판 */
+.board02 {border-right:1px solid #c0c0c0;width:100%; margin-left:0px;font-size:12px;border-top:1px solid #c0c0c0;}
+.board02 th {vertical-align:middle;padding:3px 0 5px 0;/*border-top:1px solid #c0c0c0;*/border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;background:#f0f7ff;color:#585858;font-weight:normal;text-align:left;height:24px; padding-left:10px;}
+.board02 td {vertical-align:middle;padding:3px 0 5px 0;border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;text-align:center;line-height:120%}
+.board02 td img {vertical-align:middle;}
+.board02 td input.dis{vertical-align: middle;font-size:12px;color:#656565; background:#eeeeee; border:1px solid #ddd;}
+.board02 td.rr {padding:2px 10px 2px 0;border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;text-align:right;}
+.board02 td.tleft {border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;text-align:left; padding-right:10px; line-height: 24px; padding-left:5px;
+letter-spacing: -0.5px;}
+.board02 td.tleft_red {border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;text-align:left; padding-left:10px; color:#eb2147;}
+.board02 td.tleft1 {border-left:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;text-align:center;}
+.board02 .first {border-left:none;}
+.board02.last {border-right:none;}
+.board02 .last {border-right:none;}
+.board02 .fontred{color:#f92020;}
+
+.board02 tr.ave {background:#f0f7ff;}
+.board02 td input[type="checkbox"]{border:none}
+.board03{border-right:0px solid;width:100%; padding-bottom:5px; margin-left:0px;font-size:12px;border-top:0px solid;}
+.board03 td {border-left:0px solid; padding-bottom:5px; border-bottom:0px solid;text-align:center;line-height:120%}
+.board04{border-right:0px solid;width:100%; padding-bottom:5px; margin-left:0px;font-size:12px;border-top:0px solid; float:center;}
+.board04 td {border-left:0px solid; padding-bottom:5px; border-bottom:0px solid;text-align:center;line-height:120%}
+.table1{ width:100%; margin:10px 0 0 0; border-top:2px solid #999; border-bottom:1px solid #dddddd; font-size:11px; }
+.table1 th{ color:#666; padding:6px 0 5px 0; text-align:center; background:#f7f7f7;}
+.table1 td{ color:#666; padding:6px 0 5px 0; text-align:center; border-top:1px solid #dddddd;}
+.board05 {width:100%; margin-left:0px;font-size:12px;}
+.board05 th{border-bottom:2px solid #c0c0c0;border-top:2px solid #c0c0c0;text-align:center;line-height:120%}
+.board05 td{border-bottom:1px solid #c0c0c0;text-align:center;line-height:120%}
+
+/* btn영역 */
+.btn_area{position:relative;}
+.textAR {position:relative;}
+.floatL{padding-top:5px;font-size:14px; font-weight:bold; position:relative;}
+.floatL1{padding-top:24px; font-size:14px; font-weight:bold; position:relative; letter-spacing:-0.5px; padding-bottom: 8px; }
+.floatL3 {position:relative; padding-top:30px; text-align:center;}
+.floatL4 {position:relative; font-size:14px; padding-top:24px; padding-bottom:5px;}
+.floatL2{padding-top:25px; text-align:center;}
+.floatL .btn{position: absolute; right: 0px; top: -5px;}
+.ab_pos2 {position: absolute;right: 0;top: 0;}
+.ab_btn_right{position: absolute;right: 0;top:0px;}
+.ab_btn_left{position:relative;}
+
+/* 아이디찾기 */
+#loginbox{overflow:hidden;border:1px solid #eee; border-right: 3px solid #eee;  border-bottom: 3px solid #eee; background: #fbfbfc; margin-top:20px; font-size:13px; line-height:26px; font-weight:bold; text-align:center;}
+#loginbox .fnt_blue{ color:#2d76c9;}
+#loginbox .fnt_align{text-align:left; padding-left:55px; padding-top:13px;}
+#loginbox .fnt_center{align:center;}
+#loginbox .fnt_align a{color:#ea002c !important; text-decoration: underline;}
+
+
+#center{ float:right; width: 70%;  height:450px; padding-left:10px; margin-top:15px;}
+/* chk 영억*/
+.ab_pos3 {position: absolute;right: 0;top: 0px;}
+.ab_pos4 {position: absolute;right: 0;top: 10px;}
+.floatL5 {position:relative; padding-top:10px; padding-bottom:5px;}
+
+/*sja*/
+.ab_pos1 {position: absolute;right: 0;top: 18px;}/* view영역 우측버튼*/
+.ab_pos5 {position: absolute;right: 0px;bottom: 0px;}
+.floatL4 {position:relative; font-size:14px;  padding-top:24px; padding-bottom:5px;}
+/* //UI Object */
+.cb_info_area {overflow: hidden;padding:10px 0;}
+.cb_section {float:left;}
+.cb_section span{padding:2px 10px; color:#d9d9d9;}
+.cb_section2 {float:right;}
+.line{margin:10px  0; position: relative; border-bottom: 1px solid #eeeeec;}
+.cb_section3 {position: absolute;top:150px;right: 6px;height: 15px;padding-left: 6px;color: #aaa;}
+.line{padding:10px  0; position: relative; border-bottom: 1px solid #eeeeec;}
+.n_comment_wrap {overflow:hidden;}
+
+/* 2015.03.12 add */
+.birthdayMember{height:390px;margin:20px;overflow-x:hidden;overflow-y:scroll;background:url("../image/bg_birthdayMember.gif") no-repeat 90% 40%;}
+.birthdayMember dl{width:300px;overflow:hidden;margin-bottom:20px;padding-bottom:20px;border-bottom:1px dotted #ddd}
+.birthdayMember dt, .birthdayMember dd{display:inline-block}
+.birthdayMember dt{float:left;width:93px;height:93px}
+.birthdayMember dt img{display:block;width:100%;height:100%;max-width:93px;max-height:93px;margin:0 auto}
+.birthdayMember dd{float:right;width:57%;padding-left:10px;margin-bottom:0px;background:url("../image/bull_txt_type1.gif") no-repeat 0 50%;font-size:1.05em;line-height:2.4em}
+.birthdayMember .name{font-weight:900}

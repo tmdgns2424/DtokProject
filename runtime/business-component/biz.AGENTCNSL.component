@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.AGENTCNSL">
+    <componentName>[BC]업무-면담계획/정기면담</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.agentcnsl</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-11-21T16:46:59" user="이민재 (leeminjae)"/>
+    </history>
+</component>

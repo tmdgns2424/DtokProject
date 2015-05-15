@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCMNT001">
+	<select id="dSearchCmnt" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.cmnt.db.DCMNT001.dSearchCmnt  */
+/* IO: 이승훈2,2015-03-19T09:27:48(이승훈2,2015-03-18T16:40:45) */
+SELECT /*+ ORDERED USE_NL(A B ) */
+			A.*
+			]]><isNotEmpty property="IS_HEAD"><![CDATA[
+			, F_DSM_WRITER_NM(A.RGSTR_ID, 'userInfo') AS RGSTR_NM
+			]]></isNotEmpty><![CDATA[
+			]]><isEmpty property="IS_HEAD"><![CDATA[
+			, F_DSM_WRITER_NM(A.RGSTR_ID, 'board') AS RGSTR_NM
+			]]></isEmpty><![CDATA[			
+	FROM ( SELECT /*+ INDEX_DESC( A PK_DSM_CMNT_MGMT) */
+				A.CMNT_MGMT_ID
+				, A.CMNT_SEQ /* 덧글순번 */
+				, A.CMNT_CTT /* 덧글내용 */
+				, A.RGSTR_ID /* 등록자 */
+				, TO_CHAR(A.RGST_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RGST_DTM /* 등록시간 */
+				, ROWNUM RN
+				, A.CMNT_OPEN_CL_CD AS CMNT_OPEN_CL_CD_VAL
+			FROM DSM_CMNT_MGMT A
+			WHERE A.CMNT_MGMT_ID = #CMNT_MGMT_ID# 
+			]]><isEqual property="IS_MAINSCHD" compareValue="Y"><![CDATA[ /* 주요일정 댓글이 경우 */
+				
+				]]><isEqual property="onlineContext.userInfo.ATTC_CAT" compareValue="4"><![CDATA[ /* 에이전트일 경우 */
+					]]><isEqual property="onlineContext.userInfo.DUTY" compareValue="14"><![CDATA[/* 국장일 경우 */
+				  AND (
+						( A.CMNT_OPEN_CL_CD = '03' 
+						  AND (
+								  SELECT DISTINCT D.SUP_OUT_ORG_DTL_ID
+									 FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT D
+									 JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+									 JOIN PS_MNG.TBAS_USER_MGMT        F ON (F.CPLAZA_ORG_CD = E.AGNT_ID)
+									WHERE F.USER_ID = A.RGSTR_ID 
+								)	= 	#onlineContext.userInfo.SALE_DEPT_ORG_ID#
+						)
+						OR
+						( A.CMNT_OPEN_CL_CD = '02' 
+						  AND (
+								  SELECT DISTINCT D.SUP_OUT_ORG_DTL_ID
+									 FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT D
+									 JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+									 JOIN PS_MNG.TBAS_USER_MGMT        F ON (F.CPLAZA_ORG_CD = E.AGNT_ID)
+									WHERE F.USER_ID = A.RGSTR_ID 
+								)	= 	#onlineContext.userInfo.SALE_DEPT_ORG_ID#
+						) 
+						OR
+						A.RGSTR_ID = #onlineContext.userInfo.loginId#
+					  )
+					]]></isEqual><![CDATA[
+					 ]]><isNotEqual property="onlineContext.userInfo.DUTY" compareValue="14"><![CDATA[ /*국장이 아닐 경우 */
+				  AND (
+						( A.CMNT_OPEN_CL_CD = '02' 
+						  AND (
+								  SELECT DISTINCT D.SUP_OUT_ORG_DTL_ID
+									 FROM PS_MNG.TBAS_OUT_ORG_DTL_MGMT D
+									 JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT E ON (E.OUT_ORG_DTL_ID = D.OUT_ORG_DTL_ID)
+									 JOIN PS_MNG.TBAS_USER_MGMT        F ON (F.CPLAZA_ORG_CD = E.AGNT_ID)
+									WHERE F.USER_ID = A.RGSTR_ID 
+								)	= 	#onlineContext.userInfo.SALE_DEPT_ORG_ID#
+						) 
+						OR
+						A.RGSTR_ID = #onlineContext.userInfo.loginId#
+					  )		
+					 ]]></isNotEqual><![CDATA[
+					
+				]]></isEqual><![CDATA[
+
+			]]></isEqual><![CDATA[
+			
+			
+			
+			
+			]]><isEqual property="IS_HEAD" compareValue="Y"><![CDATA[
+			  AND EXISTS ( SELECT 1
+			                 FROM PS_MNG.TBAS_USER_MGMT
+			                WHERE USER_ID = A.RGSTR_ID
+			                  AND DUTY = '14'
+			             )
+			]]></isEqual><![CDATA[
+		 ) A]]>
+	</select>
+	<select id="dSearchCmntCount" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.cmnt.db.DCMNT001.dSearchCmntCount  */
+/* IO: 안진갑,2015-03-10T11:52:07(이민재,2014-12-05T17:12:38) */
+SELECT COUNT(1) totCnt
+	FROM DSM_CMNT_MGMT A
+	WHERE A.CMNT_MGMT_ID = #CMNT_MGMT_ID#
+	]]><isEqual property="IS_HEAD" compareValue="Y"><![CDATA[
+	  AND EXISTS ( SELECT 1
+	                 FROM PS_MNG.TBAS_USER_MGMT
+	                WHERE USER_ID = A.RGSTR_ID
+	                  AND DUTY = '14'
+	             )
+	]]></isEqual><![CDATA[]]>
+	</select>
+	<update id="dInsertCmnt" ><![CDATA[/* Biz: com.psnm.dtok.com.cmnt.db.DCMNT001.dInsertCmnt  */
+/* IO: 이승훈2,2015-03-18T17:37:27(이승훈2,2015-03-18T17:06:52) */
+MERGE INTO DSM_CMNT_MGMT A
+	USING DUAL 
+	   ON ( CMNT_MGMT_ID = #CMNT_MGMT_ID# AND CMNT_SEQ = #CMNT_SEQ# )
+	 WHEN MATCHED THEN
+	      UPDATE SET
+	             CMNT_CTT     = #CMNT_CTT#   
+	           , UPDR_ID      = #onlineContext.userInfo.loginId# 
+	           , UPD_DTM      = SYSDATE  
+			]]><isEqual property="IS_MAINSCHD" compareValue="Y"><![CDATA[ /* 주요일정 댓글이 경우 */
+			   , CMNT_OPEN_CL_CD = #CMNT_OPEN_CL_CD#
+			]]></isEqual><![CDATA[
+	 WHEN NOT MATCHED THEN
+	      INSERT (
+	             CMNT_MGMT_ID
+	           , CMNT_SEQ
+	           , CMNT_CTT
+	           , RGSTR_ID
+	           , RGST_DTM
+	           , UPDR_ID
+	           , UPD_DTM
+			]]><isEqual property="IS_MAINSCHD" compareValue="Y"><![CDATA[ /* 주요일정 댓글이 경우 */
+			   , CMNT_OPEN_CL_CD
+			]]></isEqual><![CDATA[
+	      ) VALUES (
+	             #CMNT_MGMT_ID#
+	           , ( SELECT /*+ INDEX_DESC( A PK_DSM_CMNT_MGMT) */
+	                      NVL(MAX(CMNT_SEQ), 0) + 1
+	                 FROM DSM_CMNT_MGMT
+	                WHERE CMNT_MGMT_ID = #CMNT_MGMT_ID#
+	                  AND ROWNUM = 1 )
+	           , #CMNT_CTT#
+	           , #onlineContext.userInfo.loginId#
+	           , SYSDATE
+	           , #onlineContext.userInfo.loginId#
+	           , SYSDATE
+			]]><isEqual property="IS_MAINSCHD" compareValue="Y"><![CDATA[ /* 주요일정 댓글이 경우 */
+			   , #CMNT_OPEN_CL_CD#
+			]]></isEqual><![CDATA[
+	      )]]>
+	</update>
+	<delete id="dDeleteCmnt" ><![CDATA[/* Biz: com.psnm.dtok.com.cmnt.db.DCMNT001.dDeleteCmnt  */
+/* IO: 이민재,2014-12-05T17:17:30(이민재,2014-12-05T17:17:30) */
+	DELETE FROM DSM_CMNT_MGMT
+ 	WHERE CMNT_MGMT_ID = #CMNT_MGMT_ID#
+	]]><isNotEmpty prepend="" property="CMNT_SEQ"><![CDATA[
+   	AND CMNT_SEQ = #CMNT_SEQ#
+	]]></isNotEmpty><![CDATA[]]>
+	</delete>
+</sqlMap>

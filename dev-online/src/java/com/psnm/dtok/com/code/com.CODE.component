@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="com.CODE">
+    <componentName>[BC]공통-코드조회</componentName>
+    <bizGroupXd>common</bizGroupXd>
+    <packageName>com.psnm.dtok.com.code</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description>코드조회 컴포넌트는 화면에서 코드정보를 조회하기위해 PU 클래스만 제공하며, FU, DU는 [공유공통]의 클래스를 참조한다.</description>
+    <custom-props/>
+    <history>
+        <created date="2014-11-14T11:52:17" user="admin (admin)"/>
+    </history>
+</component>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FMTHSALESEXECTRGT001">
+    <bizUnitName>[FU]영업목표관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.SALETRGT</componentId>
+    <description>영업목표관리 FU</description>
+    <method-list>
+        <method id="fInsertSalesExecTrgt">
+            <methodName>[FM]영업목표관리저장</methodName>
+            <transactionId>biz.SALETRGT@FMTHSALESEXECTRGT001_fInsertSalesExecTrgt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업목표관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T17:32:16" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalesExecTrgt">
+            <methodName>[FM]영업목표관리조회</methodName>
+            <transactionId>biz.SALETRGT@FMTHSALESEXECTRGT001_fSearchSalesExecTrgt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업목표관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T17:31:53" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalesExecTrgtTotal">
+            <methodName>[FM]영업목표관리합계조회</methodName>
+            <transactionId>biz.SALETRGT@FMTHSALESEXECTRGT001_fSearchSalesExecTrgtTotal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업목표관리합계 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T17:33:50" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSalesExecTrgtBrws">
+            <methodName>[FM]영업목표조회</methodName>
+            <transactionId>biz.SALETRGT@FMTHSALESEXECTRGT001_fSearchSalesExecTrgtBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업목표정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-10T13:41:45" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-09T16:49:14" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

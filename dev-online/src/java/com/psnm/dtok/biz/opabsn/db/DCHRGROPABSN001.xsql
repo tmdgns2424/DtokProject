@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DCHRGROPABSN001">
+	<select id="dSearchChrgrOpabsn" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.opabsn.db.DCHRGROPABSN001.dSearchChrgrOpabsn  */
+/* IO: 이민재,2015-01-26T15:40:55(이민재,2015-01-26T15:40:55) */
+	SELECT B.USER_ID 
+		, A.OP_ABS_SEQ
+		, G.ORG_ID AS HDQT_TEAM_ORG_ID
+		, G.ORG_NM AS HDQT_TEAM_ORG_NM
+		, F.OUT_ORG_ID AS HDQT_PART_ORG_ID
+	    , F.OUT_ORG_NM AS HDQT_PART_ORG_NM
+	    , wm_concat(E.OUT_ORG_DTL_NM ) AS SALE_DEPT_ORG_NM
+	    , F_MASKING('N',D.USER_NM) AS USER_NM
+	    , TO_CHAR( TO_DATE(A.OP_ABSN_STA_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) AS OP_ABSN_STA_DT
+	    , TO_CHAR( TO_DATE(A.OP_ABSN_END_DT, 'YYYYMMDD'), 'YYYY-MM-DD' ) AS OP_ABSN_END_DT
+	    , A.OP_ABSN_RSN_CTT
+	FROM DSM_CHRGR_OP_ABSN A
+	JOIN DSM_APPROVE B ON (B.USER_ID = A.CHRGR_ID)
+	JOIN DSM_CHRGR_HEADQ C ON (C.CHRGR_ID = B.USER_ID)
+	JOIN PS_MNG.TBAS_USER_MGMT D ON (D.USER_ID = B.USER_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT E ON (E.OUT_ORG_DTL_ID = C.DSM_HEADQ_CD)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT F ON (F.OUT_ORG_ID = E.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT G ON (G.ORG_ID = F.ORG_ID)
+	WHERE A.OP_ABSN_STA_DT BETWEEN #FROM_DT# AND #TO_DT#
+	]]><isNotEmpty prepend="AND" property="HDQT_TEAM_ORG_ID"><![CDATA[
+		G.ORG_ID = #HDQT_TEAM_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	]]><isNotEmpty prepend="AND" property="HDQT_PART_ORG_ID"><![CDATA[
+		F.OUT_ORG_ID = #HDQT_PART_ORG_ID#
+	]]></isNotEmpty><![CDATA[
+	GROUP BY B.USER_ID
+		, A.OP_ABS_SEQ
+		, G.ORG_ID 
+		, G.ORG_NM
+		, F.OUT_ORG_ID
+	    , F.OUT_ORG_NM
+	    , D.USER_NM
+	    , A.OP_ABSN_STA_DT
+	    , A.OP_ABSN_END_DT
+	    , A.OP_ABSN_RSN_CTT
+	ORDER BY A.OP_ABSN_STA_DT DESC]]>
+	</select>
+	<select id="dSearchChrgrOpabsnUser" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.biz.opabsn.db.DCHRGROPABSN001.dSearchChrgrOpabsnUser  */
+/* IO: 이민재,2015-01-26T16:01:58(이민재,2015-01-26T16:01:58) */
+	SELECT A.USER_ID
+		, F_MASKING('N',C.USER_NM) AS USER_NM
+    	, F.ORG_NM AS HDQT_TEAM_ORG_NM
+    	, E.OUT_ORG_NM AS HDQT_PART_ORG_NM
+    	, wm_concat(D.OUT_ORG_DTL_NM ) AS SALE_DEPT_ORG_NM
+	FROM DSM_APPROVE A
+  	JOIN DSM_CHRGR_HEADQ B ON (B.CHRGR_ID = A.USER_ID)
+	JOIN PS_MNG.TBAS_USER_MGMT C ON (C.USER_ID = A.USER_ID)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT D ON (D.OUT_ORG_DTL_ID = B.DSM_HEADQ_CD)
+	LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT E ON (E.OUT_ORG_ID = D.OUT_ORG_ID)
+	LEFT JOIN PS_MNG.TBAS_NEW_ORG_MGMT F ON (F.ORG_ID = E.ORG_ID)
+	WHERE C.USER_NM LIKE '%'||#USER_NM#||'%'
+	GROUP BY A.USER_ID
+		, C.USER_NM
+    	, F.ORG_NM
+    	, E.OUT_ORG_NM]]>
+	</select>
+	<insert id="dInsertChrgrOpabsn" ><![CDATA[/* Biz: com.psnm.dtok.biz.opabsn.db.DCHRGROPABSN001.dInsertChrgrOpabsn  */
+/* IO: 이민재,2015-01-26T16:05:12(이민재,2015-01-26T16:05:12) */
+	INSERT INTO DSM_CHRGR_OP_ABSN
+  	(
+    	CHRGR_ID
+    	, OP_ABS_SEQ
+    	, OP_ABSN_STA_DT
+    	, OP_ABSN_END_DT
+    	, OP_ABSN_RSN_CTT
+    	, RGSTR_ID
+    	, RGST_DTM
+    	, UPDR_ID
+    	, UPD_DTM
+  	)
+  	VALUES
+  	(
+    	#USER_ID#
+    	, (SELECT NVL(MAX(OP_ABS_SEQ),0) + 1 AS OP_ABS_SEQ FROM DSM_CHRGR_OP_ABSN WHERE CHRGR_ID = #USER_ID#)
+    	, #OP_ABSN_STA_DT#
+    	, #OP_ABSN_END_DT#
+    	, #OP_ABSN_RSN_CTT#
+    	, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  		, #onlineContext.userInfo.loginId#
+  		, SYSDATE
+  	)]]>
+	</insert>
+	<update id="dUpdateChrgrOpabsn" ><![CDATA[/* Biz: com.psnm.dtok.biz.opabsn.db.DCHRGROPABSN001.dUpdateChrgrOpabsn  */
+/* IO: 이민재,2015-01-26T16:05:25(이민재,2015-01-26T16:05:25) */
+	UPDATE DSM_CHRGR_OP_ABSN
+	SET OP_ABSN_STA_DT  = #OP_ABSN_STA_DT#
+		, OP_ABSN_END_DT  = #OP_ABSN_END_DT#
+		, OP_ABSN_RSN_CTT = #OP_ABSN_RSN_CTT#
+		, UPDR_ID = #onlineContext.userInfo.loginId#
+		, UPD_DTM = SYSDATE
+	WHERE CHRGR_ID = #USER_ID#
+	AND OP_ABS_SEQ = #OP_ABS_SEQ#]]>
+	</update>
+	<delete id="dDeleteChrgrOpabsn" ><![CDATA[/* Biz: com.psnm.dtok.biz.opabsn.db.DCHRGROPABSN001.dDeleteChrgrOpabsn  */
+/* IO: 이민재,2015-01-26T16:05:39(이민재,2015-01-26T16:05:39) */
+	DELETE
+  	FROM DSM_CHRGR_OP_ABSN
+ 	WHERE CHRGR_ID = #USER_ID#
+ 	AND OP_ABS_SEQ = #OP_ABS_SEQ#]]>
+	</delete>
+</sqlMap>

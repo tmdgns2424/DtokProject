@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FSYSUSELOG001">
+    <bizUnitName>[FU]시스템사용로그</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.SYS</componentId>
+    <description>[FU]시스템사용로그</description>
+    <method-list>
+        <method id="fInsertSysUseLog">
+            <methodName>[FM]시스템사용로그등록</methodName>
+            <transactionId>com.SYS@FSYSUSELOG001_fInsertSysUseLog</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]시스템사용로그등록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-24T16:42:27" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-02-24T16:42:04" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

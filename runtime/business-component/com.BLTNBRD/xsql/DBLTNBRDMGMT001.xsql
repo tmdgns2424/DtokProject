@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DBLTNBRDMGMT001">
+	<select id="dSearchBltnBrdByType" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchBltnBrdByType  */
+/* IO: 안종광,2014-12-30T14:05:45(안종광,2014-12-26T13:44:23) */
+SELECT b.BLTN_BRD_ID
+     , b.BLTN_BRD_NM
+     , b.BLTN_BRD_TYP_CD
+     , b.SUP_BLTN_BRD_ID
+     , b.BRWS_SEQ
+     , b.SMS_RCV_YN
+     , b.ANM_TYP_CD
+     , b.USE_YN
+     , b.ADD_FILE_YN
+     , b.ALL_USER_APLY_YN
+     , b.RCMND_OBJ_YN
+     , b.SCRT_NUM_SET_YN
+     , b.SRCH_PRD_CD
+     , b.SRCH_PRD_CHG_YN
+     , b.BLT_DTM_YN
+     , b.CMNT_SMS_RCV_YN
+  FROM DSM_BLTN_BRD b
+ WHERE b.USE_YN = 'Y'
+  ]]><isNotEmpty property="BLTN_BRD_TYP_CD"><![CDATA[
+   AND b.BLTN_BRD_TYP_CD = #BLTN_BRD_TYP_CD# /*게시판유형코드*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY b.BRWS_SEQ]]>
+	</select>
+	<select id="dSearchBltnBrd" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchBltnBrd  */
+/* IO: 채수윤,2015-03-19T14:07:46(안종광,2014-12-26T15:08:53) */
+SELECT ROWNUM RN
+     , LEVEL  LVL
+     , A.BLTN_BRD_ID
+     , A.BLTN_BRD_NM
+     , A.BLTN_BRD_TYP_CD
+     , (SELECT F_DSM_CODE_NM('DSM_BLTN_BRD_TYP_CD', A.BLTN_BRD_TYP_CD) FROM DUAL) AS BLTN_BRD_TYP_NM
+     , A.SUP_BLTN_BRD_ID      
+     , A.BRWS_SEQ
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.ADD_FILE_YN, NULL) AS ADD_FILE_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.SMS_RCV_YN, NULL)  AS SMS_RCV_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.ANM_TYP_CD, NULL)  AS ANM_TYP_CD
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', (SELECT F_DSM_CODE_NM('DSM_ANM_TYP_CD', A.ANM_TYP_CD) FROM DUAL), NULL) AS ANM_TYP_NM
+     , A.SCRT_NUM_SET_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', (SELECT DECODE(NVL(COUNT(BLTN_BRD_ID),0),0,'N','Y') 
+                                        FROM DSM_BLTN_BRD_AUTH
+                                       WHERE BLTN_BRD_ID = A.BLTN_BRD_ID), NULL) AS AUTH_YN
+     , A.RCMND_OBJ_YN
+     , A.USE_YN
+     , DECODE(A.USE_YN,'Y','사용','미사용') AS USE_NM
+     , A.SRCH_PRD_CD /*조회기간*/
+     , (SELECT F_DSM_CODE_NM('DSM_BLTN_BRWS_PRD_CD', A.SRCH_PRD_CD) FROM DUAL) AS SRCH_PRD_NM
+     , A.SRCH_PRD_CHG_YN /*조회기간변경가능*/
+     , A.BLT_DTM_YN /*게시일시여부*/
+     , A.CMNT_SMS_RCV_YN
+     , F_MASKING('N', (SELECT F_DSM_GET_USER_NM(A.UPDR_ID) FROM DUAL)) AS UPDR_NM
+     , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS UPD_YMD
+     , (SELECT COUNT(*) FROM DSM_BLTCONT WHERE BLTN_BRD_ID = A.BLTN_BRD_ID AND DEL_YN = 'N') AS BLTCONT_CNT /*게시글건수*/
+     , (SELECT COUNT(*) FROM DSM_BLTN_BRD WHERE SUP_BLTN_BRD_ID = A.BLTN_BRD_ID) AS SUB_BLTN_BRD_CNT /*바로하위게시판개수*/
+  FROM DSM_BLTN_BRD A
+ START WITH A.BLTN_BRD_ID = #TOP_BLTN_BRD_ID# /*게시판ID*/
+CONNECT BY PRIOR A.BLTN_BRD_ID = A.SUP_BLTN_BRD_ID
+         ]]><isNotEmpty property="MID_BLTN_BRD_ID"><![CDATA[
+           AND (BLTN_BRD_ID = #MID_BLTN_BRD_ID# OR SUP_BLTN_BRD_ID = #MID_BLTN_BRD_ID#)
+         ]]></isNotEmpty><![CDATA[
+ ORDER SIBLINGS BY A.BLTN_BRD_TYP_CD, A.BRWS_SEQ, A.BLTN_BRD_NM]]>
+	</select>
+	<select id="dSearchBltnBrdByPk" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchBltnBrdByPk  */
+/* IO: 안종광,2014-12-26T18:12:35(안종광,2014-12-26T15:08:53) */
+SELECT A.BLTN_BRD_ID
+     , A.BLTN_BRD_NM
+     , A.BLTN_BRD_TYP_CD
+     , (SELECT F_DSM_CODE_NM('DSM_BLTN_BRD_TYP_CD', A.BLTN_BRD_TYP_CD) FROM DUAL) AS BLTN_BRD_TYP_NM
+     , A.SUP_BLTN_BRD_ID      
+     , A.BRWS_SEQ
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.ADD_FILE_YN, NULL) AS ADD_FILE_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.SMS_RCV_YN, NULL)  AS SMS_RCV_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', A.ANM_TYP_CD, NULL)  AS ANM_TYP_CD
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', (SELECT F_DSM_CODE_NM('DSM_ANM_TYP_CD', A.ANM_TYP_CD) FROM DUAL), NULL) AS ANM_TYP_NM
+     , A.SCRT_NUM_SET_YN
+     , DECODE(A.BLTN_BRD_TYP_CD,'3', (SELECT DECODE(NVL(COUNT(BLTN_BRD_ID),0),0,'N','Y') 
+                                        FROM DSM_BLTN_BRD_AUTH
+                                       WHERE BLTN_BRD_ID = A.BLTN_BRD_ID), NULL) AS AUTH_YN
+     , A.RCMND_OBJ_YN
+     , A.USE_YN
+     , DECODE(A.USE_YN,'Y','사용','미사용') AS USE_NM
+     , A.SRCH_PRD_CD /*조회기간*/
+     , (SELECT F_DSM_CODE_NM('DSM_BLTN_BRWS_PRD_CD', A.SRCH_PRD_CD) FROM DUAL) AS SRCH_PRD_NM
+     , A.SRCH_PRD_CHG_YN /*조회기간변경가능*/
+     , A.BLT_DTM_YN /*게시일시여부*/
+     , A.CHRGR_ID
+     , (SELECT F_DSM_GET_USER_NM(A.CHRGR_ID) FROM DUAL) AS CHRGR_NM /*담당자명*/
+     , (SELECT F_DSM_GET_USER_NM(A.UPDR_ID) FROM DUAL) AS UPDR_NM
+     , TO_CHAR(A.UPD_DTM,'YYYY-MM-DD') AS UPD_YMD
+     , (SELECT COUNT(*) FROM DSM_BLTCONT WHERE BLTN_BRD_ID = A.BLTN_BRD_ID) AS BLTCONT_CNT /*게시글건수*/
+     , (SELECT COUNT(*) FROM DSM_BLTN_BRD WHERE SUP_BLTN_BRD_ID = A.BLTN_BRD_ID) AS SUB_BLTN_BRD_CNT /*바로하위게시판개수*/
+  FROM DSM_BLTN_BRD A
+ WHERE A.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/]]>
+	</select>
+	<update id="dUpdateBltnBrd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dUpdateBltnBrd  */
+/* IO: 안종광,2015-01-28T11:02:57(안종광,2015-01-28T10:04:09) */
+UPDATE DSM_BLTN_BRD b SET
+       UPDR_ID = #onlineContext.userInfo.loginId#
+     , UPD_DTM = SYSDATE
+     , BLTN_BRD_NM      = #BLTN_BRD_NM#
+     , BLTN_BRD_TYP_CD  = #BLTN_BRD_TYP_CD#
+     , SUP_BLTN_BRD_ID  = #SUP_BLTN_BRD_ID#
+     ]]><isNotEmpty property="BRWS_SEQ"><![CDATA[, BRWS_SEQ         = #BRWS_SEQ#         ]]></isNotEmpty><![CDATA[
+     , SMS_RCV_YN       = #SMS_RCV_YN#
+     , ANM_TYP_CD       = #ANM_TYP_CD#
+     , USE_YN           = #USE_YN#
+     , ADD_FILE_YN      = #ADD_FILE_YN#
+     , ALL_USER_APLY_YN = #ALL_USER_APLY_YN#
+     , RCMND_OBJ_YN     = #RCMND_OBJ_YN#
+     , SCRT_NUM_SET_YN  = #SCRT_NUM_SET_YN#
+     , BLT_DTM_YN       = #BLT_DTM_YN#
+     , SRCH_PRD_CD      = #SRCH_PRD_CD#
+     , SRCH_PRD_CHG_YN  = #SRCH_PRD_CHG_YN#
+     , CMNT_SMS_RCV_YN  = #CMNT_SMS_RCV_YN#
+ WHERE b.BLTN_BRD_ID = #BLTN_BRD_ID#]]>
+	</update>
+	<delete id="dDeleteBltnBrd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dDeleteBltnBrd  */
+/* IO: 채수윤,2015-03-19T14:05:41(안종광,2015-01-28T10:12:14) */
+DELETE FROM DSM_BLTN_BRD b
+ WHERE b.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+   AND NOT EXISTS (
+            SELECT 1 FROM DSM_BLTCONT WHERE BLTN_BRD_ID = b.BLTN_BRD_ID AND DEL_YN = 'N'
+       )
+   AND NOT EXISTS (
+            SELECT 1 FROM DSM_BLTN_BRD WHERE SUP_BLTN_BRD_ID = b.BLTN_BRD_ID
+       )]]>
+	</delete>
+	<select id="dSearchNextBltnBrdId" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchNextBltnBrdId  */
+/* IO: 안종광,2015-01-28T10:15:16(안종광,2015-01-28T10:15:16) */
+SELECT MAX(TO_NUMBER(BLTN_BRD_ID)) + 1 AS BLTN_BRD_ID FROM DSM_BLTN_BRD
+ WHERE BLTN_BRD_ID LIKE '1%']]>
+	</select>
+	<insert id="dInsertBltnBrd" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dInsertBltnBrd  */
+/* IO: 안종광,2015-01-28T11:07:22(안종광,2015-01-28T10:34:52) */
+INSERT INTO DSM_BLTN_BRD (
+       BLTN_BRD_ID
+     , BLTN_BRD_NM
+     , BLTN_BRD_TYP_CD
+     , SUP_BLTN_BRD_ID
+     , BRWS_SEQ
+     , SMS_RCV_YN
+     , ANM_TYP_CD
+     , USE_YN
+     , ADD_FILE_YN
+     , ALL_USER_APLY_YN
+     , RCMND_OBJ_YN
+     , SCRT_NUM_SET_YN
+     , BLT_DTM_YN
+     , SRCH_PRD_CD
+     , SRCH_PRD_CHG_YN
+     , CMNT_SMS_RCV_YN
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #BLTN_BRD_ID#
+     , #BLTN_BRD_NM#
+     , #BLTN_BRD_TYP_CD#
+     , #SUP_BLTN_BRD_ID#
+     , #BRWS_SEQ#
+     , #SMS_RCV_YN#
+     , #ANM_TYP_CD#
+     , #USE_YN#
+     , #ADD_FILE_YN#
+     , #ALL_USER_APLY_YN#
+     , #RCMND_OBJ_YN#
+     , #SCRT_NUM_SET_YN#
+     , #BLT_DTM_YN#
+     , #SRCH_PRD_CD#
+     , #SRCH_PRD_CHG_YN#
+     , #CMNT_SMS_RCV_YN#
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<select id="dSearchBltnBrdChrgr2" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchBltnBrdChrgr2  */
+/* IO: 안종광,2015-02-16T15:08:33(안종광,2015-02-16T09:32:37) */
+SELECT ROW_NUMBER() OVER (ORDER BY x.USER_NM) AS  RN
+     , z.MBL_PHON_NUM1
+     , z.MBL_PHON_NUM2
+     , z.MBL_PHON_NUM3
+     , z.MBL_PHON_NUM1 || z.MBL_PHON_NUM2 || z.MBL_PHON_NUM3 AS MBL_PHON_NUM
+     , x.*
+     , (SELECT F_DSM_CODE_NM('DSM_RETL_CLASS_CD', x.RPSTY) FROM DUAL) AS RPSTY_NM /* 직책명 */
+     , PKG_ORGS.F_DSM_ORG_NM('AGNT',      x.SALE_AGNT_ORG_ID) AS SALE_AGNT_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('SALE_TEAM', x.SALE_TEAM_ORG_ID) AS SALE_TEAM_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('SALE_DEPT', x.SALE_DEPT_ORG_ID) AS SALE_DEPT_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('HDQT_PART', x.HDQT_PART_ORG_ID) AS HDQT_PART_ORG_NM
+     , PKG_ORGS.F_DSM_ORG_NM('HDQT_TEAM', x.HDQT_TEAM_ORG_ID) AS HDQT_TEAM_ORG_NM
+  FROM (
+        SELECT c.BLTN_BRD_ID
+             , c.CHRGR_ID
+             , F_MASKING('N', u.USER_NM) AS USER_NM
+             , u.USER_NM AS USER_NAME /*사용자명원본*/
+             , mm.RPSTY
+             , u.CPLAZA_ORG_CD       AS SALE_AGNT_ORG_ID /* 에이전트 조직ID */
+             , dm.OUT_ORG_DTL_ID     AS SALE_TEAM_ORG_ID /* 영업팀 조직ID */
+             , dm.SUP_OUT_ORG_DTL_ID AS SALE_DEPT_ORG_ID /* 영업국 조직ID */
+             , NVL(oo.OUT_ORG_ID, u.OUT_ORG_ID) AS HDQT_PART_ORG_ID /* 본사파트 조직ID */
+             , NVL(oo.ORG_ID, u.NEW_ORG_ID)     AS HDQT_TEAM_ORG_ID /* 본사팀 조직ID */
+          FROM DSM_BLTN_BRD_CHRGR c
+          JOIN PS_MNG.TBAS_USER_MGMT u ON ( c.CHRGR_ID = u.USER_ID AND u.DEL_YN != 'Y' AND u.USER_ST = '1' AND u.EFF_USER_YN = 'Y' AND u.ATTC_CAT IN ('1','2','3','4') )
+          JOIN PS_MNG.TBAS_DUTY_MGMT d ON ( u.DUTY = d.DUTY_CD AND 'Y' = d.USE_YN AND d.DUTY_TYP = '2' )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MBR_MGMT mm ON ( mm.AGNT_ID = u.CPLAZA_ORG_CD AND mm.CONS_MTH = TO_CHAR(SYSDATE, 'YYYYMM') )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_DTL_MGMT dm ON ( dm.OUT_ORG_DTL_ID = mm.OUT_ORG_DTL_ID )
+               LEFT JOIN PS_MNG.TBAS_OUT_ORG_MGMT     oo ON ( oo.OUT_ORG_ID = dm.OUT_ORG_ID )
+         WHERE c.BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/
+  ) x
+  JOIN DSM_USER z ON ( z.USER_ID = x.CHRGR_ID )]]>
+	</select>
+	<select id="dSearchBltnBrdBySup" parameterClass="map" resultClass="hmap" fetchSize="50" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dSearchBltnBrdBySup  */
+/* IO: 안종광,2015-02-16T10:22:03(안종광,2015-02-16T10:22:03) */
+SELECT b.BLTN_BRD_ID
+     , b.BLTN_BRD_NM
+     , b.BLTN_BRD_TYP_CD
+     , b.SUP_BLTN_BRD_ID
+     , b.BRWS_SEQ
+     , b.SMS_RCV_YN
+     , b.ANM_TYP_CD
+     , b.USE_YN
+     , b.ADD_FILE_YN
+     , b.ALL_USER_APLY_YN
+     , b.RCMND_OBJ_YN
+     , b.SCRT_NUM_SET_YN
+     , b.BLT_DTM_YN
+     , b.SRCH_PRD_CD
+     , b.SRCH_PRD_CHG_YN
+     , b.CMNT_SMS_RCV_YN
+     , (SELECT COUNT(*) FROM DSM_BLTN_BRD_CHRGR WHERE BLTN_BRD_ID = b.BLTN_BRD_ID) AS BLTN_BRD_CHRGR_CNT
+  FROM DSM_BLTN_BRD b
+ WHERE b.USE_YN = 'Y'
+  ]]><isEmpty property="SUP_BLTN_BRD_ID"><![CDATA[
+   AND b.SUP_BLTN_BRD_ID = '0000' /*최상위게시판ID*/
+  ]]></isEmpty><![CDATA[
+  ]]><isNotEmpty property="SUP_BLTN_BRD_ID"><![CDATA[
+   AND b.SUP_BLTN_BRD_ID = #SUP_BLTN_BRD_ID# /*상위게시판ID*/
+  ]]></isNotEmpty><![CDATA[
+ ORDER BY b.BRWS_SEQ]]>
+	</select>
+	<insert id="dInsertBltnBrdChrgr" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dInsertBltnBrdChrgr  */
+/* IO: 안종광,2015-02-16T17:01:42(안종광,2015-02-16T17:01:42) */
+INSERT INTO DSM_BLTN_BRD_CHRGR (
+       BLTN_BRD_ID
+     , CHRGR_ID
+     , RGSTR_ID
+     , RGST_DTM
+     , UPDR_ID
+     , UPD_DTM
+)
+VALUES (
+       #BLTN_BRD_ID#
+     , #CHRGR_ID#
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+     , #onlineContext.userInfo.loginId#
+     , SYSDATE
+)]]>
+	</insert>
+	<delete id="dDeleteBltnBrdChrgr" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dDeleteBltnBrdChrgr  */
+/* IO: 안종광,2015-02-16T17:03:24(안종광,2015-02-16T17:03:24) */
+DELETE FROM DSM_BLTN_BRD_CHRGR c
+ WHERE c.BLTN_BRD_ID = #BLTN_BRD_ID#
+ ]]><isNotEmpty property="CHRGR_ID"><![CDATA[
+   AND c.CHRGR_ID = #CHRGR_ID# /*담당자ID*/
+ ]]></isNotEmpty><![CDATA[]]>
+	</delete>
+	<delete id="dDeleteBltCont" parameterClass="map" ><![CDATA[/* Biz: com.psnm.dtok.com.bltnbrd.db.DBLTNBRDMGMT001.dDeleteBltCont  */
+/* IO: 채수윤,2015-03-19T14:04:59(채수윤,2015-03-19T14:04:59) */
+DELETE 
+  FROM DSM_BLTCONT 
+ WHERE BLTN_BRD_ID = #BLTN_BRD_ID# /*게시판ID*/]]>
+	</delete>
+</sqlMap>

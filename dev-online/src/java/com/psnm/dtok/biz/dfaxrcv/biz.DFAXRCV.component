@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.DFAXRCV">
+    <componentName>[BC]업무-D-FAX접수결과</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.dfaxrcv</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2014-12-24T16:07:34" user="이민재 (leeminjae)"/>
+    </history>
+</component>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PAUTHGRP">
+    <bizUnitName>[PU]권한그룹관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>com.AUTH</componentId>
+    <description>권한그룹관리</description>
+    <method-list>
+        <method id="pDeleteAuthGrp">
+            <methodName>[PM]권한그룹삭제</methodName>
+            <transactionId>com.AUTH@PAUTHGRP_pDeleteAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹삭제</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-24T10:51:03" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSaveAuthGrp">
+            <methodName>[PM]권한그룹저장</methodName>
+            <transactionId>com.AUTH@PAUTHGRP_pSaveAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-16T10:00:58" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSaveAuthGrpAplyDuty">
+            <methodName>[PM]권한그룹적용직무저장</methodName>
+            <transactionId>com.AUTH@PAUTHGRP_pSaveAuthGrpAplyDuty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹적용직무저장</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-16T10:01:37" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchAuthGrpAplyDuty">
+            <methodName>[PM]권한그룹적용직무조회</methodName>
+            <transactionId>com.AUTH@PAUTHGRP_pSearchAuthGrpAplyDuty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹적용직무조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-16T10:00:03" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="pSearchAuthGrp">
+            <methodName>[PM]권한그룹조회</methodName>
+            <transactionId>com.AUTH@PAUTHGRP_pSearchAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>권한그룹조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-16T09:59:33" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-16T09:59:04" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

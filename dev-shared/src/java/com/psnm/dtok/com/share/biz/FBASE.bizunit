@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FBASE">
+    <bizUnitName>[FU]기준정보조회</bizUnitName>
+    <parentClassXd>SFU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>공통 기준정보 조회 기능 클래스</description>
+    <method-list>
+        <method id="fSearchAuthGrp">
+            <methodName>[FM]권한그룹목록</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]권한그룹목록</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-12T15:32:15" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAllUserPop">
+            <methodName>[FM]모든회원팝업정보조회</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchAllUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-13T16:14:26" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchEmpPop">
+            <methodName>[FM]본사직원조회</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchEmpPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>본사직원조회(팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-29T16:17:36" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAgentNoMember">
+            <methodName>[FM]에이전트조회(회원가입시)</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchAgentNoMember</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>[FM]에이전트조회(회원가입시)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-05T17:28:23" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchAgent">
+            <methodName>[FM]에이전트조회</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchAgent</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트 정보를 조회(NO페이징, 팝업용)</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-03T16:16:39" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="fSearchUserPop">
+            <methodName>[FM]회원팝업정보조회</methodName>
+            <transactionId>com.SHARE@FBASE_fSearchUserPop</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>회원 팝업 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-15T17:28:47" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-03T16:15:56" user="안종광 (rhkd)"/>
+    </history>
+</bizUnit>

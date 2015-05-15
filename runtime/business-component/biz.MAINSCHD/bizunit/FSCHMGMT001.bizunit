@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FSCHMGMT001">
+    <bizUnitName>[FU]주요일정관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.MAINSCHD</componentId>
+    <description/>
+    <method-list>
+        <method id="fSearchSchMgmtAuthGrp">
+            <methodName>[FM]주요일정관리권한그룹조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmtAuthGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-04-17T10:40:43" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDeleteSchMgmt">
+            <methodName>[FM]주요일정관리삭제</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fDeleteSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T10:17:52" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fUpdateSchMgmt">
+            <methodName>[FM]주요일정관리수정</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fUpdateSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T17:43:13" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fInsertSchMgmt">
+            <methodName>[FM]주요일정관리추가</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fInsertSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T17:42:29" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fDetailSchMgmt">
+            <methodName>[FM]주요일정관리상세</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fDetailSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 상세 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T10:01:44" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSchMgmt">
+            <methodName>[FM]주요일정관리조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-13T11:38:04" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fInsertSchMgmtRcvGrp">
+            <methodName>[FM]주요일정그룹저장</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fInsertSchMgmtRcvGrp</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 그룹을 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T19:14:03" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSchMgmtBrwsCalData">
+            <methodName>[FM]주요일정달력정보조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmtBrwsCalData</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T14:04:20" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSchMgmtBrwsCal">
+            <methodName>[FM]주요일정달력조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmtBrwsCal</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정달력 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T10:17:06" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchSchMgmtBrwsCalHDay">
+            <methodName>[FM]주요일정달력휴일조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmtBrwsCalHDay</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정달력휴일 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-12T10:19:54" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertSchMgmtRcvOrg">
+            <methodName>[FM]주요일정조직저장</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fInsertSchMgmtRcvOrg</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 조직을 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-15T19:15:08" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchSchMgmtBrws">
+            <methodName>[FM]주요일정조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchSchMgmtBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정 정보를 조회 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-16T16:55:38" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+        <method id="fSearchPopSchMgmtBrws">
+            <methodName>[FM]주요일정팝업상세조회</methodName>
+            <transactionId>biz.MAINSCHD@FSCHMGMT001_fSearchPopSchMgmtBrws</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>주요일정을 팝업에 상세 조회를 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-21T09:21:51" user="이승훈2 (gunyoung)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-13T11:37:43" user="이승훈2 (gunyoung)"/>
+    </history>
+</bizUnit>

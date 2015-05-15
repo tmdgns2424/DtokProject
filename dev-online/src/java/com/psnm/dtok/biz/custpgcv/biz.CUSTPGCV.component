@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component fqId="biz.CUSTPGCV">
+    <componentName>[BC]업무-고객민원</componentName>
+    <bizGroupXd>biz</bizGroupXd>
+    <packageName>com.psnm.dtok.biz.custpgcv</packageName>
+    <componentTypeXd>BC</componentTypeXd>
+    <description/>
+    <custom-props/>
+    <history>
+        <created date="2015-01-27T10:26:42" user="안진갑 (ahnjingap)"/>
+    </history>
+</component>

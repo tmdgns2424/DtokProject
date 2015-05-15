@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DINCMPDOCTYPHST001">
+    <bizUnitName>[DU]미비접수 첨부유형</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.INCMPDOC</componentId>
+    <description>미비접수 첨부유형 파일 관련 Data Unit</description>
+    <method-list>
+        <method id="dDeleteIncmpDocTypHst">
+            <methodName>[DM]미비서류접수첨부유형삭제</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOCTYPHST001_dDeleteIncmpDocTypHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 첨부유형이력 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:19:50" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dSearchIncmpDocTypHst">
+            <methodName>[DM]미비서류접수첨부유형조회</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOCTYPHST001_dSearchIncmpDocTypHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 첨부유형이력 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:17:01" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dInsertIncmpDocTypHst">
+            <methodName>[DM]미비서류접수첨부유형추가</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOCTYPHST001_dInsertIncmpDocTypHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 첨부유형이력 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T15:18:04" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-22T15:15:14" user="김지홍 (kimjihong)"/>
+    </history>
+</bizUnit>

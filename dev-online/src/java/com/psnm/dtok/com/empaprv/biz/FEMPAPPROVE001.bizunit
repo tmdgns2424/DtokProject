@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FEMPAPPROVE001">
+    <bizUnitName>[FU]임직원로그인관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>com.EMPAPRV</componentId>
+    <description>임직원로그인관리 FU</description>
+    <method-list>
+        <method id="fSearchAproveUser">
+            <methodName>[FM]임직원로그인관리사용자조회</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fSearchAproveUser</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 사용자 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:16:15" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fDeleteAprove">
+            <methodName>[FM]임직원로그인관리삭제</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fDeleteAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:17:33" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertAprove">
+            <methodName>[FM]임직원로그인관리저장</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fInsertAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:16:42" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchAprove">
+            <methodName>[FM]임직원로그인관리조회</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fSearchAprove</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-23T14:15:45" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fSearchDutyMgmt">
+            <methodName>[FM]임직원로그인관리직무조회</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fSearchDutyMgmt</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>임직원로그인관리직무정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-20T16:22:46" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="fInsertDutyChgHst">
+            <methodName>[FM]직무이력변경 등록</methodName>
+            <transactionId>com.EMPAPRV@FEMPAPPROVE001_fInsertDutyChgHst</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-03-09T13:34:46" user="안진갑 (ahnjingap)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-12-23T13:12:21" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

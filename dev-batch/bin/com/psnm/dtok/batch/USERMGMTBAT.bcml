@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.psnm.dtok.batch.USERMGMTBAT">
+    <componentName>[BC]배치-사용자상태관리</componentName>
+    <bizGroupXd>batch</bizGroupXd>
+    <packageName>com.psnm.dtok.batch</packageName>
+    <parentClassXd>01</parentClassXd>
+    <description>DSM사용자중 해촉된 사용자의 상태변경과 이력등록을 처리</description>
+    <history>
+        <created date="2015-03-17T15:58:06" user="안종광 (rhkd)"/>
+        <updated date="2015-03-17T16:57:09" user="안종광 (rhkd)"/>
+    </history>
+</component>

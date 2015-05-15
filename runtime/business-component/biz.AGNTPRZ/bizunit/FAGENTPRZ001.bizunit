@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="FAGENTPRZ001">
+    <bizUnitName>[FU]포상관리</bizUnitName>
+    <parentClassXd>BFU</parentClassXd>
+    <componentId>biz.AGNTPRZ</componentId>
+    <description>포상관리 FU</description>
+    <method-list>
+        <method id="fDeleteAgentPrz">
+            <methodName>[FM]포상관리삭제</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fDeleteAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 정보를 삭제하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-28T18:30:40" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="fDetailAgentPrz">
+            <methodName>[FM]포상관리상세</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fDetailAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리상세 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-27T18:13:56" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="fUpdateAgentPrz">
+            <methodName>[FM]포상관리수정</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fUpdateAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-28T18:30:13" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="fInsertExlAgentPrz">
+            <methodName>[FM]포상관리엑셀업로드</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fInsertExlAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 엑셀업로드 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-10T17:18:50" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="fInsertAgentPrz">
+            <methodName>[FM]포상관리저장</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fInsertAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 정보를 저장하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-28T18:29:45" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+        <method id="fSearchAgentPrz">
+            <methodName>[FM]포상관리조회</methodName>
+            <transactionId>biz.AGNTPRZ@FAGENTPRZ001_fSearchAgentPrz</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>포상관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-27T16:00:15" user="한상곤 (hansanggon)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-26T18:19:11" user="한상곤 (hansanggon)"/>
+    </history>
+</bizUnit>

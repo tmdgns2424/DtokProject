@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="PSALEPLANSTRD001">
+    <bizUnitName>[PU]영업계획기준관리</bizUnitName>
+    <parentClassXd>BPU</parentClassXd>
+    <componentId>biz.SALEPLAN</componentId>
+    <description>영업계획기준관리 PU</description>
+    <method-list>
+        <method id="pCopySalePlanStrd">
+            <methodName>[PM]영업계획기준관리복사</methodName>
+            <transactionId>biz.SALEPLAN@PSALEPLANSTRD001_pCopySalePlanStrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리정보를 복사하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-02-09T14:09:30" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSaveSalePlanStrd">
+            <methodName>[PM]영업계획기준관리저장(등록|수정|삭제)</methodName>
+            <transactionId>biz.SALEPLAN@PSALEPLANSTRD001_pSaveSalePlanStrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리 정보를 등록,수정,삭제 하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:59:22" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="pSearchSalePlanStrd">
+            <methodName>[PM]영업계획기준관리조회</methodName>
+            <transactionId>biz.SALEPLAN@PSALEPLANSTRD001_pSearchSalePlanStrd</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업계획기준관리 정보를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-29T14:58:36" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-29T10:38:29" user="이민재 (leeminjae)"/>
+    </history>
+</bizUnit>

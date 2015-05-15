@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DINCMPDOC001">
+    <bizUnitName>[DU]미비서류접수</bizUnitName>
+    <parentClassXd>BDU</parentClassXd>
+    <componentId>biz.INCMPDOC</componentId>
+    <description>미비서류접수 업무 관련 DataUnit</description>
+    <method-list>
+        <method id="dSearchIncmpDocIdSeq">
+            <methodName>[DM]미비서류접수ID시퀀스채번</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dSearchIncmpDocIdSeq</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 ID 시퀀스 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-26T14:11:39" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dDetailIncmpDoc">
+            <methodName>[DM]미비서류접수정보상세조회</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dDetailIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수정보 상세 조회 DM</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-23T14:29:10" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dUpdateIncmpDoc">
+            <methodName>[DM]미비서류접수정보수정</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dUpdateIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 정보를 수정하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:22:20" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dSearchIncmpDoc">
+            <methodName>[DM]미비서류접수정보조회</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dSearchIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 검색을 위하여 관련 테이블 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:19:34" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dInsertIncmpDoc">
+            <methodName>[DM]미비서류접수정보추가</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dInsertIncmpDoc</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>미비서류접수 정보를 추가하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-22T14:21:04" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+        <method id="dSaveIncmpDocResult">
+            <methodName>[DM]미비서류접수처리결과저장</methodName>
+            <transactionId>biz.INCMPDOC@DINCMPDOC001_dSaveIncmpDocResult</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description/>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2015-01-28T15:29:53" user="김지홍 (kimjihong)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2015-01-22T14:06:59" user="김지홍 (kimjihong)"/>
+    </history>
+</bizUnit>

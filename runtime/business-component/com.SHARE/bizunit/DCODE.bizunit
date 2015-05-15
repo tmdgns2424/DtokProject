@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bizUnit id="DCODE">
+    <bizUnitName>[DU]코드조회</bizUnitName>
+    <parentClassXd>SDU</parentClassXd>
+    <componentId>com.SHARE</componentId>
+    <description>공통코드 조회 전용 DAO 클래스</description>
+    <method-list>
+        <method id="dSearchHdqtTeamOrgId">
+            <methodName>[DM]본사팀코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchHdqtTeamOrgId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>본사팀을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-25T15:37:26" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchHdqtPartOrgId">
+            <methodName>[DM]본사파트코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchHdqtPartOrgId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>본사파트를 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-26T11:33:00" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleAgntOrgId">
+            <methodName>[DM]에이전트목록조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchSaleAgntOrgId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>에이전트목록조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-12-18T19:30:27" user="안종광 (rhkd)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleDeptOrgId">
+            <methodName>[DM]영업국명코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchSaleDeptOrgId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업국명을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-26T11:33:42" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchSaleTeamOrgId">
+            <methodName>[DM]영업팀명코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchSaleTeamOrgId</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>영업팀명을 조회하는 메소드</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-26T11:34:15" user="이민재 (leeminjae)"/>
+            </history>
+        </method>
+        <method id="dSearchDuty">
+            <methodName>[DM]직무코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchDuty</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>직무코드 정보 조회</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-18T16:33:13" user="admin (admin)"/>
+            </history>
+        </method>
+        <method id="dSearchCodes">
+            <methodName>[DM]코드조회</methodName>
+            <transactionId>com.SHARE@DCODE_dSearchCodes</transactionId>
+            <webServiceOpenXd>0</webServiceOpenXd>
+            <fixedLengthXd>0</fixedLengthXd>
+            <description>지정된 코드그룹(COMM_CD_ID)의 코드 목록을 조회(조건 = COMM_CD_ID, 사용중인것만)하여 반환&#13;
+(참고) PRT_SEQ 오름차순정렬</description>
+            <inputMethodIo>
+                <fields/>
+            </inputMethodIo>
+            <outputMethodIo>
+                <fields/>
+            </outputMethodIo>
+            <custom-props/>
+            <history>
+                <created date="2014-11-14T11:26:11" user="admin (admin)"/>
+            </history>
+        </method>
+    </method-list>
+    <xsql/>
+    <history>
+        <created date="2014-11-14T11:20:49" user="admin (admin)"/>
+    </history>
+</bizUnit>
